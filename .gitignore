@@ -5,7 +5,9 @@ v15
 *.stackdump
 *.suo
 *.user
+*.sln
 
+/Server/.vs/*
 /Server/Server/bin
 /Server/Server/obj
 /Server/Debug
