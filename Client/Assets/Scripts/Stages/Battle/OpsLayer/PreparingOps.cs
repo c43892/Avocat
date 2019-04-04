@@ -45,6 +45,7 @@ public class PreparingOps : StageOpsLayer
         if (avatar == null)
             return;
 
+        // 显示指针，并隐藏准备拖拽的对象
         currentSelAvatar = avatar;
         PointerIndicator.gameObject.SetActive(true);
         PointerIndicator.sprite = avatar.SpriteRender.sprite;
@@ -56,6 +57,7 @@ public class PreparingOps : StageOpsLayer
         if (currentSelAvatar == null)
             return;
 
+        // 移动指针
         var rootPos = MapRoot.transform.localPosition;
         PointerIndicator.transform.localPosition = new Vector2(rootPos.x + cx, rootPos.y - cy);
     }
@@ -65,6 +67,7 @@ public class PreparingOps : StageOpsLayer
         if (currentSelAvatar == null)
             return;
 
+        // 隐藏指针，执行交换操作，并显示被拖拽对象
         Room.ExchangeWarroirsPosition((int)fx, (int)fy, (int)cx, (int)cy);
         PointerIndicator.gameObject.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);

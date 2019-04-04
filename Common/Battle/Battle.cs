@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using Swift;
 
-namespace Battle
+namespace Avocat
 {
     /// <summary>
     /// 战斗对象，包括一场战斗所需全部数据，在初始数据和操作过程完全一致的情况下，可完全复现一场战斗过程。
@@ -16,10 +16,14 @@ namespace Battle
         // 战斗地图
         public BattleMap Map { get; private set; }
 
-        public Battle(int mapWidth, int mapHeight, int randSeed)
+        // 参与战斗的各玩家
+        public PlayerInfo[] Players;
+
+        public Battle(int mapWidth, int mapHeight, int randSeed, params PlayerInfo[] players)
         {
             srand = new SRandom(randSeed);
             Map = new BattleMap(mapWidth, mapHeight);
+            Players = players;
         }
 
         // 交换英雄位置

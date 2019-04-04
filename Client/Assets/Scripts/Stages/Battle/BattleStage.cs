@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Swift;
-using Battle;
+using Avocat;
 using System;
 
 /// <summary>
@@ -32,6 +32,7 @@ public class BattleStage : MonoBehaviour
 
     private void Awake()
     {
+        // 所有操作转交当前操作层逻辑
         MapGround.OnClicked += (float x, float y) => currentOpLayer.OnClicked((int)x, (int)y);
         MapGround.OnStartDragging += (float x, float y) => currentOpLayer.OnStartDragging(x, y);
         MapGround.OnDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnDragging(fx, fy, cx, cy);
@@ -53,7 +54,7 @@ public class BattleStage : MonoBehaviour
 
         currentOpLayer = new PreparingOps(this);
 
-        // 英雄
+        // 英雄位置变化
         room.OnWarriorPositionChanged += (int fromX, int fromY, int toX, int toY) =>
         {
             var avFrom = Avatars[fromX, fromY];
@@ -131,24 +132,5 @@ public class BattleStage : MonoBehaviour
         }
 
         Avatars[x, y] = avatar;
-    }
-
-    // 设置指针标记
-    public void SetPointerIndicator(string res)
-    {
-        PointerIndicator.gameObject.SetActive(res != null);
-    }
-
-    // 指针坐标
-    public Vector2 PointerIndicatorPosition
-    {
-        get
-        {
-            return PointerIndicator.transform.position;
-        }
-        set
-        {
-            PointerIndicator.transform.position = new Vector3(value.x, value.y);
-        }
     }
 }

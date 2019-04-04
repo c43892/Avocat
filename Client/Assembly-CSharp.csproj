@@ -106,7 +106,7 @@
     <Compile Include="Assets\Scripts\Common\Swift\Utils\SRandom.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Utils\TimeUtils.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Utils\XmlUtils.cs" />
-    <Compile Include="Assets\Scripts\Common\UserPlayer\UserInfo.cs" />
+    <Compile Include="Assets\Scripts\Common\UserPlayer\PlayerInfo.cs" />
     <Compile Include="Assets\Scripts\GameCore.cs" />
     <Compile Include="Assets\Scripts\GameDriver.cs" />
     <Compile Include="Assets\Scripts\Network\ServerPort.cs" />

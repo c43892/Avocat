@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Swift;
-using Battle;
+using Avocat;
 
 public class CombatTestDriver : MonoBehaviour
 {
@@ -10,13 +10,20 @@ public class CombatTestDriver : MonoBehaviour
     public MapTile TestMapTile;
     public MapWarrior TestMapWarrior;
 
+    public GameObject PreparingUI;
+
+    BattleRoomClient Room { get { return BattleStage.Room; } }
+
     public void Start()
     {
         BattleStage.MapTileCreator = (int tileType) => Instantiate(TestMapTile);
         BattleStage.MapWarriorCreator = (int avatarType) => Instantiate(TestMapWarrior);
 
         // test battle
-        var bt = new Battle.Battle(22, 12, 0);
+        var player = new PlayerInfo();
+        player.ID = "tester";
+        player.Name = "战斗测试";
+        var bt = new Battle(22, 12, 0, player);
 
         // test map
         var map = bt.Map;
@@ -34,5 +41,16 @@ public class CombatTestDriver : MonoBehaviour
         // test room
         var room = new BattleRoomClient(bt);
         BattleStage.BuildBattleStage(room);
+
+        Room.OnAllPrepared += () =>
+        {
+            PreparingUI.SetActive(false);
+        };
+    }
+
+    // 准备完毕
+    public void OnPreparingDown()
+    {
+        Room.Prepared();
     }
 }

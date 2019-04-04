@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Swift;
-using SCM;
 using Swift.Math;
 using System;
 
@@ -60,7 +59,6 @@ public class GameCore : Core
 
     // 玩家自身信息
     public string MeID { get; set; }
-    public UserInfo MeInfo { get; set; }
 
     // 自己在战斗中的 player 编号
     public int MePlayer { get; set; }

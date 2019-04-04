@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Battle
+namespace Avocat
 {
     /// <summary>
     /// 道具
