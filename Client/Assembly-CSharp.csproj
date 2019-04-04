@@ -86,7 +86,6 @@
     <Compile Include="Assets\Scripts\Common\Swift\Math\MathEx.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Math\Vec2.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Math\Vec3.cs" />
-    <Compile Include="Assets\Scripts\Common\Swift\Misc\PointerOpsHandler.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Net\NetComponent.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Net\NetConnection.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Net\NetCore.cs" />
@@ -112,25 +111,26 @@
     <Compile Include="Assets\Scripts\GameDriver.cs" />
     <Compile Include="Assets\Scripts\Network\ServerPort.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\BattleStage.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\MapGround.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapWarrior.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Test\CombatTestDriver.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -334,13 +334,13 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>C:/works/Unity/ScarletFantasy/Client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>C:/works/Unity/Avocat/Client/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

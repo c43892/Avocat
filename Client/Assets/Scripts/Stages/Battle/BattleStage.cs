@@ -10,9 +10,15 @@ using System;
 /// </summary>
 public class BattleStage : MonoBehaviour
 {
+    // 显示操作指针
+    public SpriteRenderer PointerIndicator;
+
+    // 底层地图操作处理
+    public MapGround MapGround;
+
     // 相关显示参数
-    public int MapTileWidth;
-    public int MapTileHeight;
+    public int MapTileWidth { get; set; }
+    public int MapTileHeight { get; set; }
 
     // 创建地图块模板
     public Func<int, MapTile> MapTileCreator;
@@ -24,15 +30,26 @@ public class BattleStage : MonoBehaviour
     public BattleRoomClient Room { get; private set; }
     public BattleMap Map { get { return Room == null ? null : Room.Battle.Map; } }
 
+    private void Awake()
+    {
+        MapGround.OnClicked += (float x, float y) => currentOpLayer.OnClicked((int)x, (int)y);
+        MapGround.OnStartDragging += (float x, float y) => currentOpLayer.OnStartDragging(x, y);
+        MapGround.OnDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnDragging(fx, fy, cx, cy);
+        MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnEndDragging(fx, fy, cx, cy);
+    }
+
     // 创建场景显示对象
     public void BuildBattleStage(BattleRoomClient room)
     {
         ClearMap();
 
         Room = room;
+
         BuildMapGrids();
         BuildMapItems();
         BuildWarroirs();
+
+        MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
 
         currentOpLayer = new PreparingOps(this);
 
@@ -70,8 +87,7 @@ public class BattleStage : MonoBehaviour
             tile.Y = y;
             tile.GetComponent<SpriteRenderer>().sortingOrder = 1;
             tile.gameObject.SetActive(true);
-            tile.OnClicked += (px, py) => currentOpLayer.OnClicked(px, py);
-
+            
             Tiles[x, y] = tile;
         });
     }
@@ -95,9 +111,10 @@ public class BattleStage : MonoBehaviour
 
             var avatar = MapWarriorCreator(warrior.Avatar);
             avatar.transform.SetParent(MapRoot);
-            var sp = avatar.GetComponent<SpriteRenderer>();
+            var sp = avatar.SpriteRender;
             sp.sortingOrder = 2;
             sp.flipX = warrior.IsOpponent;
+
             avatar.gameObject.SetActive(true);
 
             SetAvatarPosition(avatar, x, y);
@@ -114,5 +131,24 @@ public class BattleStage : MonoBehaviour
         }
 
         Avatars[x, y] = avatar;
+    }
+
+    // 设置指针标记
+    public void SetPointerIndicator(string res)
+    {
+        PointerIndicator.gameObject.SetActive(res != null);
+    }
+
+    // 指针坐标
+    public Vector2 PointerIndicatorPosition
+    {
+        get
+        {
+            return PointerIndicator.transform.position;
+        }
+        set
+        {
+            PointerIndicator.transform.position = new Vector3(value.x, value.y);
+        }
     }
 }

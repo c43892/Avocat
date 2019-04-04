@@ -9,6 +9,25 @@ using Swift;
 /// </summary>
 public class MapTile : MonoBehaviour
 {
+    SpriteRenderer sr;
+    private void Start()
+    {
+        sr = GetComponent<SpriteRenderer>();
+    }
+
+    public bool Selected
+    {
+        get
+        {
+            return selected;
+        }
+        set
+        {
+            selected = value;
+            sr.color = selected ? Color.green : Color.white;
+        }
+    } bool selected = false;
+
     public int X
     {
         get
@@ -33,48 +52,5 @@ public class MapTile : MonoBehaviour
             y = value;
             transform.localPosition = new Vector3(x, y);
         }
-    } int y;
-
-    public event Action<int, int> OnClicked;
-
-    private void Awake()
-    {
-        ops = new PointerOpsHandler();
-        ops.OnClicked += () => OnClicked.SC(x, y);
-    }
-
-    SpriteRenderer sr;
-    private void Start()
-    {
-        sr = GetComponent<SpriteRenderer>();
-    }
-
-    public bool Selected
-    {
-        get
-        {
-            return selected;
-        }
-        set
-        {
-            selected = value;
-            sr.color = selected ? Color.green : Color.white;
-        }
-    } bool selected = false;
-
-    #region 操作事件构建
-
-    PointerOpsHandler ops;
-
-    void OnMouseDown()
-    {
-        ops.Down();
-    }
-
-    void OnMouseUp()
-    {
-        ops.Up();
-    }
-
-    #endregion
+    } int y;    
 }

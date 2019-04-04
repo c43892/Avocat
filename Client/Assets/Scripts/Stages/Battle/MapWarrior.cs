@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MapWarrior : MonoBehaviour
 {
+    public Vector2 CenterOffset = new Vector2(0.5f, 0.5f);
+
     public int X
     {
         get
@@ -13,7 +15,7 @@ public class MapWarrior : MonoBehaviour
         set
         {
             x = value;
-            transform.localPosition = new Vector3(x, y);
+            transform.localPosition = new Vector3(x + CenterOffset.x, y + CenterOffset.y);
         }
     } int x;
 
@@ -26,15 +28,19 @@ public class MapWarrior : MonoBehaviour
         set
         {
             y = value;
-            transform.localPosition = new Vector3(x, y);
+            transform.localPosition = new Vector3(x + CenterOffset.x, y + CenterOffset.y);
         }
     } int y;
 
-    SpriteRenderer sr;
-    private void Start()
-    {
-        sr = GetComponent<SpriteRenderer>();
-    }
+    public SpriteRenderer SpriteRender {
+        get
+        {
+            if (sr == null)
+                sr = GetComponent<SpriteRenderer>();
+
+            return sr;
+        }
+    } SpriteRenderer sr;
 
     public bool Selected
     {
@@ -45,7 +51,7 @@ public class MapWarrior : MonoBehaviour
         set
         {
             selected = value;
-            sr.color = selected ? Color.green : Color.white;
+            SpriteRender.color = selected ? Color.green : Color.white;
         }
     } bool selected = false;
 }
