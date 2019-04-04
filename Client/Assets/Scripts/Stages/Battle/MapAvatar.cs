@@ -4,7 +4,7 @@ using UnityEngine;
 using Swift;
 using Avocat;
 
-public class MapWarrior : MonoBehaviour
+public class MapAvatar : MonoBehaviour
 {
     public BattleStage BattleStage { get; set; }
     public Vector2 CenterOffset = new Vector2(0.5f, 0.5f);

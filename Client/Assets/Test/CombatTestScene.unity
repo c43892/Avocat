@@ -1148,11 +1148,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleStageRoot
       objectReference: {fileID: 0}
-    - target: {fileID: 5360679074043673761, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1208,104 +1203,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: MapGround
-      value: 
-      objectReference: {fileID: 5360679074138491638}
-    - target: {fileID: 2020077978715511676, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -11.36
-      objectReference: {fileID: 0}
-    - target: {fileID: 2020077978715511676, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2020077978715511676, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2020077978715511676, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3716431805127273120, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3138642989645646544, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 00bcabbc410132649a6e32408529527b,
-        type: 3}
-    - target: {fileID: 3138642989645646544, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3138642989645646544, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3138642989645646544, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3138642989645646544, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_DrawMode
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
---- !u!1 &5360679074138491636 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3716431805127273120, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-    type: 3}
-  m_PrefabInstance: {fileID: 5360679074138491635}
-  m_PrefabAsset: {fileID: 0}
---- !u!61 &5360679074138491637
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5360679074138491636}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.5, y: -0.5}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 1}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 0.2, y: 0.2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &5360679074138491638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5360679074138491636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7d9d22e2dbd36f468df57af6fb1f08e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

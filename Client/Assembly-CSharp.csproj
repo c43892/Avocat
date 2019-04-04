@@ -111,9 +111,9 @@
     <Compile Include="Assets\Scripts\GameDriver.cs" />
     <Compile Include="Assets\Scripts\Network\ServerPort.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\BattleStage.cs" />
-    <Compile Include="Assets\Scripts\Stages\Battle\MapGround.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\MapAvatar.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\MapGroundLayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />
-    <Compile Include="Assets\Scripts\Stages\Battle\MapWarrior.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\InBattleOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />

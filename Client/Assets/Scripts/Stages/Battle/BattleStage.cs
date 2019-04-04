@@ -14,7 +14,7 @@ public class BattleStage : MonoBehaviour
     public SpriteRenderer PointerIndicator;
 
     // 底层地图操作处理
-    public MapGround MapGround;
+    public MapGroundLayer MapGround;
 
     // 相关显示参数
     public int MapTileWidth { get; set; }
@@ -22,7 +22,7 @@ public class BattleStage : MonoBehaviour
 
     // 创建地图块模板
     public Func<int, MapTile> MapTileCreator;
-    public Func<int, MapWarrior> MapWarriorCreator;
+    public Func<int, MapAvatar> MapWarriorCreator;
 
     // 地图显示元素根
     public Transform MapRoot;
@@ -98,10 +98,10 @@ public class BattleStage : MonoBehaviour
     }
 
     // 构建地图上的角色
-    public MapWarrior[,] Avatars { get; private set; }
+    public MapAvatar[,] Avatars { get; private set; }
     void BuildWarroirs()
     {
-        Avatars = new MapWarrior[Map.Width, Map.Height];
+        Avatars = new MapAvatar[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
             var warrior = Map.Warriors[x, y];
@@ -122,7 +122,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 设置角色位置
-    void SetAvatarPosition(MapWarrior avatar, int x, int y)
+    void SetAvatarPosition(MapAvatar avatar, int x, int y)
     {
         if (avatar != null)
         {

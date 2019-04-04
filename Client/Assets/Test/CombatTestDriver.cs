@@ -8,7 +8,7 @@ public class CombatTestDriver : MonoBehaviour
 {
     public BattleStage BattleStage;
     public MapTile TestMapTile;
-    public MapWarrior TestMapWarrior;
+    public MapAvatar TestMapWarrior;
 
     public GameObject PreparingUI;
     public GameObject StartingUI;

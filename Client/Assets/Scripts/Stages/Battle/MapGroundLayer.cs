@@ -7,7 +7,7 @@ using System;
 /// <summary>
 /// 统一由地表底下一层响应地图相关操作
 /// </summary>
-public class MapGround : MonoBehaviour
+public class MapGroundLayer : MonoBehaviour
 {
     public event Action<float, float> OnClicked;
 
@@ -37,7 +37,7 @@ public class MapGround : MonoBehaviour
         get
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hitInfo = Physics2D.GetRayIntersection(ray, float.MaxValue, LayerMask.GetMask("MapGround"));
+            var hitInfo = Physics2D.GetRayIntersection(ray, float.MaxValue, LayerMask.GetMask("MapGroundLayer"));
             if (hitInfo.collider != null)
             {
                 var pos = transform.worldToLocalMatrix.MultiplyPoint(hitInfo.point);

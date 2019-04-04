@@ -8,7 +8,7 @@ using Swift;
 /// </summary>
 public class PreparingOps : StageOpsLayer
 {
-    MapWarrior currentSelAvatar;
+    MapAvatar currentSelAvatar;
 
     public PreparingOps(BattleStage bs)
         : base(bs)
