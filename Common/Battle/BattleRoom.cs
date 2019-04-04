@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Swift;
 using Swift.Math;
+using System.Diagnostics;
 
 namespace Avocat
 {
@@ -41,6 +42,14 @@ namespace Avocat
             playerPreparedDown.Remove(Battle.Players[player].ID);
             if (playerPreparedDown.Count == 0)
                 OnAllPrepared.SC();
+        }
+
+        // 执行攻击
+        public event Action<Warrior, int, int> OnWarriorAttackAt = null; // 角色进行攻击
+        public virtual void DoAttackAt(Warrior attacker, int tx, int ty)
+        {
+            Debug.Assert(attacker != null, "attacker should not be null");
+            OnWarriorAttackAt.SC(attacker, tx, ty);
         }
     }
 }

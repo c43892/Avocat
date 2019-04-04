@@ -50,6 +50,11 @@ public class CombatTestDriver : MonoBehaviour
 
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
+
+        Room.OnWarriorAttackAt += (Warrior attacker, int tx, int ty) =>
+        {
+            Debug.Log("do attack at " + tx + ", " + ty);
+        };
     }
 
     // 开始新游戏

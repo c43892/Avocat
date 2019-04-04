@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Swift;
 using Avocat;
+using System.Diagnostics;
 
 /// <summary>
 /// 客户端战斗对象
@@ -28,5 +29,12 @@ public class BattleRoomClient : BattleRoom
     public void Prepared()
     {
         PlayerPrepared(PlayerMe);
+    }
+
+    // 执行攻击操作
+    public override void DoAttackAt(Warrior attacker, int tx, int ty)
+    {
+        Debug.Assert(!attacker.IsOpponent, "attacker should be in my team");
+        base.DoAttackAt(attacker, tx, ty);
     }
 }
