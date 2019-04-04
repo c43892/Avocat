@@ -114,6 +114,7 @@
     <Compile Include="Assets\Scripts\Stages\Battle\MapGround.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapWarrior.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\InBattleOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Test\CombatTestDriver.cs" />

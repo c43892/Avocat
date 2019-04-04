@@ -91,5 +91,12 @@ namespace Swift
         {
             return v.InRect(Vec2.Zero, max);
         }
+
+        // 计算曼哈顿距离
+        public static int ManhattanDist(int v1x, int v1y, int v2x, int v2y) { return (int)ManhattanDist(new Vec2(v1x, v1y), new Vec2(v2x, v2y)); }
+        public static Fix64 ManhattanDist(Vec2 v1, Vec2 v2)
+        {
+            return MathEx.Abs(v1.x - v2.x) + MathEx.Abs(v1.y - v2.y);
+        }
     }
 }

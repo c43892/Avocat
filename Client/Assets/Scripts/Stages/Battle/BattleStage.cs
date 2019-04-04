@@ -52,8 +52,6 @@ public class BattleStage : MonoBehaviour
 
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
 
-        currentOpLayer = new PreparingOps(this);
-
         // 英雄位置变化
         room.OnWarriorPositionChanged += (int fromX, int fromY, int toX, int toY) =>
         {
@@ -110,7 +108,8 @@ public class BattleStage : MonoBehaviour
             if (warrior == null)
                 return;
 
-            var avatar = MapWarriorCreator(warrior.Avatar);
+            var avatar = MapWarriorCreator(warrior.AvatarID);
+            avatar.BattleStage = this;
             avatar.transform.SetParent(MapRoot);
             var sp = avatar.SpriteRender;
             sp.sortingOrder = 2;
@@ -132,5 +131,17 @@ public class BattleStage : MonoBehaviour
         }
 
         Avatars[x, y] = avatar;
+    }
+
+    // 开始战斗准备阶段
+    public void StartPreparing()
+    {
+        currentOpLayer = new PreparingOps(this);
+    }
+
+    // 开始战斗阶段
+    public void StartFighting()
+    {
+        currentOpLayer = new InBattleOps(this);
     }
 }

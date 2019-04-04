@@ -11,6 +11,7 @@ public class CombatTestDriver : MonoBehaviour
     public MapWarrior TestMapWarrior;
 
     public GameObject PreparingUI;
+    public GameObject StartingUI;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
@@ -27,13 +28,13 @@ public class CombatTestDriver : MonoBehaviour
 
         // test map
         var map = bt.Map;
-        map.Warriors[2, 2] = new Warrior();
-        map.Warriors[2, 4] = new Warrior();
-        map.Warriors[2, 6] = new Warrior();
+        map.Warriors[2, 2] = new Warrior(map);
+        map.Warriors[2, 4] = new Warrior(map);
+        map.Warriors[2, 6] = new Warrior(map);
 
-        map.Warriors[19, 3] = new Warrior();
-        map.Warriors[19, 5] = new Warrior();
-        map.Warriors[19, 7] = new Warrior();
+        map.Warriors[19, 3] = new Warrior(map);
+        map.Warriors[19, 5] = new Warrior(map);
+        map.Warriors[19, 7] = new Warrior(map);
         map.Warriors[19, 3].IsOpponent = true;
         map.Warriors[19, 5].IsOpponent = true;
         map.Warriors[19, 7].IsOpponent = true;
@@ -46,11 +47,25 @@ public class CombatTestDriver : MonoBehaviour
         {
             PreparingUI.SetActive(false);
         };
+
+        BattleStage.gameObject.SetActive(false);
+        StartingUI.SetActive(true);
+    }
+
+    // 开始新游戏
+    public void OnStartNewGame()
+    {
+        BattleStage.gameObject.SetActive(true);
+        BattleStage.StartPreparing();
+        StartingUI.SetActive(false);
+        PreparingUI.SetActive(true);
     }
 
     // 准备完毕
     public void OnPreparingDown()
     {
         Room.Prepared();
+        PreparingUI.SetActive(false);
+        BattleStage.StartFighting();
     }
 }
