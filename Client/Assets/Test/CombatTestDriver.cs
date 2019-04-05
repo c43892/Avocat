@@ -28,13 +28,13 @@ public class CombatTestDriver : MonoBehaviour
 
         // test map
         var map = bt.Map;
-        map.Warriors[2, 2] = new Warrior(map);
-        map.Warriors[2, 4] = new Warrior(map);
-        map.Warriors[2, 6] = new Warrior(map);
+        map.Warriors[2, 2] = new Warrior(map, 2, 1);
+        map.Warriors[2, 4] = new Warrior(map, 2, 1);
+        map.Warriors[2, 6] = new Warrior(map, 2, 1);
 
-        map.Warriors[19, 3] = new Warrior(map);
-        map.Warriors[19, 5] = new Warrior(map);
-        map.Warriors[19, 7] = new Warrior(map);
+        map.Warriors[19, 3] = new Warrior(map, 2, 1);
+        map.Warriors[19, 5] = new Warrior(map, 2, 1);
+        map.Warriors[19, 7] = new Warrior(map, 2, 1);
         map.Warriors[19, 3].IsOpponent = true;
         map.Warriors[19, 5].IsOpponent = true;
         map.Warriors[19, 7].IsOpponent = true;

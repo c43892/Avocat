@@ -26,9 +26,9 @@ public class BattleRoomClient : BattleRoom
     }
 
     // 执行攻击操作
-    public override void DoAttackAt(Warrior attacker, int tx, int ty)
+    public override void DoAttack(Warrior attacker, Warrior target)
     {
         Debug.Assert(!attacker.IsOpponent, "attacker should be in my team");
-        base.DoAttackAt(attacker, tx, ty);
+        base.DoAttack(attacker, target);
     }
 }

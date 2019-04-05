@@ -73,7 +73,7 @@ public class BattleStage : MonoBehaviour
             tile.Y = y;
             tile.GetComponent<SpriteRenderer>().sortingOrder = 1;
             tile.gameObject.SetActive(true);
-            
+
             Tiles[x, y] = tile;
         });
     }
@@ -155,10 +155,18 @@ public class BattleStage : MonoBehaviour
         }
     } MapAniPlayer aniPlayer;
 
+    MapAvatar GetAvatarByWarrior(Warrior warrior)
+    {
+        warrior.GetPosInMap(out int x, out int y);
+        var avatar = Avatars[x, y];
+        Debug.Assert(avatar != null, "warrior should have a avatar in battle map");
+        return avatar;
+    }
+
     // 挂接动画播放事件
     void SetupAniPlayer()
     {
-        // 英雄位置变化
+        // 角色位置变化
         Room.OnWarriorPositionExchanged += (int fromX, int fromY, int toX, int toY) =>
         {
             var avFrom = Avatars[fromX, fromY];
@@ -169,10 +177,10 @@ public class BattleStage : MonoBehaviour
         };
 
         // 角色攻击
-        Room.OnWarriorAttackAt += (Warrior attacker, int tx, int ty) =>
+        Room.OnWarriorAttack += (Warrior attacker, Warrior target) =>
         {
-            attacker.GetPosInMap(out int x, out int y);
-            var avatar = Avatars[x, y];
+            var avatar = GetAvatarByWarrior(attacker);
+            target.GetPosInMap(out int tx, out int ty);
             AniPlayer.Add(AniPlayer.MakeAttacking(avatar.transform, tx + avatar.CenterOffset.x, ty + avatar.CenterOffset.y));
         };
 
@@ -184,6 +192,13 @@ public class BattleStage : MonoBehaviour
 
             AniPlayer.Add(AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)));
             Avatars[path[path.Count - 2], path[path.Count - 1]] = avatar;
+        };
+
+        // 角色死亡
+        Room.OnWarriorDying += (Warrior warrior) =>
+        {
+            var avatar = GetAvatarByWarrior(warrior);
+            AniPlayer.Add(AniPlayer.MakeDying(avatar), () => Avatars[avatar.X, avatar.Y] = null);
         };
     }
 

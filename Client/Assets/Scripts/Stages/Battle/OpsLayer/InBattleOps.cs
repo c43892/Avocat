@@ -73,7 +73,7 @@ public class InBattleOps : StageOpsLayer
                 else if (CurrentSelWarrior != null)
                 {
                     // 点对方角色，指定攻击指令
-                    DoAttack(CurrentSelWarrior, (int)x, (int)y);
+                    DoAttack(CurrentSelWarrior, warrior);
                     CurrentSelWarrior = null;
                     status = "selectingWarrior";
                 }
@@ -148,11 +148,11 @@ public class InBattleOps : StageOpsLayer
     }
 
     // 执行攻击指令
-    void DoAttack(Warrior attacker, int tx, int ty)
+    void DoAttack(Warrior attacker, Warrior target)
     {
         if (attacker.MovingPath.Count > 0)
             Room.DoMoveOnPath(attacker);
 
-        Room.DoAttackAt(attacker, tx, ty);
+        Room.DoAttack(attacker, target);
     }
 }

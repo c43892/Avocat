@@ -24,12 +24,12 @@ public class MapAniPlayer : MonoBehaviour
         }
     } BattleStage stage;
 
-    List<IEnumerator> anis = new List<IEnumerator>();
+    List<KeyValuePair<IEnumerator, Action>> anis = new List<KeyValuePair<IEnumerator, Action>>();
 
     // 要播放的动画入队
-    public void Add(IEnumerator routine)
+    public void Add(IEnumerator routine, Action callback = null)
     {
-        anis.Add(routine);
+        anis.Add(new KeyValuePair<IEnumerator, Action>(routine, callback));
         if (anis.Count == 1)
             StartCoroutine(StartPlaying());
     }
@@ -38,9 +38,11 @@ public class MapAniPlayer : MonoBehaviour
     {
         while (anis.Count > 0)
         {
-            var ani = anis[0];
+            var ani = anis[0].Key;
+            var cb = anis[0].Value;
             yield return StartCoroutine(ani);
             anis.RemoveAt(0);
+            cb.SC();
         }
     }
 
@@ -111,6 +113,14 @@ public class MapAniPlayer : MonoBehaviour
 
         yield return MakeMovingOnPath(tr, v, new float[] { fx, fy, tx, ty });
         yield return MakeMovingOnPath(tr, v, new float[] { tx, ty, fx, fy });
+    }
+
+    // 角色死亡
+    public IEnumerator MakeDying(MapAvatar avatar)
+    {
+        yield return null;
+        avatar.transform.SetParent(null);
+        Destroy(avatar.gameObject);
     }
 
     #endregion

@@ -78,11 +78,15 @@ namespace Avocat
         }
 
         // 执行攻击
-        public event Action<Warrior, int, int> OnWarriorAttackAt = null; // 角色进行攻击
-        public virtual void DoAttackAt(Warrior attacker, int tx, int ty)
+        public event Action<Warrior, Warrior> OnWarriorAttack = null; // 角色进行攻击
+        public event Action<Warrior> OnWarriorDying = null; // 角色死亡
+        public virtual void DoAttack(Warrior attacker, Warrior target)
         {
-            Debug.Assert(attacker != null, "attacker should not be null");
-            OnWarriorAttackAt.SC(attacker, tx, ty);
+            Debug.Assert(attacker != null && target != null, "attacker & target should not be null either");
+            target.Hp -= attacker.Power;
+            OnWarriorAttack.SC(attacker, target);
+            if (target.IsDead)
+                OnWarriorDying.SC(target);
         }
     }
 }
