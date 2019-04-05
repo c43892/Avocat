@@ -28,7 +28,7 @@ public class PreparingOps : StageOpsLayer
         {
             // 交换角色位置
             currentSelAvatar.Selected = false;
-            Room.ExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)x, (int)y);
+            Room.DoExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)x, (int)y);
             currentSelAvatar = null;
         }
     }
@@ -68,7 +68,7 @@ public class PreparingOps : StageOpsLayer
             return;
 
         // 隐藏指针，执行交换操作，并显示被拖拽对象
-        Room.ExchangeWarroirsPosition((int)fx, (int)fy, (int)cx, (int)cy);
+        Room.DoExchangeWarroirsPosition((int)fx, (int)fy, (int)cx, (int)cy);
         PointerIndicator.gameObject.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);
         currentSelAvatar = null;

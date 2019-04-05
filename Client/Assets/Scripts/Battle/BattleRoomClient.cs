@@ -25,10 +25,22 @@ public class BattleRoomClient : BattleRoom
         PlayerPrepared(PlayerMe);
     }
 
+    // 交换角色位置
+    public void DoExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
+    {
+        ExchangeWarroirsPosition(fx, fy, tx, ty);
+    }
+
+    // 沿路径移动角色
+    public void DoMoveOnPath(Warrior warrior)
+    {
+        MoveOnPath(warrior);
+    }
+
     // 执行攻击操作
-    public override void DoAttack(Warrior attacker, Warrior target)
+    public void DoAttack(Warrior attacker, Warrior target)
     {
         Debug.Assert(!attacker.IsOpponent, "attacker should be in my team");
-        base.DoAttack(attacker, target);
+        Attack(attacker, target);
     }
 }

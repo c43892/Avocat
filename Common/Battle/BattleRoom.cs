@@ -27,16 +27,16 @@ namespace Avocat
 
         // 交换英雄位置
         public event Action<int, int, int, int> OnWarriorPositionExchanged = null;
-        public virtual void ExchangeWarroirsPosition(int fx, int fy, int toX, int toY)
+        protected void ExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
         {
-            Battle.ExchangeWarroirsPosition(fx, fy, toX, toY);
-            OnWarriorPositionExchanged.SC(fx, fy, toX, toY);
+            Battle.ExchangeWarroirsPosition(fx, fy, tx, ty);
+            OnWarriorPositionExchanged.SC(fx, fy, tx, ty);
         }
 
         // 完成战斗准备
         public event Action<int> OnPlayerPrepared = null; // 有玩家完成战斗准备
         public event Action OnAllPrepared = null; // 所有玩家完成战斗准备
-        public virtual void PlayerPrepared(int player)
+        protected void PlayerPrepared(int player)
         {
             OnPlayerPrepared.SC(player);
             playerPreparedDown.Remove(Battle.Players[player].ID);
@@ -47,7 +47,7 @@ namespace Avocat
         // 角色沿路径移动
         public event Action<int, int, int, int> OnWarriorPositionChanged = null;
         public event Action<Warrior, List<int>> OnWarriorMovingOnPath = null; // 角色沿路径移动
-        public virtual void DoMoveOnPath(Warrior warrior)
+        protected void MoveOnPath(Warrior warrior)
         {
             var lstPathXY = warrior.MovingPath;
             var fx = lstPathXY[0];
@@ -80,7 +80,7 @@ namespace Avocat
         // 执行攻击
         public event Action<Warrior, Warrior> OnWarriorAttack = null; // 角色进行攻击
         public event Action<Warrior> OnWarriorDying = null; // 角色死亡
-        public virtual void DoAttack(Warrior attacker, Warrior target)
+        protected void Attack(Warrior attacker, Warrior target)
         {
             Debug.Assert(attacker != null && target != null, "attacker & target should not be null either");
             target.Hp -= attacker.Power;
