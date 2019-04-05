@@ -108,11 +108,8 @@ public class MapAniPlayer : MonoBehaviour
         var fx = tr.localPosition.x;
         var fy = tr.localPosition.y;
 
-        var dist = (new Vector2(fx, fy) - new Vector2(tx, ty)).sqrMagnitude;
-        var v = dist / 0.25f;
-
-        yield return MakeMovingOnPath(tr, v, new float[] { fx, fy, tx, ty });
-        yield return MakeMovingOnPath(tr, v, new float[] { tx, ty, fx, fy });
+        yield return MakeMovingOnPath(tr, 20, new float[] { fx, fy, tx, ty });
+        yield return MakeMovingOnPath(tr, 20, new float[] { tx, ty, fx, fy });
     }
 
     // 角色死亡

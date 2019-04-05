@@ -15,15 +15,19 @@ public class CombatTestDriver : MonoBehaviour
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
+    BattleMessageLooper msgLooper = new BattleMessageLooper();
     public void Start()
     {
         BattleStage.MapTileCreator = (int tileType) => Instantiate(TestMapTile);
         BattleStage.MapWarriorCreator = (int avatarType) => Instantiate(TestMapWarrior);
 
         // test battle
-        var player = new PlayerInfo();
-        player.ID = "tester";
-        player.Name = "战斗测试";
+        var player = new PlayerInfo
+        {
+            ID = "tester",
+            Name = "战斗测试"
+        };
+
         var bt = new Battle(22, 12, 0, player);
 
         // test map
@@ -41,12 +45,27 @@ public class CombatTestDriver : MonoBehaviour
 
         // test room
         var room = new BattleRoomClient(bt);
+
+        // setup the fake message loop
+        room.BMS = msgLooper;
+        room.RegisterBattleMessageHandlers(msgLooper);
+
         BattleStage.BuildBattleStage(room);
+        room.OnAllPrepared += () =>
+        {
+            PreparingUI.SetActive(false);
+            BattleStage.StartFighting();
+        };
 
         Room.OnAllPrepared += () => { PreparingUI.SetActive(false); };
 
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
+    }
+
+    public void Update()
+    {
+        msgLooper.MoveNext();
     }
 
     // 开始新游戏
@@ -61,8 +80,6 @@ public class CombatTestDriver : MonoBehaviour
     // 准备完毕
     public void OnPreparingDown()
     {
-        Room.Prepared();
-        PreparingUI.SetActive(false);
-        BattleStage.StartFighting();
+        Room.DoPrepared();
     }
 }

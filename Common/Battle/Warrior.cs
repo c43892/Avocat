@@ -19,7 +19,7 @@ namespace Avocat
             Hp = MaxHp;
         }
 
-        public int AvatarID { get; private set; } // 具体的角色 ID
+        public int AvatarID { get; private set; } // 具体的角色形象 ID
         public bool IsOpponent { get; set; } // 是否是对手
         public int Hp { get; set; } // 血量
         public int MaxHp { get; set; } // 最大血量

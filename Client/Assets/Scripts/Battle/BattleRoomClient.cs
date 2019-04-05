@@ -7,12 +7,21 @@ using Swift;
 using Avocat;
 using System.Diagnostics;
 
+public interface IBattleMessageSender
+{
+    void Send(string op, Action<IWriteableBuffer> data);
+}
+
 /// <summary>
 /// 客户端战斗对象
 /// </summary>
 public class BattleRoomClient : BattleRoom
 {
+    // 自己在房间中的 player 编号
     public int PlayerMe { get; private set; }
+
+    // 负责消息发送
+    public IBattleMessageSender BMS { get; set; }
 
     public BattleRoomClient(Battle bt)
         :base(bt)
@@ -20,27 +29,47 @@ public class BattleRoomClient : BattleRoom
     }
 
     // 战斗准备完毕
-    public void Prepared()
+    public void DoPrepared()
     {
-        PlayerPrepared(PlayerMe);
+        BMS.Send("PlayerPrepared", (data) => data.Write(PlayerMe));
     }
 
     // 交换角色位置
     public void DoExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
     {
-        ExchangeWarroirsPosition(fx, fy, tx, ty);
+        BMS.Send("ExchangeWarroirsPosition", (data) =>
+        {
+            data.Write(fx);
+            data.Write(fy);
+            data.Write(tx);
+            data.Write(ty);
+        });
     }
 
     // 沿路径移动角色
     public void DoMoveOnPath(Warrior warrior)
     {
-        MoveOnPath(warrior);
+        BMS.Send("MoveOnPath", (data) =>
+        {
+            warrior.GetPosInMap(out int x, out int y);
+            data.Write(x);
+            data.Write(y);
+            data.Write(warrior.MovingPath.ToArray());
+        });
     }
 
     // 执行攻击操作
     public void DoAttack(Warrior attacker, Warrior target)
     {
         Debug.Assert(!attacker.IsOpponent, "attacker should be in my team");
-        Attack(attacker, target);
+        BMS.Send("Attack", (data) =>
+        {
+            attacker.GetPosInMap(out int fx, out int fy);
+            target.GetPosInMap(out int tx, out int ty);
+            data.Write(fx);
+            data.Write(fy);
+            data.Write(tx);
+            data.Write(ty);
+        });
     }
 }
