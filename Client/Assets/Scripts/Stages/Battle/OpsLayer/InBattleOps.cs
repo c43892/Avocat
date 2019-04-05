@@ -61,9 +61,25 @@ public class InBattleOps : StageOpsLayer
             case "selectingAttackTarget":
                 if (warrior == null)
                 {
-                    // 点空地恢复初始状态
-                    CurrentSelWarrior = null;
-                    status = "selectingWarrior";
+                    // 点空地
+
+                    if (CurrentSelWarrior.MovingPath.Count >= 2
+                        && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 2] == (int)x
+                        && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 1] == (int)y)
+                    {
+                        // 如果是移动目的地，则直接移动
+                        if (CurrentSelWarrior.MovingPath.Count > 0)
+                            Room.DoMoveOnPath(CurrentSelWarrior);
+
+                        CurrentSelWarrior = null;
+                        status = "selectingWarrior";
+                    }
+                    else
+                    {
+                        // 否则恢复初始状态
+                        CurrentSelWarrior = null;
+                        status = "selectingWarrior";
+                    }
                 }
                 else if (!warrior.IsOpponent)
                 {
@@ -73,6 +89,9 @@ public class InBattleOps : StageOpsLayer
                 else if (CurrentSelWarrior != null)
                 {
                     // 点对方角色，指定攻击指令
+                    if (CurrentSelWarrior.MovingPath.Count > 0)
+                        Room.DoMoveOnPath(CurrentSelWarrior);
+
                     DoAttack(CurrentSelWarrior, warrior);
                     CurrentSelWarrior = null;
                     status = "selectingWarrior";
@@ -150,9 +169,6 @@ public class InBattleOps : StageOpsLayer
     // 执行攻击指令
     void DoAttack(Warrior attacker, Warrior target)
     {
-        if (attacker.MovingPath.Count > 0)
-            Room.DoMoveOnPath(attacker);
-
         Room.DoAttack(attacker, target);
     }
 }
