@@ -28,3 +28,6 @@ v15
 /Common/Swift/StateMachine/*.meta
 /Common/Swift/Math/*.meta
 /Common/Swift/AStar/*.meta
+/Common/Swift/DataStructures/*.meta
+/Common/Battle/*.meta
+/Common/UserPlayer/*.meta
