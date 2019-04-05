@@ -43,18 +43,10 @@ public class CombatTestDriver : MonoBehaviour
         var room = new BattleRoomClient(bt);
         BattleStage.BuildBattleStage(room);
 
-        Room.OnAllPrepared += () =>
-        {
-            PreparingUI.SetActive(false);
-        };
+        Room.OnAllPrepared += () => { PreparingUI.SetActive(false); };
 
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
-
-        Room.OnWarriorAttackAt += (Warrior attacker, int tx, int ty) =>
-        {
-            Debug.Log("do attack at " + tx + ", " + ty);
-        };
     }
 
     // 开始新游戏

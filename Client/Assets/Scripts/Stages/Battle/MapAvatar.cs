@@ -10,7 +10,7 @@ public class MapAvatar : MonoBehaviour
     public Vector2 CenterOffset = new Vector2(0.5f, 0.5f);
 
     // 对应的角色
-    public Warrior Warrior { get { return BattleStage.Map.Warriors[X, Y]; } }
+    public Warrior Warrior { get; set; }
 
     public int X
     {

@@ -27,7 +27,7 @@ namespace Avocat
         }
 
         // 交换英雄位置
-        public void ExchangeWarroirsPosition(int player, int fromX, int fromY, int toX, int toY)
+        public void ExchangeWarroirsPosition(int fromX, int fromY, int toX, int toY)
         {
             var item = Map.Warriors[fromX, fromY];
             Map.Warriors[fromX, fromY] = Map.Warriors[toX, toY];

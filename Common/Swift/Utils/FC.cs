@@ -279,6 +279,12 @@ namespace Swift
                 a(p1, p2, p3, p4);
         }
 
+        public static void SC<T1, T2, T3, T4, T5>(this Action<T1, T2, T3, T4, T5> a, T1 p1, T2 p2, T3 p3, T4 p4, T5 p5)
+        {
+            if (a != null)
+                a(p1, p2, p3, p4, p5);
+        }
+
         #endregion
 
         public static TDst[] ToArray<TSrc, TDst>(this IEnumerable<TSrc> src, Func<int, TSrc, Action, TDst> mapFun)

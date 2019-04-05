@@ -19,12 +19,6 @@ public class BattleRoomClient : BattleRoom
     {
     }
 
-    // 交换英雄位置
-    public void ExchangeWarroirsPosition(int fromX, int fromY, int toX, int toY)
-    {
-        ExchangeWarroirsPosition(PlayerMe, fromX, fromY, toX, toY);
-    }
-
     // 战斗准备完毕
     public void Prepared()
     {

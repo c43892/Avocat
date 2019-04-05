@@ -111,6 +111,7 @@
     <Compile Include="Assets\Scripts\GameDriver.cs" />
     <Compile Include="Assets\Scripts\Network\ServerPort.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\BattleStage.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\MapAniPlayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapAvatar.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapGroundLayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />

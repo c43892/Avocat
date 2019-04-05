@@ -32,7 +32,10 @@ public class InBattleOps : StageOpsLayer
 
             curSelWarrior = value;
             if (curSelWarrior != null && curSelWarrior.GetPosInMap(out x, out y))
+            {
                 BattleStage.Avatars[x, y].Selected = true;
+                curSelWarrior.MovingPath.Clear();
+            }
 
             FC.ForEach(pathInSel, (i, tile) => tile.Selected = false);
             pathInSel.Clear();
@@ -93,7 +96,6 @@ public class InBattleOps : StageOpsLayer
             return;
         }
 
-        pathInSel.Clear();
         CurrentSelWarrior = warrior;
         var tile = BattleStage.Tiles[(int)x, (int)y];
         tile.Selected = true;
@@ -135,12 +137,22 @@ public class InBattleOps : StageOpsLayer
         if (status != "selectingPath")
             return;
 
+        CurrentSelWarrior.MovingPath.Clear();
+        FC.ForEach(pathInSel, (i, tile) =>
+        {
+            CurrentSelWarrior.MovingPath.Add(tile.X);
+            CurrentSelWarrior.MovingPath.Add(tile.Y);
+        });
+
         status = "selectingAttackTarget";
     }
 
     // 执行攻击指令
     void DoAttack(Warrior attacker, int tx, int ty)
     {
+        if (attacker.MovingPath.Count > 0)
+            Room.DoMoveOnPath(attacker);
+
         Room.DoAttackAt(attacker, tx, ty);
     }
 }

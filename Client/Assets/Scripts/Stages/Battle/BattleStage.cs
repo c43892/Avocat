@@ -32,11 +32,8 @@ public class BattleStage : MonoBehaviour
 
     private void Awake()
     {
-        // 所有操作转交当前操作层逻辑
-        MapGround.OnClicked += (float x, float y) => currentOpLayer.OnClicked((int)x, (int)y);
-        MapGround.OnStartDragging += (float x, float y) => currentOpLayer.OnStartDragging(x, y);
-        MapGround.OnDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnDragging(fx, fy, cx, cy);
-        MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnEndDragging(fx, fy, cx, cy);
+        SetupGroundOps(); // 所有操作转交当前操作层逻辑
+        SetupAniPlayer(); // 挂接地图动画播放事件
     }
 
     // 创建场景显示对象
@@ -51,16 +48,6 @@ public class BattleStage : MonoBehaviour
         BuildWarroirs();
 
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
-
-        // 英雄位置变化
-        room.OnWarriorPositionChanged += (int fromX, int fromY, int toX, int toY) =>
-        {
-            var avFrom = Avatars[fromX, fromY];
-            var avTo = Avatars[toX, toY];
-
-            SetAvatarPosition(avFrom, toX, toY);
-            SetAvatarPosition(avTo, fromX, fromY);
-        };
     }
 
     void ClearMap()
@@ -109,6 +96,7 @@ public class BattleStage : MonoBehaviour
                 return;
 
             var avatar = MapWarriorCreator(warrior.AvatarID);
+            avatar.Warrior = warrior;
             avatar.BattleStage = this;
             avatar.transform.SetParent(MapRoot);
             var sp = avatar.SpriteRender;
@@ -144,4 +132,60 @@ public class BattleStage : MonoBehaviour
     {
         currentOpLayer = new InBattleOps(this);
     }
+
+    // 挂接地图操作逻辑
+    void SetupGroundOps()
+    {
+        MapGround.OnClicked += (float x, float y) => currentOpLayer.OnClicked((int)x, (int)y);
+        MapGround.OnStartDragging += (float x, float y) => currentOpLayer.OnStartDragging(x, y);
+        MapGround.OnDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnDragging(fx, fy, cx, cy);
+        MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnEndDragging(fx, fy, cx, cy);
+    }
+
+    #region 动画播放衔接
+
+    MapAniPlayer AniPlayer
+    {
+        get
+        {
+            if (aniPlayer == null)
+                aniPlayer = GetComponent<MapAniPlayer>();
+
+            return aniPlayer;
+        }
+    } MapAniPlayer aniPlayer;
+
+    // 挂接动画播放事件
+    void SetupAniPlayer()
+    {
+        // 英雄位置变化
+        Room.OnWarriorPositionExchanged += (int fromX, int fromY, int toX, int toY) =>
+        {
+            var avFrom = Avatars[fromX, fromY];
+            var avTo = Avatars[toX, toY];
+
+            SetAvatarPosition(avFrom, toX, toY);
+            SetAvatarPosition(avTo, fromX, fromY);
+        };
+
+        // 角色攻击
+        Room.OnWarriorAttackAt += (Warrior attacker, int tx, int ty) =>
+        {
+            attacker.GetPosInMap(out int x, out int y);
+            var avatar = Avatars[x, y];
+            AniPlayer.Add(AniPlayer.MakeAttacking(avatar.transform, tx + avatar.CenterOffset.x, ty + avatar.CenterOffset.y));
+        };
+
+        // 角色移动
+        Room.OnWarriorMovingOnPath += (Warrior warrior, List<int> path) =>
+        {
+            var avatar = Avatars[path[0], path[1]];
+            Debug.Assert(avatar != null && avatar.Warrior == warrior, "moving target conflicted");
+
+            AniPlayer.Add(AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)));
+            Avatars[path[path.Count - 2], path[path.Count - 1]] = avatar;
+        };
+    }
+
+    #endregion
 }
