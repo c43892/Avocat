@@ -139,7 +139,7 @@ public class InBattleOps : StageOpsLayer
             pathInSel.RemoveAt(pathInSel.Count - 1);
             tailTile.Selected = false;
         }
-        else
+        else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
         {
             // 拖拽到相邻块则加入路径
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
