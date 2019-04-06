@@ -33,7 +33,11 @@ public class BattleStage : MonoBehaviour
     private void Awake()
     {
         SetupGroundOps(); // 所有操作转交当前操作层逻辑
-        SetupAniPlayer(); // 挂接地图动画播放事件
+    }
+
+    public void Clear()
+    {
+        ClearMap();
     }
 
     // 创建场景显示对象
@@ -46,6 +50,7 @@ public class BattleStage : MonoBehaviour
         BuildMapGrids();
         BuildMapItems();
         BuildWarroirs();
+        SetupAniPlayer(); // 挂接地图动画播放事件
 
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
     }
@@ -56,7 +61,7 @@ public class BattleStage : MonoBehaviour
         Avatars = null;
 
         while (MapRoot.childCount > 0)
-            Destroy(MapRoot.GetChild(0));
+            DestroyImmediate(MapRoot.GetChild(0).gameObject);
     }
 
     // 构建地块层
@@ -101,7 +106,7 @@ public class BattleStage : MonoBehaviour
             avatar.transform.SetParent(MapRoot);
             var sp = avatar.SpriteRender;
             sp.sortingOrder = 2;
-            sp.flipX = warrior.IsOpponent;
+            sp.flipX = warrior.Owner != Room.PlayerMe;
 
             avatar.gameObject.SetActive(true);
 
@@ -144,7 +149,7 @@ public class BattleStage : MonoBehaviour
 
     #region 动画播放衔接
 
-    MapAniPlayer AniPlayer
+    public MapAniPlayer AniPlayer
     {
         get
         {

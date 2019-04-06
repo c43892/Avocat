@@ -33,5 +33,13 @@ namespace Avocat
             Map.Warriors[fromX, fromY] = Map.Warriors[toX, toY];
             Map.Warriors[toX, toY] = item;
         }
+
+        // 移除指定角色
+        public void RemoveWarrior(Warrior warrior)
+        {
+            warrior.GetPosInMap(out int x, out int y);
+            Map.Warriors[x, y] = null;
+            warrior.Map = null;
+        }
     }
 }

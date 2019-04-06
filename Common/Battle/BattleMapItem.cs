@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Swift;
+using System.Diagnostics;
 
 namespace Avocat
 {
@@ -10,7 +11,7 @@ namespace Avocat
     /// </summary>
     public class BattleMapItem
     {
-        public BattleMap Map { get; private set; }
+        public BattleMap Map { get; set; }
 
         public BattleMapItem(BattleMap map)
         {
@@ -26,6 +27,7 @@ namespace Avocat
         // 获取对象在地图中位置
         protected bool FindItemsInMap(BattleMapItem[,] items, out int x, out int y)
         {
+            Debug.Assert(Map != null, "Warrior is not in a map");
             int fx = -1;
             int fy = -1;
             bool found = false;

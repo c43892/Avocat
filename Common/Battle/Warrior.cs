@@ -20,7 +20,7 @@ namespace Avocat
         }
 
         public int AvatarID { get; private set; } // 具体的角色形象 ID
-        public bool IsOpponent { get; set; } // 是否是对手
+        public int Owner { get; set; } // 是属于哪一个玩家
         public int Hp { get; set; } // 血量
         public int MaxHp { get; set; } // 最大血量
 

@@ -18,7 +18,7 @@ public interface IBattleMessageSender
 public class BattleRoomClient : BattleRoom
 {
     // 自己在房间中的 player 编号
-    public int PlayerMe { get; private set; }
+    public int PlayerMe { get; set; }
 
     // 负责消息发送
     public IBattleMessageSender BMS { get; set; }
@@ -61,7 +61,7 @@ public class BattleRoomClient : BattleRoom
     // 执行攻击操作
     public void DoAttack(Warrior attacker, Warrior target)
     {
-        Debug.Assert(!attacker.IsOpponent, "attacker should be in my team");
+        Debug.Assert(attacker.Owner != PlayerMe, "attacker should be in my team");
         BMS.Send("Attack", (data) =>
         {
             attacker.GetPosInMap(out int fx, out int fy);

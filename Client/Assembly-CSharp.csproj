@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Battle.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleMap.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleMapItem.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\BattleReplay.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleRoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleUtils.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warrior.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Test\BattleMessageLooper.cs" />
     <Compile Include="Assets\Test\CombatTestDriver.cs" />
+    <Compile Include="Assets\Test\LocalBattleRecorder.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

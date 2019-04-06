@@ -9,7 +9,7 @@ namespace Avocat
 {
     public interface IBattlemessageProvider
     {
-        void OnMsg(string msg, Action<IReadableBuffer> handler);
+        void HandleMsg(string msg, Action<IReadableBuffer> handler);
     }
 
     public static class BattleUtils
@@ -17,7 +17,7 @@ namespace Avocat
         // 注册所有战斗消息
         public static void RegisterBattleMessageHandlers(this BattleRoom room, IBattlemessageProvider bmp)
         {
-            bmp.OnMsg("ExchangeWarroirsPosition", (data) =>
+            bmp.HandleMsg("ExchangeWarroirsPosition", (data) =>
             {
                 var fx = data.ReadInt();
                 var fy = data.ReadInt();
@@ -26,13 +26,13 @@ namespace Avocat
                 room.ExchangeWarroirsPosition(fx, fy, tx, ty);
             });
 
-            bmp.OnMsg("PlayerPrepared", (data) =>
+            bmp.HandleMsg("PlayerPrepared", (data) =>
             {
                 var player = data.ReadInt();
                 room.PlayerPrepared(player);
             });
 
-            bmp.OnMsg("MoveOnPath", (data) =>
+            bmp.HandleMsg("MoveOnPath", (data) =>
             {
                 var x = data.ReadInt();
                 var y = data.ReadInt();
@@ -45,7 +45,7 @@ namespace Avocat
                 room.MoveOnPath(warrior);
             });
 
-            bmp.OnMsg("Attack", (data) =>
+            bmp.HandleMsg("Attack", (data) =>
             {
                 var fx = data.ReadInt();
                 var fy = data.ReadInt();

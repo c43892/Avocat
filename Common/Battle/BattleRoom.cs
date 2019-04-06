@@ -16,13 +16,14 @@ namespace Avocat
     {
         public Battle Battle { get; private set; }
 
-        // 尚未准备完成的玩家列表
-        List<string> playerPreparedDown = new List<string>();
+        // 战斗准备情况
+        bool team1Prepared = false;
+        bool team2Prepared = false;
 
-        public BattleRoom(Battle bt)
+        public BattleRoom(Battle bt, bool isPVE = true)
         {
             Battle = bt;
-            FC.Travel(bt.Players, (PlayerInfo p) => playerPreparedDown.Add(p.ID));
+            team2Prepared = isPVE;
         }
 
         // 交换英雄位置
@@ -39,8 +40,13 @@ namespace Avocat
         public virtual void PlayerPrepared(int player)
         {
             OnPlayerPrepared.SC(player);
-            playerPreparedDown.Remove(Battle.Players[player].ID);
-            if (playerPreparedDown.Count == 0)
+
+            if (player == 1)
+                team1Prepared = true;
+            else if (player == 2)
+                team2Prepared = true;
+
+            if (team1Prepared && team2Prepared)
                 OnAllPrepared.SC();
         }
 
@@ -75,6 +81,8 @@ namespace Avocat
             }
 
             OnWarriorMovingOnPath.SC(warrior, movedPath);
+
+            TryBattleEnd();
         }
 
         // 执行攻击
@@ -86,7 +94,48 @@ namespace Avocat
             target.Hp -= attacker.Power;
             OnWarriorAttack.SC(attacker, target);
             if (target.IsDead)
+            {
                 OnWarriorDying.SC(target);
+                Battle.RemoveWarrior(target);
+            }
+
+            TryBattleEnd();
+        }
+
+        // 检查战斗结束条件
+        public int CheckEndCondition()
+        {
+            // 双方至少各存活一个角色
+
+            var team1Survived = false;
+            var team2Survived = false;
+            FC.For2(Battle.Map.Width, Battle.Map.Height, (x, y) =>
+            {
+                var warrior = Battle.Map.Warriors[x, y];
+                if (warrior != null && !warrior.IsDead)
+                {
+                    if (warrior.Owner == 1)
+                        team1Survived = true;
+                    else
+                        team2Survived = true;
+                }
+            }, () => !team1Survived || !team2Survived);
+
+            if (team1Survived && !team2Survived)
+                return 1;
+            else if (team2Survived && !team1Survived)
+                return 2;
+            else
+                return 0;
+        }
+
+        // 结束战斗
+        public event Action<int> OnBattleEnded = null; // 战斗结束通知
+        public void TryBattleEnd()
+        {
+            var r = CheckEndCondition();
+            if (r != 0)
+                OnBattleEnded.SC(r);
         }
     }
 }

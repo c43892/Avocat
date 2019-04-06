@@ -51,7 +51,7 @@ public class InBattleOps : StageOpsLayer
         switch (status)
         {
             case "selectingWarrior":
-                if (warrior != null && !warrior.IsOpponent)
+                if (warrior != null && warrior.Owner == Room.PlayerMe)
                 {
                     // 选中己方角色，等待攻击指令
                     CurrentSelWarrior = warrior;
@@ -81,7 +81,7 @@ public class InBattleOps : StageOpsLayer
                         status = "selectingWarrior";
                     }
                 }
-                else if (!warrior.IsOpponent)
+                else if (warrior.Owner == Room.PlayerMe)
                 {
                     // 点己方角色，切换操作对象
                     CurrentSelWarrior = warrior;

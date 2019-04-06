@@ -12,26 +12,48 @@ using System.Diagnostics;
 /// </summary>
 public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
 {
-    RingBuffer msgBuff = new RingBuffer();
+    Queue<byte[]> msgs = new Queue<byte[]>();
+
+    public void SendRaw(byte[] data)
+    {
+        msgs.Enqueue(data);
+    }
+
     public void Send(string op, Action<IWriteableBuffer> w)
     {
-        msgBuff.Write(op);
-        w(msgBuff);
+        var buff = new WriteBuffer();
+        buff.Write(op);
+        w(buff);
+        msgs.Enqueue(buff.Data);
+    }
+
+    public event Action<byte[]> OnMessageIn = null;
+
+    public void Clear()
+    {
+        msgs.Clear();
+        hs.Clear();
     }
 
     Dictionary<string, Action<IReadableBuffer>> hs = new Dictionary<string, Action<IReadableBuffer>>();
-    public void OnMsg(string msg, Action<IReadableBuffer> r)
+    public void HandleMsg(string msg, Action<IReadableBuffer> r)
     {
         hs[msg] = r;
     }
 
     public void MoveNext()
     {
-        if (msgBuff.Available <= 0)
+        if (msgs.Count == 0)
             return;
 
-        var op = msgBuff.ReadString();
+        var data = msgs.Dequeue();
+        OnMessageIn.SC(data);
+
+        var buff = new RingBuffer();
+        buff.Write(data);
+
+        var op = buff.ReadString();
         Debug.Assert(hs.ContainsKey(op), "no handler for message: " + op);
-        hs[op](msgBuff);
+        hs[op](buff);
     }
 }

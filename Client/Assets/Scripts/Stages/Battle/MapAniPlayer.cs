@@ -40,7 +40,8 @@ public class MapAniPlayer : MonoBehaviour
         {
             var ani = anis[0].Key;
             var cb = anis[0].Value;
-            yield return StartCoroutine(ani);
+            if (ani != null)
+                yield return StartCoroutine(ani);
             anis.RemoveAt(0);
             cb.SC();
         }
