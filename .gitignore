@@ -2,7 +2,6 @@ Library
 v14
 Temp
 v15
-.vs
 *.stackdump
 *.suo
 *.user
