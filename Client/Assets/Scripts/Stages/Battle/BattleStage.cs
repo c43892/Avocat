@@ -21,8 +21,8 @@ public class BattleStage : MonoBehaviour
     public int MapTileHeight { get; set; }
 
     // 创建地图块模板
-    public Func<int, MapTile> MapTileCreator;
-    public Func<int, MapAvatar> MapWarriorCreator;
+    public MapTile MapTile;
+    public MapAvatar MapAvatar;
 
     // 地图显示元素根
     public Transform MapRoot;
@@ -72,7 +72,8 @@ public class BattleStage : MonoBehaviour
         Tiles = new MapTile[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
-            var tile = MapTileCreator(Map.Grids[x, y]);
+            var tile = Instantiate(MapTile);
+            tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/MapTile");
             tile.transform.SetParent(MapRoot);
             tile.X = x;
             tile.Y = y;
@@ -100,7 +101,8 @@ public class BattleStage : MonoBehaviour
             if (warrior == null)
                 return;
 
-            var avatar = MapWarriorCreator(warrior.AvatarID);
+            var avatar = Instantiate(MapAvatar);
+            avatar.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/Soldier");
             avatar.Warrior = warrior;
             avatar.BattleStage = this;
             avatar.transform.SetParent(MapRoot);
@@ -109,6 +111,7 @@ public class BattleStage : MonoBehaviour
             sp.flipX = warrior.Owner != Room.PlayerMe;
 
             avatar.gameObject.SetActive(true);
+            avatar.RefreshAttrs();
 
             SetAvatarPosition(avatar, x, y);
         });
@@ -185,8 +188,8 @@ public class BattleStage : MonoBehaviour
         Room.OnWarriorAttack += (Warrior attacker, Warrior target) =>
         {
             var avatar = GetAvatarByWarrior(attacker);
-            target.GetPosInMap(out int tx, out int ty);
-            AniPlayer.Add(AniPlayer.MakeAttacking(avatar.transform, tx + avatar.CenterOffset.x, ty + avatar.CenterOffset.y));
+            var targetAvatar = GetAvatarByWarrior(target);
+            AniPlayer.Add(AniPlayer.MakeAttacking(avatar, targetAvatar));
         };
 
         // 角色移动

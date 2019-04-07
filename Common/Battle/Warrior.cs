@@ -25,6 +25,7 @@ namespace Avocat
         public int MaxHp { get; set; } // 最大血量
 
         public int Power { get; set; } // 攻击力
+        public int Shield { get; set; } // 护甲
 
         public bool IsDead { get { return Hp <= 0; } }
 

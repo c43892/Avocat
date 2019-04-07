@@ -104,13 +104,16 @@ public class MapAniPlayer : MonoBehaviour
     }
 
     // 攻击动画
-    public IEnumerator MakeAttacking(Transform tr, float tx, float ty)
+    public IEnumerator MakeAttacking(MapAvatar attacker, MapAvatar target)
     {
-        var fx = tr.localPosition.x;
-        var fy = tr.localPosition.y;
+        var fx = attacker.transform.localPosition.x;
+        var fy = attacker.transform.localPosition.y;
+        var tx = target.transform.localPosition.x;
+        var ty = target.transform.localPosition.y;
 
-        yield return MakeMovingOnPath(tr, 20, new float[] { fx, fy, tx, ty });
-        yield return MakeMovingOnPath(tr, 20, new float[] { tx, ty, fx, fy });
+        yield return MakeMovingOnPath(attacker.transform, 20, new float[] { fx, fy, tx, ty });
+        target.RefreshAttrs();
+        yield return MakeMovingOnPath(attacker.transform, 20, new float[] { tx, ty, fx, fy });
     }
 
     // 角色死亡

@@ -9,9 +9,6 @@ using Avocat;
 public class CombatTestDriver : MonoBehaviour
 {
     public BattleStage BattleStage;
-    public MapTile TestMapTile;
-    public MapAvatar TestMapWarrior;
-
     public GameObject PreparingUI;
     public GameObject StartingUI;
     public GameObject GameOverUI;
@@ -32,9 +29,6 @@ public class CombatTestDriver : MonoBehaviour
     public void Start()
     {
         msgLooper = new BattleMessageLooper();
-
-        BattleStage.MapTileCreator = (int tileType) => Instantiate(TestMapTile);
-        BattleStage.MapWarriorCreator = (int avatarType) => Instantiate(TestMapWarrior);
 
         // setup the local replay system
         Recoder.LoadAll();

@@ -9,8 +9,20 @@ public class MapAvatar : MonoBehaviour
     public BattleStage BattleStage { get; set; }
     public Vector2 CenterOffset = new Vector2(0.5f, 0.5f);
 
+    public TextMesh HpText;
+    public TextMesh PowerText;
+    public TextMesh ShieldText;
+
     // 对应的角色
     public Warrior Warrior { get; set; }
+
+    public void RefreshAttrs()
+    {
+        HpText.text = Warrior.Hp.ToString();
+        PowerText.text = Warrior.Power.ToString();
+        ShieldText.text = Warrior.Shield.ToString();
+        ShieldText.transform.parent.gameObject.SetActive(Warrior.Shield > 0); 
+    }
 
     public int X
     {
