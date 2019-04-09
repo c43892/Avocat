@@ -117,6 +117,18 @@ public class BattleStage : MonoBehaviour
         });
     }
 
+    void ForeachAvatar(Action<int, int, MapAvatar> act, Func<bool> continueCondition = null)
+    {
+        FC.For2(Map.Width, Map.Height, (x, y) =>
+        {
+            var avatar = Avatars[x, y];
+            if (avatar == null)
+                return;
+
+            act(x, y, avatar);
+        }, continueCondition);
+    }
+
     // 设置角色位置
     void SetAvatarPosition(MapAvatar avatar, int x, int y)
     {
@@ -175,17 +187,26 @@ public class BattleStage : MonoBehaviour
     void SetupAniPlayer()
     {
         // 角色位置变化
-        Room.OnWarriorPositionExchanged += (int fromX, int fromY, int toX, int toY) =>
+        Room.Battle.OnWarriorPositionExchanged += (int fromX, int fromY, int toX, int toY) =>
         {
-            var avFrom = Avatars[fromX, fromY];
-            var avTo = Avatars[toX, toY];
+            AniPlayer.AddOp(() =>
+            {
+                var avFrom = Avatars[fromX, fromY];
+                var avTo = Avatars[toX, toY];
 
-            SetAvatarPosition(avFrom, toX, toY);
-            SetAvatarPosition(avTo, fromX, fromY);
+                SetAvatarPosition(avFrom, toX, toY);
+                SetAvatarPosition(avTo, fromX, fromY);
+            });
+        };
+
+        // 回合开始
+        Room.Battle.OnNextRoundStarted += () =>
+        {
+            AniPlayer.AddOp(() => ForeachAvatar((x, y, avatar) => avatar.RefreshAttrs()));
         };
 
         // 角色攻击
-        Room.OnWarriorAttack += (Warrior attacker, Warrior target) =>
+        Room.Battle.OnWarriorAttack += (Warrior attacker, Warrior target) =>
         {
             var avatar = GetAvatarByWarrior(attacker);
             var targetAvatar = GetAvatarByWarrior(target);
@@ -193,7 +214,7 @@ public class BattleStage : MonoBehaviour
         };
 
         // 角色移动
-        Room.OnWarriorMovingOnPath += (Warrior warrior, List<int> path) =>
+        Room.Battle.OnWarriorMovingOnPath += (Warrior warrior, List<int> path) =>
         {
             var avatar = Avatars[path[0], path[1]];
             Debug.Assert(avatar != null && avatar.Warrior == warrior, "moving target conflicted");
@@ -203,7 +224,7 @@ public class BattleStage : MonoBehaviour
         };
 
         // 角色死亡
-        Room.OnWarriorDying += (Warrior warrior) =>
+        Room.Battle.OnWarriorDying += (Warrior warrior) =>
         {
             var avatar = GetAvatarByWarrior(warrior);
             AniPlayer.Add(AniPlayer.MakeDying(avatar), () => Avatars[avatar.X, avatar.Y] = null);

@@ -60,16 +60,19 @@ public class MapAvatar : MonoBehaviour
         }
     } SpriteRenderer sr;
 
-    public bool Selected
+    public static readonly Color ColorDefault = Color.white;
+    public static readonly Color ColorSelected = Color.green;
+    public static readonly Color ColorAttacked = Color.gray;
+
+    public Color Color
     {
         get
         {
-            return selected;
+            return sr.color;
         }
         set
         {
-            selected = value;
-            SpriteRender.color = selected ? Color.green : Color.white;
+            sr.color = value;
         }
-    } bool selected = false;
+    }
 }

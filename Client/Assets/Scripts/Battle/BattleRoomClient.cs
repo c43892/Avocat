@@ -61,7 +61,7 @@ public class BattleRoomClient : BattleRoom
     // 执行攻击操作
     public void DoAttack(Warrior attacker, Warrior target)
     {
-        Debug.Assert(attacker.Owner != PlayerMe, "attacker should be in my team");
+        Debug.Assert(attacker.Owner == PlayerMe, "attacker should be in my team");
         BMS.Send("Attack", (data) =>
         {
             attacker.GetPosInMap(out int fx, out int fy);

@@ -30,4 +30,6 @@ v15
 /Common/Swift/AStar/*.meta
 /Common/Swift/DataStructures/*.meta
 /Common/Battle/*.meta
+/Common/Battle/Map/*.meta
+/Common/Battle/Replay/*.meta
 /Common/UserPlayer/*.meta

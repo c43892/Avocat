@@ -50,13 +50,7 @@ public class CombatTestDriver : MonoBehaviour
     public void OnStartNewBattle()
     {
         // test battle
-        var player = new PlayerInfo
-        {
-            ID = "tester",
-            Name = "战斗测试"
-        };
-
-        var bt = new Battle(22, 12, 0, player);
+        var bt = new BattlePVE(22, 12, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" });
 
         // test map
         var map = bt.Map;
@@ -87,15 +81,21 @@ public class CombatTestDriver : MonoBehaviour
 
         BattleStage.BuildBattleStage(room);
 
-        room.OnAllPrepared += () =>
+        room.Battle.OnPlayerPrepared += (int player) =>
         {
-            PreparingUI.SetActive(false);
-            BattleStage.StartFighting();
+            BattleStage.AniPlayer.AddOp(() =>
+            {
+                if (room.Battle.AllPrepared)
+                {
+                    PreparingUI.SetActive(false);
+                    BattleStage.StartFighting();
+                }
+            });
         };
 
-        room.OnBattleEnded += (winner) =>
+        room.Battle.OnBattleEnded += (winner) =>
         {
-            BattleStage.AniPlayer.Add(null, () =>
+            BattleStage.AniPlayer.AddOp(() =>
             {
                 GameOverUI.SetActive(true);
                 GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";

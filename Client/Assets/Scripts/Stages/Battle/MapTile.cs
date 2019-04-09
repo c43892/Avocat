@@ -15,18 +15,21 @@ public class MapTile : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    public bool Selected
+    public static readonly Color ColorDefault = Color.white;
+    public static readonly Color ColorSelected = Color.green;
+    public static readonly Color ColorSelectedHead = Color.blue;
+
+    public Color Color
     {
         get
         {
-            return selected;
+            return sr.color;
         }
         set
         {
-            selected = value;
-            sr.color = selected ? Color.green : Color.white;
+            sr.color = value;
         }
-    } bool selected = false;
+    }
 
     public int X
     {

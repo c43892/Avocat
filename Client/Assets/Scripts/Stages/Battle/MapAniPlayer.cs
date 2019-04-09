@@ -34,20 +34,32 @@ public class MapAniPlayer : MonoBehaviour
             StartCoroutine(StartPlaying());
     }
 
+    // 插入指定动作
+    public void AddOp(Action act)
+    {
+        Add(Op(act));
+    }
+
     IEnumerator StartPlaying()
     {
         while (anis.Count > 0)
         {
             var ani = anis[0].Key;
             var cb = anis[0].Value;
-            if (ani != null)
-                yield return StartCoroutine(ani);
+            yield return StartCoroutine(ani);
             anis.RemoveAt(0);
             cb.SC();
         }
     }
 
     #region 构建不同动画
+
+    // 执行指定动作
+    IEnumerator Op(Action op)
+    {
+        yield return null;
+        op();
+    }
 
     // 计算沿路径移动位置，返回值表示越过了几个中间节点
     int RunOnPath(float[] path, float dist, float fx, float fy, int toNode, out float x, out float y)

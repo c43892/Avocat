@@ -28,16 +28,16 @@ public class InBattleOps : StageOpsLayer
                 return;
 
             if (curSelWarrior != null && curSelWarrior.GetPosInMap(out int x, out int y))
-                BattleStage.Avatars[x, y].Selected = false;
+                BattleStage.Avatars[x, y].Color = MapAvatar.ColorDefault;
 
             curSelWarrior = value;
             if (curSelWarrior != null && curSelWarrior.GetPosInMap(out x, out y))
             {
-                BattleStage.Avatars[x, y].Selected = true;
+                BattleStage.Avatars[x, y].Color = MapAvatar.ColorSelected;
                 curSelWarrior.MovingPath.Clear();
             }
 
-            FC.ForEach(pathInSel, (i, tile) => tile.Selected = false);
+            FC.ForEach(pathInSel, (i, tile) => tile.Color = MapTile.ColorDefault);
             pathInSel.Clear();
         }
     } Warrior curSelWarrior;
@@ -117,7 +117,7 @@ public class InBattleOps : StageOpsLayer
 
         CurrentSelWarrior = warrior;
         var tile = BattleStage.Tiles[(int)x, (int)y];
-        tile.Selected = true;
+        tile.Color = MapTile.ColorSelectedHead;
         pathInSel.Add(tile);
         status = "selectingPath";
     }
@@ -137,7 +137,9 @@ public class InBattleOps : StageOpsLayer
         {
             // 回退指向尾部第二块，则从路径中退掉尾部第一块
             pathInSel.RemoveAt(pathInSel.Count - 1);
-            tailTile.Selected = false;
+            tailTile.Color = MapTile.ColorDefault;
+            if (pathInSel.Count > 0)
+                pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
         {
@@ -145,8 +147,9 @@ public class InBattleOps : StageOpsLayer
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
             if (dist == 1)
             {
+                pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelected;
+                tile.Color = MapTile.ColorSelectedHead;
                 pathInSel.Add(tile);
-                tile.Selected = true;
             }
         }
     }

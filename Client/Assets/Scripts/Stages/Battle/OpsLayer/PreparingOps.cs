@@ -22,12 +22,12 @@ public class PreparingOps : StageOpsLayer
         {
             // 选中要移动的角色
             currentSelAvatar = avatar;
-            avatar.Selected = true;
+            avatar.Color = MapAvatar.ColorSelected;
         }
         else if (currentSelAvatar != null)
         {
             // 交换角色位置
-            currentSelAvatar.Selected = false;
+            currentSelAvatar.Color = MapAvatar.ColorDefault;
             Room.DoExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)x, (int)y);
             currentSelAvatar = null;
         }
@@ -37,7 +37,7 @@ public class PreparingOps : StageOpsLayer
     {
         if (currentSelAvatar != null)
         {
-            currentSelAvatar.Selected = false;
+            currentSelAvatar.Color = MapAvatar.ColorDefault;
             currentSelAvatar = null;
         }
 
