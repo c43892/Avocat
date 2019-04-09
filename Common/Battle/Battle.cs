@@ -113,22 +113,22 @@ namespace Avocat
         }
 
         // 回合开始，重置所有角色行动标记
-        event Action BeforeStartNextRound = null;
-        event Action AfterStartNextRound = null;
-        public event Action OnNextRoundStarted = null;
-        public void StartNextRound()
+        event Action<int> BeforeStartNextRound = null;
+        event Action<int> AfterStartNextRound = null;
+        public event Action<int> OnNextRoundStarted = null;
+        public void StartNextRound(int player)
         {
-            BeforeStartNextRound.SC();
+            BeforeStartNextRound.SC(player);
 
             ForeachWarriors((i, j, warrior) =>
             {
                 warrior.Moved = false;
-                warrior.Attacked = false;
+                warrior.ActionDone = false;
             });
 
-            AfterStartNextRound.SC();
+            AfterStartNextRound.SC(player);
 
-            OnNextRoundStarted.SC();
+            OnNextRoundStarted.SC(player);
         }
 
         // 角色沿路径移动
@@ -178,7 +178,7 @@ namespace Avocat
         public event Action<Warrior> OnWarriorDying = null; // 角色死亡
         public void Attack(Warrior attacker, Warrior target)
         {
-            Debug.Assert(!attacker.Attacked, "attacker has already attacted in this round");
+            Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
             BeforeAttack.SC(attacker, target);
 
@@ -189,7 +189,7 @@ namespace Avocat
                 target.Shield = 0;
             }
 
-            attacker.Attacked = true;
+            attacker.ActionDone = true;
 
             AfterAttack.SC(attacker, target);
 

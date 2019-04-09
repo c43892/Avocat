@@ -32,20 +32,19 @@ public class MapGroundLayer : MonoBehaviour
         }
     } Rect area;
 
-    Vector2 PointerRelativePosition
+    bool CheckPointerRelativePosition(out Vector2 v2)
     {
-        get
+        v2 = Vector2.zero;
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hitInfo = Physics2D.GetRayIntersection(ray, float.MaxValue, LayerMask.GetMask("MapGroundLayer"));
+        if (hitInfo.collider?.gameObject == gameObject)
         {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hitInfo = Physics2D.GetRayIntersection(ray, float.MaxValue, LayerMask.GetMask("MapGroundLayer"));
-            if (hitInfo.collider != null)
-            {
-                var pos = transform.worldToLocalMatrix.MultiplyPoint(hitInfo.point);
-                return new Vector2(pos.x * Area.width, -pos.y * Area.height);
-            }
-            else
-                return Vector2.zero;
+            var pos = transform.worldToLocalMatrix.MultiplyPoint(hitInfo.point);
+            v2 = new Vector2(pos.x * Area.width, -pos.y * Area.height);
+            return true;
         }
+
+        return false;
     }
 
     private void OnMouseDown()
@@ -53,16 +52,20 @@ public class MapGroundLayer : MonoBehaviour
         switch (opStatus)
         {
             case "default":
-                opStatus = "down";
-                fromPos = PointerRelativePosition;
-                draggingLastPos = fromPos;
+                if (CheckPointerRelativePosition(out fromPos))
+                {
+                    opStatus = "down";
+                    draggingLastPos = fromPos;
+                }
                 break;
         }
     }
 
     private void OnMouseUp()
     {
-        var currentPos = PointerRelativePosition;
+        if (!CheckPointerRelativePosition(out var currentPos))
+            return;
+
         switch (opStatus)
         {
             case "down":
@@ -79,7 +82,9 @@ public class MapGroundLayer : MonoBehaviour
     Vector2 draggingLastPos;
     private void OnMouseDrag()
     {
-        var currentPos = PointerRelativePosition;
+        if (!CheckPointerRelativePosition(out var currentPos))
+            return;
+
         switch (opStatus)
         {
             case "down":

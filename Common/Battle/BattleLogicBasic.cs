@@ -36,19 +36,27 @@ namespace Avocat
             AfterPlayerPrepared += (int player) => 
             {
                 if (AllPrepared)
-                    StartNextRound();
+                    StartNextRound(0);
             };
 
             // 回合结束时检查战斗结束条件
             AfterActionDone += (int player) => TryBattleEnd();
         }
 
+        // 回合开始时重置护盾，重置行动标记
         void ResetDefenceAtRoundStart()
         {
-            BeforeStartNextRound += () =>
+            BeforeStartNextRound += (int player) =>
             {
-                // 重置所有护甲
-                ForeachWarriors((i, j, warrior) => warrior.Shield = 0);
+                ForeachWarriors((i, j, warrior) =>
+                {
+                    if (warrior.Owner != player)
+                        return;
+
+                    warrior.Shield = 0; // 重置所有护甲
+                    warrior.Moved = false; // 重置行动标记
+                    warrior.ActionDone = false; // 重置行动标记
+                });
             };
         }
 

@@ -21,7 +21,9 @@ public class MapAvatar : MonoBehaviour
         HpText.text = Warrior.Hp.ToString();
         PowerText.text = Warrior.Power.ToString();
         ShieldText.text = Warrior.Shield.ToString();
-        ShieldText.transform.parent.gameObject.SetActive(Warrior.Shield > 0); 
+        ShieldText.transform.parent.gameObject.SetActive(Warrior.Shield > 0);
+
+        Color = Warrior.ActionDone ? ColorAttacked : ColorDefault;
     }
 
     public int X

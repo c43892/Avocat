@@ -27,8 +27,18 @@ namespace Avocat
         public int Power { get; set; } // 攻击力
         public int Shield { get; set; } // 护甲
 
-        public bool Moved { get; set; } // 本回合是否已经移动过
-        public bool Attacked { get; set; } // 本回合是否已经攻击过
+        // 本回合是否已经移动过
+        public bool Moved {
+            get
+            {
+                return moved || ActionDone;
+            }
+            set
+            {
+                moved = value;
+            }
+        } bool moved = false; 
+        public bool ActionDone { get; set; } // 角色在本回合的行动已经结束
 
         public bool IsDead { get { return Hp <= 0; } }
 

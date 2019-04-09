@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 public interface IBattleMessageSender
 {
-    void Send(string op, Action<IWriteableBuffer> data);
+    void Send(string op, Action<IWriteableBuffer> data = null);
 }
 
 /// <summary>
@@ -31,7 +31,7 @@ public class BattleRoomClient : BattleRoom
     // 战斗准备完毕
     public void DoPrepared()
     {
-        BMS.Send("PlayerPrepared", (data) => data.Write(PlayerMe));
+        BMS.Send("PlayerPrepared");
     }
 
     // 交换角色位置
@@ -71,5 +71,11 @@ public class BattleRoomClient : BattleRoom
             data.Write(tx);
             data.Write(ty);
         });
+    }
+
+    // 回合结束
+    public void ActionDone()
+    {
+        BMS.Send("ActionDone");
     }
 }

@@ -19,11 +19,12 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         msgs.Enqueue(data);
     }
 
-    public void Send(string op, Action<IWriteableBuffer> w)
+    public void Send(string op, Action<IWriteableBuffer> w = null)
     {
         var buff = new WriteBuffer();
         buff.Write(op);
-        w(buff);
+        buff.Write(1); // the test player
+        w.SC(buff);
         msgs.Enqueue(buff.Data);
     }
 
@@ -35,8 +36,8 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         hs.Clear();
     }
 
-    Dictionary<string, Action<IReadableBuffer>> hs = new Dictionary<string, Action<IReadableBuffer>>();
-    public void HandleMsg(string msg, Action<IReadableBuffer> r)
+    Dictionary<string, Action<int, IReadableBuffer>> hs = new Dictionary<string, Action<int, IReadableBuffer>>();
+    public void HandleMsg(string msg, Action<int, IReadableBuffer> r)
     {
         hs[msg] = r;
     }
@@ -53,7 +54,8 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         buff.Write(data);
 
         var op = buff.ReadString();
+        var player = buff.ReadInt();
         Debug.Assert(hs.ContainsKey(op), "no handler for message: " + op);
-        hs[op](buff);
+        hs[op](player, buff);
     }
 }

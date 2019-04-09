@@ -124,6 +124,7 @@ public class MapAniPlayer : MonoBehaviour
         var ty = target.transform.localPosition.y;
 
         yield return MakeMovingOnPath(attacker.transform, 20, new float[] { fx, fy, tx, ty });
+        attacker.RefreshAttrs();
         target.RefreshAttrs();
         yield return MakeMovingOnPath(attacker.transform, 20, new float[] { tx, ty, fx, fy });
     }

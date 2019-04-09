@@ -200,8 +200,11 @@ public class BattleStage : MonoBehaviour
         };
 
         // 回合开始
-        Room.Battle.OnNextRoundStarted += () =>
+        Room.Battle.OnNextRoundStarted += (int player) =>
         {
+            if (player != Room.PlayerMe)
+                return;
+
             AniPlayer.AddOp(() => ForeachAvatar((x, y, avatar) => avatar.RefreshAttrs()));
         };
 
@@ -221,6 +224,19 @@ public class BattleStage : MonoBehaviour
 
             AniPlayer.Add(AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)));
             Avatars[path[path.Count - 2], path[path.Count - 1]] = avatar;
+        };
+
+        // 回合结束
+        Room.Battle.OnActionDone += (int player) =>
+        {
+            if (player != Room.PlayerMe)
+                return;
+
+            AniPlayer.AddOp(() => ForeachAvatar((x, y, avatar) =>
+            {
+                avatar.RefreshAttrs();
+                avatar.Color = MapAvatar.ColorDefault;
+            }));
         };
 
         // 角色死亡

@@ -11,7 +11,7 @@ namespace Avocat
 {
     public interface IBattlemessageProvider
     {
-        void HandleMsg(string msg, Action<IReadableBuffer> handler);
+        void HandleMsg(string msg, Action<int, IReadableBuffer> handler);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ namespace Avocat
         // 注册所有战斗消息
         public void RegisterBattleMessageHandlers(IBattlemessageProvider bmp)
         {
-            bmp.HandleMsg("ExchangeWarroirsPosition", (data) =>
+            bmp.HandleMsg("ExchangeWarroirsPosition", (player, data) =>
             {
                 var fx = data.ReadInt();
                 var fy = data.ReadInt();
@@ -39,13 +39,12 @@ namespace Avocat
                 Battle.ExchangeWarroirsPosition(fx, fy, tx, ty);
             });
 
-            bmp.HandleMsg("PlayerPrepared", (data) =>
+            bmp.HandleMsg("PlayerPrepared", (player, data) =>
             {
-                var player = data.ReadInt();
                 Battle.PlayerPrepared(player);
             });
 
-            bmp.HandleMsg("MoveOnPath", (data) =>
+            bmp.HandleMsg("MoveOnPath", (player, data) =>
             {
                 var x = data.ReadInt();
                 var y = data.ReadInt();
@@ -58,7 +57,7 @@ namespace Avocat
                 Battle.MoveOnPath(warrior);
             });
 
-            bmp.HandleMsg("Attack", (data) =>
+            bmp.HandleMsg("Attack", (player, data) =>
             {
                 var fx = data.ReadInt();
                 var fy = data.ReadInt();
@@ -69,6 +68,11 @@ namespace Avocat
                 var target = Battle.Map.Warriors[tx, ty];
 
                 Battle.Attack(attacker, target);
+            });
+
+            bmp.HandleMsg("ActionDone", (player, data) =>
+            {
+                Battle.ActionDone(player);
             });
         }
     }

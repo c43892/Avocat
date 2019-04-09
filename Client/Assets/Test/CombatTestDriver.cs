@@ -145,10 +145,7 @@ public class CombatTestDriver : MonoBehaviour
     {
         OnStartNewBattle();
         var replay = Recoder.Replays[i];
-        Recoder.Play(replay, (data) =>
-        {
-            msgLooper.SendRaw(data);
-        });
+        Recoder.Play(replay, (data) => msgLooper.SendRaw(data));
     }
 
     // 游戏结束确定

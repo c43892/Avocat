@@ -24,7 +24,7 @@ public class InBattleOps : StageOpsLayer
         }
         set
         {
-            if (curSelWarrior == value)
+            if (curSelWarrior == value || (value != null && value.ActionDone))
                 return;
 
             if (curSelWarrior != null && curSelWarrior.GetPosInMap(out int x, out int y))
@@ -59,7 +59,7 @@ public class InBattleOps : StageOpsLayer
                 }
                 break;
             case "selectingAttackTarget":
-                if (warrior == null)
+                if (warrior == null || CurrentSelWarrior.ActionDone)
                 {
                     // 点空地
 
@@ -107,7 +107,7 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         var warrior = avatar == null ? null : avatar.Warrior;
-        if (warrior == null)
+        if (warrior == null || warrior.Moved)
         {
             // 从空地拖拽和点空地一样的效果
             CurrentSelWarrior = null;
