@@ -61,6 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Battle\BattleRoomClient.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\AI\AIExt.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\AI\RobotPlayer.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\AI\WarriorAI.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Battle.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleCard.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleLogicBasic.cs" />

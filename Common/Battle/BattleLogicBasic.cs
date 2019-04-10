@@ -48,7 +48,7 @@ namespace Avocat
         {
             BeforeStartNextRound += (int player) =>
             {
-                ForeachWarriors((i, j, warrior) =>
+                Map.ForeachWarriors((i, j, warrior) =>
                 {
                     if (warrior.Owner != player)
                         return;

@@ -12,6 +12,7 @@ public class CombatTestDriver : MonoBehaviour
     public GameObject PreparingUI;
     public GameObject StartingUI;
     public GameObject GameOverUI;
+    public GameObject BattleStageUI;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
@@ -49,30 +50,25 @@ public class CombatTestDriver : MonoBehaviour
     // 开始新游戏
     public void OnStartNewBattle()
     {
-        // test battle
-        var bt = new BattlePVE(22, 12, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" });
-
         // test map
-        var map = bt.Map;
-        map.Warriors[2, 2] = new Warrior(map, 2, 1);
-        map.Warriors[2, 4] = new Warrior(map, 2, 1);
-        map.Warriors[2, 6] = new Warrior(map, 2, 1);
-        map.Warriors[2, 2].Owner = 1;
-        map.Warriors[2, 4].Owner = 1;
-        map.Warriors[2, 6].Owner = 1;
+        var map = new BattleMap(22, 12);
+        map.Warriors[2, 2] = new Warrior(map, 2, 1) { Owner = 1 };
+        map.Warriors[2, 4] = new Warrior(map, 2, 1) { Owner = 1 };
+        map.Warriors[2, 6] = new Warrior(map, 2, 1) { Owner = 1 };
 
-        map.Warriors[19, 3] = new Warrior(map, 2, 1);
-        map.Warriors[19, 5] = new Warrior(map, 2, 1);
-        map.Warriors[19, 7] = new Warrior(map, 2, 1);
-        map.Warriors[19, 3].Owner = 2;
-        map.Warriors[19, 5].Owner = 2;
-        map.Warriors[19, 7].Owner = 2;
+        // npcs
+        var npc0 = new Warrior(map, 2, 1) { Owner = 2 };
+        var npc1 = new Warrior(map, 2, 1) { Owner = 2 };
+        var npc2 = new Warrior(map, 2, 1) { Owner = 2 };
+        map.Warriors[19, 3] = npc0;
+        map.Warriors[19, 5] = npc1;
+        map.Warriors[19, 7] = npc2;
+
+        // test battle
+        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);
 
         // test room
-        var room = new BattleRoomClient(bt)
-        {
-            PlayerMe = 1
-        };
+        var room = new BattleRoomClient(bt) { PlayerMe = 1 };
 
         // setup the fake message loop
         room.BMS = msgLooper;
@@ -88,6 +84,7 @@ public class CombatTestDriver : MonoBehaviour
                 if (room.Battle.AllPrepared)
                 {
                     PreparingUI.SetActive(false);
+                    BattleStageUI.gameObject.SetActive(true);
                     BattleStage.StartFighting();
                 }
             });
@@ -99,6 +96,7 @@ public class CombatTestDriver : MonoBehaviour
             {
                 GameOverUI.SetActive(true);
                 GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";
+                BattleStageUI.gameObject.SetActive(false);
             });
 
             Recoder.AddReplay(currentReplay);
@@ -109,10 +107,7 @@ public class CombatTestDriver : MonoBehaviour
         BattleStage.StartPreparing();
         StartingUI.SetActive(false);
         PreparingUI.SetActive(true);
-        currentReplay = new BattleReplay
-        {
-            Time = DateTime.Now.Ticks
-        };
+        currentReplay = new BattleReplay { Time = DateTime.Now.Ticks };
     }
 
     // 准备完毕

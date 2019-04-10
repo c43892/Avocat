@@ -15,12 +15,26 @@ namespace Avocat
         SRandom Srand { get; set; }
 
         // 战斗地图
-        public BattleMap Map { get; private set; }
+        public BattleMap Map
+        {
+            get
+            {
+                return map;
+            }
+            private set
+            {
+                if (map != null)
+                    map.Battle = null;
 
-        public Battle(int mapWidth, int mapHeight, int randSeed)
+                map = value;
+                map.Battle = this;
+    }
+        } BattleMap map = null;
+
+        public Battle(BattleMap map, int randSeed)
         {
             Srand = new SRandom(randSeed);
-            Map = new BattleMap(mapWidth, mapHeight);
+            Map = map;
         }
 
         // 移除指定角色
@@ -37,8 +51,11 @@ namespace Avocat
         event Action<int, int, int, int> BeforeExchangeWarroirsPosition = null;
         event Action<int, int, int, int> AfterExchangeWarroirsPosition = null;
         public event Action<int, int, int, int> OnWarriorPositionExchanged = null;
-        public void ExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
+        public void ExchangeWarroirsPosition(int fx, int fy, int tx, int ty, bool suppressPositionExchangedEvent = false)
         {
+            if (fx == tx && fy == ty)
+                return;
+
             BeforeExchangeWarroirsPosition.SC(fx, fy, tx, ty);
 
             var item = Map.Warriors[fx, fy];
@@ -47,7 +64,8 @@ namespace Avocat
 
             AfterExchangeWarroirsPosition.SC(fx, fy, tx, ty);
 
-            OnWarriorPositionExchanged.SC(fx, fy, tx, ty);
+            if (!suppressPositionExchangedEvent)
+                OnWarriorPositionExchanged.SC(fx, fy, tx, ty);
         }
 
         // 完成战斗准备
@@ -100,18 +118,6 @@ namespace Avocat
 
         #region 战斗过程
 
-        // 迭代所有非空战斗角色
-        public void ForeachWarriors(Action<int, int, Warrior> act, Func<bool> continueCondition = null)
-        {
-            FC.For2(Map.Width, Map.Height, (x, y) =>
-            {
-                var warrior = Map.Warriors[x, y];
-                if (warrior != null)
-                    act(x, y, warrior);
-
-            }, continueCondition);
-        }
-
         // 回合开始，重置所有角色行动标记
         event Action<int> BeforeStartNextRound = null;
         event Action<int> AfterStartNextRound = null;
@@ -120,7 +126,7 @@ namespace Avocat
         {
             BeforeStartNextRound.SC(player);
 
-            ForeachWarriors((i, j, warrior) =>
+            Map.ForeachWarriors((i, j, warrior) =>
             {
                 warrior.Moved = false;
                 warrior.ActionDone = false;
@@ -156,13 +162,14 @@ namespace Avocat
                 var tx = lstPathXY[0];
                 var ty = lstPathXY[1];
 
+                lstPathXY.RemoveRange(0, 2);
+                movedPath.Add(tx);
+                movedPath.Add(ty);
+
+                ExchangeWarroirsPosition(fx, fy, tx, ty, true);
+
                 fx = tx;
                 fy = ty;
-                lstPathXY.RemoveRange(0, 2);
-                movedPath.Add(fx);
-                movedPath.Add(fy);
-
-                ExchangeWarroirsPosition(fx, fy, tx, ty);
             }
 
             warrior.Moved = true;

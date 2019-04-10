@@ -13,12 +13,15 @@ namespace Avocat
     /// </summary>
     public class BattlePVE : Battle
     {
-        protected PlayerInfo[] Players { get; set; }
-        public BattlePVE(int mapWidth, int mapHeight, int randSeed, params PlayerInfo[] players)
-            :base(mapWidth, mapHeight, randSeed)
+        protected PlayerInfo Player { get; set; }
+        protected RobotPlayer Robot { get; set; }
+
+        public BattlePVE(BattleMap map, int randSeed, PlayerInfo player, params Warrior[] npcs)
+            :base(map, randSeed)
         {
-            Players = players;
+            Player = player;
             BuildLogic();
+            BuildRobot(npcs);
         }
 
         bool playerPrepared = false;
@@ -34,6 +37,18 @@ namespace Avocat
             {
                 return playerPrepared;
             }
+        }
+
+        // 创建机器人对手
+        public void BuildRobot(Warrior[] npcs)
+        {
+            var ais = npcs.ToArray((i, npc, skipAct) =>
+            {
+                var ai = new WarriorAI(npc);
+                ai.Build("StraightlyForwardAndAttack");
+                return ai;
+            });
+            Robot = new RobotPlayer(this, ais);
         }
     }
 }

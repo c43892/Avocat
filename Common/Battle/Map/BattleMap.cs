@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Swift;
 
 namespace Avocat
 {
@@ -9,6 +10,8 @@ namespace Avocat
     /// </summary>
     public class BattleMap
     {
+        public Battle Battle { get; set; }
+
         public BattleMap(int w, int h)
         {
             Width = w;
@@ -48,5 +51,17 @@ namespace Avocat
                 return warriors;
             }
         } Warrior[,] warriors;
+
+        // 迭代所有非空战斗角色
+        public void ForeachWarriors(Action<int, int, Warrior> act, Func<bool> continueCondition = null)
+        {
+            FC.For2(Width, Height, (x, y) =>
+            {
+                var warrior = Warriors[x, y];
+                if (warrior != null)
+                    act(x, y, warrior);
+
+            }, continueCondition);
+        }
     }
 }
