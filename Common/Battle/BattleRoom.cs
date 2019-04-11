@@ -67,6 +67,9 @@ namespace Avocat
                 var attacker = Battle.Map.Warriors[fx, fy];
                 var target = Battle.Map.Warriors[tx, ty];
 
+                if (MU.ManhattanDist(fx, fy, tx, ty) > attacker.AttackRange) // 超过攻击范围
+                    return;
+
                 Battle.Attack(attacker, target);
             });
 

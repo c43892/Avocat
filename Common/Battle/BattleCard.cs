@@ -11,10 +11,10 @@ namespace Avocat
     /// </summary>
     public class BattleCard
     {
-        public static readonly BattleCard Power = new BattleCard("+P");
-        public static readonly BattleCard Defence = new BattleCard("+D");
-        public static readonly BattleCard Hp = new BattleCard("+Hp");
-        public static readonly BattleCard Energy = new BattleCard("+E");
+        public static readonly BattleCard Power = new BattleCard("power");
+        public static readonly BattleCard Defence = new BattleCard("defence");
+        public static readonly BattleCard Hp = new BattleCard("hp");
+        public static readonly BattleCard Energy = new BattleCard("energy");
 
         public static readonly BattleCard[] AllTypeOfBattleCards = new BattleCard[] { BattleCard.Power, BattleCard.Defence, BattleCard.Hp, BattleCard.Energy };
 

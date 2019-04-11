@@ -103,9 +103,9 @@ public class MapAniPlayer : MonoBehaviour
     public IEnumerator MakeMovingOnPath(Transform tar, float velocity, float[] path)
     {
         yield return null;
-        tar.localPosition = new Vector2(path[0], path[1]);
+        // tar.localPosition = new Vector2(path[0], path[1]);
 
-        var i = 2;
+        var i = 0;
         while (i < path.Length)
         {
             var overNodesNum = RunOnPath(path, Time.deltaTime * velocity, tar.localPosition.x, tar.localPosition.y, i, out float x, out float y);

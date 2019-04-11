@@ -22,6 +22,7 @@ public class BattleCardUI : MonoBehaviour
         set
         {
             card = value;
+            GetComponentInChildren<Text>().text = card.Name;
         }
     } BattleCard card;
 }

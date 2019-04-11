@@ -12,7 +12,7 @@ namespace Avocat
     public abstract partial class Battle
     {
         // 由初始随机种子确定的伪随机序列
-        SRandom Srand { get; set; }
+        protected SRandom Srand { get; set; }
 
         // 战斗地图
         public BattleMap Map
@@ -48,8 +48,8 @@ namespace Avocat
         #region 战斗准备过程
 
         // 交换英雄位置
-        event Action<int, int, int, int> BeforeExchangeWarroirsPosition = null;
-        event Action<int, int, int, int> AfterExchangeWarroirsPosition = null;
+        protected event Action<int, int, int, int> BeforeExchangeWarroirsPosition = null;
+        protected event Action<int, int, int, int> AfterExchangeWarroirsPosition = null;
         public event Action<int, int, int, int> OnWarriorPositionExchanged = null;
         public void ExchangeWarroirsPosition(int fx, int fy, int tx, int ty, bool suppressPositionExchangedEvent = false)
         {
@@ -69,8 +69,8 @@ namespace Avocat
         }
 
         // 完成战斗准备
-        event Action<int> BeforePlayerPrepared = null;
-        event Action<int> AfterPlayerPrepared = null;
+        protected event Action<int> BeforePlayerPrepared = null;
+        protected event Action<int> AfterPlayerPrepared = null;
         public abstract void PlayerPreparedImpl(int player);
         public event Action<int> OnPlayerPrepared = null; // 有玩家完成战斗准备
         public void PlayerPrepared(int player)
@@ -119,8 +119,8 @@ namespace Avocat
         #region 战斗过程
 
         // 回合开始，重置所有角色行动标记
-        event Action<int> BeforeStartNextRound = null;
-        event Action<int> AfterStartNextRound = null;
+        protected event Action<int> BeforeStartNextRound = null;
+        protected event Action<int> AfterStartNextRound = null;
         public event Action<int> OnNextRoundStarted = null;
         public void StartNextRound(int player)
         {
@@ -138,24 +138,25 @@ namespace Avocat
         }
 
         // 角色沿路径移动
-        event Action<Warrior> BeforeMoveOnPath = null;
-        event Action<Warrior> AfterMoveOnPath = null;
-        public event Action<Warrior, List<int>> OnWarriorMovingOnPath = null; // 角色沿路径移动
+        protected event Action<Warrior> BeforeMoveOnPath = null;
+        protected event Action<Warrior, int, int, List<int>> AfterMoveOnPath = null;
+        public event Action<Warrior, int, int, List<int>> OnWarriorMovingOnPath = null; // 角色沿路径移动
         public void MoveOnPath(Warrior warrior)
         {
+            Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
+
+            warrior.GetPosInMap(out int x, out int y);
+            Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
+
+            if (warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
+                return;
+
             BeforeMoveOnPath.SC(warrior);
 
-            var lstPathXY = warrior.MovingPath;
-            var fx = lstPathXY[0];
-            var fy = lstPathXY[1];
-            lstPathXY.RemoveRange(0, 2);
-
-            Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
-            Debug.Assert(warrior == Map.Warriors[fx, fy], "the warrior has not been right on the start position: " + fx + ", " + fy);
-
             List<int> movedPath = new List<int>(); // 实际落实了的移动路径
-            movedPath.Add(fx);
-            movedPath.Add(fy);
+            var lstPathXY = warrior.MovingPath;
+            var fx = x;
+            var fy = y;
 
             while (lstPathXY.Count >= 2)
             {
@@ -174,18 +175,22 @@ namespace Avocat
 
             warrior.Moved = true;
 
-            AfterMoveOnPath.SC(warrior);
-            OnWarriorMovingOnPath.SC(warrior, movedPath);
+            AfterMoveOnPath.SC(warrior, x, y, movedPath);
+            OnWarriorMovingOnPath.SC(warrior, x, y, movedPath);
         }
 
         // 执行攻击
-        event Action<Warrior, Warrior> BeforeAttack = null;
-        event Action<Warrior, Warrior> AfterAttack = null;
+        protected event Action<Warrior, Warrior> BeforeAttack = null;
+        protected event Action<Warrior, Warrior> AfterAttack = null;
         public event Action<Warrior, Warrior> OnWarriorAttack = null; // 角色进行攻击
         public event Action<Warrior> OnWarriorDying = null; // 角色死亡
         public void Attack(Warrior attacker, Warrior target)
         {
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
+
+            target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
+            if (!attacker.InAttackRange(tx, ty))
+                return;
 
             BeforeAttack.SC(attacker, target);
 
@@ -210,8 +215,8 @@ namespace Avocat
         }
 
         // 玩家本回合行动结束
-        event Action<int> BeforeActionDone = null;
-        event Action<int> AfterActionDone = null;
+        protected event Action<int> BeforeActionDone = null;
+        protected event Action<int> AfterActionDone = null;
         public Action<int> OnActionDone = null;
         public void ActionDone(int player)
         {

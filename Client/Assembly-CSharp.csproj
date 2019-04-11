@@ -66,7 +66,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\AI\WarriorAI.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Battle.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleCard.cs" />
-    <Compile Include="Assets\Scripts\Common\Battle\BattleLogicBasic.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\BattleLogic.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattlePVE.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleRoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMap.cs" />

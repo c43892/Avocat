@@ -43,23 +43,33 @@ namespace Avocat
                 if (target == null)
                     return;
 
-                var bt = warrior.Map.Battle;
+                target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
+                if (!warrior.InAttackRange(tx, ty))
+                { // 不在攻击范围内，则先移动过去
 
-                warrior.GetPosInMap(out int fx, out int fy);
-                target.GetPosInMap(out int tx, out int ty);
+                    var bt = warrior.Map.Battle;
 
-                // 直接走向目标，不考虑障碍
-                var path = warrior.MovingPath;
-                path.Clear();
-                FC.ForFromTo(fx, tx, (x) => { path.Add(x); path.Add(fy); });
-                FC.ForFromTo(fy, ty, (y) => { path.Add(tx); path.Add(y); });
-                if (path.Count > 2)
-                    path.RemoveRange(path.Count - 2, 2);
+                    warrior.GetPosInMap(out int fx, out int fy);
 
-                bt.MoveOnPath(warrior);
+                    // 直接走向目标，不考虑障碍
+                    var path = warrior.MovingPath;
+                    path.Clear();
+                    FC.ForFromTo(fx, tx, (x) => { path.Add(x); path.Add(fy); });
+                    FC.ForFromTo(fy, ty, (y) => { path.Add(tx); path.Add(y); });
 
-                // 攻击目标
-                bt.Attack(warrior, target);
+                    // 根据移动距离做截断，第一个点是角色当前位置，不算作移动距离
+                    if (path.Count > 0)
+                        path.RemoveRange(0, 2);
+
+                    while (path.Count > warrior.MoveRange * 2)
+                        path.RemoveRange(path.Count - 2, 2);
+
+                    bt.MoveOnPath(warrior);
+
+                    // 攻击目标
+                    if (warrior.InAttackRange(tx, ty))
+                        bt.Attack(warrior, target);
+                }
             };
         }
 

@@ -107,7 +107,7 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         var warrior = avatar == null ? null : avatar.Warrior;
-        if (warrior == null || warrior.Moved)
+        if (warrior == null || warrior.Moved || warrior.Owner != Room.PlayerMe)
         {
             // 从空地拖拽和点空地一样的效果
             CurrentSelWarrior = null;
@@ -143,6 +143,10 @@ public class InBattleOps : StageOpsLayer
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
         {
+            // 已经达到移动距离上限，也不再增加。起始点不应算在距离限制中，所以 +1
+            if (pathInSel.Count >= CurrentSelWarrior.MoveRange + 1)
+                return;
+
             // 拖拽到相邻块则加入路径
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
             if (dist == 1)
@@ -160,8 +164,9 @@ public class InBattleOps : StageOpsLayer
             return;
 
         CurrentSelWarrior.MovingPath.Clear();
-        FC.ForEach(pathInSel, (i, tile) =>
+        FC.For(1, pathInSel.Count, (i) => // 第一个节点是目前所在位置，应从路径中剔除
         {
+            var tile = pathInSel[i];
             CurrentSelWarrior.MovingPath.Add(tile.X);
             CurrentSelWarrior.MovingPath.Add(tile.Y);
         });

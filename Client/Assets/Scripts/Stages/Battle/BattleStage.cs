@@ -28,7 +28,7 @@ public class BattleStage : MonoBehaviour
     public Transform MapRoot;
 
     public BattleRoomClient Room { get; private set; }
-    public BattleMap Map { get { return Room == null ? null : Room.Battle.Map; } }
+    public BattleMap Map { get { return Room?.Battle.Map; } }
 
     private void Awake()
     {
@@ -217,13 +217,17 @@ public class BattleStage : MonoBehaviour
         };
 
         // 角色移动
-        Room.Battle.OnWarriorMovingOnPath += (Warrior warrior, List<int> path) =>
+        Room.Battle.OnWarriorMovingOnPath += (warrior, x, y, path) =>
         {
-            var avatar = Avatars[path[0], path[1]];
+            var avatar = Avatars[x, y];
             Debug.Assert(avatar != null && avatar.Warrior == warrior, "moving target conflicted");
 
+            var tx = path[path.Count - 2];
+            var ty = path[path.Count - 1];
+            Avatars[x, y] = Avatars[tx, ty];
+            Avatars[tx, ty] = avatar;
+
             AniPlayer.Add(AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)));
-            Avatars[path[path.Count - 2], path[path.Count - 1]] = avatar;
         };
 
         // 回合结束

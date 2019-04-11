@@ -22,7 +22,7 @@ public class BattleStageUI : MonoBehaviour
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
     // 刷新一组新的战斗卡牌
-    public void RefreshCardsAvailable(BattleCard[] cards)
+    public void RefreshCardsAvailable(List<BattleCard> cards)
     {
         ClearCardsAvailable();
 
@@ -31,6 +31,7 @@ public class BattleStageUI : MonoBehaviour
             var cd = Instantiate(BattleCard);
             cd.Card = c;
             cd.transform.SetParent(CardsAvailableGroup);
+            cd.gameObject.SetActive(true);
         });
     }
 
@@ -38,7 +39,7 @@ public class BattleStageUI : MonoBehaviour
     void ClearCardsAvailable()
     {
         while (CardsAvailableGroup.childCount > 0)
-            DestroyImmediate(CardsAvailableGroup.GetChild(0));
+            DestroyImmediate(CardsAvailableGroup.GetChild(0).gameObject);
     }
 
     // 结束当前回合
