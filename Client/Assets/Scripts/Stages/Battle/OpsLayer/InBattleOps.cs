@@ -27,12 +27,16 @@ public class InBattleOps : StageOpsLayer
             if (curSelWarrior == value || (value != null && value.ActionDone))
                 return;
 
-            if (curSelWarrior != null && curSelWarrior.GetPosInMap(out int x, out int y))
+            if (curSelWarrior != null)
+            {
+                curSelWarrior.GetPosInMap(out int x, out int y);
                 BattleStage.Avatars[x, y].Color = MapAvatar.ColorDefault;
+            }
 
             curSelWarrior = value;
-            if (curSelWarrior != null && curSelWarrior.GetPosInMap(out x, out y))
+            if (curSelWarrior != null)
             {
+                curSelWarrior.GetPosInMap(out int x, out int y);
                 BattleStage.Avatars[x, y].Color = MapAvatar.ColorSelected;
                 curSelWarrior.MovingPath.Clear();
             }

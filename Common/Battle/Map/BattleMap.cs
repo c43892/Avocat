@@ -45,16 +45,27 @@ namespace Avocat
         } int[,] grids;
 
         // 所有道具
-        public BattleMapItem[,] Items
+        BattleMapItem[,] items;
+        Dictionary<int, BattleMapItem> id2Items = new Dictionary<int, BattleMapItem>();
+        Dictionary<BattleMapItem, KeyValuePair<int, int>> item2XY = new Dictionary<BattleMapItem, KeyValuePair<int, int>>();
+
+        public BattleMapItem GetItemAt(int x, int y)
         {
-            get
-            {
-                return items;
-            }
-        } BattleMapItem[,] items;
+            return items[x, y];
+        }
+
+        // 查找指定角色的地图坐标
+        public void FindXY(BattleMapItem item, out int px, out int py)
+        {
+            Debug.Assert(item.Map == this, "the item is not in the map");
+            px = item2XY[item].Key;
+            py = item2XY[item].Value;
+        }
 
         // 所有角色
         Warrior[,] warriors;
+        Dictionary<int, Warrior> id2Warriors = new Dictionary<int, Warrior>();
+        Dictionary<Warrior, KeyValuePair<int, int>> warrior2XY = new Dictionary<Warrior, KeyValuePair<int, int>>();
 
         public Warrior GetWarriorAt(int x, int y)
         {
@@ -64,29 +75,39 @@ namespace Avocat
         public void SetWarriorAt(int x, int y, Warrior warrior)
         {
             Debug.Assert(warrior == null || warrior.Map == this, "the warrior is not in the map");
+
+            if (warriors[x, y] == warrior)
+                return;
+
+            // refresh the fast search  cache
+            if (warriors[x, y] != null)
+            {
+                id2Warriors.Remove(warriors[x, y].IDInMap);
+                warrior2XY.Remove(warriors[x, y]);
+            }
+
             warriors[x, y] = warrior;
+
+            // refresh the fast search cache
+            if (warrior != null)
+            {
+                id2Warriors[warrior.IDInMap] = warrior;
+                warrior2XY[warrior] = new KeyValuePair<int, int>(x, y);
+            }
         }
 
-        public bool FindXY(Warrior warrior, out int px, out int py)
+        // 根据 id 寻找指定角色
+        public Warrior GetWarriorsByID(int idInMap)
         {
-            var tx = 0;
-            var ty = 0;
-            var found = false;
+            return id2Warriors[idInMap];
+        }
 
-            FC.For2(Width, Height, (x, y) =>
-            {
-                if (warriors[x, y] == warrior)
-                {
-                    tx = x;
-                    ty = y;
-                    found = true;
-                }
-            }, () => !found);
-
-            px = tx;
-            py = ty;
-
-            return found;
+        // 查找指定角色的地图坐标
+        public void FindXY(Warrior warrior, out int px, out int py)
+        {
+            Debug.Assert(warrior.Map == this, "the warrior is not in the map");
+            px = warrior2XY[warrior].Key;
+            py = warrior2XY[warrior].Value;
         }
 
         // 迭代所有非空战斗角色
@@ -99,19 +120,6 @@ namespace Avocat
                     act(x, y, warrior);
 
             }, continueCondition);
-        }
-
-        // 根据 id 寻找指定角色
-        public Warrior GetWarriorsByID(int idInMap)
-        {
-            Warrior targetWarrior = null;
-            ForeachWarriors((x, y, warrior) =>
-            {
-                if (warrior.IDInMap == idInMap)
-                    targetWarrior = warrior;
-            }, () => targetWarrior == null);
-
-            return targetWarrior;
         }
     }
 }

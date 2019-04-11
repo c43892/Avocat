@@ -57,9 +57,9 @@ namespace Avocat
         } List<int> movingPath = new List<int>();
 
         // 获取对象在地图中位置
-        public override bool GetPosInMap(out int x, out int y)
+        public override void GetPosInMap(out int x, out int y)
         {
-            return Map.FindXY(this, out x, out y);
+            Map.FindXY(this, out x, out y);
         }
     }
 }

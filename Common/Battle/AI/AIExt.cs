@@ -43,12 +43,11 @@ namespace Avocat
                 if (target == null)
                     return;
 
+                var bt = warrior.Map.Battle;
+
                 target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
-                if (!warrior.InAttackRange(tx, ty))
-                { // 不在攻击范围内，则先移动过去
-
-                    var bt = warrior.Map.Battle;
-
+                if (!warrior.InAttackRange(tx, ty)) // 不在攻击范围内，则先移动过去
+                { 
                     warrior.GetPosInMap(out int fx, out int fy);
 
                     // 直接走向目标，不考虑障碍
@@ -65,11 +64,11 @@ namespace Avocat
                         path.RemoveRange(path.Count - 2, 2);
 
                     bt.MoveOnPath(warrior);
-
-                    // 攻击目标
-                    if (warrior.InAttackRange(tx, ty))
-                        bt.Attack(warrior, target);
                 }
+
+                // 攻击目标
+                if (warrior.InAttackRange(tx, ty))
+                    bt.Attack(warrior, target);
             };
         }
 
