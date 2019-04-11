@@ -9,19 +9,53 @@ namespace Avocat
     /// <summary>
     /// 战斗中的卡牌
     /// </summary>
-    public class BattleCard
+    public abstract class BattleCard
     {
-        public static readonly BattleCard Power = new BattleCard("power");
-        public static readonly BattleCard Defence = new BattleCard("defence");
-        public static readonly BattleCard Hp = new BattleCard("hp");
-        public static readonly BattleCard Energy = new BattleCard("energy");
+        public static readonly BattleCard Power = new BattleCardPower();
+        public static readonly BattleCard Defence = new BattleCardDefence();
+        public static readonly BattleCard Hp = new BattleCardHp();
+        public static readonly BattleCard Energy = new BattleCardEnergy();
 
         public static readonly BattleCard[] AllTypeOfBattleCards = new BattleCard[] { BattleCard.Power, BattleCard.Defence, BattleCard.Hp, BattleCard.Energy };
 
-        public string Name { get; private set; }
-        private BattleCard(string name)
+        public string Name { get; protected set; }
+
+        public abstract void ExecuteOn(Warrior warrior);
+    }
+
+    public class BattleCardHp : BattleCard
+    {
+        public BattleCardHp() { Name = "hp"; }
+        public override void ExecuteOn(Warrior warrior)
         {
-            Name = name;
+            if (warrior.Hp < warrior.MaxHp)
+                warrior.Hp += 1;
+        }
+    }
+
+    public class BattleCardPower : BattleCard
+    {
+        public BattleCardPower() { Name = "power"; }
+        public override void ExecuteOn(Warrior warrior)
+        {
+            warrior.Power += 1;
+        }
+    }
+
+    public class BattleCardDefence : BattleCard
+    {
+        public BattleCardDefence() { Name = "defence"; }
+        public override void ExecuteOn(Warrior warrior)
+        {
+            warrior.Shield += 1;
+        }
+    }
+
+    public class BattleCardEnergy : BattleCard
+    {
+        public BattleCardEnergy() { Name = "energy"; }
+        public override void ExecuteOn(Warrior warrior)
+        {
         }
     }
 }

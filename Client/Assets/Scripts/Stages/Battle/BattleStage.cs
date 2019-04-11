@@ -228,6 +228,7 @@ public class BattleStage : MonoBehaviour
             Avatars[tx, ty] = avatar;
 
             AniPlayer.Add(AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)));
+            AniPlayer.AddOp(() => avatar.RefreshAttrs());
         };
 
         // 回合结束

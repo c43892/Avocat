@@ -100,7 +100,7 @@ public class MapAniPlayer : MonoBehaviour
     }
 
     // 沿路径移动动画
-    public IEnumerator MakeMovingOnPath(Transform tar, float velocity, float[] path)
+    public IEnumerator MakeMovingOnPath(Transform tar, float velocity, float[] path, Action onPosChanged = null)
     {
         yield return null;
         // tar.localPosition = new Vector2(path[0], path[1]);
@@ -109,8 +109,14 @@ public class MapAniPlayer : MonoBehaviour
         while (i < path.Length)
         {
             var overNodesNum = RunOnPath(path, Time.deltaTime * velocity, tar.localPosition.x, tar.localPosition.y, i, out float x, out float y);
-            i += overNodesNum * 2;
             tar.localPosition = new Vector2(x, y);
+
+            if (overNodesNum > 0)
+            {
+                i += overNodesNum * 2;
+                onPosChanged.SC();
+            }
+
             yield return null;
         }
     }

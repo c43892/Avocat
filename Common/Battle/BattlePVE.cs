@@ -81,7 +81,13 @@ namespace Avocat
 
                 var movedPathLen = movedPath.Count / 2;
                 Debug.Assert(movedPathLen <= AvailableCards.Count, "moved path grids should not be more than cards number");
-                FC.For(movedPathLen, (i) => AvailableCards.RemoveAt(0));
+
+                FC.For(movedPathLen, (i) =>
+                {
+                    AvailableCards[0].ExecuteOn(warrior);
+                    AvailableCards.RemoveAt(0);
+                });
+
                 ResetAvailableCards();
             };
 

@@ -22,7 +22,7 @@ public class BattleStageUI : MonoBehaviour
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
     // 刷新一组新的战斗卡牌
-    public void RefreshCardsAvailable(List<BattleCard> cards)
+    public void RefreshCardsAvailable(List<BattleCard> cards = null)
     {
         ClearCardsAvailable();
 
