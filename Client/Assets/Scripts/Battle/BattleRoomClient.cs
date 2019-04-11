@@ -51,9 +51,7 @@ public class BattleRoomClient : BattleRoom
     {
         BMS.Send("MoveOnPath", (data) =>
         {
-            warrior.GetPosInMap(out int x, out int y);
-            data.Write(x);
-            data.Write(y);
+            data.Write(warrior.IDInMap);
             data.Write(warrior.MovingPath.ToArray());
         });
     }
@@ -64,12 +62,8 @@ public class BattleRoomClient : BattleRoom
         Debug.Assert(attacker.Owner == PlayerMe, "attacker should be in my team");
         BMS.Send("Attack", (data) =>
         {
-            attacker.GetPosInMap(out int fx, out int fy);
-            target.GetPosInMap(out int tx, out int ty);
-            data.Write(fx);
-            data.Write(fy);
-            data.Write(tx);
-            data.Write(ty);
+            data.Write(attacker.IDInMap);
+            data.Write(target.IDInMap);
         });
     }
 

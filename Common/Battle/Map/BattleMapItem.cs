@@ -11,11 +11,13 @@ namespace Avocat
     /// </summary>
     public class BattleMapItem
     {
-        public BattleMap Map { get; set; }
+        public BattleMap Map { get; private set; }
+        public int IDInMap { get; private set; }
 
         public BattleMapItem(BattleMap map)
         {
             Map = map;
+            IDInMap = map.ItemIDInMap;
         }
 
         // 获取对象在地图中位置

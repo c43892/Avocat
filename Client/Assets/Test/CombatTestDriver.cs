@@ -52,17 +52,17 @@ public class CombatTestDriver : MonoBehaviour
     {
         // test map
         var map = new BattleMap(22, 12);
-        map.Warriors[2, 2] = new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 1 };
-        map.Warriors[2, 3] = new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 2 };
-        map.Warriors[2, 4] = new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 3 };
+        map.SetWarriorAt(2, 2, new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 1 });
+        map.SetWarriorAt(2, 3, new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 2 });
+        map.SetWarriorAt(2, 4, new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 3 });
 
         // npcs
         var npc0 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, Power = 1, MoveRange = 2 };
         var npc1 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, Power = 2, MoveRange = 2 };
         var npc2 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, Power = 3, MoveRange = 2 };
-        map.Warriors[8, 1] = npc0;
-        map.Warriors[8, 3] = npc1;
-        map.Warriors[8, 5] = npc2;
+        map.SetWarriorAt(8, 1, npc0);
+        map.SetWarriorAt(8, 3, npc1);
+        map.SetWarriorAt(8, 5, npc2);
 
         // test battle
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);

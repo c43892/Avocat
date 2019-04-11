@@ -97,7 +97,7 @@ public class BattleStage : MonoBehaviour
         Avatars = new MapAvatar[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
-            var warrior = Map.Warriors[x, y];
+            var warrior = Map.GetWarriorAt(x, y);
             if (warrior == null)
                 return;
 

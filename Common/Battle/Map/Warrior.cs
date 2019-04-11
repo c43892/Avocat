@@ -59,7 +59,7 @@ namespace Avocat
         // 获取对象在地图中位置
         public override bool GetPosInMap(out int x, out int y)
         {
-            return FindItemsInMap(Map.Warriors, out x, out y);
+            return Map.FindXY(this, out x, out y);
         }
     }
 }

@@ -41,8 +41,7 @@ namespace Avocat
         public void RemoveWarrior(Warrior warrior)
         {
             warrior.GetPosInMap(out int x, out int y);
-            Map.Warriors[x, y] = null;
-            warrior.Map = null;
+            Map.SetWarriorAt(x, y, null);
         }
 
         #region 战斗准备过程
@@ -58,9 +57,9 @@ namespace Avocat
 
             BeforeExchangeWarroirsPosition.SC(fx, fy, tx, ty);
 
-            var item = Map.Warriors[fx, fy];
-            Map.Warriors[fx, fy] = Map.Warriors[tx, ty];
-            Map.Warriors[tx, ty] = item;
+            var tmp = Map.GetWarriorAt(fx, fy);
+            Map.SetWarriorAt(fx, fy, Map.GetWarriorAt(tx, ty));
+            Map.SetWarriorAt(tx, ty, tmp);
 
             AfterExchangeWarroirsPosition.SC(fx, fy, tx, ty);
 
@@ -96,7 +95,7 @@ namespace Avocat
             var team2Survived = false;
             FC.For2(Map.Width, Map.Height, (x, y) =>
             {
-                var warrior = Map.Warriors[x, y];
+                var warrior = Map.GetWarriorAt(x, y);
                 if (warrior != null && !warrior.IsDead)
                 {
                     if (warrior.Owner == 1)

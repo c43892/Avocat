@@ -46,11 +46,10 @@ namespace Avocat
 
             bmp.HandleMsg("MoveOnPath", (player, data) =>
             {
-                var x = data.ReadInt();
-                var y = data.ReadInt();
+                var id = data.ReadInt();
                 var pathXYArr = data.ReadIntArr();
 
-                var warrior = Battle.Map.Warriors[x, y];
+                var warrior = Battle.Map.GetWarriorsByID(id);
                 warrior.MovingPath.Clear();
                 warrior.MovingPath.AddRange(pathXYArr);
 
@@ -59,14 +58,14 @@ namespace Avocat
 
             bmp.HandleMsg("Attack", (player, data) =>
             {
-                var fx = data.ReadInt();
-                var fy = data.ReadInt();
-                var tx = data.ReadInt();
-                var ty = data.ReadInt();
+                var attackerID = data.ReadInt();
+                var targetID = data.ReadInt();
 
-                var attacker = Battle.Map.Warriors[fx, fy];
-                var target = Battle.Map.Warriors[tx, ty];
+                var attacker = Battle.Map.GetWarriorsByID(attackerID);
+                var target = Battle.Map.GetWarriorsByID(targetID);
 
+                attacker.GetPosInMap(out int fx, out int fy);
+                target.GetPosInMap(out int tx, out int ty);
                 if (MU.ManhattanDist(fx, fy, tx, ty) > attacker.AttackRange) // 超过攻击范围
                     return;
 
