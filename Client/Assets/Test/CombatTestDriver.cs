@@ -108,10 +108,17 @@ public class CombatTestDriver : MonoBehaviour
             if (player != Room.PlayerMe)
                 return;
 
-            BattleStage.AniPlayer.AddOp(() => BattleStageUI.RefreshCardsAvailable(bt.AvailableCards));
+            var availableCards = new List<BattleCard>();
+            availableCards.AddRange(bt.AvailableCards);
+            BattleStage.AniPlayer.AddOp(() => BattleStageUI.RefreshCardsAvailable(availableCards));
         };
 
-        room.Battle.OnWarriorMovingOnPath += (warrior, x, y, path) => BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
+        room.Battle.OnWarriorMovingOnPath += (warrior, x, y, path) =>
+        {
+            var availableCards = new List<BattleCard>();
+            availableCards.AddRange(bt.AvailableCards);
+            BattleStage.AniPlayer.AddOp(() => BattleStageUI.RefreshCardsAvailable(availableCards));
+        };
 
         BattleStage.gameObject.SetActive(true);
         BattleStage.StartPreparing();

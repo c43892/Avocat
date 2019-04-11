@@ -41,7 +41,11 @@ public class InBattleOps : StageOpsLayer
                 curSelWarrior.MovingPath.Clear();
             }
 
-            FC.ForEach(pathInSel, (i, tile) => tile.Color = MapTile.ColorDefault);
+            FC.ForEach(pathInSel, (i, tile) =>
+            {
+                tile.Color = MapTile.ColorDefault;
+                tile.Card = null;
+            });
             pathInSel.Clear();
         }
     } Warrior curSelWarrior;
@@ -121,7 +125,6 @@ public class InBattleOps : StageOpsLayer
 
         CurrentSelWarrior = warrior;
         var tile = BattleStage.Tiles[(int)x, (int)y];
-        tile.Color = MapTile.ColorSelectedHead;
         pathInSel.Add(tile);
         status = "selectingPath";
     }
@@ -142,7 +145,8 @@ public class InBattleOps : StageOpsLayer
             // 回退指向尾部第二块，则从路径中退掉尾部第一块
             pathInSel.RemoveAt(pathInSel.Count - 1);
             tailTile.Color = MapTile.ColorDefault;
-            if (pathInSel.Count > 0)
+            tailTile.Card = null;
+            if (pathInSel.Count > 1) // 头节点不变色显示
                 pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
@@ -155,8 +159,14 @@ public class InBattleOps : StageOpsLayer
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
             if (dist == 1)
             {
-                pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelected;
+                if (pathInSel.Count > 1) // 头节点不变色显示
+                {
+                    pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelected;
+                    pathInSel[pathInSel.Count - 1].Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 2]; // 第一个路径节点并不对应战斗卡牌
+                }
+
                 tile.Color = MapTile.ColorSelectedHead;
+                tile.Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
                 pathInSel.Add(tile);
             }
         }
