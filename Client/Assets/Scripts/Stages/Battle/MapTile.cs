@@ -11,7 +11,8 @@ using Avocat;
 public class MapTile : MonoBehaviour
 {
     SpriteRenderer sr;
-    public TextMesh cardSR;
+    public TextMesh CardSR;
+    public TextMesh DirSR;
 
     private void Start()
     {
@@ -21,6 +22,21 @@ public class MapTile : MonoBehaviour
     public static readonly Color ColorDefault = Color.white;
     public static readonly Color ColorSelected = Color.green;
     public static readonly Color ColorSelectedHead = Color.blue;
+
+    public void SetDir(int dx, int dy)
+    {
+        var angle = 0;
+        if (dx == 0 && dy == 0)
+            DirSR.gameObject.SetActive(false);
+        else if (dx == 0 && dy > 0)
+            angle = 90;
+        else if (dx == 0 && dy < 0)
+            angle = -90;
+        else if (dx < 0 && dy == 0)
+            angle = 180;
+
+        DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+    }
 
     public Color Color
     {
@@ -66,13 +82,20 @@ public class MapTile : MonoBehaviour
         {
             card = value;
             if (card == null)
-                cardSR.gameObject.SetActive(false);
+            {
+                CardSR.gameObject.SetActive(false);
+                DirSR.gameObject.SetActive(false);
+            }
             else
             {
-                cardSR.gameObject.SetActive(true);
-                cardSR.GetComponent<MeshRenderer>().sortingLayerID = sr.sortingLayerID;
-                cardSR.GetComponent<MeshRenderer>().sortingOrder = sr.sortingOrder + 1;
-                cardSR.text = card.Name;
+                DirSR.GetComponent<MeshRenderer>().sortingLayerID = sr.sortingLayerID;
+                DirSR.GetComponent<MeshRenderer>().sortingOrder = sr.sortingOrder + 1;
+                DirSR.gameObject.SetActive(true);
+
+                CardSR.gameObject.SetActive(true);
+                CardSR.GetComponent<MeshRenderer>().sortingLayerID = sr.sortingLayerID;
+                CardSR.GetComponent<MeshRenderer>().sortingOrder = sr.sortingOrder + 2;
+                CardSR.text = card.Name;
             }
         }
     } BattleCard card = null;

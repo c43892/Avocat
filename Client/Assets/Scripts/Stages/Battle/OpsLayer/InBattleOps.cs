@@ -67,7 +67,7 @@ public class InBattleOps : StageOpsLayer
                 }
                 break;
             case "selectingAttackTarget":
-                if (warrior == null || CurrentSelWarrior.ActionDone)
+                if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
                     // 点空地
 
@@ -147,7 +147,10 @@ public class InBattleOps : StageOpsLayer
             tailTile.Color = MapTile.ColorDefault;
             tailTile.Card = null;
             if (pathInSel.Count > 1) // 头节点不变色显示
+            {
                 pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
+                pathInSel[pathInSel.Count - 1].SetDir(0, 0);
+            }
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
         {
@@ -161,12 +164,15 @@ public class InBattleOps : StageOpsLayer
             {
                 if (pathInSel.Count > 1) // 头节点不变色显示
                 {
-                    pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelected;
-                    pathInSel[pathInSel.Count - 1].Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 2]; // 第一个路径节点并不对应战斗卡牌
+                    var cd = pathInSel[pathInSel.Count - 1];
+                    cd.Color = MapTile.ColorSelected;
+                    cd.SetDir(tile.X - tailTile.X, tile.Y - tailTile.Y);
+                    cd.Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 2]; // 第一个路径节点并不对应战斗卡牌
                 }
 
                 tile.Color = MapTile.ColorSelectedHead;
                 tile.Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
+                tile.SetDir(0, 0);
                 pathInSel.Add(tile);
             }
         }
