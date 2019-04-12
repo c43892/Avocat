@@ -54,6 +54,7 @@ namespace Swift.AStar
         public TPathNode[,] SearchSpace { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public bool Only4Adjacent { get; set; }
 
         protected class PathNode : IPathNode<TUserContext>, IComparer<PathNode>, IIndexedObject
         {
@@ -143,10 +144,11 @@ namespace Swift.AStar
         /// Returns null, if no path is found. Start- and End-Node are included in returned path. The user context
         /// is passed to IsWalkable().
         /// </summary>
-        public LinkedList<TPathNode> Search(int inStartX, int inStartY, int inEndX, int inEndY, TUserContext inUserContext = default(TUserContext), int MaxSearchDist = int.MaxValue)
+        public LinkedList<TPathNode> Search(int inStartX, int inStartY, int inEndX, int inEndY, TUserContext inUserContext = default(TUserContext), bool findNearest = false, int MaxSearchDist = int.MaxValue)
         {
             PathNode startNode = m_SearchSpace[inStartX, inStartY];
             PathNode endNode = m_SearchSpace[inEndX, inEndY];
+            PathNode nearest = startNode;
 
             //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             //watch.Start();
@@ -154,7 +156,7 @@ namespace Swift.AStar
             if (startNode == endNode)
                 return new LinkedList<TPathNode>(new TPathNode[] { startNode.UserContext });
 
-            PathNode[] neighborNodes = new PathNode[8];
+            PathNode[] neighborNodes = Only4Adjacent ? new PathNode[4] : new PathNode[8];
 
             m_ClosedSet.Clear();
             m_OpenSet.Clear();
@@ -245,12 +247,23 @@ namespace Swift.AStar
                         m_RuntimeGrid[y].H = Heuristic(y, endNode);
                         m_RuntimeGrid[y].F = m_RuntimeGrid[y].G + m_RuntimeGrid[y].H;
 
+                        if (findNearest)
+                            if (m_RuntimeGrid[y].H < nearest.H)
+                                nearest = m_RuntimeGrid[y];
+
                         if (wasAdded)
                             m_OrderedOpenSet.Push(y);
                         else
                             m_OrderedOpenSet.Update(y);
                     }
                 }
+            }
+
+            if (findNearest)
+            {
+                LinkedList<TPathNode> result = ReconstructPath(m_CameFrom, nearest);
+                result.AddLast(nearest.UserContext);
+                return result;
             }
 
             return null;
@@ -304,25 +317,28 @@ namespace Swift.AStar
             else
                 inNeighbors[3] = null;
 
-            if ((x > 0) && (y > 0))
-                inNeighbors[4] = m_SearchSpace[x - 1, y - 1];
-            else
-                inNeighbors[4] = null;
+            if (!Only4Adjacent) // 4 联通定义
+            {
+                if ((x > 0) && (y > 0))
+                    inNeighbors[4] = m_SearchSpace[x - 1, y - 1];
+                else
+                    inNeighbors[4] = null;
 
-            if ((x < Width - 1) && (y > 0))
-                inNeighbors[5] = m_SearchSpace[x + 1, y - 1];
-            else
-                inNeighbors[5] = null;
+                if ((x < Width - 1) && (y > 0))
+                    inNeighbors[5] = m_SearchSpace[x + 1, y - 1];
+                else
+                    inNeighbors[5] = null;
 
-            if ((x > 0) && (y < Height - 1))
-                inNeighbors[6] = m_SearchSpace[x - 1, y + 1];
-            else
-                inNeighbors[6] = null;
+                if ((x > 0) && (y < Height - 1))
+                    inNeighbors[6] = m_SearchSpace[x - 1, y + 1];
+                else
+                    inNeighbors[6] = null;
 
-            if ((x < Width - 1) && (y < Height - 1))
-                inNeighbors[7] = m_SearchSpace[x + 1, y + 1];
-            else
-                inNeighbors[7] = null;
+                if ((x < Width - 1) && (y < Height - 1))
+                    inNeighbors[7] = m_SearchSpace[x + 1, y + 1];
+                else
+                    inNeighbors[7] = null;
+            }
         }
 
         private class OpenCloseMap

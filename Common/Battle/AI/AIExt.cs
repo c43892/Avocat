@@ -53,39 +53,9 @@ namespace Avocat
                     // 直接走向目标，不考虑障碍
                     var path = warrior.MovingPath;
                     path.Clear();
+                    path.AddRange(warrior.Map.FindPath(fx, fy, tx, ty, 1));
 
-                    var blocked = false;
-
-                    FC.ForFromTo(fx, tx, (x) =>
-                    {
-                        if (x == fx || (x == tx && fy == ty)) // 掠过 attacker/target 位置
-                            return;
-
-                        if (warrior.Map.BlockedAt(x, fy))
-                        {
-                            blocked = true;
-                            return;
-                        }
-
-                        path.Add(x);
-                        path.Add(fy);
-                    }, () => !blocked);
-
-                    FC.ForFromTo(fy, ty, (y) =>
-                    {
-                        if ((tx == fx && y == fy) || y == ty) // 掠过 attacker/target 位置
-                            return;
-
-                        if (warrior.Map.BlockedAt(tx, y))
-                        {
-                            blocked = true;
-                            return;
-                        }
-
-                        path.Add(tx);
-                        path.Add(y);
-                    }, () => !blocked);
-
+                    // 限制移动距离
                     while (path.Count > warrior.MoveRange * 2)
                         path.RemoveRange(path.Count - 2, 2);
 

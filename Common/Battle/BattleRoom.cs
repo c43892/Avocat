@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Swift;
+using Swift.AStar;
 using Swift.Math;
 using System.Diagnostics;
 
@@ -76,6 +77,12 @@ namespace Avocat
             {
                 Battle.ActionDone(player);
             });
+        }
+
+        // 搜索可达路径
+        public List<int> FindPath(int fx, int fy, int tx, int ty, int radius)
+        {
+            return Battle.Map.FindPath(fx, fy, tx, ty, radius);
         }
     }
 }

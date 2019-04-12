@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Swift;
+using Swift.AStar;
+using Swift.Math;
 
 namespace Avocat
 {
@@ -29,6 +31,7 @@ namespace Avocat
             grids = new int[w, h];
             items = new BattleMapItem[w, h];
             warriors = new Warrior[w, h];
+            BuildPathFinder();
         }
 
         // 地图尺寸
@@ -127,5 +130,70 @@ namespace Avocat
         {
             return (warriors[x, y] != null && warriors[x, y].IsObstacle) || (items[x, y] != null && items[x, y].IsObstacle);
         }
+
+        #region 寻路相关
+
+        // 检查指定区域是否被占用
+        public bool CheckSpareSpace(int cx, int cy, int r)
+        {
+            var free = true;
+            FC.RectFor(cx, cx, cy, cy, (x, y) =>
+            {
+                free = x >= 0 && x < Width
+                        && y >= 0 && y < Height
+                        && !BlockedAt(x, y);
+            }, () => free);
+
+            return free;
+        }
+
+        class PathNode : IPathNode<int>
+        {
+            public Vec2 Pos { get; private set; }
+            Func<int, int, int, bool> CheckSpareSpace = null;
+
+            public PathNode(int x, int y, Func<int, int, int, bool> checker)
+            {
+                Pos = new Vec2(x, y);
+                CheckSpareSpace = checker;
+            }
+
+            public Boolean IsWalkable(int ps)
+            {
+                return CheckSpareSpace((int)Pos.x, (int)Pos.y, ps);
+            }
+        }
+
+        PathNode[,] pathNodes = null;
+        SpatialAStar<PathNode, int> pathFinder = null;
+
+        // 构建寻路器
+        void BuildPathFinder()
+        {
+            pathNodes = new PathNode[Width, Height];
+            FC.For2(Width, Height, (x, y) => pathNodes[x, y] = new PathNode(x, y, CheckSpareSpace));
+            pathFinder = new SpatialAStar<PathNode, int>(pathNodes) { Only4Adjacent = true };
+        }
+
+        // 寻路
+        public List<int> FindPath(int fx, int fy, int tx, int ty, int radius)
+        {
+            var path = new List<int>();
+
+            var nodes = pathFinder.Search(fx, fy, tx, ty, radius, true);
+            if (nodes != null)
+            {
+                nodes.RemoveFirst(); // remove the src node
+                foreach (var n in nodes)
+                {
+                    path.Add((int)n.Pos.x);
+                    path.Add((int)n.Pos.y);
+                }
+            }
+
+            return path;
+        }
+
+        #endregion
     }
 }
