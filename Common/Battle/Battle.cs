@@ -55,6 +55,8 @@ namespace Avocat
             if (fx == tx && fy == ty)
                 return;
 
+            Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
+
             BeforeExchangeWarroirsPosition.SC(fx, fy, tx, ty);
 
             var tmp = Map.GetWarriorAt(fx, fy);
@@ -165,6 +167,8 @@ namespace Avocat
                 lstPathXY.RemoveRange(0, 2);
                 movedPath.Add(tx);
                 movedPath.Add(ty);
+
+                Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
                 ExchangeWarroirsPosition(fx, fy, tx, ty, true);
 

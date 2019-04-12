@@ -13,11 +13,13 @@ namespace Avocat
     {
         public BattleMap Map { get; private set; }
         public int IDInMap { get; private set; }
+        public bool IsObstacle { get; set; } // 是否是障碍，占据地块
 
         public BattleMapItem(BattleMap map)
         {
             Map = map;
             IDInMap = map.ItemIDInMap;
+            IsObstacle = true; // 默认都占据地块
         }
 
         // 获取对象在地图中位置

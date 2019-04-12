@@ -160,7 +160,7 @@ public class InBattleOps : StageOpsLayer
 
             // 拖拽到相邻块则加入路径
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
-            if (dist == 1)
+            if (dist == 1 && !Room.Battle.Map.BlockedAt(tile.X, tile.Y))
             {
                 if (pathInSel.Count > 1) // 头节点不变色显示
                 {

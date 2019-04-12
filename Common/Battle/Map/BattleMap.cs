@@ -121,5 +121,11 @@ namespace Avocat
 
             }, continueCondition);
         }
+
+        // 判断指定位置是否已经被占据
+        public bool BlockedAt(int x, int y)
+        {
+            return (warriors[x, y] != null && warriors[x, y].IsObstacle) || (items[x, y] != null && items[x, y].IsObstacle);
+        }
     }
 }
