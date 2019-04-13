@@ -11,7 +11,7 @@ namespace Avocat
     /// </summary>
     public class BattleMapItem
     {
-        public BattleMap Map { get; private set; }
+        public BattleMap Map { get; set; }
         public int IDInMap { get; private set; }
         public bool IsObstacle { get; set; } // 是否是障碍，占据地块
 

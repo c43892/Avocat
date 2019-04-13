@@ -27,7 +27,7 @@ public class InBattleOps : StageOpsLayer
             if (curSelWarrior == value || (value != null && value.ActionDone))
                 return;
 
-            if (curSelWarrior != null)
+            if (curSelWarrior != null && curSelWarrior.Map != null)
             {
                 curSelWarrior.GetPosInMap(out int x, out int y);
                 BattleStage.Avatars[x, y].Color = MapAvatar.ColorDefault;

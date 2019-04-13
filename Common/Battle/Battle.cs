@@ -42,6 +42,7 @@ namespace Avocat
         {
             warrior.GetPosInMap(out int x, out int y);
             Map.SetWarriorAt(x, y, null);
+            warrior.Map = null;
         }
 
         #region 战斗准备过程

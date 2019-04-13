@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Swift;
 
@@ -59,6 +60,7 @@ namespace Avocat
         // 获取对象在地图中位置
         public override void GetPosInMap(out int x, out int y)
         {
+            Debug.Assert(Map != null, "warrior is not in map now");
             Map.FindXY(this, out x, out y);
         }
     }
