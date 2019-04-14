@@ -74,7 +74,7 @@ namespace Avocat
         // 移动消耗卡牌
         BattlePVE ConsumeCardsOnMoving()
         {
-            AfterMoveOnPath += (warrior, fx, fy, movedPath) =>
+            AfterMoveOnPath.Add((warrior, fx, fy, movedPath) =>
             {
                 if (warrior.Owner != PlayerIndex)
                     return;
@@ -89,7 +89,7 @@ namespace Avocat
                 });
 
                 ResetAvailableCards();
-            };
+            });
 
             return this;
         }

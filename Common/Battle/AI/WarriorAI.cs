@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,6 @@ namespace Avocat
             Warrior = warrior;
         }
 
-        public Action Act;
+        public Func<IEnumerator> Act;
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Replay\BattleReplay.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\SpatialAStar.cs" />
+    <Compile Include="Assets\Scripts\Common\Swift\AsyncCalleeChain.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\BufferExtension.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\IBuffer.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\Interfaces.cs" />

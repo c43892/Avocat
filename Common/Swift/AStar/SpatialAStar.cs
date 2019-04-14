@@ -247,12 +247,14 @@ namespace Swift.AStar
                         m_RuntimeGrid[y].H = Heuristic(y, endNode);
                         m_RuntimeGrid[y].F = m_RuntimeGrid[y].G + m_RuntimeGrid[y].H;
 
-                        if (findNearest)
-                            if (m_RuntimeGrid[y].H < nearest.H)
-                                nearest = m_RuntimeGrid[y];
-
                         if (wasAdded)
+                        {
                             m_OrderedOpenSet.Push(y);
+
+                            if (findNearest)
+                                if (m_RuntimeGrid[y].H < nearest.H)
+                                    nearest = m_RuntimeGrid[y];
+                        }
                         else
                             m_OrderedOpenSet.Update(y);
                     }
@@ -262,7 +264,6 @@ namespace Swift.AStar
             if (findNearest)
             {
                 LinkedList<TPathNode> result = ReconstructPath(m_CameFrom, nearest);
-                result.AddLast(nearest.UserContext);
                 return result;
             }
 

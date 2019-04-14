@@ -35,16 +35,14 @@ public class CombatTestDriver : MonoBehaviour
         Recoder.LoadAll();
         msgLooper.OnMessageIn += (byte[] data) =>
         {
-            currentReplay.Messages.Add(data);
+            if (currentReplay != null)
+                currentReplay.Messages.Add(data);
         };
 
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
-    }
 
-    public void Update()
-    {
-        msgLooper.MoveNext();
+        StartCoroutine(msgLooper.Loop());
     }
 
     // 开始新游戏
@@ -77,54 +75,51 @@ public class CombatTestDriver : MonoBehaviour
 
         BattleStage.BuildBattleStage(room);
 
-        room.Battle.OnPlayerPrepared += (int player) =>
+        room.Battle.OnPlayerPrepared.Add((int player) =>
         {
-            BattleStage.AniPlayer.AddOp(() =>
+            if (room.Battle.AllPrepared)
             {
-                if (room.Battle.AllPrepared)
-                {
-                    PreparingUI.SetActive(false);
-                    BattleStageUI.gameObject.SetActive(true);
-                    BattleStage.StartFighting();
-                }
-            });
-        };
+                PreparingUI.SetActive(false);
+                BattleStageUI.gameObject.SetActive(true);
+                BattleStage.StartFighting();
+            }
+        });
 
-        room.Battle.OnBattleEnded += (winner) =>
+        room.Battle.OnBattleEnded.Add((winner) =>
         {
-            BattleStage.AniPlayer.AddOp(() =>
+            if (currentReplay != null)
             {
-                GameOverUI.SetActive(true);
-                GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";
-                BattleStageUI.gameObject.SetActive(false);
-            });
+                Recoder.AddReplay(currentReplay);
+                Recoder.SaveAll();
+            }
 
-            Recoder.AddReplay(currentReplay);
-            Recoder.SaveAll();
-        };
+            GameOverUI.SetActive(true);
+            GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";
+            BattleStageUI.gameObject.SetActive(false);
+        });
 
-        room.Battle.OnNextRoundStarted += (player) =>
+        room.Battle.OnNextRoundStarted.Add((player) =>
         {
             if (player != Room.PlayerMe)
                 return;
 
             var availableCards = new List<BattleCard>();
             availableCards.AddRange(bt.AvailableCards);
-            BattleStage.AniPlayer.AddOp(() => BattleStageUI.RefreshCardsAvailable(availableCards));
-        };
+            BattleStageUI.RefreshCardsAvailable(availableCards);
+        });
 
-        room.Battle.OnWarriorMovingOnPath += (warrior, x, y, path) =>
+        room.Battle.OnWarriorMovingOnPath.Add((warrior, x, y, path) =>
         {
             var availableCards = new List<BattleCard>();
             availableCards.AddRange(bt.AvailableCards);
-            BattleStage.AniPlayer.AddOp(() => BattleStageUI.RefreshCardsAvailable(availableCards));
-        };
+            BattleStageUI.RefreshCardsAvailable(availableCards);
+        });
 
         BattleStage.gameObject.SetActive(true);
         BattleStage.StartPreparing();
         StartingUI.SetActive(false);
         PreparingUI.SetActive(true);
-        currentReplay = new BattleReplay { Time = DateTime.Now.Ticks };
+        currentReplay = this.Recoder.InReplaying ? null : new BattleReplay { Time = DateTime.Now.Ticks };
     }
 
     // 准备完毕

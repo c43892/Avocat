@@ -7,12 +7,13 @@ using Swift;
 using Swift.AStar;
 using Swift.Math;
 using System.Diagnostics;
+using System.Collections;
 
 namespace Avocat
 {
     public interface IBattlemessageProvider
     {
-        void HandleMsg(string msg, Action<int, IReadableBuffer> handler);
+        void HandleMsg(string msg, Func<int, IReadableBuffer, IEnumerator> handler);
     }
 
     /// <summary>
@@ -29,7 +30,7 @@ namespace Avocat
         }
 
         // 注册所有战斗消息
-        public void RegisterBattleMessageHandlers(IBattlemessageProvider bmp)
+        public virtual void RegisterBattleMessageHandlers(IBattlemessageProvider bmp)
         {
             bmp.HandleMsg("ExchangeWarroirsPosition", (player, data) =>
             {
@@ -37,12 +38,12 @@ namespace Avocat
                 var fy = data.ReadInt();
                 var tx = data.ReadInt();
                 var ty = data.ReadInt();
-                Battle.ExchangeWarroirsPosition(fx, fy, tx, ty);
+                return Battle.ExchangeWarroirsPosition(fx, fy, tx, ty);
             });
 
             bmp.HandleMsg("PlayerPrepared", (player, data) =>
             {
-                Battle.PlayerPrepared(player);
+                return Battle.PlayerPrepared(player);
             });
 
             bmp.HandleMsg("MoveOnPath", (player, data) =>
@@ -54,7 +55,7 @@ namespace Avocat
                 warrior.MovingPath.Clear();
                 warrior.MovingPath.AddRange(pathXYArr);
 
-                Battle.MoveOnPath(warrior);
+                return Battle.MoveOnPath(warrior);
             });
 
             bmp.HandleMsg("Attack", (player, data) =>
@@ -65,17 +66,12 @@ namespace Avocat
                 var attacker = Battle.Map.GetWarriorsByID(attackerID);
                 var target = Battle.Map.GetWarriorsByID(targetID);
 
-                attacker.GetPosInMap(out int fx, out int fy);
-                target.GetPosInMap(out int tx, out int ty);
-                if (MU.ManhattanDist(fx, fy, tx, ty) > attacker.AttackRange) // 超过攻击范围
-                    return;
-
-                Battle.Attack(attacker, target);
+                return Battle.Attack(attacker, target);
             });
 
             bmp.HandleMsg("ActionDone", (player, data) =>
             {
-                Battle.ActionDone(player);
+                return Battle.ActionDone(player);
             });
         }
 

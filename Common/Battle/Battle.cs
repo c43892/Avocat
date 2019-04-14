@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Swift;
@@ -48,42 +49,42 @@ namespace Avocat
         #region 战斗准备过程
 
         // 交换英雄位置
-        protected event Action<int, int, int, int> BeforeExchangeWarroirsPosition = null;
-        protected event Action<int, int, int, int> AfterExchangeWarroirsPosition = null;
-        public event Action<int, int, int, int> OnWarriorPositionExchanged = null;
-        public void ExchangeWarroirsPosition(int fx, int fy, int tx, int ty, bool suppressPositionExchangedEvent = false)
+        protected AsyncCalleeChain<int, int, int, int> BeforeExchangeWarroirsPosition = new AsyncCalleeChain<int, int, int, int>();
+        protected AsyncCalleeChain<int, int, int, int> AfterExchangeWarroirsPosition = new AsyncCalleeChain<int, int, int, int>();
+        public AsyncCalleeChain<int, int, int, int> OnWarriorPositionExchanged = new AsyncCalleeChain<int, int, int, int>();
+        public IEnumerator ExchangeWarroirsPosition(int fx, int fy, int tx, int ty, bool suppressPositionExchangedEvent = false)
         {
             if (fx == tx && fy == ty)
-                return;
+                yield break;
 
             Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
-            BeforeExchangeWarroirsPosition.SC(fx, fy, tx, ty);
+            yield return BeforeExchangeWarroirsPosition.Invoke(fx, fy, tx, ty);
 
             var tmp = Map.GetWarriorAt(fx, fy);
             Map.SetWarriorAt(fx, fy, Map.GetWarriorAt(tx, ty));
             Map.SetWarriorAt(tx, ty, tmp);
 
-            AfterExchangeWarroirsPosition.SC(fx, fy, tx, ty);
+            yield return AfterExchangeWarroirsPosition.Invoke(fx, fy, tx, ty);
 
             if (!suppressPositionExchangedEvent)
-                OnWarriorPositionExchanged.SC(fx, fy, tx, ty);
+                yield return OnWarriorPositionExchanged.Invoke(fx, fy, tx, ty);
         }
 
         // 完成战斗准备
-        protected event Action<int> BeforePlayerPrepared = null;
-        protected event Action<int> AfterPlayerPrepared = null;
+        protected AsyncCalleeChain<int> BeforePlayerPrepared = new AsyncCalleeChain<int>();
+        protected AsyncCalleeChain<int> AfterPlayerPrepared = new AsyncCalleeChain<int>();
         public abstract void PlayerPreparedImpl(int player);
-        public event Action<int> OnPlayerPrepared = null; // 有玩家完成战斗准备
-        public void PlayerPrepared(int player)
+        public AsyncCalleeChain<int> OnPlayerPrepared = new AsyncCalleeChain<int>(); // 有玩家完成战斗准备
+        public IEnumerator PlayerPrepared(int player)
         {
-            BeforePlayerPrepared.SC(player);
+            yield return BeforePlayerPrepared?.Invoke(player);
 
             PlayerPreparedImpl(player);
 
-            AfterPlayerPrepared.SC(player);
+            yield return AfterPlayerPrepared?.Invoke(player);
 
-            OnPlayerPrepared.SC(player);
+            yield return OnPlayerPrepared?.Invoke(player);
         }
 
         // 检查所有玩家是否都已经完成战斗准备
@@ -121,12 +122,12 @@ namespace Avocat
         #region 战斗过程
 
         // 回合开始，重置所有角色行动标记
-        protected event Action<int> BeforeStartNextRound = null;
-        protected event Action<int> AfterStartNextRound = null;
-        public event Action<int> OnNextRoundStarted = null;
-        public void StartNextRound(int player)
+        protected AsyncCalleeChain<int> BeforeStartNextRound = new AsyncCalleeChain<int>();
+        protected AsyncCalleeChain<int> AfterStartNextRound = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> OnNextRoundStarted = new AsyncCalleeChain<int>();
+        public IEnumerator StartNextRound(int player)
         {
-            BeforeStartNextRound.SC(player);
+            yield return BeforeStartNextRound.Invoke(player);
 
             Map.ForeachWarriors((i, j, warrior) =>
             {
@@ -134,16 +135,16 @@ namespace Avocat
                 warrior.ActionDone = false;
             });
 
-            AfterStartNextRound.SC(player);
+            yield return AfterStartNextRound?.Invoke(player);
 
-            OnNextRoundStarted.SC(player);
+            yield return OnNextRoundStarted?.Invoke(player);
         }
 
         // 角色沿路径移动
-        protected event Action<Warrior> BeforeMoveOnPath = null;
-        protected event Action<Warrior, int, int, List<int>> AfterMoveOnPath = null;
-        public event Action<Warrior, int, int, List<int>> OnWarriorMovingOnPath = null; // 角色沿路径移动
-        public void MoveOnPath(Warrior warrior)
+        protected AsyncCalleeChain<Warrior> BeforeMoveOnPath = new AsyncCalleeChain<Warrior>();
+        protected AsyncCalleeChain<Warrior, int, int, List<int>> AfterMoveOnPath = new AsyncCalleeChain<Warrior, int, int, List<int>>();
+        public AsyncCalleeChain<Warrior, int, int, List<int>> OnWarriorMovingOnPath = new AsyncCalleeChain<Warrior, int, int, List<int>>(); // 角色沿路径移动
+        public IEnumerator MoveOnPath(Warrior warrior)
         {
             Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
 
@@ -151,9 +152,9 @@ namespace Avocat
             Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
 
             if (warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
-                return;
+                yield break;
 
-            BeforeMoveOnPath.SC(warrior);
+            yield return BeforeMoveOnPath.Invoke(warrior);
 
             List<int> movedPath = new List<int>(); // 实际落实了的移动路径
             var lstPathXY = warrior.MovingPath;
@@ -171,7 +172,7 @@ namespace Avocat
 
                 Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
-                ExchangeWarroirsPosition(fx, fy, tx, ty, true);
+                yield return ExchangeWarroirsPosition(fx, fy, tx, ty, true);
 
                 fx = tx;
                 fy = ty;
@@ -179,24 +180,24 @@ namespace Avocat
 
             warrior.Moved = true;
 
-            AfterMoveOnPath.SC(warrior, x, y, movedPath);
-            OnWarriorMovingOnPath.SC(warrior, x, y, movedPath);
+            yield return AfterMoveOnPath.Invoke(warrior, x, y, movedPath);
+            yield return OnWarriorMovingOnPath.Invoke(warrior, x, y, movedPath);
         }
 
         // 执行攻击
-        protected event Action<Warrior, Warrior> BeforeAttack = null;
-        protected event Action<Warrior, Warrior> AfterAttack = null;
-        public event Action<Warrior, Warrior> OnWarriorAttack = null; // 角色进行攻击
-        public event Action<Warrior> OnWarriorDying = null; // 角色死亡
-        public void Attack(Warrior attacker, Warrior target)
+        protected AsyncCalleeChain<Warrior, Warrior> BeforeAttack = new AsyncCalleeChain<Warrior, Warrior>();
+        protected AsyncCalleeChain<Warrior, Warrior> AfterAttack = new AsyncCalleeChain<Warrior, Warrior>();
+        public AsyncCalleeChain<Warrior, Warrior> OnWarriorAttack = new AsyncCalleeChain<Warrior, Warrior>(); // 角色进行攻击
+        public AsyncCalleeChain<Warrior> OnWarriorDying = new AsyncCalleeChain<Warrior>(); // 角色死亡
+        public IEnumerator Attack(Warrior attacker, Warrior target)
         {
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
-                return;
+                yield break;
 
-            BeforeAttack.SC(attacker, target);
+            yield return BeforeAttack.Invoke(attacker, target);
 
             target.Shield -= attacker.Power;
             if (target.Shield < 0)
@@ -207,26 +208,26 @@ namespace Avocat
 
             attacker.ActionDone = true;
 
-            AfterAttack.SC(attacker, target);
+            yield return AfterAttack.Invoke(attacker, target);
 
-            OnWarriorAttack.SC(attacker, target);
+            yield return OnWarriorAttack.Invoke(attacker, target);
 
             if (target.IsDead)
             {
-                OnWarriorDying.SC(target);
+                yield return OnWarriorDying.Invoke(target);
                 RemoveWarrior(target);
             }
         }
 
         // 玩家本回合行动结束
-        protected event Action<int> BeforeActionDone = null;
-        protected event Action<int> AfterActionDone = null;
-        public Action<int> OnActionDone = null;
-        public void ActionDone(int player)
+        protected AsyncCalleeChain<int> BeforeActionDone = new AsyncCalleeChain<int>();
+        protected AsyncCalleeChain<int> AfterActionDone = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> OnActionDone = new AsyncCalleeChain<int>();
+        public IEnumerator ActionDone(int player)
         {
-            BeforeActionDone.SC(player);
-            AfterActionDone.SC(player);
-            OnActionDone.SC(player);
+            yield return BeforeActionDone.Invoke(player);
+            yield return AfterActionDone.Invoke(player);
+            yield return OnActionDone.Invoke(player);
         }
 
         #endregion

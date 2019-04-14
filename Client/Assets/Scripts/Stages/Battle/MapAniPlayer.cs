@@ -24,33 +24,33 @@ public class MapAniPlayer : MonoBehaviour
         }
     } BattleStage stage;
 
-    List<KeyValuePair<IEnumerator, Action>> anis = new List<KeyValuePair<IEnumerator, Action>>();
+    // List<KeyValuePair<IEnumerator, Action>> anis = new List<KeyValuePair<IEnumerator, Action>>();
 
-    // 要播放的动画入队
-    public void Add(IEnumerator routine, Action callback = null)
-    {
-        anis.Add(new KeyValuePair<IEnumerator, Action>(routine, callback));
-        if (anis.Count == 1)
-            StartCoroutine(StartPlaying());
-    }
+    //// 要播放的动画入队
+    //public void Add(IEnumerator routine, Action callback = null)
+    //{
+    //    anis.Add(new KeyValuePair<IEnumerator, Action>(routine, callback));
+    //    if (anis.Count == 1)
+    //        StartCoroutine(StartPlaying());
+    //}
 
-    // 插入指定动作
-    public void AddOp(Action act)
-    {
-        Add(Op(act));
-    }
+    //// 插入指定动作
+    //public void AddOp(Action act)
+    //{
+    //    Add(Op(act));
+    //}
 
-    IEnumerator StartPlaying()
-    {
-        while (anis.Count > 0)
-        {
-            var ani = anis[0].Key;
-            var cb = anis[0].Value;
-            yield return StartCoroutine(ani);
-            anis.RemoveAt(0);
-            cb.SC();
-        }
-    }
+    //IEnumerator StartPlaying()
+    //{
+    //    while (anis.Count > 0)
+    //    {
+    //        var ani = anis[0].Key;
+    //        var cb = anis[0].Value;
+    //        yield return StartCoroutine(ani);
+    //        anis.RemoveAt(0);
+    //        cb.SC();
+    //    }
+    //}
 
     #region 构建不同动画
 

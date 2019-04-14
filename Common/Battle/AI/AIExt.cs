@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,58 +17,55 @@ namespace Avocat
             switch (aiType)
             {
                 case "StraightlyForwardAndAttack":
-                    StraightlyForwardAndAttack(ai);
+                    ai.Act = () => StraightlyForwardAndAttack(ai);
                     break;
                 case "Dumb":
                 default:
-                    Dumb(ai);
+                    ai.Act = () => Dumb(ai);
                     break;
             }
         }
 
         // 哑 AI，不做任何事情
-        static void Dumb(WarriorAI ai)
+        static IEnumerator Dumb(WarriorAI ai)
         {
+            yield return null;
         }
 
         // 直线走向最近的目标并攻击之
-        static void StraightlyForwardAndAttack(WarriorAI ai)
+        static IEnumerator StraightlyForwardAndAttack(WarriorAI ai)
         {
-            ai.Act = () =>
+            var warrior = ai.Warrior;
+            if (warrior.IsDead)
+                yield break;
+
+            // 先寻找最近目标
+            var target = FindNearestTarget(warrior);
+            if (target == null)
+                yield break;
+
+            var bt = warrior.Map.Battle;
+
+            target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
+            if (!warrior.InAttackRange(tx, ty)) // 不在攻击范围内，则先移动过去
             {
-                var warrior = ai.Warrior;
-                if (warrior.IsDead)
-                    return;
+                warrior.GetPosInMap(out int fx, out int fy);
 
-                // 先寻找最近目标
-                var target = FindNearestTarget(warrior);
-                if (target == null)
-                    return;
+                var path = warrior.MovingPath;
+                path.Clear();
+                path.AddRange(warrior.Map.FindPath(fx, fy, tx, ty, 1));
 
-                var bt = warrior.Map.Battle;
+                // 限制移动距离
+                while (path.Count > warrior.MoveRange * 2)
+                    path.RemoveRange(path.Count - 2, 2);
 
-                target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
-                if (!warrior.InAttackRange(tx, ty)) // 不在攻击范围内，则先移动过去
-                { 
-                    warrior.GetPosInMap(out int fx, out int fy);
+                if (path.Count > 0)
+                    yield return bt.MoveOnPath(warrior);
+            }
 
-                    // 直接走向目标，不考虑障碍
-                    var path = warrior.MovingPath;
-                    path.Clear();
-                    path.AddRange(warrior.Map.FindPath(fx, fy, tx, ty, 1));
-
-                    // 限制移动距离
-                    while (path.Count > warrior.MoveRange * 2)
-                        path.RemoveRange(path.Count - 2, 2);
-
-                    if (path.Count > 0)
-                        bt.MoveOnPath(warrior);
-                }
-
-                // 攻击目标
-                if (warrior.InAttackRange(tx, ty))
-                    bt.Attack(warrior, target);
-            };
+            // 攻击目标
+            if (warrior.InAttackRange(tx, ty))
+                yield return bt.Attack(warrior, target);
         }
 
         #region 基本组成功能

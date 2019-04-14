@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avocat;
 using Swift;
 using System.Diagnostics;
+using System.Collections;
 
 /// <summary>
 /// 战斗消息回环，用于模拟网络消息从服务器到客户端的往返
@@ -36,26 +37,31 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         hs.Clear();
     }
 
-    Dictionary<string, Action<int, IReadableBuffer>> hs = new Dictionary<string, Action<int, IReadableBuffer>>();
-    public void HandleMsg(string msg, Action<int, IReadableBuffer> r)
+    Dictionary<string, Func<int, IReadableBuffer, IEnumerator>> hs = new Dictionary<string, Func<int, IReadableBuffer, IEnumerator>>();
+    public void HandleMsg(string msg, Func<int, IReadableBuffer, IEnumerator> r)
     {
         hs[msg] = r;
     }
 
-    public void MoveNext()
+    public IEnumerator Loop()
     {
-        if (msgs.Count == 0)
-            return;
+        while (true)
+        {
+            if (msgs.Count > 0)
+            {
+                var data = msgs.Dequeue();
+                OnMessageIn.SC(data);
 
-        var data = msgs.Dequeue();
-        OnMessageIn.SC(data);
+                var buff = new RingBuffer();
+                buff.Write(data);
 
-        var buff = new RingBuffer();
-        buff.Write(data);
-
-        var op = buff.ReadString();
-        var player = buff.ReadInt();
-        Debug.Assert(hs.ContainsKey(op), "no handler for message: " + op);
-        hs[op](player, buff);
+                var op = buff.ReadString();
+                var player = buff.ReadInt();
+                Debug.Assert(hs.ContainsKey(op), "no handler for message: " + op);
+                yield return hs[op](player, buff);
+            }
+            else
+                yield return null;
+        }
     }
 }

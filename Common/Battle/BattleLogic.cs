@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Swift;
 using System.Diagnostics;
+using System.Collections;
 
 namespace Avocat
 {
@@ -25,31 +26,38 @@ namespace Avocat
         }
 
         // 推动战斗基本流程
+
+        int[] players = null;
+        List<int> playerSeq = new List<int>();
+
+        // 所有玩家完成战斗准备，自动开始新回合
+        IEnumerator OnAfterPlayerPrepared(int player)
+        {
+            if (AllPrepared)
+                yield return StartNextRound(playerSeq[0]);
+        }
+
+        IEnumerator OnAfterActionDone(int player)
+        {
+            // 回合交替
+            Debug.Assert(player == playerSeq[0]);
+            playerSeq.RemoveAt(0);
+            if (playerSeq.Count == 0)
+                playerSeq.AddRange(players);
+
+            yield return StartNextRound(playerSeq[0]);
+
+            // 回合结束时检查战斗结束条件
+            yield return TryBattleEnd();
+        }
+
         public Battle BattleStatusTransfer(params int[] players)
         {
-            var playerSeq = new List<int>();
+            this.players = players;
             playerSeq.AddRange(players);
 
-            // 所有玩家完成战斗准备，自动开始新回合
-            AfterPlayerPrepared += (int player) => 
-            {
-                if (AllPrepared)
-                    StartNextRound(playerSeq[0]);
-            };
-
-            AfterActionDone += (int player) =>
-            {
-                // 回合交替
-                Debug.Assert(player == playerSeq[0]);
-                playerSeq.RemoveAt(0);
-                if (playerSeq.Count == 0)
-                    playerSeq.AddRange(players);
-
-                StartNextRound(playerSeq[0]);
-
-                // 回合结束时检查战斗结束条件
-                TryBattleEnd();
-            };
+            AfterPlayerPrepared.Add(OnAfterPlayerPrepared);
+            AfterActionDone.Add(OnAfterActionDone);
 
             return this;
         }
@@ -57,7 +65,7 @@ namespace Avocat
         // 回合开始时重置护盾，重置行动标记，填充卡片等
         public Battle ResetDefenceAtRoundStart()
         {
-            BeforeStartNextRound += (int player) =>
+            BeforeStartNextRound.Add((int player) =>
             {
                 Map.ForeachWarriors((i, j, warrior) =>
                 {
@@ -68,7 +76,7 @@ namespace Avocat
                     warrior.Moved = false; // 重置行动标记
                     warrior.ActionDone = false; // 重置行动标记
                 });
-            };
+            });
 
             return this;
         }
@@ -76,24 +84,24 @@ namespace Avocat
         // 填充卡片
         public Battle AutoGenBattleCards(Func<int, int> getNumCardsGen = null, Action<int, BattleCard[]> onCardsGenerated = null)
         {
-            BeforeStartNextRound += (int player) =>
+            BeforeStartNextRound.Add((int player) =>
             {
                 // 填充卡片
                 var num = getNumCardsGen == null ? 0 : getNumCardsGen(player);
                 if (num > 0)
                     onCardsGenerated(player, GenNextCards(num));
-            };
+            });
 
             return this;
         }
 
         // 结束战斗
-        public event Action<int> OnBattleEnded = null; // 战斗结束通知
-        public virtual void TryBattleEnd()
+        public AsyncCalleeChain<int> OnBattleEnded = new AsyncCalleeChain<int>(); // 战斗结束通知
+        public IEnumerator TryBattleEnd()
         {
             var r = CheckEndCondition();
             if (r != 0)
-                OnBattleEnded.SC(r);
+                yield return OnBattleEnded.Invoke(r);
         }
     }
 }
