@@ -33,9 +33,6 @@ public class LocalBattleRecorder : MonoBehaviour
 
     public void AddReplay(BattleReplay replay)
     {
-        if (InReplaying)
-            return;
-
         replays.Add(replay);
         while (replays.Count > MAX_REPLAYS_RECORD)
             replays.RemoveAt(0);
@@ -75,23 +72,13 @@ public class LocalBattleRecorder : MonoBehaviour
         }
     }
 
-    public bool InReplaying { get; private set; }
     public void Play(BattleReplay replay, Action<byte[]> msgHandler)
-    {
-        InReplaying = true;
-        StartCoroutine(ImplPlaying(replay, msgHandler));
-    }
-
-    IEnumerator ImplPlaying(BattleReplay replay, Action<byte[]> msgHandler)
     {
         for (var i = 0; i < replay.Messages.Count; i++)
         {
             var msg = replay.Messages[i];
             msgHandler(msg);
-            yield return new TimeWaiter(1000);
         }
-
-        InReplaying = false;
     }
 }
  

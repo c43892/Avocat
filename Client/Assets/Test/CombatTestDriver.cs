@@ -35,8 +35,14 @@ public class CombatTestDriver : MonoBehaviour
         Recoder.LoadAll();
         msgLooper.OnMessageIn += (byte[] data) =>
         {
-            if (currentReplay != null)
-                currentReplay.Messages.Add(data);
+            if (currentReplay == null)
+            {
+                currentReplay = new BattleReplay { Time = DateTime.Now.Ticks };
+                Recoder.AddReplay(currentReplay);
+            }
+
+            currentReplay.Messages.Add(data);
+            Recoder.SaveAll();
         };
 
         BattleStage.gameObject.SetActive(false);
@@ -86,12 +92,6 @@ public class CombatTestDriver : MonoBehaviour
 
         room.Battle.OnBattleEnded.Add((winner) =>
         {
-            if (currentReplay != null)
-            {
-                Recoder.AddReplay(currentReplay);
-                Recoder.SaveAll();
-            }
-
             GameOverUI.SetActive(true);
             GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";
             BattleStageUI.gameObject.SetActive(false);
@@ -124,7 +124,8 @@ public class CombatTestDriver : MonoBehaviour
         BattleStage.StartPreparing();
         StartingUI.SetActive(false);
         PreparingUI.SetActive(true);
-        currentReplay = this.Recoder.InReplaying ? null : new BattleReplay { Time = DateTime.Now.Ticks };
+
+        currentReplay = null;
     }
 
     // 准备完毕
@@ -156,8 +157,9 @@ public class CombatTestDriver : MonoBehaviour
     public void OnPlayReplay(int i)
     {
         OnStartNewBattle();
-        var replay = Recoder.Replays[i];
-        Recoder.Play(replay, (data) => msgLooper.SendRaw(data));
+        currentReplay = Recoder.Replays[i];
+        Recoder.Play(currentReplay, (data) => msgLooper.SendRaw(data));
+        currentReplay.Messages.Clear();
     }
 
     // 游戏结束确定
