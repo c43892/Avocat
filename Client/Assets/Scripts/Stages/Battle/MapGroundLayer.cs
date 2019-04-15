@@ -102,6 +102,6 @@ public class MapGroundLayer : MonoBehaviour
                 draggingLastPos = currentPos;
                 OnDragging.SC(fromPos.x, fromPos.y, currentPos.x, currentPos.y);
                 break;
-        }        
+        }
     }
 }

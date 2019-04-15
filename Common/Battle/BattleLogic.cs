@@ -18,8 +18,8 @@ namespace Avocat
             var cards = new BattleCard[num];
             FC.For(num, (i) =>
             {
-                var type = Srand.Next(0, BattleCard.AllTypeOfBattleCards.Length);
-                cards[i] = BattleCard.AllTypeOfBattleCards[type];
+                var type = Srand.Next(0, BattleCard.BattleCardTypesNum);
+                cards[i] = BattleCard.Create(type);
             });
 
             return cards;

@@ -9,9 +9,21 @@ using Avocat;
 /// </summary>
 public class InBattleOps : StageOpsLayer
 {
-    public InBattleOps(BattleStage bs)
+    BattleStageUI UI { get; set; }
+    public InBattleOps(BattleStage bs, BattleStageUI ui)
         : base(bs)
     {
+        UI = ui;
+        BattleCardUI.OnCardExchanged += OnCardExchanged;
+    }
+
+    // 交换卡牌
+    private void OnCardExchanged(int gf, int nf, int gt, int nt)
+    {
+        if (gf == gt && nf == nt)
+            return;
+
+        Room.DoExchangeBattleCards(gf, nf, gt, nt);
     }
 
     // selectingWarrior - 等待选择行动对象, selectingAttackTarget - 等待选择攻击目标，selectingPath - 选择行动路径

@@ -64,9 +64,8 @@ public class CombatTestDriver : MonoBehaviour
 
         // test battle
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);
-
         // test room
-        var room = new BattleRoomClient(bt) { PlayerMe = 1 };
+        var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };
 
         // setup the fake message loop
         room.BMS = msgLooper;
@@ -113,6 +112,12 @@ public class CombatTestDriver : MonoBehaviour
             var availableCards = new List<BattleCard>();
             availableCards.AddRange(bt.AvailableCards);
             BattleStageUI.RefreshCardsAvailable(availableCards);
+        });
+
+        (room.Battle as BattlePVE).OnBattleCardsExchange.Add((int g1, int n1, int g2, int n2) =>
+        {
+            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
+            BattleStageUI.RefreshCardsStarshed(bt.StashedCards);
         });
 
         BattleStage.gameObject.SetActive(true);

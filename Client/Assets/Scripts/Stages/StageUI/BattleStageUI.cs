@@ -13,33 +13,24 @@ public class BattleStageUI : MonoBehaviour
     // 战斗场景
     public BattleStage BattleStage;
 
-    // 战斗卡牌模板
-    public BattleCardUI BattleCard;
-
     // 可用的卡组区域
-    public Transform CardsAvailableGroup;
+    public BattleCardUI[] CardsAvailableGroup;
+
+    // 暂存卡牌区域
+    public BattleCardUI[] CardsStashGroup;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
-    // 刷新一组新的战斗卡牌
+    // 刷新战斗卡牌区域
     public void RefreshCardsAvailable(List<BattleCard> cards = null)
     {
-        ClearCardsAvailable();
-
-        FC.ForEach(cards, (i, c) =>
-        {
-            var cd = Instantiate(BattleCard);
-            cd.Card = c;
-            cd.transform.SetParent(CardsAvailableGroup);
-            cd.gameObject.SetActive(true);
-        });
+        FC.ForEach(CardsAvailableGroup, (i, c) => c.Card = i < cards.Count ? cards[i] : null);
     }
 
-    // 清理当前战斗卡牌区域
-    void ClearCardsAvailable()
+    // 刷新暂存卡牌区域
+    public void RefreshCardsStarshed(List<BattleCard> cards = null)
     {
-        while (CardsAvailableGroup.childCount > 0)
-            DestroyImmediate(CardsAvailableGroup.GetChild(0).gameObject);
+        FC.ForEach(CardsStashGroup, (i, c) => c.Card = i < cards.Count ? cards[i] : null);
     }
 
     // 结束当前回合

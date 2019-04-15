@@ -2722,11 +2722,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: BattleStage
-      value: 
-      objectReference: {fileID: 2077963860}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f87b7ac3c444b9049a7d146227ab6fcd, type: 3}
 --- !u!1001 &5360679074138491635
@@ -2796,6 +2791,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: BattleStageUI
+      value: 
+      objectReference: {fileID: 963811592}
     - target: {fileID: 2020077978715511676, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.x

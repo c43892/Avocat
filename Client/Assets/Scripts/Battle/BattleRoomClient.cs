@@ -13,19 +13,29 @@ public interface IBattleMessageSender
 }
 
 /// <summary>
-/// 客户端战斗对象
+/// 客户端战斗房间
 /// </summary>
-public class BattleRoomClient : BattleRoom
+public class BattleRoomClient
 {
     // 自己在房间中的 player 编号
     public int PlayerMe { get; set; }
 
+    public BattleRoom BattleRoom { get; private set; }
+
+    // 战斗对象
+    public Battle Battle { get { return BattleRoom.Battle; } }
+
     // 负责消息发送
     public IBattleMessageSender BMS { get; set; }
 
-    public BattleRoomClient(Battle bt)
-        :base(bt)
+    public BattleRoomClient(BattleRoom room)
     {
+        BattleRoom = room;
+    }
+
+    public void RegisterBattleMessageHandlers(IBattlemessageProvider bmp)
+    {
+        BattleRoom.RegisterBattleMessageHandlers(bmp);
     }
 
     // 战斗准备完毕
@@ -71,5 +81,17 @@ public class BattleRoomClient : BattleRoom
     public void ActionDone()
     {
         BMS.Send("ActionDone");
+    }
+
+    // 交换战斗卡牌位置
+    public void DoExchangeBattleCards(int g1, int n1, int g2, int n2)
+    {
+        BMS.Send("ExchangeBattleCards", (data) =>
+        {
+            data.Write(g1);
+            data.Write(n1);
+            data.Write(g2);
+            data.Write(n2);
+        });
     }
 }

@@ -15,8 +15,24 @@ namespace Avocat
         public static readonly BattleCard Defence = new BattleCardDefence();
         public static readonly BattleCard Hp = new BattleCardHp();
         public static readonly BattleCard Energy = new BattleCardEnergy();
+        public static readonly int BattleCardTypesNum = 4;
 
-        public static readonly BattleCard[] AllTypeOfBattleCards = new BattleCard[] { BattleCard.Power, BattleCard.Defence, BattleCard.Hp, BattleCard.Energy };
+        public static BattleCard Create(int type)
+        {
+            switch (type)
+            {
+                case 0:
+                    return new BattleCardHp();
+                case 1:
+                    return new BattleCardDefence();
+                case 2:
+                    return new BattleCardPower();
+                case 3:
+                    return new BattleCardEnergy();
+            }
+
+            return null;
+        }
 
         public string Name { get; protected set; }
 
