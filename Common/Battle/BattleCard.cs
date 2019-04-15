@@ -11,10 +11,10 @@ namespace Avocat
     /// </summary>
     public abstract class BattleCard
     {
-        public static readonly BattleCard Power = new BattleCardPower();
-        public static readonly BattleCard Defence = new BattleCardDefence();
-        public static readonly BattleCard Hp = new BattleCardHp();
-        public static readonly BattleCard Energy = new BattleCardEnergy();
+        public static readonly BattleCard ATK = new BattleCardATK();
+        public static readonly BattleCard ES = new BattleCardES();
+        public static readonly BattleCard HP = new BattleCardHP();
+        public static readonly BattleCard Energy = new BattleCardPOW();
         public static readonly int BattleCardTypesNum = 4;
 
         public static BattleCard Create(int type)
@@ -22,13 +22,13 @@ namespace Avocat
             switch (type)
             {
                 case 0:
-                    return new BattleCardHp();
+                    return new BattleCardHP();
                 case 1:
-                    return new BattleCardDefence();
+                    return new BattleCardES();
                 case 2:
-                    return new BattleCardPower();
+                    return new BattleCardATK();
                 case 3:
-                    return new BattleCardEnergy();
+                    return new BattleCardPOW();
             }
 
             return null;
@@ -39,9 +39,9 @@ namespace Avocat
         public abstract void ExecuteOn(Warrior warrior);
     }
 
-    public class BattleCardHp : BattleCard
+    public class BattleCardHP : BattleCard
     {
-        public BattleCardHp() { Name = "hp"; }
+        public BattleCardHP() { Name = "HP"; }
         public override void ExecuteOn(Warrior warrior)
         {
             if (warrior.Hp < warrior.MaxHp)
@@ -49,27 +49,27 @@ namespace Avocat
         }
     }
 
-    public class BattleCardPower : BattleCard
+    public class BattleCardATK : BattleCard
     {
-        public BattleCardPower() { Name = "power"; }
+        public BattleCardATK() { Name = "ATK"; }
         public override void ExecuteOn(Warrior warrior)
         {
-            warrior.Power += 1;
+            warrior.ATK += 1;
         }
     }
 
-    public class BattleCardDefence : BattleCard
+    public class BattleCardES : BattleCard
     {
-        public BattleCardDefence() { Name = "defence"; }
+        public BattleCardES() { Name = "ES"; }
         public override void ExecuteOn(Warrior warrior)
         {
-            warrior.Shield += 1;
+            warrior.ES += 1;
         }
     }
 
-    public class BattleCardEnergy : BattleCard
+    public class BattleCardPOW : BattleCard
     {
-        public BattleCardEnergy() { Name = "energy"; }
+        public BattleCardPOW() { Name = "POW"; }
         public override void ExecuteOn(Warrior warrior)
         {
         }

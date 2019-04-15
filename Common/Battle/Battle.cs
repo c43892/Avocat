@@ -199,11 +199,11 @@ namespace Avocat
 
             yield return BeforeAttack.Invoke(attacker, target);
 
-            target.Shield -= attacker.Power;
-            if (target.Shield < 0)
+            target.ES -= attacker.ATK;
+            if (target.ES < 0)
             {
-                target.Hp += target.Shield;
-                target.Shield = 0;
+                target.Hp += target.ES;
+                target.ES = 0;
             }
 
             attacker.ActionDone = true;

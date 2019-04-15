@@ -56,14 +56,14 @@ public class CombatTestDriver : MonoBehaviour
     {
         // test map
         var map = new BattleMap(10, 6);
-        map.SetWarriorAt(2, 2, new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 1 });
-        map.SetWarriorAt(2, 3, new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 2 });
-        map.SetWarriorAt(2, 4, new Warrior(map, 2) { Owner = 1, AttackRange = 5, Power = 3 });
+        map.SetWarriorAt(2, 2, new Warrior(map, 2) { Owner = 1, AttackRange = 5, ATK = 1 });
+        map.SetWarriorAt(2, 3, new Warrior(map, 2) { Owner = 1, AttackRange = 5, ATK = 2 });
+        map.SetWarriorAt(2, 4, new Warrior(map, 2) { Owner = 1, AttackRange = 5, ATK = 3 });
 
         // npcs
-        var npc0 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, Power = 1, MoveRange = 2 };
-        var npc1 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, Power = 2, MoveRange = 2 };
-        var npc2 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, Power = 3, MoveRange = 2 };
+        var npc0 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, ATK = 1, MoveRange = 2 };
+        var npc1 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, ATK = 2, MoveRange = 2 };
+        var npc2 = new Warrior(map, 5) { Owner = 2, AttackRange = 1, ATK = 3, MoveRange = 2 };
         map.SetWarriorAt(5, 1, npc0);
         map.SetWarriorAt(5, 3, npc1);
         map.SetWarriorAt(5, 5, npc2);

@@ -19,9 +19,9 @@ public class MapAvatar : MonoBehaviour
     public void RefreshAttrs()
     {
         HpText.text = Warrior.Hp.ToString();
-        PowerText.text = Warrior.Power.ToString();
-        ShieldText.text = Warrior.Shield.ToString();
-        ShieldText.transform.parent.gameObject.SetActive(Warrior.Shield > 0);
+        PowerText.text = Warrior.ATK.ToString();
+        ShieldText.text = Warrior.ES.ToString();
+        ShieldText.transform.parent.gameObject.SetActive(Warrior.ES > 0);
 
         Color = Warrior.ActionDone ? ColorAttacked : ColorDefault;
     }

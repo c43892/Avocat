@@ -72,7 +72,7 @@ namespace Avocat
                     if (warrior.Owner != player)
                         return;
 
-                    warrior.Shield = 0; // 重置所有护甲
+                    warrior.ES = 0; // 重置所有护甲
                     warrior.Moved = false; // 重置行动标记
                     warrior.ActionDone = false; // 重置行动标记
                 });
