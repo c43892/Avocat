@@ -37,29 +37,25 @@ namespace Avocat
                 yield return StartNextRound(playerSeq[0]);
         }
 
-        IEnumerator OnAfterActionDone(int player)
-        {
-            // 回合交替
-            Debug.Assert(player == playerSeq[0]);
-            playerSeq.RemoveAt(0);
-            if (playerSeq.Count == 0)
-                playerSeq.AddRange(players);
-
-            yield return StartNextRound(playerSeq[0]);
-
-            // 回合结束时检查战斗结束条件
-            yield return TryBattleEnd();
-        }
-
         public Battle BattleStatusTransfer(params int[] players)
         {
             this.players = players;
             playerSeq.AddRange(players);
 
             AfterPlayerPrepared.Add(OnAfterPlayerPrepared);
-            AfterActionDone.Add(OnAfterActionDone);
-
             return this;
+        }
+
+        // 行动机会转移至玩家开始行动
+        public virtual IEnumerator Move2NextPlayer(int lastPlayer)
+        {
+            // 回合交替
+            Debug.Assert(lastPlayer == playerSeq[0]);
+            playerSeq.RemoveAt(0);
+            if (playerSeq.Count == 0)
+                playerSeq.AddRange(players);
+
+            yield return StartNextRound(playerSeq[0]);
         }
 
         // 回合开始时重置护盾，重置行动标记，填充卡片等

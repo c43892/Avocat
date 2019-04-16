@@ -75,25 +75,28 @@ namespace Avocat
                 });
         }
 
+        IEnumerator OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
+        {
+            if (warrior.Owner != PlayerIndex)
+                yield break;
+
+            var movedPathLen = movedPath.Count / 2;
+            Debug.Assert(movedPathLen <= AvailableCards.Count, "moved path grids should not be more than cards number");
+
+            for (var i = 0; i < movedPathLen; i++)
+            {
+                var card = AvailableCards[0];
+                AvailableCards.RemoveAt(0);
+                yield return card.ExecuteOn(warrior);
+            }
+
+            ResetAvailableCards();
+        }
+
         // 移动消耗卡牌
         BattlePVE ConsumeCardsOnMoving()
         {
-            AfterMoveOnPath.Add((warrior, fx, fy, movedPath) =>
-            {
-                if (warrior.Owner != PlayerIndex)
-                    return;
-
-                var movedPathLen = movedPath.Count / 2;
-                Debug.Assert(movedPathLen <= AvailableCards.Count, "moved path grids should not be more than cards number");
-
-                FC.For(movedPathLen, (i) =>
-                {
-                    AvailableCards[0].ExecuteOn(warrior);
-                    AvailableCards.RemoveAt(0);
-                });
-
-                ResetAvailableCards();
-            });
+            AfterMoveOnPath.Add(OnAfterMoveOnPath);
 
             return this;
         }

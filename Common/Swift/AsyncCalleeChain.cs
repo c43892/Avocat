@@ -16,9 +16,19 @@ namespace Swift
             callee.Add(a);
         }
 
+        public void Del(Func<T, IEnumerator> a)
+        {
+            callee.Remove(a);
+        }
+
         public void Add(Action<T> a)
         {
             callee.Add(a);
+        }
+
+        public void Del(Action<T> a)
+        {
+            callee.Remove(a);
         }
 
         public IEnumerator Invoke(T p)
@@ -48,6 +58,11 @@ namespace Swift
             callee.Add(a);
         }
 
+        public void Del(Action<T1, T2> a)
+        {
+            callee.Remove(a);
+        }
+
         public IEnumerator Invoke(T1 p1, T2 p2)
         {
             var arr = callee.ToArray();
@@ -73,6 +88,11 @@ namespace Swift
         public void Add(Action<T1, T2, T3> a)
         {
             callee.Add(a);
+        }
+
+        public void Del(Action<T1, T2, T3> a)
+        {
+            callee.Remove(a);
         }
 
         public IEnumerator Invoke(T1 p1, T2 p2, T3 p3)
@@ -102,6 +122,11 @@ namespace Swift
             callee.Add(a);
         }
 
+        public void Del(Action<T1, T2, T3, T4> a)
+        {
+            callee.Remove(a);
+        }
+
         public IEnumerator Invoke(T1 p1, T2 p2, T3 p3, T4 p4)
         {
             var arr = callee.ToArray();
@@ -127,6 +152,11 @@ namespace Swift
         public void Add(Action<T1, T2, T3, T4, T5> a)
         {
             callee.Add(a);
+        }
+
+        public void Del(Action<T1, T2, T3, T5> a)
+        {
+            callee.Remove(a);
         }
 
         public IEnumerator Invoke(T1 p1, T2 p2, T3 p3, T4 p4, T5 p5)

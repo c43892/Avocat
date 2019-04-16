@@ -75,7 +75,8 @@ public class InBattleOps : StageOpsLayer
                 {
                     // 选中己方角色，等待攻击指令
                     CurrentSelWarrior = warrior;
-                    status = "selectingAttackTarget";
+                    if (CurrentSelWarrior != null)
+                        status = "selectingAttackTarget";
                 }
                 break;
             case "selectingAttackTarget":

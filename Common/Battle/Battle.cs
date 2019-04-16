@@ -29,7 +29,7 @@ namespace Avocat
 
                 map = value;
                 map.Battle = this;
-    }
+            }
         } BattleMap map = null;
 
         public Battle(BattleMap map, int randSeed)
@@ -122,8 +122,8 @@ namespace Avocat
         #region 战斗过程
 
         // 回合开始，重置所有角色行动标记
-        protected AsyncCalleeChain<int> BeforeStartNextRound = new AsyncCalleeChain<int>();
-        protected AsyncCalleeChain<int> AfterStartNextRound = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> BeforeStartNextRound = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> AfterStartNextRound = new AsyncCalleeChain<int>();
         public AsyncCalleeChain<int> OnNextRoundStarted = new AsyncCalleeChain<int>();
         public IEnumerator StartNextRound(int player)
         {
@@ -220,14 +220,52 @@ namespace Avocat
         }
 
         // 玩家本回合行动结束
-        protected AsyncCalleeChain<int> BeforeActionDone = new AsyncCalleeChain<int>();
-        protected AsyncCalleeChain<int> AfterActionDone = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> BeforeActionDone = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> AfterActionDone = new AsyncCalleeChain<int>();
         public AsyncCalleeChain<int> OnActionDone = new AsyncCalleeChain<int>();
         public IEnumerator ActionDone(int player)
         {
             yield return BeforeActionDone.Invoke(player);
             yield return AfterActionDone.Invoke(player);
             yield return OnActionDone.Invoke(player);
+
+            yield return TryBattleEnd(); // 回合结束时检查战斗结束条件
+            yield return Move2NextPlayer(player); // 行动机会转移至玩家开始行动
+        }
+
+        #endregion
+
+        #region buff 相关
+
+        protected AsyncCalleeChain<Buff, Warrior> BeforeBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
+        protected AsyncCalleeChain<Buff, Warrior> AfterBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
+        public AsyncCalleeChain<Buff, Warrior> OnBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
+        public virtual IEnumerator AddBuff(Buff buff, Warrior target)
+        {
+            Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
+
+            yield return BeforeBuffAttached.Invoke(buff, target);
+            target.Buffs.Add(buff);
+            buff.Target = target;
+            buff.OnAttached();
+            yield return AfterBuffAttached.Invoke(buff, target);
+            yield return OnBuffAttached.Invoke(buff, target);
+        }
+
+        protected AsyncCalleeChain<Buff, Warrior> BeforeBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
+        protected AsyncCalleeChain<Buff, Warrior> AfterBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
+        public AsyncCalleeChain<Buff, Warrior> OnBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
+        public virtual IEnumerator RemoveBuff(Buff buff)
+        {
+            var target = buff.Target;
+            Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.Name + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
+
+            yield return BeforeBuffRemoved.Invoke(buff, target);
+            target.Buffs.Remove(buff);
+            buff.OnDetached();
+            buff.Target = null;
+            yield return AfterBuffRemoved.Invoke(buff, target);
+            yield return OnBuffRemoved.Invoke(buff, target);
         }
 
         #endregion

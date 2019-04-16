@@ -12,6 +12,7 @@ namespace Avocat
     public class BattleMapItem
     {
         public BattleMap Map { get; set; }
+        public Battle Battle { get { return Map?.Battle; } }
         public int IDInMap { get; private set; }
         public bool IsObstacle { get; set; } // 是否是障碍，占据地块
 
@@ -27,5 +28,7 @@ namespace Avocat
         {
             Map.FindXY(this, out x, out y);
         }
+
+        public List<Buff> Buffs { get; } = new List<Buff>();
     }
 }

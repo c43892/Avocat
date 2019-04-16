@@ -70,6 +70,8 @@
     <Compile Include="Assets\Scripts\Common\Battle\BattlePVE.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattlePVERoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleRoom.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\Buff.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\CardATK.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMap.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMapItem.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\Warrior.cs" />

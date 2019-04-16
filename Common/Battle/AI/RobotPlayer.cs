@@ -24,10 +24,10 @@ namespace Avocat
             BuildLogic();
         }
 
-        IEnumerator OnActionDone(int player)
+        IEnumerator OnAfterStartNextRound(int player)
         {
-            // 只处理玩家回合结束
-            if (player != 1)
+            // 只处理机器人回合开始
+            if (player != 2)
                 yield break;
 
             for (var i = 0; i < WarriorAIs.Length; i++)
@@ -38,7 +38,7 @@ namespace Avocat
 
         void BuildLogic()
         {
-            Battle.OnActionDone.Add(OnActionDone);
+            Battle.AfterStartNextRound.Add(OnAfterStartNextRound);
         }
     }
 }

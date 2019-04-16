@@ -19,6 +19,7 @@ namespace Avocat
         }
 
         public int AvatarID { get; private set; } // 具体的角色形象 ID
+
         public int Owner { get; set; } // 是属于哪一个玩家
         public int Hp { get; set; } // 血量
         public int MaxHp { get; set; } // 最大血量
@@ -49,13 +50,7 @@ namespace Avocat
         public bool IsDead { get { return Hp <= 0; } }
 
         // 角色要移动的路径信息放在角色身上
-        public List<int> MovingPath
-        {
-            get
-            {
-                return movingPath;
-            }
-        } List<int> movingPath = new List<int>();
+        public List<int> MovingPath { get; } = new List<int>();
 
         // 获取对象在地图中位置
         public override void GetPosInMap(out int x, out int y)

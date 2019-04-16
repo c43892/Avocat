@@ -33,4 +33,5 @@ v15
 /Common/Battle/AI/*.meta
 /Common/Battle/Map/*.meta
 /Common/Battle/Replay/*.meta
+/Common/Battle/Buff/*.meta
 /Common/UserPlayer/*.meta
