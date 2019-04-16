@@ -24,13 +24,13 @@ namespace Avocat
 
         // 暂存区的卡牌
         public List<BattleCard> StashedCards = new List<BattleCard>();
+        Warrior[] Npcs { get; set; }
 
         public BattlePVE(BattleMap map, int randSeed, PlayerInfo player, params Warrior[] npcs)
             :base(map, randSeed)
         {
             Player = player;
-            BuildLogic();
-            BuildRobot(npcs);
+            Npcs = npcs;
         }
 
         bool playerPrepared = false;
@@ -65,15 +65,23 @@ namespace Avocat
         }
 
         // 创建 PVE 战斗逻辑
-        void BuildLogic()
+        public void Build()
         {
-            ConsumeCardsOnMoving().BattleStatusTransfer(1, 2).ResetDefenceAtRoundStart().AutoGenBattleCards((player) => player == 1 ? 8 : 0, // 只有玩家需要生成卡牌
+            Build(1, 2);  // 1-玩家，2-机器人
+
+            ConsumeCardsOnMoving();
+            AddBuffSilently(new ReGenCards(
+                (player) => player == 1 ? 8 : 0, // 只有玩家需要生成卡牌
                 (player, cards) =>
                 {
                     if (player == PlayerIndex)
                         ResetAvailableCards(cards);
-                });
+                }));
+
+            BuildRobot(Npcs);
         }
+
+        // 移动消耗卡牌
 
         IEnumerator OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
         {
@@ -93,11 +101,9 @@ namespace Avocat
             ResetAvailableCards();
         }
 
-        // 移动消耗卡牌
         BattlePVE ConsumeCardsOnMoving()
         {
             AfterMoveOnPath.Add(OnAfterMoveOnPath);
-
             return this;
         }
 

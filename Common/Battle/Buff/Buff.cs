@@ -14,7 +14,8 @@ namespace Avocat
     {
         public virtual string Name { get; set; }
         public virtual Warrior Target { get; set; }
-        public virtual Battle Battle { get { return Target?.Map?.Battle; } }
+        public virtual Battle Battle { get; set; }
+        public virtual BattleMap Map { get { return Battle?.Map; } }
         public virtual void OnAttached() { }
         public virtual void OnDetached() { }
     }

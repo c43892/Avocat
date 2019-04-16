@@ -66,12 +66,14 @@
     <Compile Include="Assets\Scripts\Common\Battle\AI\WarriorAI.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Battle.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleCard.cs" />
-    <Compile Include="Assets\Scripts\Common\Battle\BattleLogic.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattlePVE.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattlePVERoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\BattleRoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\Buff.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\CardATK.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\ReGenCards.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\ResetActionFlag.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\ResetES.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMap.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMapItem.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\Warrior.cs" />

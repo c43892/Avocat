@@ -10,10 +10,10 @@ namespace Avocat
     /// 战斗对象，包括一场战斗所需全部数据，在初始数据和操作过程完全一致的情况下，可完全复现一场战斗过程。
     /// 但战斗对象本身不包括战斗驱动过程，而是有 BattleRoom 驱动。
     /// </summary>
-    public abstract partial class Battle
+    public abstract class Battle
     {
         // 由初始随机种子确定的伪随机序列
-        protected SRandom Srand { get; set; }
+        public SRandom Srand { get; protected set; }
 
         // 战斗地图
         public BattleMap Map
@@ -237,17 +237,36 @@ namespace Avocat
 
         #region buff 相关
 
+        protected List<Buff> GroundBuffs = new List<Buff>();
+
+        // 同步添加 buff，不触发任何事件，通常用于初始逻辑的构建
+        public virtual void AddBuffSilently(Buff buff, Warrior target = null)
+        {
+            if (target != null)
+            {
+                Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
+                target.Buffs.Add(buff);
+                buff.Target = target;
+            }
+            else
+            {
+                Debug.Assert(!GroundBuffs.Contains(buff), "buff " + buff.Name + " already attached to ground");
+                GroundBuffs.Add(buff);
+            }
+
+            buff.Battle = this;
+            buff.OnAttached();
+        }
+
         protected AsyncCalleeChain<Buff, Warrior> BeforeBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
         protected AsyncCalleeChain<Buff, Warrior> AfterBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
         public AsyncCalleeChain<Buff, Warrior> OnBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        public virtual IEnumerator AddBuff(Buff buff, Warrior target)
+        public virtual IEnumerator AddBuff(Buff buff, Warrior target = null)
         {
-            Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
-
             yield return BeforeBuffAttached.Invoke(buff, target);
-            target.Buffs.Add(buff);
-            buff.Target = target;
-            buff.OnAttached();
+
+            AddBuffSilently(buff, target);
+            
             yield return AfterBuffAttached.Invoke(buff, target);
             yield return OnBuffAttached.Invoke(buff, target);
         }
@@ -258,14 +277,80 @@ namespace Avocat
         public virtual IEnumerator RemoveBuff(Buff buff)
         {
             var target = buff.Target;
-            Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.Name + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
 
             yield return BeforeBuffRemoved.Invoke(buff, target);
-            target.Buffs.Remove(buff);
-            buff.OnDetached();
-            buff.Target = null;
+
+            if (target != null)
+            {
+                Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.Name + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
+                target.Buffs.Remove(buff);
+                buff.OnDetached();
+                buff.Target = null;
+            }
+            else
+            {
+                Debug.Assert(GroundBuffs.Contains(buff), "buff " + buff.Name + " has not been attached to ground)");
+                GroundBuffs.Remove(buff);
+                buff.OnDetached();
+            }
+
+            buff.Battle = null;
+
             yield return AfterBuffRemoved.Invoke(buff, target);
             yield return OnBuffRemoved.Invoke(buff, target);
+        }
+
+        #endregion
+
+        #region 战斗基本流程
+
+        int[] players = null; // 初始的玩家轮转列表
+        List<int> playerSeq = new List<int>();  // 当前剩余轮转
+
+        // 所有玩家完成战斗准备，自动开始新回合
+        IEnumerator OnAfterPlayerPrepared(int player)
+        {
+            if (AllPrepared)
+                yield return StartNextRound(playerSeq[0]);
+        }
+
+        // 多玩家行动机会的轮转
+        void BattleStatusTransfer(params int[] players)
+        {
+            this.players = players;
+            playerSeq.AddRange(players);
+
+            AfterPlayerPrepared.Add(OnAfterPlayerPrepared);
+        }
+
+        // 行动机会转移至玩家开始行动
+        public virtual IEnumerator Move2NextPlayer(int lastPlayer)
+        {
+            // 行动机会轮转至下一玩家
+            Debug.Assert(lastPlayer == playerSeq[0]);
+            playerSeq.RemoveAt(0);
+            if (playerSeq.Count == 0)
+                playerSeq.AddRange(players);
+
+            yield return StartNextRound(playerSeq[0]);
+        }
+
+        // 结束战斗
+        public AsyncCalleeChain<int> OnBattleEnded = new AsyncCalleeChain<int>(); // 战斗结束通知
+        public IEnumerator TryBattleEnd()
+        {
+            var r = CheckEndCondition();
+            if (r != 0)
+                yield return OnBattleEnded.Invoke(r);
+        }
+
+        // 构建基本逻辑，参数表示玩家轮转编号列表
+        public virtual Battle Build(params int[] players)
+        {
+            BattleStatusTransfer(players);
+            AddBuffSilently(new ResetES()); // 回合开始时重置护盾
+            AddBuffSilently(new ResetActionFlag()); // 回合开始时重置行动标记
+            return this;
         }
 
         #endregion
