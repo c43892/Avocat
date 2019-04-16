@@ -45,7 +45,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 创建场景显示对象
-    public void BuildBattleStage(BattleRoomClient room)
+    public void Build(BattleRoomClient room)
     {
         ClearMap();
 
@@ -54,7 +54,7 @@ public class BattleStage : MonoBehaviour
         BuildMapGrids();
         BuildMapItems();
         BuildWarroirs();
-        SetupAniPlayer(); // 挂接地图动画播放事件
+        SetupAniPlayer(); // 地图动画播放
 
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
     }

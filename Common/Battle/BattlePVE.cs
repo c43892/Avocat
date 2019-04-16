@@ -27,7 +27,7 @@ namespace Avocat
         Warrior[] Npcs { get; set; }
 
         // 玩家能量槽
-        public int EnergyMax { get; set; } = 100;
+        public int MaxEnergy { get; set; } = 100;
         public int Energy { get; set; } = 0;
 
         public BattlePVE(BattleMap map, int randSeed, PlayerInfo player, params Warrior[] npcs)
@@ -74,13 +74,13 @@ namespace Avocat
             ConsumeCardsOnMoving();
 
             // 行动结束分解剩余卡牌
-            AddBuffSilently(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards()));
+            FC.Async2Sync(AddBuff(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards())));
 
             // 行动开始前，生成新卡牌
-            AddBuffSilently(new GenCards(PlayerIndex,
+            FC.Async2Sync(AddBuff(new GenCards(PlayerIndex,
                 (player) => player == 1 ? 8 : 0,
                 (player, cards) => ResetAvailableCards(cards)
-            ));
+            )));
 
             BuildRobot(Npcs);
         }
@@ -164,5 +164,23 @@ namespace Avocat
 
             yield return OnBattleCardsExchange?.Invoke(g1, n1, g2, n2);
         }
+
+        #region 角色操作包装
+
+        // 玩家加能量
+        public AsyncCalleeChain<int, Action<int>> BeforeAddEN = new AsyncCalleeChain<int, Action<int>>();
+        public AsyncCalleeChain<int> AfterAddEN = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> OnAddEN = new AsyncCalleeChain<int>();
+        public IEnumerator AddEN(int den)
+        {
+            yield return BeforeAddEN.Invoke(den, (int _den) => den = _den);
+
+            Energy = MU.Clamp(Energy + den, 0, MaxEnergy);
+
+            yield return AfterAddEN.Invoke(den);
+            yield return OnAddEN.Invoke(den);
+        }
+
+        #endregion
     }
 }

@@ -34,4 +34,5 @@ v15
 /Common/Battle/Map/*.meta
 /Common/Battle/Replay/*.meta
 /Common/Battle/Buff/*.meta
+/Common/Battle/Buff/PassiveSkills/*.meta
 /Common/UserPlayer/*.meta

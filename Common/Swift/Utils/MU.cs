@@ -33,7 +33,7 @@ namespace Swift
             if (v < min)
                 return min;
             else if (v > max)
-                return max - 1;
+                return max;
             else
                 return v;
         }

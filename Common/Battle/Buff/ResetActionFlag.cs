@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Avocat
     /// </summary>
     public class ResetActionFlag : Buff
     {
-        public override void OnAttached()
+        public override IEnumerator OnAttached()
         {
             Battle.BeforeStartNextRound.Add((int player) =>
             {
@@ -24,6 +25,8 @@ namespace Avocat
                     warrior.ActionDone = false; // 重置行动标记
                 });
             });
+
+            yield return base.OnAttached();
         }
     }
 }

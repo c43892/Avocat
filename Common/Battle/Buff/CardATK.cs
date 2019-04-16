@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,16 +19,16 @@ namespace Avocat
             Num = 1; // 一回合结束
         }
 
-        public override void OnAttached()
+        public override IEnumerator OnAttached()
         {
-            Target.ATK += ATK;
-            base.OnAttached();
+            yield return Battle.AddATK(Target, ATK);
+            yield return base.OnAttached();
         }
 
-        public override void OnDetached()
+        public override IEnumerator OnDetached()
         {
-            Target.ATK -= ATK;
-            base.OnDetached();
+            yield return Target.Battle.AddATK(Target, -ATK);
+            yield return base.OnDetached();
         }
     }
 }

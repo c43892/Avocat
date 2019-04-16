@@ -39,11 +39,23 @@ namespace Avocat
         }
 
         // 移除指定角色
-        public void RemoveWarrior(Warrior warrior)
+        protected AsyncCalleeChain<Warrior> BeforeWarriorRemoved = new AsyncCalleeChain<Warrior>();
+        protected AsyncCalleeChain<Warrior> AfterWarriorRemoved = new AsyncCalleeChain<Warrior>();
+        public AsyncCalleeChain<Warrior> OnWarriorRemoved = new AsyncCalleeChain<Warrior>();
+        public IEnumerator RemoveWarrior(Warrior warrior)
         {
+            yield return BeforeWarriorRemoved.Invoke(warrior);
+
+            // 移除角色前，先移除身上的 buff 效果
+            for (var i = 0; i < warrior.Buffs.Count; i++)
+                yield return warrior.Buffs[i].OnDetached();
+
             warrior.GetPosInMap(out int x, out int y);
             Map.SetWarriorAt(x, y, null);
             warrior.Map = null;
+
+            yield return AfterWarriorRemoved.Invoke(warrior);
+            yield return OnWarriorRemoved.Invoke(warrior);
         }
 
         #region 战斗准备过程
@@ -78,13 +90,13 @@ namespace Avocat
         public AsyncCalleeChain<int> OnPlayerPrepared = new AsyncCalleeChain<int>(); // 有玩家完成战斗准备
         public IEnumerator PlayerPrepared(int player)
         {
-            yield return BeforePlayerPrepared?.Invoke(player);
+            yield return BeforePlayerPrepared.Invoke(player);
 
             PlayerPreparedImpl(player);
 
-            yield return AfterPlayerPrepared?.Invoke(player);
+            yield return AfterPlayerPrepared.Invoke(player);
 
-            yield return OnPlayerPrepared?.Invoke(player);
+            yield return OnPlayerPrepared.Invoke(player);
         }
 
         // 检查所有玩家是否都已经完成战斗准备
@@ -135,9 +147,9 @@ namespace Avocat
                 warrior.ActionDone = false;
             });
 
-            yield return AfterStartNextRound?.Invoke(player);
+            yield return AfterStartNextRound.Invoke(player);
 
-            yield return OnNextRoundStarted?.Invoke(player);
+            yield return OnNextRoundStarted.Invoke(player);
         }
 
         // 角色沿路径移动
@@ -202,7 +214,7 @@ namespace Avocat
             target.ES -= attacker.ATK;
             if (target.ES < 0)
             {
-                target.Hp += target.ES;
+                target.HP += target.ES;
                 target.ES = 0;
             }
 
@@ -215,7 +227,7 @@ namespace Avocat
             if (target.IsDead)
             {
                 yield return OnWarriorDying.Invoke(target);
-                RemoveWarrior(target);
+                yield return RemoveWarrior(target);
             }
         }
 
@@ -238,10 +250,13 @@ namespace Avocat
         #region buff 相关
 
         protected List<Buff> GroundBuffs = new List<Buff>();
-
-        // 同步添加 buff，不触发任何事件，通常用于初始逻辑的构建
-        public virtual void AddBuffSilently(Buff buff, Warrior target = null)
+        protected AsyncCalleeChain<Buff, Warrior> BeforeBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
+        protected AsyncCalleeChain<Buff, Warrior> AfterBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
+        public AsyncCalleeChain<Buff, Warrior> OnBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
+        public virtual IEnumerator AddBuff(Buff buff, Warrior target = null)
         {
+            yield return BeforeBuffAttached.Invoke(buff, target);
+
             if (target != null)
             {
                 Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
@@ -255,18 +270,8 @@ namespace Avocat
             }
 
             buff.Battle = this;
-            buff.OnAttached();
-        }
+            yield return buff.OnAttached();
 
-        protected AsyncCalleeChain<Buff, Warrior> BeforeBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        protected AsyncCalleeChain<Buff, Warrior> AfterBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        public AsyncCalleeChain<Buff, Warrior> OnBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        public virtual IEnumerator AddBuff(Buff buff, Warrior target = null)
-        {
-            yield return BeforeBuffAttached.Invoke(buff, target);
-
-            AddBuffSilently(buff, target);
-            
             yield return AfterBuffAttached.Invoke(buff, target);
             yield return OnBuffAttached.Invoke(buff, target);
         }
@@ -284,16 +289,15 @@ namespace Avocat
             {
                 Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.Name + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
                 target.Buffs.Remove(buff);
-                buff.OnDetached();
-                buff.Target = null;
             }
             else
             {
                 Debug.Assert(GroundBuffs.Contains(buff), "buff " + buff.Name + " has not been attached to ground)");
                 GroundBuffs.Remove(buff);
-                buff.OnDetached();
             }
 
+            yield return buff.OnDetached();
+            buff.Target = null;
             buff.Battle = null;
 
             yield return AfterBuffRemoved.Invoke(buff, target);
@@ -348,9 +352,57 @@ namespace Avocat
         public virtual Battle Build(params int[] players)
         {
             BattleStatusTransfer(players);
-            AddBuffSilently(new ResetES()); // 回合开始时重置护盾
-            AddBuffSilently(new ResetActionFlag()); // 回合开始时重置行动标记
+            FC.Async2Sync(AddBuff(new ResetES())); // 回合开始时重置护盾
+            FC.Async2Sync(AddBuff(new ResetActionFlag())); // 回合开始时重置行动标记
             return this;
+        }
+
+        #endregion
+
+        #region 角色操作包装
+
+        // 角色加血
+        public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddHP = new AsyncCalleeChain<Warrior, int, Action<int>>();
+        public AsyncCalleeChain<Warrior, int> AfterAddHP = new AsyncCalleeChain<Warrior, int>();
+        public AsyncCalleeChain<Warrior, int> OnAddHP = new AsyncCalleeChain<Warrior, int>();
+        public IEnumerator AddHP(Warrior warrior, int dhp)
+        {
+            yield return BeforeAddHP.Invoke(warrior, dhp, (int _dhp) => dhp = _dhp);
+
+            warrior.HP = MU.Clamp(warrior.HP + dhp, 0, warrior.MaxHP);
+
+            yield return AfterAddHP.Invoke(warrior, dhp);
+            yield return OnAddHP.Invoke(warrior, dhp);
+        }
+
+        // 角色加盾
+        public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddES = new AsyncCalleeChain<Warrior, int, Action<int>>();
+        public AsyncCalleeChain<Warrior, int> AfterAddES = new AsyncCalleeChain<Warrior, int>();
+        public AsyncCalleeChain<Warrior, int> OnAddES = new AsyncCalleeChain<Warrior, int>();
+        public IEnumerator AddES(Warrior warrior, int des)
+        {
+            yield return BeforeAddES.Invoke(warrior, des, (int _des) => des = _des);
+
+            warrior.ES = MU.Clamp(warrior.ES + des, 0, warrior.MaxES);
+
+            yield return AfterAddES.Invoke(warrior, des);
+            yield return OnAddES.Invoke(warrior, des);
+        }
+
+        // 角色加攻
+        public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddATK = new AsyncCalleeChain<Warrior, int, Action<int>>();
+        public AsyncCalleeChain<Warrior, int> AfterAddATK = new AsyncCalleeChain<Warrior, int>();
+        public AsyncCalleeChain<Warrior, int> OnAddATK = new AsyncCalleeChain<Warrior, int>();
+        public IEnumerator AddATK(Warrior warrior, int atk)
+        {
+            yield return BeforeAddATK.Invoke(warrior, atk, (int _atk) => atk = _atk);
+
+            warrior.ATK += atk;
+            if (warrior.ATK < 0)
+                warrior.ATK = 0;
+
+            yield return AfterAddATK.Invoke(warrior, atk);
+            yield return OnAddATK.Invoke(warrior, atk);
         }
 
         #endregion

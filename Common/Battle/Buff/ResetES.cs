@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Avocat
     /// </summary>
     public class ResetES : Buff
     {
-        public override void OnAttached()
+        public override IEnumerator OnAttached()
         {
             Battle.BeforeStartNextRound.Add((int player) =>
             {
@@ -23,6 +24,8 @@ namespace Avocat
                     warrior.ES = 0; // 重置所有护甲
                 });
             });
+
+            yield return base.OnAttached();
         }
     }
 }

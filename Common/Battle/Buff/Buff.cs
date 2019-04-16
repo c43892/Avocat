@@ -16,8 +16,8 @@ namespace Avocat
         public virtual Warrior Target { get; set; }
         public virtual Battle Battle { get; set; }
         public virtual BattleMap Map { get { return Battle?.Map; } }
-        public virtual void OnAttached() { }
-        public virtual void OnDetached() { }
+        public virtual IEnumerator OnAttached() { yield return null; }
+        public virtual IEnumerator OnDetached() { yield return null; }
     }
 
     /// <summary>
@@ -37,14 +37,16 @@ namespace Avocat
                 yield return Battle.RemoveBuff(this);
         }
 
-        public override void OnAttached()
+        public override IEnumerator OnAttached()
         {
             Battle.BeforeActionDone.Add(CountDown);
+            yield return base.OnAttached();
         }
 
-        public override void OnDetached()
+        public override IEnumerator OnDetached()
         {
             Battle.BeforeActionDone.Del(CountDown);
+            yield return base.OnDetached();
         }
     }
 }

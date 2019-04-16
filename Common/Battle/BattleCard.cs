@@ -45,10 +45,7 @@ namespace Avocat
         public BattleCardHP() { Name = "HP"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            if (warrior.Hp < warrior.MaxHp)
-                warrior.Hp += 1;
-
-            yield return null;
+            yield return warrior.Battle.AddHP(warrior, 1);
         }
     }
 
@@ -69,9 +66,7 @@ namespace Avocat
         public BattleCardES() { Name = "ES"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            var dES = warrior.MaxES / 4;
-            warrior.ES += (dES == 0 ? 1 : dES);
-            yield return null;
+            yield return warrior.Battle.AddES(warrior, warrior.MaxES / 4);
         }
     }
 
@@ -80,10 +75,7 @@ namespace Avocat
         public BattleCardEn() { Name = "EN"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            var bt = (warrior.Battle as BattlePVE);
-            bt.Energy += 15;
-
-            yield return null;
+            yield return (warrior.Battle as BattlePVE).AddEN(15);
         }
     }
 }

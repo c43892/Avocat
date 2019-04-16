@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Avocat
             OnCardsDisassembled = onCardsDisassembled;
         }
 
-        public override void OnAttached()
+        public override IEnumerator OnAttached()
         {
             Battle.BeforeActionDone.Add((int player) =>
             {
@@ -33,6 +34,8 @@ namespace Avocat
                 AvailableCards.Clear();
                 OnCardsDisassembled?.Invoke(player, cards);
             });
+
+            yield return base.OnAttached();
         }
     }
 }

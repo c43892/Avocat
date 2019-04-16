@@ -11,12 +11,12 @@ namespace Avocat
     /// </summary>
     public class Warrior : BattleMapItem
     {
-        public Warrior(BattleMap map, int maxHp, int maxES)
+        public Warrior(BattleMap map, int maxHP, int maxES)
             :base (map)
         {
-            MaxHp = maxHp;
+            MaxHP = maxHP;
             MaxES = maxES;
-            Hp = MaxHp;
+            HP = MaxHP;
             ES = 0;
         }
 
@@ -24,8 +24,8 @@ namespace Avocat
 
         public int Owner { get; set; } // 是属于哪一个玩家
 
-        public int MaxHp { get; set; } // 最大血量
-        public int Hp { get; set; } // 血量
+        public int MaxHP { get; set; } // 最大血量
+        public int HP { get; set; } // 血量
 
         public int ATK { get; set; } // 攻击力
 
@@ -54,7 +54,7 @@ namespace Avocat
         } bool moved = false; 
         public bool ActionDone { get; set; } // 角色在本回合的行动已经结束
 
-        public bool IsDead { get { return Hp <= 0; } }
+        public bool IsDead { get { return HP <= 0; } }
 
         // 角色要移动的路径信息放在角色身上
         public List<int> MovingPath { get; } = new List<int>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,7 @@ namespace Avocat
             return cards;
         }
 
-        public override void OnAttached()
+        public override IEnumerator OnAttached()
         {
             Battle.BeforeStartNextRound.Add((int player) =>
             {
@@ -48,6 +49,8 @@ namespace Avocat
                 if (num > 0)
                     CardsGeneratedCallback(player, GenNextCards(num));
             });
+
+            yield return base.OnAttached();
         }
     }
 }

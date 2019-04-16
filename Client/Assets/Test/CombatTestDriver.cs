@@ -72,6 +72,10 @@ public class CombatTestDriver : MonoBehaviour
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);
         bt.Build();
 
+        var bb = new StarsTears();
+        FC.Async2Sync(bt.AddBuff(bb, map.GetWarriorAt(2, 2)));
+        // FC.Async2Sync(bt.RemoveBuff(bb));
+
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };
 
@@ -80,65 +84,18 @@ public class CombatTestDriver : MonoBehaviour
         msgLooper.Clear();
         room.RegisterBattleMessageHandlers(msgLooper);
 
-        BattleStage.BuildBattleStage(room);
+        // build up the whole scene
+        BattleStage.Build(room);
 
-        room.Battle.OnPlayerPrepared.Add((int player) =>
-        {
-            if (room.Battle.AllPrepared)
-            {
-                PreparingUI.SetActive(false);
-                BattleStageUI.gameObject.SetActive(true);
-                BattleStage.StartFighting();
-            }
-        });
+        // connect the logic event to the stage and ui logic
+        BattleStage.SetupEventHandler(room);
+        BattleStageUI.SetupEventHandler(room);
+        this.SetupEventHandler(room);
 
-        room.Battle.OnBattleEnded.Add((winner) =>
-        {
-            GameOverUI.SetActive(true);
-            GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";
-            BattleStageUI.gameObject.SetActive(false);
-        });
-
-        room.Battle.OnActionDone.Add((player) =>
-        {
-            if (player != Room.PlayerMe)
-                return;
-
-            var availableCards = new List<BattleCard>();
-            availableCards.AddRange(bt.AvailableCards);
-            BattleStageUI.RefreshCardsAvailable(availableCards);
-        });
-
-        room.Battle.OnNextRoundStarted.Add((player) =>
-        {
-            if (player != Room.PlayerMe)
-                return;
-
-            var availableCards = new List<BattleCard>();
-            availableCards.AddRange(bt.AvailableCards);
-            BattleStageUI.RefreshCardsAvailable(availableCards);
-        });
-
-        room.Battle.OnWarriorMovingOnPath.Add((warrior, x, y, path) =>
-        {
-            if (warrior.Owner != Room.PlayerMe)
-                return;
-
-            var availableCards = new List<BattleCard>();
-            availableCards.AddRange(bt.AvailableCards);
-            BattleStageUI.RefreshCardsAvailable(availableCards);
-        });
-
-        (room.Battle as BattlePVE).OnBattleCardsExchange.Add((int g1, int n1, int g2, int n2) =>
-        {
-            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
-            BattleStageUI.RefreshCardsStarshed(bt.StashedCards);
-        });
-
-        BattleStage.gameObject.SetActive(true);
-        BattleStage.StartPreparing();
         StartingUI.SetActive(false);
         PreparingUI.SetActive(true);
+        BattleStage.gameObject.SetActive(true);
+        BattleStage.StartPreparing();
 
         currentReplay = null;
     }
