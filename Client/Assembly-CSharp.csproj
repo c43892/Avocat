@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{12F44184-A422-5F27-22E6-507969043F15}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -71,7 +72,8 @@
     <Compile Include="Assets\Scripts\Common\Battle\BattleRoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\Buff.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\CardATK.cs" />
-    <Compile Include="Assets\Scripts\Common\Battle\Buff\ReGenCards.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\DisassembleCards.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\GenCards.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\ResetActionFlag.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\ResetES.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMap.cs" />

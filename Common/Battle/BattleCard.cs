@@ -15,7 +15,7 @@ namespace Avocat
         public static readonly BattleCard ATK = new BattleCardATK();
         public static readonly BattleCard ES = new BattleCardES();
         public static readonly BattleCard HP = new BattleCardHP();
-        public static readonly BattleCard Energy = new BattleCardPOW();
+        public static readonly BattleCard Energy = new BattleCardEn();
         public static readonly int BattleCardTypesNum = 4;
 
         public static BattleCard Create(int type)
@@ -29,7 +29,7 @@ namespace Avocat
                 case 2:
                     return new BattleCardATK();
                 case 3:
-                    return new BattleCardPOW();
+                    return new BattleCardEn();
             }
 
             return null;
@@ -58,7 +58,9 @@ namespace Avocat
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
             var bt = warrior.Battle;
-            yield return bt.AddBuff(new CardATK() { ATK = 1 }, warrior);
+            var dATK = (int)(warrior.ATK * 0.15);
+            dATK = dATK == 0 ? 1 : dATK;
+            yield return bt.AddBuff(new CardATK() { ATK = dATK }, warrior);
         }
     }
 
@@ -67,16 +69,20 @@ namespace Avocat
         public BattleCardES() { Name = "ES"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            warrior.ES += 1;
+            var dES = warrior.MaxES / 4;
+            warrior.ES += (dES == 0 ? 1 : dES);
             yield return null;
         }
     }
 
-    public class BattleCardPOW : BattleCard
+    public class BattleCardEn : BattleCard
     {
-        public BattleCardPOW() { Name = "POW"; }
+        public BattleCardEn() { Name = "EN"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
+            var bt = (warrior.Battle as BattlePVE);
+            bt.Energy += 15;
+
             yield return null;
         }
     }

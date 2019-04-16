@@ -246,6 +246,19 @@ public class BattleStage : MonoBehaviour
             });
         });
 
+        // 回合结束
+        Room.Battle.OnActionDone.Add((int player) =>
+        {
+            if (player != Room.PlayerMe)
+                return;
+
+            ForeachAvatar((x, y, avatar) =>
+            {
+                avatar.RefreshAttrs();
+                avatar.Color = MapAvatar.ColorDefault;
+            });
+        });
+
         // 角色死亡
         IEnumerator OnWarriorDying(Warrior warrior)
         {

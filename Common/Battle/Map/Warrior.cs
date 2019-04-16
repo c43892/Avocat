@@ -11,20 +11,27 @@ namespace Avocat
     /// </summary>
     public class Warrior : BattleMapItem
     {
-        public Warrior(BattleMap map, int maxHp)
+        public Warrior(BattleMap map, int maxHp, int maxES)
             :base (map)
         {
             MaxHp = maxHp;
+            MaxES = maxES;
             Hp = MaxHp;
+            ES = 0;
         }
 
         public int AvatarID { get; private set; } // 具体的角色形象 ID
 
         public int Owner { get; set; } // 是属于哪一个玩家
-        public int Hp { get; set; } // 血量
+
         public int MaxHp { get; set; } // 最大血量
+        public int Hp { get; set; } // 血量
+
         public int ATK { get; set; } // 攻击力
+
+        public int MaxES { get; set; } // 最大护盾
         public int ES { get; set; } // 护盾
+
         public int AttackRange { get; set; } // 最大攻击距离
         public int MoveRange { get; set; } // 最大移动距离
 

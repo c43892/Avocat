@@ -21,7 +21,6 @@ namespace Avocat
         public BattlePVERoom(BattlePVE bt)
             : base(bt)
         {
-
         }
 
         // 注册所有战斗消息

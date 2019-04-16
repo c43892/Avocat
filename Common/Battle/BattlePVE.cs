@@ -26,6 +26,10 @@ namespace Avocat
         public List<BattleCard> StashedCards = new List<BattleCard>();
         Warrior[] Npcs { get; set; }
 
+        // 玩家能量槽
+        public int EnergyMax { get; set; } = 100;
+        public int Energy { get; set; } = 0;
+
         public BattlePVE(BattleMap map, int randSeed, PlayerInfo player, params Warrior[] npcs)
             :base(map, randSeed)
         {
@@ -48,13 +52,11 @@ namespace Avocat
             }
         }
 
+        // 重置可用卡片
         void ResetAvailableCards(BattleCard[] cards = null)
         {
             if (cards != null)
-            {
-                AvailableCards.Clear();
                 AvailableCards.AddRange(cards);
-            }
 
             var moveRange = AvailableCards.Count;
             Map.ForeachWarriors((x, y, warrior) =>
@@ -70,13 +72,15 @@ namespace Avocat
             Build(1, 2);  // 1-玩家，2-机器人
 
             ConsumeCardsOnMoving();
-            AddBuffSilently(new ReGenCards(
-                (player) => player == 1 ? 8 : 0, // 只有玩家需要生成卡牌
-                (player, cards) =>
-                {
-                    if (player == PlayerIndex)
-                        ResetAvailableCards(cards);
-                }));
+
+            // 行动结束分解剩余卡牌
+            AddBuffSilently(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards()));
+
+            // 行动开始前，生成新卡牌
+            AddBuffSilently(new GenCards(PlayerIndex,
+                (player) => player == 1 ? 8 : 0,
+                (player, cards) => ResetAvailableCards(cards)
+            ));
 
             BuildRobot(Npcs);
         }
@@ -119,7 +123,6 @@ namespace Avocat
 
             Robot = new RobotPlayer(this, ais);
         }
-
 
         // 交换战斗卡牌位置
         protected AsyncCalleeChain<int, int, int, int> BeforeBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();

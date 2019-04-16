@@ -10,13 +10,15 @@ namespace Avocat
     /// <summary>
     /// 每回合重新生成战斗卡牌
     /// </summary>
-    public class ReGenCards : Buff
+    public class GenCards : Buff
     {
         Func<int, int> NumCardsGen = null;
-        Action<int, BattleCard[]> CardsGeneratedCallback = null;
+        readonly Action<int, BattleCard[]> CardsGeneratedCallback = null;
+        int Player { get; set; }
 
-        public ReGenCards(Func<int, int> getNumCardsGen = null, Action<int, BattleCard[]> onCardsGenerated = null)
+        public GenCards(int player, Func<int, int> getNumCardsGen = null, Action<int, BattleCard[]> onCardsGenerated = null)
         {
+            Player = player;
             NumCardsGen = getNumCardsGen;
             CardsGeneratedCallback = onCardsGenerated;
         }
@@ -38,6 +40,9 @@ namespace Avocat
         {
             Battle.BeforeStartNextRound.Add((int player) =>
             {
+                if (Player != player)
+                    return;
+
                 // 填充卡片
                 var num = NumCardsGen == null ? 0 : NumCardsGen(player);
                 if (num > 0)
