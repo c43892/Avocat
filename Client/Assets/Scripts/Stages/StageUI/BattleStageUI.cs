@@ -39,13 +39,34 @@ public class BattleStageUI : MonoBehaviour
     // 刷新能量槽
     public void RefreshEnergy(int energy)
     {
-        Enerygy.GetComponent<Image>().color = energy == 100 ? Color.green : Color.white;
+        Enerygy.GetComponent<Image>().color = energy == 100 ? Color.yellow : Color.white;
         Enerygy.GetComponentInChildren<Text>().text = energy.ToString();
+
+        var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
+        if (skill != null && energy >= skill.EnergyCost)
+        {
+            Enerygy.GetComponent<Button>().interactable = true;
+            Enerygy.GetComponent<Image>().color = Color.green;
+        }
+        else
+        {
+            Enerygy.GetComponent<Button>().interactable = false;
+            Enerygy.GetComponent<Image>().color = Color.red;
+        }
     }
 
     // 结束当前回合
     public void OnActionDone()
     {
         Room.ActionDone();
+    }
+
+    // 释放主动技能
+    public void OnFireActiveSkill()
+    {
+        var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
+        Debug.Assert(skill != null, "there is no default active skill");
+
+        Room.FireActiveSkill(skill);
     }
 }

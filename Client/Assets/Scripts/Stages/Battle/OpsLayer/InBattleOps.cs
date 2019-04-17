@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Swift;
 using Avocat;
+using System;
 
 /// <summary>
 /// 准备阶段操作：移动英雄位置
@@ -28,13 +29,14 @@ public class InBattleOps : StageOpsLayer
 
     // selectingWarrior - 等待选择行动对象, selectingAttackTarget - 等待选择攻击目标，selectingPath - 选择行动路径
     string status = "selectingWarrior";
-    Warrior CurrentSelWarrior
+    public static Action OnCurrentWarriorChanged = null;
+    public Warrior CurrentSelWarrior
     {
         get
         {
             return curSelWarrior;
         }
-        set
+        private set
         {
             if (curSelWarrior == value || (value != null && value.ActionDone))
                 return;
@@ -59,6 +61,8 @@ public class InBattleOps : StageOpsLayer
                 tile.Card = null;
             });
             pathInSel.Clear();
+
+            OnCurrentWarriorChanged?.Invoke();
         }
     } Warrior curSelWarrior;
 

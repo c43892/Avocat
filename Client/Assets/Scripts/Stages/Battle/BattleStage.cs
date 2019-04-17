@@ -69,7 +69,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 构建地块层
-    StageOpsLayer currentOpLayer = null;
+    public StageOpsLayer CurrentOpLayer { get; private set; }
     public MapTile[,] Tiles { get; private set; }
     void BuildMapGrids()
     {
@@ -148,22 +148,22 @@ public class BattleStage : MonoBehaviour
     // 开始战斗准备阶段
     public void StartPreparing()
     {
-        currentOpLayer = new PreparingOps(this);
+        CurrentOpLayer = new PreparingOps(this);
     }
 
     // 开始战斗阶段
     public void StartFighting()
     {
-        currentOpLayer = new InBattleOps(this, BattleStageUI);
+        CurrentOpLayer = new InBattleOps(this, BattleStageUI);
     }
 
     // 挂接地图操作逻辑
     void SetupGroundOps()
     {
-        MapGround.OnClicked += (float x, float y) => currentOpLayer.OnClicked((int)x, (int)y);
-        MapGround.OnStartDragging += (float x, float y) => currentOpLayer.OnStartDragging(x, y);
-        MapGround.OnDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnDragging(fx, fy, cx, cy);
-        MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => currentOpLayer.OnEndDragging(fx, fy, cx, cy);
+        MapGround.OnClicked += (float x, float y) => CurrentOpLayer.OnClicked((int)x, (int)y);
+        MapGround.OnStartDragging += (float x, float y) => CurrentOpLayer.OnStartDragging(x, y);
+        MapGround.OnDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnDragging(fx, fy, cx, cy);
+        MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);
     }
 
     #region 动画播放衔接

@@ -65,5 +65,37 @@ namespace Avocat
             Debug.Assert(Map != null, "warrior is not in map now");
             Map.FindXY(this, out x, out y);
         }
+
+        // 所有主动技能
+        string defaultSkillName = null;
+        Dictionary<string, ActiveSkill> activeSkills = new Dictionary<string, ActiveSkill>();
+
+        // 添加主动技能
+        public void AddActiveSkill(ActiveSkill skill, bool asDefaultActiveSkill = true)
+        {
+            var name = skill.Name;
+            Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed.");
+            skill.Target = this;
+            activeSkills[name] = skill;
+
+            if (asDefaultActiveSkill)
+                defaultSkillName = name;
+        }
+
+        // 获取主动技能
+        public ActiveSkill GetActiveSkillByName(string name)
+        {
+            Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " doest not exist.");
+            var skill = activeSkills[name];
+            skill.Target = null;
+            return skill;
+        }
+
+        // 获取默认主动技能
+        public ActiveSkill GetDefaultActiveSkill()
+        {
+            Debug.Assert(defaultSkillName != null, "no default active skill");
+            return GetActiveSkillByName(defaultSkillName);
+        }
     }
 }

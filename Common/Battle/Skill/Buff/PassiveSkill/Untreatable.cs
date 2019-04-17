@@ -11,7 +11,7 @@ namespace Avocat
     /// 游川隐
     /// 创伤，攻击时施加不可治疗效果
     /// </summary>
-    public class PutOnUntreatableWhenAttack : Buff
+    public class PutOnUntreatableWhenAttack : PassiveSkill
     {
         IEnumerator OnAfterAttack(Warrior attacker, Warrior target)
         {

@@ -65,5 +65,7 @@ static class BattleStageUIOnEvents
             BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
             BattleStageUI.RefreshCardsStarshed(bt.StashedCards);
         });
+
+        InBattleOps.OnCurrentWarriorChanged += () => BattleStageUI.RefreshEnergy(bt.Energy);
     }
 }

@@ -33,6 +33,11 @@ v15
 /Common/Battle/AI/*.meta
 /Common/Battle/Map/*.meta
 /Common/Battle/Replay/*.meta
-/Common/Battle/Buff/*.meta
-/Common/Battle/Buff/PassiveSkills/*.meta
+/Common/Battle/Skill/*.meta
+/Common/Battle/Skill/Buff/*.meta
+/Common/Battle/Skill/Buff/PassiveSkill/*.meta
+/Common/Battle/Skill/ActiveSkills/*.meta
+/Common/Battle/Skill/Buff/BattleCard/*.meta
+/Common/Battle/Skill/Buff/GroundEffect/*.meta
+/Common/Battle/Skill/Buff/PatternSkill/*.meta
 /Common/UserPlayer/*.meta

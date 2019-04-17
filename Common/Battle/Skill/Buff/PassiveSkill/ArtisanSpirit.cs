@@ -8,36 +8,29 @@ using System.Threading.Tasks;
 namespace Avocat
 {
     /// <summary>
-    /// 巴洛克
-    /// 战术指挥，行动阶段前，生成一张指令卡
+    /// 洛里斯
+    /// 匠心，行动阶段前，为团队提供能量
     /// </summary>
-    public class TacticalCommand : Buff
+    public class ArtisanSpirit : PassiveSkill
     {
-        Func<string> GetCardType { get; set; }
-        public TacticalCommand(Func<string> getCardType)
-        {
-            GetCardType = getCardType;
-        }
-
-        IEnumerator AddBattleCard(int player)
+        IEnumerator AddEN(int player)
         {
             if (player != Target.Owner)
                 yield break;
 
             var bt = Battle as BattlePVE;
-            var card = BattleCard.Create(GetCardType());
-            yield return bt.AddBattleCard(card);
+            yield return bt.AddEN(10);
         }
 
         public override IEnumerator OnAttached()
         {
-            Battle.BeforeStartNextRound.Add(AddBattleCard);
+            Battle.BeforeStartNextRound.Add(AddEN);
             yield return base.OnAttached();
         }
 
         public override IEnumerator OnDetached()
         {
-            Battle.BeforeStartNextRound.Del(AddBattleCard);
+            Battle.BeforeStartNextRound.Del(AddEN);
             yield return null;
         }
     }
