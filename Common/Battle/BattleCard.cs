@@ -15,7 +15,7 @@ namespace Avocat
         public static readonly BattleCard ATK = new BattleCardATK();
         public static readonly BattleCard ES = new BattleCardES();
         public static readonly BattleCard HP = new BattleCardHP();
-        public static readonly BattleCard Energy = new BattleCardEn();
+        public static readonly BattleCard Energy = new EN();
         public static readonly int BattleCardTypesNum = 4;
 
         public static BattleCard Create(int type)
@@ -29,7 +29,24 @@ namespace Avocat
                 case 2:
                     return new BattleCardATK();
                 case 3:
-                    return new BattleCardEn();
+                    return new EN();
+            }
+
+            return null;
+        }
+
+        public static BattleCard Create(string type)
+        {
+            switch (type)
+            {
+                case "HP":
+                    return new BattleCardHP();
+                case "ES":
+                    return new BattleCardES();
+                case "ATK":
+                    return new BattleCardATK();
+                case "EN":
+                    return new EN();
             }
 
             return null;
@@ -70,9 +87,9 @@ namespace Avocat
         }
     }
 
-    public class BattleCardEn : BattleCard
+    public class EN : BattleCard
     {
-        public BattleCardEn() { Name = "EN"; }
+        public EN() { Name = "EN"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
             yield return (warrior.Battle as BattlePVE).AddEN(15);

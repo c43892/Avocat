@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Buff\GenCards.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\PassiveSkills\ArtisanSpirit.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\PassiveSkills\StarsTears.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Buff\PassiveSkills\TacticalCommand.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\PassiveSkills\Untreatable.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\ResetActionFlag.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Buff\ResetES.cs" />

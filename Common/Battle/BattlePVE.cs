@@ -78,7 +78,7 @@ namespace Avocat
 
             // 行动开始前，生成新卡牌
             FC.Async2Sync(AddBuff(new GenCards(PlayerIndex,
-                (player) => player == 1 ? 8 : 0,
+                (player) => player == 1 ? 5 : 0,
                 (player, cards) => ResetAvailableCards(cards)
             )));
 
@@ -125,12 +125,12 @@ namespace Avocat
         }
 
         // 交换战斗卡牌位置
-        protected AsyncCalleeChain<int, int, int, int> BeforeBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
-        protected AsyncCalleeChain<int, int, int, int> AfterBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
+        public AsyncCalleeChain<int, int, int, int> BeforeBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
+        public AsyncCalleeChain<int, int, int, int> AfterBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
         public AsyncCalleeChain<int, int, int, int> OnBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
         public IEnumerator ExchangeBattleCards(int g1, int n1, int g2, int n2)
         {
-            yield return BeforeBattleCardsExchange?.Invoke(g1, n1, g2, n2);
+            yield return BeforeBattleCardsExchange.Invoke(g1, n1, g2, n2);
 
             var lst1 = g1 == 0 ? AvailableCards : StashedCards;
             var lst2 = g2 == 0 ? AvailableCards : StashedCards;
@@ -160,9 +160,25 @@ namespace Avocat
 
             ResetAvailableCards();
 
-            yield return BeforeBattleCardsExchange?.Invoke(g1, n1, g2, n2);
+            yield return BeforeBattleCardsExchange.Invoke(g1, n1, g2, n2);
 
-            yield return OnBattleCardsExchange?.Invoke(g1, n1, g2, n2);
+            yield return OnBattleCardsExchange.Invoke(g1, n1, g2, n2);
+        }
+
+        // 增加一张战斗卡牌
+        public AsyncCalleeChain<BattleCard> BeforeAddBattleCard = new AsyncCalleeChain<BattleCard>();
+        public AsyncCalleeChain<BattleCard> AfterAddBattleCard = new AsyncCalleeChain<BattleCard>();
+        public AsyncCalleeChain<BattleCard> OnAddBattleCard = new AsyncCalleeChain<BattleCard>();
+        public IEnumerator AddBattleCard(BattleCard card)
+        {
+            yield return BeforeAddBattleCard.Invoke(card);
+
+            AvailableCards.Add(card);
+            ResetAvailableCards();
+
+            yield return AfterAddBattleCard.Invoke(card);
+
+            yield return OnAddBattleCard.Invoke(card);
         }
 
         #region 角色操作包装

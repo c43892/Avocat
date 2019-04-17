@@ -27,14 +27,17 @@ static class BattleStageUIOnEvents
             BattleStageUI.gameObject.SetActive(false);
         });
 
-        room.Battle.OnActionDone.Add((player) =>
+        bt.OnActionDone.Add((player) =>
         {
             if (player != room.PlayerMe)
                 return;
 
-            var availableCards = new List<BattleCard>();
-            availableCards.AddRange(bt.AvailableCards);
-            BattleStageUI.RefreshCardsAvailable(availableCards);
+            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
+        });
+
+        bt.OnAddBattleCard.Add((card) =>
+        {
+            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
         });
 
         bt.OnNextRoundStarted.Add((player) =>
