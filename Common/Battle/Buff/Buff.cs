@@ -27,6 +27,11 @@ namespace Avocat
     {
         public int Num { get; set; } = 0;
 
+        public BuffCountDown(int num)
+        {
+            Num = num;
+        }
+
         IEnumerator CountDown(int player)
         {
             if (player != Target.Owner)

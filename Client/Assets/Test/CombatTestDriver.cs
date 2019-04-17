@@ -72,7 +72,7 @@ public class CombatTestDriver : MonoBehaviour
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);
         bt.Build();
 
-        var bb = new StarsTears();
+        var bb = new Untreatable(1);
         FC.Async2Sync(bt.AddBuff(bb, map.GetWarriorAt(2, 2)));
         // FC.Async2Sync(bt.RemoveBuff(bb));
 

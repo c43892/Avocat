@@ -197,8 +197,8 @@ namespace Avocat
         }
 
         // 执行攻击
-        protected AsyncCalleeChain<Warrior, Warrior> BeforeAttack = new AsyncCalleeChain<Warrior, Warrior>();
-        protected AsyncCalleeChain<Warrior, Warrior> AfterAttack = new AsyncCalleeChain<Warrior, Warrior>();
+        public AsyncCalleeChain<Warrior, Warrior> BeforeAttack = new AsyncCalleeChain<Warrior, Warrior>();
+        public AsyncCalleeChain<Warrior, Warrior> AfterAttack = new AsyncCalleeChain<Warrior, Warrior>();
         public AsyncCalleeChain<Warrior, Warrior> OnWarriorAttack = new AsyncCalleeChain<Warrior, Warrior>(); // 角色进行攻击
         public AsyncCalleeChain<Warrior> OnWarriorDying = new AsyncCalleeChain<Warrior>(); // 角色死亡
         public IEnumerator Attack(Warrior attacker, Warrior target)

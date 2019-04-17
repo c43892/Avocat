@@ -15,8 +15,8 @@ namespace Avocat
         public int ATK { get; set; } = 0;
 
         public CardATK()
+            : base(1)  // 效果一回合结束
         {
-            Num = 1; // 一回合结束
         }
 
         public override IEnumerator OnAttached()
