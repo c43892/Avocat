@@ -50,7 +50,7 @@ static class BattleStageUIOnEvents
             BattleStageUI.RefreshCardsAvailable(availableCards);
         });
 
-        bt.OnWarriorMovingOnPath.Add((warrior, x, y, path) =>
+        bt.OnCardsConsumed.Add((warrior, cards) =>
         {
             if (warrior.Owner != room.PlayerMe)
                 return;

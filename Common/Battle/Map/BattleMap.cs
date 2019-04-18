@@ -131,6 +131,31 @@ namespace Avocat
             return (warriors[x, y] != null && warriors[x, y].IsObstacle) || (items[x, y] != null && items[x, y].IsObstacle);
         }
 
+        // 寻找最近目标
+        public Warrior FindNearestTarget(Warrior warrior)
+        {
+            Warrior nearestTarget = null;
+            int tx = 0;
+            int ty = 0;
+
+            warrior.GetPosInMap(out int fx, out int fy);
+            warrior.Map.ForeachWarriors((x, y, target) =>
+            {
+                // 过滤队友和已经死亡的敌人
+                if (target.IsDead || target.Owner == warrior.Owner)
+                    return;
+
+                if (nearestTarget == null || MU.ManhattanDist(fx, fy, x, y) < MU.ManhattanDist(fx, fy, tx, ty))
+                {
+                    tx = x;
+                    ty = y;
+                    nearestTarget = target;
+                }
+            });
+
+            return nearestTarget;
+        }
+
         #region 寻路相关
 
         // 检查指定区域是否被占用

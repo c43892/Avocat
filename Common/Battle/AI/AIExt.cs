@@ -40,7 +40,7 @@ namespace Avocat
                 yield break;
 
             // 先寻找最近目标
-            var target = FindNearestTarget(warrior);
+            var target = warrior.Map.FindNearestTarget(warrior);
             if (target == null)
                 yield break;
 
@@ -69,31 +69,6 @@ namespace Avocat
         }
 
         #region 基本组成功能
-
-        // 寻找最近目标
-        static Warrior FindNearestTarget(Warrior warrior)
-        {
-            Warrior nearestTarget = null;
-            int tx = 0;
-            int ty = 0;
-
-            warrior.GetPosInMap(out int fx, out int fy);
-            warrior.Map.ForeachWarriors((x, y, target) =>
-            {
-                // 过滤队友和已经死亡的敌人
-                if (target.IsDead || target.Owner == warrior.Owner)
-                    return;
-
-                if (nearestTarget == null || MU.ManhattanDist(fx, fy, x, y) < MU.ManhattanDist(fx, fy, tx, ty))
-                {
-                    tx = x;
-                    ty = y;
-                    nearestTarget = target;
-                }
-            });
-
-            return nearestTarget;
-        }
 
         #endregion
     }

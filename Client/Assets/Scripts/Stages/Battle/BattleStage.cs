@@ -216,7 +216,7 @@ public class BattleStage : MonoBehaviour
         });
 
         // 角色攻击
-        Room.Battle.OnWarriorAttack.Add((Warrior attacker, Warrior target) =>
+        Room.Battle.OnWarriorAttack.Add((Warrior attacker, Warrior target, List<string> flags) =>
         {
             var avatar = GetAvatarByWarrior(attacker);
             var targetAvatar = GetAvatarByWarrior(target);

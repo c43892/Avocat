@@ -72,12 +72,12 @@ public class CombatTestDriver : MonoBehaviour
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);
         bt.Build();
 
-        // var bb = new Butterfly();
-        // FC.Async2Sync(bt.AddBuff(bb, map.GetWarriorAt(2, 2)));
+        var bb = new FlashAttack();
+        FC.Async2Sync(bt.AddBuff(bb, map.GetWarriorAt(2, 2)));
         // FC.Async2Sync(bt.RemoveBuff(bb));
 
-        var skill = new Butterfly();
-        map.GetWarriorAt(2, 2).AddActiveSkill(skill);
+        // var skill = new Butterfly();
+        // map.GetWarriorAt(2, 2).AddActiveSkill(skill);
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };

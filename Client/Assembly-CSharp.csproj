@@ -86,6 +86,8 @@
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\StarsTears.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\TacticalCommand.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\Untreatable.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PatternSkill\FlashAttack.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PatternSkill\PatternSkill.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\SpatialAStar.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AsyncCalleeChain.cs" />

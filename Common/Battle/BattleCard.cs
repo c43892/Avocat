@@ -18,6 +18,23 @@ namespace Avocat
         public static readonly BattleCard Energy = new EN();
         public static readonly int BattleCardTypesNum = 4;
 
+        public static int TypeStr2Int(string type)
+        {
+            switch (type)
+            {
+                case "HP":
+                    return 0;
+                case "ES":
+                    return 1;
+                case "ATK":
+                    return 2;
+                case "EN":
+                    return 3;
+            }
+
+            return -1;
+        }
+
         public static BattleCard Create(int type)
         {
             switch (type)
@@ -37,19 +54,7 @@ namespace Avocat
 
         public static BattleCard Create(string type)
         {
-            switch (type)
-            {
-                case "HP":
-                    return new BattleCardHP();
-                case "ES":
-                    return new BattleCardES();
-                case "ATK":
-                    return new BattleCardATK();
-                case "EN":
-                    return new EN();
-            }
-
-            return null;
+            return Create(TypeStr2Int(type));
         }
 
         public string Name { get; protected set; }

@@ -86,7 +86,9 @@ namespace Avocat
         }
 
         // 移动消耗卡牌
-
+        public AsyncCalleeChain<Warrior, List<BattleCard>> BeforeCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
+        public AsyncCalleeChain<Warrior, List<BattleCard>> AfterCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
+        public AsyncCalleeChain<Warrior, List<BattleCard>> OnCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
         IEnumerator OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
         {
             if (warrior.Owner != PlayerIndex)
@@ -95,14 +97,24 @@ namespace Avocat
             var movedPathLen = movedPath.Count / 2;
             Debug.Assert(movedPathLen <= AvailableCards.Count, "moved path grids should not be more than cards number");
 
+            var cards = new List<BattleCard>();
             for (var i = 0; i < movedPathLen; i++)
             {
                 var card = AvailableCards[0];
+                cards.Add(card);
                 AvailableCards.RemoveAt(0);
-                yield return card.ExecuteOn(warrior);
             }
 
+            yield return BeforeCardsConsumed.Invoke(warrior, cards);
+
+            for (var i = 0; i < cards.Count; i++)
+                yield return cards[i].ExecuteOn(warrior);
+
+            yield return OnCardsConsumed.Invoke(warrior, cards);
+
             ResetAvailableCards();
+
+            yield return AfterCardsConsumed.Invoke(warrior, cards);
         }
 
         BattlePVE ConsumeCardsOnMoving()
@@ -160,9 +172,8 @@ namespace Avocat
 
             ResetAvailableCards();
 
-            yield return BeforeBattleCardsExchange.Invoke(g1, n1, g2, n2);
-
             yield return OnBattleCardsExchange.Invoke(g1, n1, g2, n2);
+            yield return AfterBattleCardsExchange.Invoke(g1, n1, g2, n2);
         }
 
         // 增加一张战斗卡牌
@@ -176,9 +187,8 @@ namespace Avocat
             AvailableCards.Add(card);
             ResetAvailableCards();
 
-            yield return AfterAddBattleCard.Invoke(card);
-
             yield return OnAddBattleCard.Invoke(card);
+            yield return AfterAddBattleCard.Invoke(card);
         }
 
         #region 角色操作包装
@@ -193,8 +203,8 @@ namespace Avocat
 
             Energy = MU.Clamp(Energy + den, 0, MaxEnergy);
 
-            yield return AfterAddEN.Invoke(den);
             yield return OnAddEN.Invoke(den);
+            yield return AfterAddEN.Invoke(den);
         }
 
         // 释放主动技能
@@ -211,8 +221,8 @@ namespace Avocat
             Energy -= skill.EnergyCost;
             yield return skill.Fire();
 
-            yield return AfterFireSkill.Invoke(skill);
             yield return OnFireSkill.Invoke(skill);
+            yield return AfterFireSkill.Invoke(skill);
         }
 
         #endregion
