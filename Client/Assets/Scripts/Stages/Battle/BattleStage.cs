@@ -16,9 +16,6 @@ public class BattleStage : MonoBehaviour
     // 底层地图操作处理
     public MapGroundLayer MapGround;
 
-    // 战斗界面
-    public BattleStageUI BattleStageUI;
-
     // 相关显示参数
     public int MapTileWidth { get; set; }
     public int MapTileHeight { get; set; }
@@ -171,7 +168,7 @@ public class BattleStage : MonoBehaviour
     // 开始战斗阶段
     public void StartFighting()
     {
-        CurrentOpLayer = new InBattleOps(this, BattleStageUI);
+        CurrentOpLayer = new InBattleOps(this);
     }
 
     // 挂接地图操作逻辑

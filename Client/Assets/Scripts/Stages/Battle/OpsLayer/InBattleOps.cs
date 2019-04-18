@@ -10,11 +10,9 @@ using System;
 /// </summary>
 public class InBattleOps : StageOpsLayer
 {
-    BattleStageUI UI { get; set; }
-    public InBattleOps(BattleStage bs, BattleStageUI ui)
+    public InBattleOps(BattleStage bs)
         : base(bs)
     {
-        UI = ui;
         BattleCardUI.OnCardExchanged += OnCardExchanged;
     }
 
