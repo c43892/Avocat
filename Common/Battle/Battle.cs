@@ -171,7 +171,7 @@ namespace Avocat
             Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
 
             warrior.GetPosInMap(out int x, out int y);
-            Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) <= 1, "the warrior has not been right on the start position: " + x + ", " + y);
+            Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
 
             if (warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
                 yield break;
@@ -192,7 +192,7 @@ namespace Avocat
                 movedPath.Add(tx);
                 movedPath.Add(ty);
 
-                // Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
+                Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
                 MoveWarroirs(warrior, tx, ty);
 

@@ -142,6 +142,7 @@ public class InBattleOps : StageOpsLayer
 
         CurrentSelWarrior = warrior;
         var tile = BattleStage.Tiles[(int)x, (int)y];
+        pathInSel.Clear();
         pathInSel.Add(tile);
         status = "selectingPath";
     }
@@ -207,10 +208,6 @@ public class InBattleOps : StageOpsLayer
             CurrentSelWarrior.MovingPath.Add(tile.X);
             CurrentSelWarrior.MovingPath.Add(tile.Y);
         });
-
-        CurrentSelWarrior.GetPosInMap(out int x, out int y);
-        if (CurrentSelWarrior.MovingPath[0] == x && CurrentSelWarrior.MovingPath[1] == y)
-            Debug.Assert(false, "!!!");
 
         status = "selectingAttackTarget";
     }
