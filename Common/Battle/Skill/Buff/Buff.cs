@@ -13,7 +13,7 @@ namespace Avocat
     public abstract class Buff
     {
         public virtual string Name { get; }
-        public virtual Warrior Target { get; set; }
+        public virtual Warrior Owner { get; set; }
         public virtual Battle Battle { get; set; }
         public virtual BattleMap Map { get { return Battle?.Map; } }
         public virtual IEnumerator OnAttached() { yield return null; }
@@ -34,7 +34,7 @@ namespace Avocat
 
         IEnumerator CountDown(int player)
         {
-            if (player != Target.Owner)
+            if (player != Owner.Owner)
                 yield break;
 
             Num--;

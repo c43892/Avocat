@@ -13,9 +13,9 @@ namespace Avocat
     /// </summary>
     public class PutOnUntreatableWhenAttack : PassiveSkill
     {
-        IEnumerator OnAfterAttack(Warrior attacker, Warrior target)
+        IEnumerator OnAfterAttack(Warrior attacker, Warrior target, List<string> flags)
         {
-            if (attacker != Target)
+            if (attacker != Owner)
                 yield break;
 
             yield return Battle.AddBuff(new Untreatable(2), target);
@@ -47,7 +47,7 @@ namespace Avocat
 
         IEnumerator OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
         {
-            if (warrior != Target)
+            if (warrior != Owner)
                 yield break;
 
             changeDhp(0);

@@ -21,7 +21,7 @@ namespace Avocat
 
         IEnumerator AddBattleCard(int player)
         {
-            if (player != Target.Owner)
+            if (player != Owner.Owner)
                 yield break;
 
             var bt = Battle as BattlePVE;

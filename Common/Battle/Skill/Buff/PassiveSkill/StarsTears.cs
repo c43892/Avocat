@@ -15,7 +15,7 @@ namespace Avocat
     {
         IEnumerator OnAfterAddHp(Warrior warrior, int dhp)
         {
-            if (warrior.Owner != Target.Owner || warrior == Target)
+            if (warrior.Owner != Owner.Owner || warrior == Owner)
                 yield break;
 
             var bt = Battle as BattlePVE;
