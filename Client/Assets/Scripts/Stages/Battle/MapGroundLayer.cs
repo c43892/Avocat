@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Swift;
 using System;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// 统一由地表底下一层响应地图相关操作
@@ -35,11 +37,16 @@ public class MapGroundLayer : MonoBehaviour
     bool CheckPointerRelativePosition(out Vector2 v2)
     {
         v2 = Vector2.zero;
+
+        // 点在 ui 上就不处理了
+        if (BattleStageUI.CheckGuiRaycastObjects())
+            return false;
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var hitInfo = Physics2D.GetRayIntersection(ray, float.MaxValue, LayerMask.GetMask("MapGroundLayer"));
-        if (hitInfo.collider?.gameObject == gameObject)
+        var hitInfos = Physics2D.GetRayIntersectionAll(ray);
+        if (hitInfos.Length > 0 && hitInfos[0].collider?.gameObject == gameObject)
         {
-            var pos = transform.worldToLocalMatrix.MultiplyPoint(hitInfo.point);
+            var pos = transform.worldToLocalMatrix.MultiplyPoint(hitInfos[0].point);
             v2 = new Vector2(pos.x * Area.width, -pos.y * Area.height);
             return true;
         }

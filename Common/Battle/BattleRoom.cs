@@ -73,15 +73,6 @@ namespace Avocat
             {
                 return Battle.ActionDone(player);
             });
-
-            bmp.HandleMsg("FireActiveSkill", (player, data) =>
-            {
-                var warriorID = data.ReadInt();
-                var skillName = data.ReadString();
-                var warrior = Battle.Map.GetWarriorsByID(warriorID);
-                var skill = warrior.GetActiveSkillByName(skillName);
-                return Battle.FireSkill(skill);
-            });
         }
 
         // 搜索可达路径

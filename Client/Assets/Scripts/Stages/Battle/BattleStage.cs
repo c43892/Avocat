@@ -121,6 +121,20 @@ public class BattleStage : MonoBehaviour
         });
     }
 
+    // 根据角色获取 Avatar
+    public MapAvatar GetAvatarByWarrior(Warrior warrior)
+    {
+        MapAvatar avatar = null;
+        ForeachAvatar((x, y, a) =>
+        {
+            if (a != null && a.Warrior == warrior)
+                avatar = a;
+        }, () => avatar == null);
+
+        Debug.Assert(avatar != null, "warrior should have a avatar in battle map");
+        return avatar;
+    }
+
     void ForeachAvatar(Action<int, int, MapAvatar> act, Func<bool> continueCondition = null)
     {
         FC.For2(Map.Width, Map.Height, (x, y) =>
@@ -178,14 +192,6 @@ public class BattleStage : MonoBehaviour
             return aniPlayer;
         }
     } MapAniPlayer aniPlayer;
-
-    MapAvatar GetAvatarByWarrior(Warrior warrior)
-    {
-        warrior.GetPosInMap(out int x, out int y);
-        var avatar = Avatars[x, y];
-        Debug.Assert(avatar != null, "warrior should have a avatar in battle map");
-        return avatar;
-    }
 
     // 挂接动画播放事件
     void SetupAniPlayer()

@@ -304,17 +304,6 @@ namespace Avocat
             yield return OnBuffRemoved.Invoke(buff, target);
         }
 
-        // 释放主动技能
-        protected AsyncCalleeChain<ActiveSkill> BeforeFireSkill = new AsyncCalleeChain<ActiveSkill>();
-        protected AsyncCalleeChain<ActiveSkill> AfterFireSkill = new AsyncCalleeChain<ActiveSkill>();
-        public AsyncCalleeChain<ActiveSkill> OnFireSkill = new AsyncCalleeChain<ActiveSkill>();
-        public virtual IEnumerator FireSkill(ActiveSkill skill)
-        {
-            yield return BeforeFireSkill.Invoke(skill);
-
-            yield return AfterFireSkill.Invoke(skill);
-            yield return OnFireSkill.Invoke(skill);
-        }
         #endregion
 
         #region 战斗基本流程

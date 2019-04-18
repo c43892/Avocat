@@ -197,6 +197,24 @@ namespace Avocat
             yield return OnAddEN.Invoke(den);
         }
 
+        // 释放主动技能
+        protected AsyncCalleeChain<ActiveSkill> BeforeFireSkill = new AsyncCalleeChain<ActiveSkill>();
+        protected AsyncCalleeChain<ActiveSkill> AfterFireSkill = new AsyncCalleeChain<ActiveSkill>();
+        public AsyncCalleeChain<ActiveSkill> OnFireSkill = new AsyncCalleeChain<ActiveSkill>();
+        public virtual IEnumerator FireSkill(ActiveSkill skill)
+        {
+            if (Energy < skill.EnergyCost)
+                yield break;
+
+            yield return BeforeFireSkill.Invoke(skill);
+
+            Energy -= skill.EnergyCost;
+            yield return skill.Fire();
+
+            yield return AfterFireSkill.Invoke(skill);
+            yield return OnFireSkill.Invoke(skill);
+        }
+
         #endregion
     }
 }

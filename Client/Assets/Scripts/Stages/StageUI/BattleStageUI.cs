@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Swift;
 using Avocat;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// 战斗场景 UI
@@ -68,5 +69,19 @@ public class BattleStageUI : MonoBehaviour
         Debug.Assert(skill != null, "there is no default active skill");
 
         Room.FireActiveSkill(skill);
+    }
+
+    // 检查当前鼠标是否点击在 ui 上
+    public static bool CheckGuiRaycastObjects()
+    {
+        var raycaster = Camera.main.transform.root.GetComponentInChildren<GraphicRaycaster>();
+        var evnSystem = Camera.main.transform.root.GetComponentInChildren<EventSystem>();
+        var eventData = new PointerEventData(evnSystem);
+        eventData.pressPosition = Input.mousePosition;
+        eventData.position = Input.mousePosition;
+
+        var list = new List<RaycastResult>();
+        raycaster.Raycast(eventData, list);
+        return list.Count > 0;
     }
 }

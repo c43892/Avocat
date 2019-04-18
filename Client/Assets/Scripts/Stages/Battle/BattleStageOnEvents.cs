@@ -18,5 +18,23 @@ static class BattleStageOnEvents
                 BattleStage.StartFighting();
             }
         });
+
+        bt.OnAddHP.Add((warrior, dhp) =>
+        {
+            var avatar = BattleStage.GetAvatarByWarrior(warrior);
+            avatar.RefreshAttrs();
+        });
+
+        bt.OnAddATK.Add((warrior, dATK) =>
+        {
+            var avatar = BattleStage.GetAvatarByWarrior(warrior);
+            avatar.RefreshAttrs();
+        });
+
+        bt.OnAddES.Add((warrior, des) =>
+        {
+            var avatar = BattleStage.GetAvatarByWarrior(warrior);
+            avatar.RefreshAttrs();
+        });
     }
 }

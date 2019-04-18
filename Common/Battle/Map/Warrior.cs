@@ -85,17 +85,30 @@ namespace Avocat
         // 获取主动技能
         public ActiveSkill GetActiveSkillByName(string name)
         {
-            Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " doest not exist.");
-            var skill = activeSkills[name];
-            skill.Target = null;
-            return skill;
+            Debug.Assert(activeSkills.ContainsKey(name), "skill named: " + name + " doest not exist.");
+            return activeSkills[name];
         }
 
         // 获取默认主动技能
         public ActiveSkill GetDefaultActiveSkill()
         {
-            Debug.Assert(defaultSkillName != null, "no default active skill");
-            return GetActiveSkillByName(defaultSkillName);
+            return defaultSkillName == null ? null : GetActiveSkillByName(defaultSkillName);
+        }
+
+        // 移除主动技能
+        public void RemoveActiveSkill(ActiveSkill skill)
+        {
+            Debug.Assert(skill.Target == this, "skill named: " + skill.Name + " doest not exist.");
+            RemoveActiveSkill(skill.Name);
+        }
+
+        // 移除主动技能
+        public void RemoveActiveSkill(string name)
+        {
+            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Target == this, "skill named: " + name + " doest not exist.");
+            activeSkills.Remove(name);
+            if (defaultSkillName == name)
+                defaultSkillName = null;
         }
     }
 }
