@@ -131,6 +131,9 @@ public class BattleStage : MonoBehaviour
                 avatar = a;
         }, () => avatar == null);
 
+        if (avatar == null)
+            Debug.Break();
+
         Debug.Assert(avatar != null, "warrior should have a avatar in battle map");
         return avatar;
     }
@@ -231,10 +234,12 @@ public class BattleStage : MonoBehaviour
 
             var tx = path[path.Count - 2];
             var ty = path[path.Count - 1];
-            Avatars[x, y] = Avatars[tx, ty];
-            Avatars[tx, ty] = avatar;
 
             yield return AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y));
+
+            SetAvatarPosition(Avatars[tx, ty], x, y);
+            SetAvatarPosition(avatar, tx, ty);
+
             avatar.RefreshAttrs();
         }
         Room.Battle.OnWarriorMovingOnPath.Add(OnWarriorMovingOnPath);
@@ -271,6 +276,8 @@ public class BattleStage : MonoBehaviour
             var avatar = GetAvatarByWarrior(warrior);
             yield return AniPlayer.MakeDying(avatar);
             Avatars[avatar.X, avatar.Y] = null;
+            avatar.transform.SetParent(null);
+            Destroy(avatar);
         }
         Room.Battle.OnWarriorDying.Add(OnWarriorDying);
     }

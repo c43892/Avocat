@@ -54,26 +54,30 @@ public class CombatTestDriver : MonoBehaviour
     // 开始新游戏
     public void OnStartNewBattle()
     {
-        // test map
-        var map = new BattleMap(10, 6);
-        map.SetWarriorAt(2, 2, new Warrior(map, 10, 10) { Owner = 1, AttackRange = 5, ATK = 1 });
-        map.SetWarriorAt(2, 3, new Warrior(map, 10, 10) { Owner = 1, AttackRange = 5, ATK = 2 });
-        map.SetWarriorAt(2, 4, new Warrior(map, 10, 10) { Owner = 1, AttackRange = 5, ATK = 3 });
+        var map = new BattleMap(10, 6); // test map
+        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }); // test battle
 
         // npcs
-        var npc0 = new Warrior(map, 5, 10) { Owner = 2, AttackRange = 1, ATK = 1, MoveRange = 2 };
-        var npc1 = new Warrior(map, 5, 10) { Owner = 2, AttackRange = 1, ATK = 2, MoveRange = 2 };
-        var npc2 = new Warrior(map, 5, 10) { Owner = 2, AttackRange = 1, ATK = 3, MoveRange = 2 };
+        var npc0 = new Boar(map) { Name = "野猪", AttackRange = 1, ATK = 1, MoveRange = 2 };
+        var npc1 = new Boar(map) { Name = "野猪", AttackRange = 1, ATK = 2, MoveRange = 2 };
+        var npc2 = new Boar(map) { Name = "野猪", AttackRange = 1, ATK = 3, MoveRange = 2 };
         map.SetWarriorAt(5, 1, npc0);
         map.SetWarriorAt(5, 3, npc1);
         map.SetWarriorAt(5, 5, npc2);
 
-        // test battle
-        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }, npc0, npc1, npc2);
-        bt.Build();
+        // ai
+        bt.AddNpcWarrior(npc0, "StraightlyForwardAndAttack");
+        bt.AddNpcWarrior(npc1, "StraightlyForwardAndAttack");
+        bt.AddNpcWarrior(npc2, "StraightlyForwardAndAttack");
 
-        var bb = new FlashAttack();
-        FC.Async2Sync(bt.AddBuff(bb, map.GetWarriorAt(2, 2)));
+        // heros
+        map.SetWarriorAt(2, 2, new Warrior(map, 10, 10) { Name = "游川隐", Owner = 1, AttackRange = 5, ATK = 1 });
+        map.SetWarriorAt(2, 3, new Warrior(map, 10, 10) { Name = "黛丽万", Owner = 1, AttackRange = 5, ATK = 2 });
+        map.SetWarriorAt(2, 4, new Warrior(map, 10, 10) { Name = "洛里斯", Owner = 1, AttackRange = 5, ATK = 3 });
+
+        FC.Async2Sync(bt.AddBuff(new FlashAttack(), map.GetWarriorAt(2, 2)));
+        FC.Async2Sync(bt.AddBuff(new StarsTears(), map.GetWarriorAt(2, 3)));
+        map.GetWarriorAt(2, 3).AddActiveSkill(new Butterfly());
         // FC.Async2Sync(bt.RemoveBuff(bb));
 
         // var skill = new Butterfly();

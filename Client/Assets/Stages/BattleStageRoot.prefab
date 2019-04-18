@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CenterOffset: {x: 0.5, y: 0.5}
+  NameText: {fileID: 930851187713006260}
   HpText: {fileID: 1280697294}
   PowerText: {fileID: 735316337}
   ShieldText: {fileID: 1280763056}
@@ -1004,7 +1005,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519928065181481959}
-  m_Text: "\u91CE\u732A"
+  m_Text: <NONE>
   m_OffsetZ: 0
   m_CharacterSize: 0.1
   m_LineSpacing: 1

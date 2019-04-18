@@ -32,6 +32,9 @@ v15
 /Common/Battle/*.meta
 /Common/Battle/AI/*.meta
 /Common/Battle/Map/*.meta
+/Common/Battle/Warriors/*.meta
+/Common/Battle/Warriors/Heros/*.meta
+/Common/Battle/Warriors/Npcs/*.meta
 /Common/Battle/Replay/*.meta
 /Common/Battle/Skill/*.meta
 /Common/Battle/Skill/Buff/*.meta

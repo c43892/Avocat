@@ -14,14 +14,12 @@ namespace Avocat
     public class RobotPlayer
     {
         Battle Battle { get; set; }
-        WarriorAI[] WarriorAIs { get; set; }
+        public List<WarriorAI> WarriorAIs { get; } = new List<WarriorAI>();
 
-        public RobotPlayer(Battle battle, WarriorAI[] warriorAIs)
+        public RobotPlayer(Battle battle)
         {
             Battle = battle;
-            WarriorAIs = warriorAIs;
-
-            BuildLogic();
+            Battle.AfterStartNextRound.Add(OnAfterStartNextRound);
         }
 
         IEnumerator OnAfterStartNextRound(int player)
@@ -30,15 +28,10 @@ namespace Avocat
             if (player != 2)
                 yield break;
 
-            for (var i = 0; i < WarriorAIs.Length; i++)
+            for (var i = 0; i < WarriorAIs.Count; i++)
                 yield return WarriorAIs[i].Act();
 
             yield return Battle.ActionDone(2);
-        }
-
-        void BuildLogic()
-        {
-            Battle.AfterStartNextRound.Add(OnAfterStartNextRound);
         }
     }
 }

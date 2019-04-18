@@ -208,6 +208,10 @@ public class InBattleOps : StageOpsLayer
             CurrentSelWarrior.MovingPath.Add(tile.Y);
         });
 
+        CurrentSelWarrior.GetPosInMap(out int x, out int y);
+        if (CurrentSelWarrior.MovingPath[0] == x && CurrentSelWarrior.MovingPath[1] == y)
+            Debug.Assert(false, "!!!");
+
         status = "selectingAttackTarget";
     }
 

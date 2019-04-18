@@ -60,11 +60,24 @@ namespace Avocat
 
         #region 战斗准备过程
 
+        // 移动角色位置
+        public void MoveWarroirs(Warrior warrior, int tx, int ty)
+        {
+            warrior.GetPosInMap(out int fx, out int fy);
+            if (fx == tx && fy == ty)
+                return;
+
+            Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
+
+            Map.SetWarriorAt(fx, fy, null);
+            Map.SetWarriorAt(tx, ty, warrior);
+        }
+
         // 交换英雄位置
         protected AsyncCalleeChain<int, int, int, int> BeforeExchangeWarroirsPosition = new AsyncCalleeChain<int, int, int, int>();
         protected AsyncCalleeChain<int, int, int, int> AfterExchangeWarroirsPosition = new AsyncCalleeChain<int, int, int, int>();
         public AsyncCalleeChain<int, int, int, int> OnWarriorPositionExchanged = new AsyncCalleeChain<int, int, int, int>();
-        public IEnumerator ExchangeWarroirsPosition(int fx, int fy, int tx, int ty, bool suppressPositionExchangedEvent = false)
+        public IEnumerator ExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
         {
             if (fx == tx && fy == ty)
                 yield break;
@@ -77,10 +90,8 @@ namespace Avocat
             Map.SetWarriorAt(fx, fy, Map.GetWarriorAt(tx, ty));
             Map.SetWarriorAt(tx, ty, tmp);
 
+            yield return OnWarriorPositionExchanged.Invoke(fx, fy, tx, ty);
             yield return AfterExchangeWarroirsPosition.Invoke(fx, fy, tx, ty);
-
-            if (!suppressPositionExchangedEvent)
-                yield return OnWarriorPositionExchanged.Invoke(fx, fy, tx, ty);
         }
 
         // 完成战斗准备
@@ -160,7 +171,7 @@ namespace Avocat
             Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
 
             warrior.GetPosInMap(out int x, out int y);
-            Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
+            Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) <= 1, "the warrior has not been right on the start position: " + x + ", " + y);
 
             if (warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
                 yield break;
@@ -181,9 +192,9 @@ namespace Avocat
                 movedPath.Add(tx);
                 movedPath.Add(ty);
 
-                Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
+                // Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
-                yield return ExchangeWarroirsPosition(fx, fy, tx, ty, true);
+                MoveWarroirs(warrior, tx, ty);
 
                 fx = tx;
                 fy = ty;
@@ -352,7 +363,7 @@ namespace Avocat
         }
 
         // 构建基本逻辑，参数表示玩家轮转编号列表
-        public virtual Battle Build(params int[] players)
+        protected virtual Battle Build(params int[] players)
         {
             BattleStatusTransfer(players);
             FC.Async2Sync(AddBuff(new ResetES())); // 回合开始时重置护盾

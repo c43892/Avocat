@@ -14,7 +14,7 @@ namespace Avocat
     /// </summary>
     public class BattlePVE : Battle
     {
-        protected PlayerInfo Player { get; set; }
+        public PlayerInfo Player { get; protected set; }
         protected RobotPlayer Robot { get; set; }
 
         public static readonly int PlayerIndex = 1; // 玩家是 1，机器人是 2
@@ -24,17 +24,16 @@ namespace Avocat
 
         // 暂存区的卡牌
         public List<BattleCard> StashedCards = new List<BattleCard>();
-        Warrior[] Npcs { get; set; }
 
         // 玩家能量槽
         public int MaxEnergy { get; set; } = 100;
         public int Energy { get; set; } = 0;
 
-        public BattlePVE(BattleMap map, int randSeed, PlayerInfo player, params Warrior[] npcs)
+        public BattlePVE(BattleMap map, int randSeed, PlayerInfo player)
             :base(map, randSeed)
         {
             Player = player;
-            Npcs = npcs;
+            Build();
         }
 
         bool playerPrepared = false;
@@ -67,7 +66,7 @@ namespace Avocat
         }
 
         // 创建 PVE 战斗逻辑
-        public void Build()
+        protected void Build()
         {
             Build(1, 2);  // 1-玩家，2-机器人
 
@@ -82,7 +81,14 @@ namespace Avocat
                 (player, cards) => ResetAvailableCards(cards)
             )));
 
-            BuildRobot(Npcs);
+            Robot = new RobotPlayer(this);
+        }
+
+        // 添加 npc 怪物
+        public void AddNpcWarrior(Npc npc, string aiType)
+        {
+            npc.Owner = 2;
+            Robot.WarriorAIs.Add((new WarriorAI(npc)).Build(aiType));
         }
 
         // 移动消耗卡牌
@@ -121,19 +127,6 @@ namespace Avocat
         {
             AfterMoveOnPath.Add(OnAfterMoveOnPath);
             return this;
-        }
-
-        // 创建机器人对手
-        public void BuildRobot(Warrior[] npcs)
-        {
-            var ais = npcs.ToArray((i, npc, skipAct) =>
-            {
-                var ai = new WarriorAI(npc);
-                ai.Build("StraightlyForwardAndAttack");
-                return ai;
-            });
-
-            Robot = new RobotPlayer(this, ais);
         }
 
         // 交换战斗卡牌位置
@@ -218,7 +211,7 @@ namespace Avocat
 
             yield return BeforeFireSkill.Invoke(skill);
 
-            Energy -= skill.EnergyCost;
+            yield return AddEN(-skill.EnergyCost);
             yield return skill.Fire();
 
             yield return OnFireSkill.Invoke(skill);

@@ -9,6 +9,7 @@ public class MapAvatar : MonoBehaviour
     public BattleStage BattleStage { get; set; }
     public Vector2 CenterOffset = new Vector2(0.5f, 0.5f);
 
+    public TextMesh NameText;
     public TextMesh HpText;
     public TextMesh PowerText;
     public TextMesh ShieldText;
@@ -18,6 +19,7 @@ public class MapAvatar : MonoBehaviour
 
     public void RefreshAttrs()
     {
+        NameText.text = Warrior.Name;
         HpText.text = Warrior.HP.ToString();
         PowerText.text = Warrior.ATK.ToString();
         ShieldText.text = Warrior.ES.ToString();

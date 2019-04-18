@@ -12,7 +12,7 @@ namespace Avocat
 {
     public static class AIUtils
     {
-        public static void Build(this WarriorAI ai, string aiType)
+        public static WarriorAI Build(this WarriorAI ai, string aiType)
         {
             switch (aiType)
             {
@@ -24,6 +24,8 @@ namespace Avocat
                     ai.Act = () => Dumb(ai);
                     break;
             }
+
+            return ai;
         }
 
         // 哑 AI，不做任何事情
