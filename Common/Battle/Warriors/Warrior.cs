@@ -6,6 +6,11 @@ using Swift;
 
 namespace Avocat
 {
+    public interface ITransformable
+    {
+        string State { set; }
+    }
+
     /// <summary>
     /// 战斗角色
     /// </summary>
@@ -75,7 +80,7 @@ namespace Avocat
         {
             var name = skill.Name;
             Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed.");
-            skill.Target = this;
+            skill.Owner = this;
             activeSkills[name] = skill;
 
             if (asDefaultActiveSkill)
@@ -98,14 +103,14 @@ namespace Avocat
         // 移除主动技能
         public void RemoveActiveSkill(ActiveSkill skill)
         {
-            Debug.Assert(skill.Target == this, "skill named: " + skill.Name + " doest not exist.");
+            Debug.Assert(skill.Owner == this, "skill named: " + skill.Name + " doest not exist.");
             RemoveActiveSkill(skill.Name);
         }
 
         // 移除主动技能
         public void RemoveActiveSkill(string name)
         {
-            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Target == this, "skill named: " + name + " doest not exist.");
+            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Owner == this, "skill named: " + name + " doest not exist.");
             activeSkills.Remove(name);
             if (defaultSkillName == name)
                 defaultSkillName = null;

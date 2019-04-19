@@ -8,33 +8,28 @@ using System.Threading.Tasks;
 namespace Avocat
 {
     /// <summary>
-    /// 创伤效果，不可治疗
+    /// 反击
     /// </summary>
-    public class Untreatable : BuffCountDown
+    public class CounterAttack : PassiveSkill
     {
-        public Untreatable(int num)
-            :base(num)
+        IEnumerator AttackBack(Warrior attacker, Warrior target, List<string> flags)
         {
-        }
-
-        IEnumerator OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
-        {
-            if (warrior != Owner)
+            if (target != Owner || flags.Contains("SuppressCounterAttack"))
                 yield break;
 
-            changeDhp(0);
+            yield return Battle.Attack(target, attacker, "CounterAttack");
         }
 
         public override IEnumerator OnAttached()
         {
-            Battle.BeforeAddHP.Add(OnBeforeAddHp);
+            Battle.AfterAttack.Add(AttackBack);
             yield return base.OnAttached();
         }
 
         public override IEnumerator OnDetached()
         {
-            Battle.BeforeAddHP.Del(OnBeforeAddHp);
-            yield return base.OnDetached();
+            Battle.AfterAttack.Del(AttackBack);
+            yield return null;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Avocat
     public abstract class ActiveSkill
     {
         public abstract string Name { get; }
-        public virtual Warrior Target { get; set; }
-        public virtual Battle Battle { get { return Target?.Battle; } }
+        public virtual Warrior Owner { get; set; }
+        public virtual Battle Battle { get { return Owner?.Battle; } }
         public virtual BattleMap Map { get { return Battle?.Map; } }
 
         // 能量消耗

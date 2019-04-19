@@ -22,7 +22,7 @@ namespace Avocat
         public override IEnumerator Fire()
         {
             var target = Map.FindNearestTarget(Owner);
-            yield return BT.Attack(Owner, target, "extraAttack");
+            yield return BT.Attack(Owner, target, "ExtraAttack", "SuppressCounterAttack");
         }
     }
 }

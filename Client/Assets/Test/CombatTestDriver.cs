@@ -69,15 +69,19 @@ public class CombatTestDriver : MonoBehaviour
         bt.AddNpcWarrior(npc0, "StraightlyForwardAndAttack");
         bt.AddNpcWarrior(npc1, "StraightlyForwardAndAttack");
         bt.AddNpcWarrior(npc2, "StraightlyForwardAndAttack");
+        FC.Async2Sync(bt.AddBuff(new CounterAttack(), npc0));
+        FC.Async2Sync(bt.AddBuff(new CounterAttack(), npc1));
+        FC.Async2Sync(bt.AddBuff(new CounterAttack(), npc2));
 
         // heros
-        map.SetWarriorAt(2, 2, new Warrior(map, 10, 10) { Name = "游川隐", Owner = 1, AttackRange = 5, ATK = 1 });
-        map.SetWarriorAt(2, 3, new Warrior(map, 10, 10) { Name = "黛丽万", Owner = 1, AttackRange = 5, ATK = 2 });
-        map.SetWarriorAt(2, 4, new Warrior(map, 10, 10) { Name = "洛里斯", Owner = 1, AttackRange = 5, ATK = 3 });
+        map.SetWarriorAt(2, 2, new DaiLiWan(bt) { Owner = 1 });
+        map.SetWarriorAt(2, 3, new LuoLiSi(bt) { Owner = 1 });
+        map.SetWarriorAt(2, 4, new YouYinChuan(bt) { Owner = 1 });
+        map.SetWarriorAt(2, 5, new BaLuoKe(bt) { Owner = 1 });
 
-        FC.Async2Sync(bt.AddBuff(new FlashAttack(), map.GetWarriorAt(2, 2)));
-        FC.Async2Sync(bt.AddBuff(new StarsTears(), map.GetWarriorAt(2, 3)));
-        map.GetWarriorAt(2, 3).AddActiveSkill(new Butterfly());
+        // FC.Async2Sync(bt.AddBuff(new FlashAttack(), map.GetWarriorAt(2, 2)));
+        // FC.Async2Sync(bt.AddBuff(new StarsTears(), map.GetWarriorAt(2, 3)));
+        // map.GetWarriorAt(2, 3).AddActiveSkill(new Butterfly());
         // FC.Async2Sync(bt.RemoveBuff(bb));
 
         // var skill = new Butterfly();

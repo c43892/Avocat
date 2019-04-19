@@ -14,27 +14,27 @@ static class BattleStageOnEvents
         bt.OnPlayerPrepared.Add((int player) =>
         {
             if (room.Battle.AllPrepared)
-            {
                 BattleStage.StartFighting();
-            }
         });
 
         bt.OnAddHP.Add((warrior, dhp) =>
         {
-            var avatar = BattleStage.GetAvatarByWarrior(warrior);
-            avatar.RefreshAttrs();
+            BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs();
         });
 
         bt.OnAddATK.Add((warrior, dATK) =>
         {
-            var avatar = BattleStage.GetAvatarByWarrior(warrior);
-            avatar.RefreshAttrs();
+            BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs();
         });
 
         bt.OnAddES.Add((warrior, des) =>
         {
-            var avatar = BattleStage.GetAvatarByWarrior(warrior);
-            avatar.RefreshAttrs();
+            BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs();
+        });
+
+        bt.OnTransfrom.Add((warrior, state) =>
+        {
+            BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs();
         });
     }
 }

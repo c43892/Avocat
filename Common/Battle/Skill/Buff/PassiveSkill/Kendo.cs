@@ -8,32 +8,28 @@ using System.Threading.Tasks;
 namespace Avocat
 {
     /// <summary>
-    /// 创伤效果，不可治疗
+    /// 游川隐
+    /// 剑道，攻击时施加创伤效果，使目标不可被治疗
     /// </summary>
-    public class Untreatable : BuffCountDown
+    public class Kendo : PassiveSkill
     {
-        public Untreatable(int num)
-            :base(num)
+        IEnumerator OnAfterAttack(Warrior attacker, Warrior target, List<string> flags)
         {
-        }
-
-        IEnumerator OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
-        {
-            if (warrior != Owner)
+            if (attacker != Owner)
                 yield break;
 
-            changeDhp(0);
+            yield return Battle.AddBuff(new Untreatable(2), target);
         }
 
         public override IEnumerator OnAttached()
         {
-            Battle.BeforeAddHP.Add(OnBeforeAddHp);
+            Battle.AfterAttack.Add(OnAfterAttack);
             yield return base.OnAttached();
         }
 
         public override IEnumerator OnDetached()
         {
-            Battle.BeforeAddHP.Del(OnBeforeAddHp);
+            Battle.AfterAttack.Del(OnAfterAttack);
             yield return base.OnDetached();
         }
     }

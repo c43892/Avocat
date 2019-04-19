@@ -231,8 +231,8 @@ namespace Avocat
                 target.ES = 0;
             }
 
-            // extraAttack 不影响行动标记
-            if (!attackFlags.Contains("extraAttack"))
+            // ExtraAttack 不影响行动标记
+            if (!attackFlags.Contains("ExtraAttack"))
                 attacker.ActionDone = true;
 
             yield return OnWarriorAttack.Invoke(attacker, target, attackFlags);
@@ -243,6 +243,22 @@ namespace Avocat
                 yield return OnWarriorDying.Invoke(target);
                 yield return RemoveWarrior(target);
             }
+        }
+
+        // 角色变形
+        public AsyncCalleeChain<Warrior, string> BeforeTransfrom = new AsyncCalleeChain<Warrior, string>();
+        public AsyncCalleeChain<Warrior, string> AfterTransfrom = new AsyncCalleeChain<Warrior, string>();
+        public AsyncCalleeChain<Warrior, string> OnTransfrom = new AsyncCalleeChain<Warrior, string>();
+        public IEnumerator Transform(Warrior warrior, string state)
+        {
+            Debug.Assert(warrior is ITransformable, "the warrior is not transformable");
+
+            yield return BeforeTransfrom.Invoke(warrior, state);
+
+            (warrior as ITransformable).State = state;
+
+            yield return OnTransfrom.Invoke(warrior, state);
+            yield return AfterTransfrom.Invoke(warrior, state);
         }
 
         // 玩家本回合行动结束
@@ -263,6 +279,9 @@ namespace Avocat
 
         #region 技能相关
 
+        /// <summary>
+        /// 添加 buff 或被动技能，如果目标对象为 null，则认为是场地效果
+        /// </summary>
         protected List<Buff> GroundBuffs = new List<Buff>();
         protected AsyncCalleeChain<Buff, Warrior> BeforeBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
         protected AsyncCalleeChain<Buff, Warrior> AfterBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
@@ -290,6 +309,9 @@ namespace Avocat
             yield return AfterBuffAttached.Invoke(buff, target);
         }
 
+        /// <summary>
+        /// 移除 buff 或被动技能效果
+        /// </summary>
         protected AsyncCalleeChain<Buff, Warrior> BeforeBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
         protected AsyncCalleeChain<Buff, Warrior> AfterBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
         public AsyncCalleeChain<Buff, Warrior> OnBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
