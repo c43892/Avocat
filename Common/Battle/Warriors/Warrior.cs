@@ -25,9 +25,11 @@ namespace Avocat
             ES = 0;
         }
 
+        public WarriorAI AI { get; set; }
+
         public int AvatarID { get; private set; } // 具体的角色形象 ID
 
-        public int Owner { get; set; } // 是属于哪一个玩家
+        public int Team { get; set; } // 是属于哪一个玩家
 
         public int MaxHP { get; set; } // 最大血量
         public int HP { get; set; } // 血量
@@ -80,7 +82,7 @@ namespace Avocat
         {
             var name = skill.Name;
             Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed.");
-            skill.Owner = this;
+            skill.Warrior = this;
             activeSkills[name] = skill;
 
             if (asDefaultActiveSkill)
@@ -103,14 +105,14 @@ namespace Avocat
         // 移除主动技能
         public void RemoveActiveSkill(ActiveSkill skill)
         {
-            Debug.Assert(skill.Owner == this, "skill named: " + skill.Name + " doest not exist.");
+            Debug.Assert(skill.Warrior == this, "skill named: " + skill.Name + " doest not exist.");
             RemoveActiveSkill(skill.Name);
         }
 
         // 移除主动技能
         public void RemoveActiveSkill(string name)
         {
-            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Owner == this, "skill named: " + name + " doest not exist.");
+            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Warrior == this, "skill named: " + name + " doest not exist.");
             activeSkills.Remove(name);
             if (defaultSkillName == name)
                 defaultSkillName = null;

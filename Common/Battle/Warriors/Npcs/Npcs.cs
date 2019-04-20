@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Avocat
 {
-    public class Npc : Warrior
+    public abstract class Npc : Warrior
     {
-        public WarriorAI AI { get; set; }
-
         public Npc(BattleMap map, int maxHP, int maxES)
             : base(map, maxHP, maxES)
         {

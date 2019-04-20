@@ -36,5 +36,10 @@ static class BattleStageOnEvents
         {
             BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs();
         });
+
+        bt.OnAddWarrior.Add((x, y, warrior) =>
+        {
+            BattleStage.CreateWarriorAvatar(x, y, warrior);
+        });
     }
 }

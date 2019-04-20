@@ -44,7 +44,7 @@ namespace Avocat
 
         protected override void SetupBuffAndSkills()
         {
-            FC.Async2Sync(Battle.AddBuff(new ArtisanSpirit(), this)); // 匠心
+            FC.Async2Sync(Battle.AddBuff(new TacticalCommand(() => State == "Archer" ? "EN" : "ATK"), this)); // 战术指挥
             AddActiveSkill(new FastAssistance()); // 快速援护
         }
     }

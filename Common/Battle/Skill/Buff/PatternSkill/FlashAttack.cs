@@ -21,8 +21,8 @@ namespace Avocat
         // 寻找附近目标攻击
         public override IEnumerator Fire()
         {
-            var target = Map.FindNearestTarget(Owner);
-            yield return BT.Attack(Owner, target, "ExtraAttack", "SuppressCounterAttack");
+            var target = Map.FindNearestTarget(Warrior);
+            yield return BT.Attack(Warrior, target, "ExtraAttack", "SuppressCounterAttack");
         }
     }
 }

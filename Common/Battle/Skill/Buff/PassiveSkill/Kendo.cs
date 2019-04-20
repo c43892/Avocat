@@ -15,7 +15,7 @@ namespace Avocat
     {
         IEnumerator OnAfterAttack(Warrior attacker, Warrior target, List<string> flags)
         {
-            if (attacker != Owner)
+            if (attacker != Warrior)
                 yield break;
 
             yield return Battle.AddBuff(new Untreatable(2), target);

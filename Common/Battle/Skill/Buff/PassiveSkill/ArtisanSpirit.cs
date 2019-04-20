@@ -15,7 +15,7 @@ namespace Avocat
     {
         IEnumerator AddEN(int player)
         {
-            if (player != Owner.Owner)
+            if (player != Warrior.Team)
                 yield break;
 
             var bt = Battle as BattlePVE;

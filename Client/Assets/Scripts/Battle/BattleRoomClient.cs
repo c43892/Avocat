@@ -69,7 +69,7 @@ public class BattleRoomClient
     // 执行攻击操作
     public void DoAttack(Warrior attacker, Warrior target)
     {
-        Debug.Assert(attacker.Owner == PlayerMe, "attacker should be in my team");
+        Debug.Assert(attacker.Team == PlayerMe, "attacker should be in my team");
         BMS.Send("Attack", (data) =>
         {
             data.Write(attacker.IDInMap);
@@ -98,7 +98,7 @@ public class BattleRoomClient
     // 释放主动技能
     public void FireActiveSkill(ActiveSkill skill)
     {
-        var warrior = skill.Owner;
+        var warrior = skill.Warrior;
         BMS.Send("FireActiveSkill", (data) =>
         {
             data.Write(warrior.IDInMap);

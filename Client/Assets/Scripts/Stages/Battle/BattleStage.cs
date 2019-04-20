@@ -50,7 +50,7 @@ public class BattleStage : MonoBehaviour
 
         BuildMapGrids();
         BuildMapItems();
-        BuildWarroirs();
+        CreateWarroirs();
         SetupAniPlayer(); // 地图动画播放
 
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
@@ -93,7 +93,7 @@ public class BattleStage : MonoBehaviour
 
     // 构建地图上的角色
     public MapAvatar[,] Avatars { get; private set; }
-    void BuildWarroirs()
+    void CreateWarroirs()
     {
         Avatars = new MapAvatar[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
@@ -102,20 +102,26 @@ public class BattleStage : MonoBehaviour
             if (warrior == null)
                 return;
 
-            var avatar = Instantiate(MapAvatar);
-            avatar.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/Soldier");
-            avatar.Warrior = warrior;
-            avatar.BattleStage = this;
-            avatar.transform.SetParent(MapRoot);
-            var sp = avatar.SpriteRender;
-            sp.sortingOrder = 2;
-            sp.flipX = warrior.Owner != Room.PlayerMe;
-
-            avatar.gameObject.SetActive(true);
-            avatar.RefreshAttrs();
-
-            SetAvatarPosition(avatar, x, y);
+            CreateWarriorAvatar(x, y, warrior);
         });
+    }
+
+    // 创建角色对应的显示对象
+    public void CreateWarriorAvatar(int x, int y, Warrior warrior)
+    {
+        var avatar = Instantiate(MapAvatar);
+        avatar.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/Soldier");
+        avatar.Warrior = warrior;
+        avatar.BattleStage = this;
+        avatar.transform.SetParent(MapRoot);
+        var sp = avatar.SpriteRender;
+        sp.sortingOrder = 2;
+        sp.flipX = warrior.Team != Room.PlayerMe;
+
+        avatar.gameObject.SetActive(true);
+        avatar.RefreshAttrs();
+
+        SetAvatarPosition(avatar, x, y);
     }
 
     // 根据角色获取 Avatar

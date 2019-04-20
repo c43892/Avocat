@@ -23,7 +23,7 @@ namespace Avocat
         // 检查卡牌模式
         public virtual IEnumerator CheckPatternTrigger(Warrior warrior, List<BattleCard> cards)
         {
-            if (warrior != Owner)
+            if (warrior != Warrior)
                 yield break;
 
             var matched = false;

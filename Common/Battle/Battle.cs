@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Swift;
 
 namespace Avocat
@@ -38,6 +39,9 @@ namespace Avocat
             Map = map;
         }
 
+        // 战场内的 ai 列表
+        public Dictionary<int, Dictionary<int, WarriorAI>> AIs { get; } = new Dictionary<int, Dictionary<int, WarriorAI>>();
+
         // 移除指定角色
         protected AsyncCalleeChain<Warrior> BeforeWarriorRemoved = new AsyncCalleeChain<Warrior>();
         protected AsyncCalleeChain<Warrior> AfterWarriorRemoved = new AsyncCalleeChain<Warrior>();
@@ -46,7 +50,8 @@ namespace Avocat
         {
             yield return BeforeWarriorRemoved.Invoke(warrior);
 
-            // 移除角色前，先移除身上的 buff 效果
+            // 移除角色前，先移除身上的 buff 效果和 AI
+            AIs[warrior.Team].Remove(warrior.IDInMap);
             for (var i = 0; i < warrior.Buffs.Count; i++)
                 yield return warrior.Buffs[i].OnDetached();
 
@@ -125,7 +130,7 @@ namespace Avocat
                 var warrior = Map.GetWarriorAt(x, y);
                 if (warrior != null && !warrior.IsDead)
                 {
-                    if (warrior.Owner == 1)
+                    if (warrior.Team == 1)
                         team1Survived = true;
                     else
                         team2Survived = true;
@@ -154,9 +159,17 @@ namespace Avocat
 
             Map.ForeachWarriors((i, j, warrior) =>
             {
-                warrior.Moved = false;
-                warrior.ActionDone = false;
+                if (warrior.Team == player)
+                {
+                    warrior.Moved = false;
+                    warrior.ActionDone = false;
+                }
             });
+
+            // 处理所属当前队伍的 ai
+            if (AIs.ContainsKey(player))
+                foreach (var id in AIs[player].Keys.ToArray())
+                    yield return AIs[player][id].ActFirst?.Invoke();
 
             yield return OnNextRoundStarted.Invoke(player);
             yield return AfterStartNextRound.Invoke(player);
@@ -210,7 +223,6 @@ namespace Avocat
         public AsyncCalleeChain<Warrior, Warrior, List<string>> BeforeAttack = new AsyncCalleeChain<Warrior, Warrior, List<string>>();
         public AsyncCalleeChain<Warrior, Warrior, List<string>> AfterAttack = new AsyncCalleeChain<Warrior, Warrior, List<string>>();
         public AsyncCalleeChain<Warrior, Warrior, List<string>> OnWarriorAttack = new AsyncCalleeChain<Warrior, Warrior, List<string>>(); // 角色进行攻击
-        public AsyncCalleeChain<Warrior> OnWarriorDying = new AsyncCalleeChain<Warrior>(); // 角色死亡
         public IEnumerator Attack(Warrior attacker, Warrior target, params string[] flags)
         {
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
@@ -224,12 +236,8 @@ namespace Avocat
 
             yield return BeforeAttack.Invoke(attacker, target, attackFlags);
 
-            target.ES -= attacker.ATK;
-            if (target.ES < 0)
-            {
-                target.HP += target.ES;
-                target.ES = 0;
-            }
+            var des = attacker.ATK >= target.ES ? -target.ES : -attacker.ATK;
+            var dhp = attacker.ATK >= target.ES ? -(attacker.ATK - target.ES) : 0;
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
@@ -238,11 +246,8 @@ namespace Avocat
             yield return OnWarriorAttack.Invoke(attacker, target, attackFlags);
             yield return AfterAttack.Invoke(attacker, target, attackFlags);
 
-            if (target.IsDead)
-            {
-                yield return OnWarriorDying.Invoke(target);
-                yield return RemoveWarrior(target);
-            }
+            if (des != 0) yield return AddES(target, des);
+            if (dhp != 0) yield return AddHP(target, dhp);
         }
 
         // 角色变形
@@ -269,10 +274,42 @@ namespace Avocat
         {
             yield return BeforeActionDone.Invoke(player);
             yield return OnActionDone.Invoke(player);
+
+            // 处理所属当前队伍的 ai
+            if (AIs.ContainsKey(player))
+                foreach (var id in AIs[player].Keys.ToArray())
+                    yield return AIs[player][id].ActLast?.Invoke();
+
             yield return AfterActionDone.Invoke(player);
 
             yield return TryBattleEnd(); // 回合结束时检查战斗结束条件
             yield return Move2NextPlayer(player); // 行动机会转移至玩家开始行动
+        }
+
+        // 添加角色到地图
+        public AsyncCalleeChain<int, int, Warrior> BeforeAddWarrior = new AsyncCalleeChain<int, int, Warrior>();
+        public AsyncCalleeChain<int, int, Warrior> AfterAddWarrior = new AsyncCalleeChain<int, int, Warrior>();
+        public AsyncCalleeChain<int, int, Warrior> OnAddWarrior = new AsyncCalleeChain<int, int, Warrior>();
+        public IEnumerator AddWarriorAt(int x, int y, Warrior warrior)
+        {
+            yield return BeforeAddWarrior.Invoke(x, y, warrior);
+
+            Map.SetWarriorAt(x, y, warrior);
+
+            if (warrior.AI != null)
+                ResetWarriorAI(warrior);
+
+            yield return OnAddWarrior.Invoke(x, y, warrior);
+            yield return AfterAddWarrior.Invoke(x, y, warrior);
+        }
+
+        // 重置角色 ai
+        public void ResetWarriorAI(Warrior warrior)
+        {
+            if (!AIs.ContainsKey(warrior.Team))
+                AIs[warrior.Team] = new Dictionary<int, WarriorAI>();
+
+            AIs[warrior.Team][warrior.IDInMap] = warrior.AI;
         }
 
         #endregion
@@ -294,7 +331,7 @@ namespace Avocat
             {
                 Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
                 target.Buffs.Add(buff);
-                buff.Owner = target;
+                buff.Warrior = target;
             }
             else
             {
@@ -317,7 +354,7 @@ namespace Avocat
         public AsyncCalleeChain<Buff, Warrior> OnBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
         public virtual IEnumerator RemoveBuff(Buff buff)
         {
-            var target = buff.Owner;
+            var target = buff.Warrior;
 
             yield return BeforeBuffRemoved.Invoke(buff, target);
 
@@ -333,7 +370,7 @@ namespace Avocat
             }
 
             yield return buff.OnDetached();
-            buff.Owner = null;
+            buff.Warrior = null;
             buff.Battle = null;
 
             yield return OnBuffRemoved.Invoke(buff, target);
@@ -401,6 +438,7 @@ namespace Avocat
         public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddHP = new AsyncCalleeChain<Warrior, int, Action<int>>();
         public AsyncCalleeChain<Warrior, int> AfterAddHP = new AsyncCalleeChain<Warrior, int>();
         public AsyncCalleeChain<Warrior, int> OnAddHP = new AsyncCalleeChain<Warrior, int>();
+        public AsyncCalleeChain<Warrior> OnWarriorDying = new AsyncCalleeChain<Warrior>(); // 角色死亡
         public IEnumerator AddHP(Warrior warrior, int dhp)
         {
             yield return BeforeAddHP.Invoke(warrior, dhp, (int _dhp) => dhp = _dhp);
@@ -409,6 +447,12 @@ namespace Avocat
 
             yield return OnAddHP.Invoke(warrior, dhp);
             yield return AfterAddHP.Invoke(warrior, dhp);
+
+            if (warrior.IsDead)
+            {
+                yield return OnWarriorDying.Invoke(warrior);
+                yield return RemoveWarrior(warrior);
+            }
         }
 
         // 角色加盾

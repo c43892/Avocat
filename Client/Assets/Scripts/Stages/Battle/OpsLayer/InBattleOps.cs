@@ -73,7 +73,7 @@ public class InBattleOps : StageOpsLayer
         switch (status)
         {
             case "selectingWarrior":
-                if (warrior != null && warrior.Owner == Room.PlayerMe)
+                if (warrior != null && warrior.Team == Room.PlayerMe)
                 {
                     // 选中己方角色，等待攻击指令
                     CurrentSelWarrior = warrior;
@@ -104,7 +104,7 @@ public class InBattleOps : StageOpsLayer
                         status = "selectingWarrior";
                     }
                 }
-                else if (warrior.Owner == Room.PlayerMe)
+                else if (warrior.Team == Room.PlayerMe)
                 {
                     // 点己方角色，切换操作对象
                     CurrentSelWarrior = warrior;
@@ -130,7 +130,7 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         var warrior = avatar == null ? null : avatar.Warrior;
-        if (warrior == null || warrior.Moved || warrior.Owner != Room.PlayerMe)
+        if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
         {
             // 从空地拖拽和点空地一样的效果
             CurrentSelWarrior = null;

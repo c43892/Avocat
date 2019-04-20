@@ -57,35 +57,16 @@ public class CombatTestDriver : MonoBehaviour
         var map = new BattleMap(10, 6); // test map
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }); // test battle
 
-        // npcs
-        var npc0 = new Boar(map) { Name = "野猪", AttackRange = 1, ATK = 1, MoveRange = 2 };
-        var npc1 = new Boar(map) { Name = "野猪", AttackRange = 1, ATK = 2, MoveRange = 2 };
-        var npc2 = new Boar(map) { Name = "野猪", AttackRange = 1, ATK = 3, MoveRange = 2 };
-        map.SetWarriorAt(5, 1, npc0);
-        map.SetWarriorAt(5, 3, npc1);
-        map.SetWarriorAt(5, 5, npc2);
-
-        // ai
-        bt.AddNpcWarrior(npc0, "StraightlyForwardAndAttack");
-        bt.AddNpcWarrior(npc1, "StraightlyForwardAndAttack");
-        bt.AddNpcWarrior(npc2, "StraightlyForwardAndAttack");
-        FC.Async2Sync(bt.AddBuff(new CounterAttack(), npc0));
-        FC.Async2Sync(bt.AddBuff(new CounterAttack(), npc1));
-        FC.Async2Sync(bt.AddBuff(new CounterAttack(), npc2));
-
         // heros
-        map.SetWarriorAt(2, 2, new DaiLiWan(bt) { Owner = 1 });
-        map.SetWarriorAt(2, 3, new LuoLiSi(bt) { Owner = 1 });
-        map.SetWarriorAt(2, 4, new YouYinChuan(bt) { Owner = 1 });
-        map.SetWarriorAt(2, 5, new BaLuoKe(bt) { Owner = 1 });
+        FC.Async2Sync(bt.AddWarriorAt(2, 1, new DaiLiWan(bt) { Team = 1 }));
+        FC.Async2Sync(bt.AddWarriorAt(2, 2, new LuoLiSi(bt) { Team = 1 }));
+        FC.Async2Sync(bt.AddWarriorAt(2, 3, new YouYinChuan(bt) { Team = 1 }));
+        FC.Async2Sync(bt.AddWarriorAt(2, 4, new BaLuoKe(bt) { Team = 1 }));
 
-        // FC.Async2Sync(bt.AddBuff(new FlashAttack(), map.GetWarriorAt(2, 2)));
-        // FC.Async2Sync(bt.AddBuff(new StarsTears(), map.GetWarriorAt(2, 3)));
-        // map.GetWarriorAt(2, 3).AddActiveSkill(new Butterfly());
-        // FC.Async2Sync(bt.RemoveBuff(bb));
-
-        // var skill = new Butterfly();
-        // map.GetWarriorAt(2, 2).AddActiveSkill(skill);
+        // npcs
+        FC.Async2Sync(bt.AddWarriorAt(5, 1, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
+        FC.Async2Sync(bt.AddWarriorAt(5, 3, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
+        FC.Async2Sync(bt.AddWarriorAt(5, 5, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };

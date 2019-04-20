@@ -52,7 +52,7 @@ static class BattleStageUIOnEvents
 
         bt.OnCardsConsumed.Add((warrior, cards) =>
         {
-            if (warrior.Owner != room.PlayerMe)
+            if (warrior.Team != room.PlayerMe)
                 return;
 
             var availableCards = new List<BattleCard>();

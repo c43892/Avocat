@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Replay\BattleReplay.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\ActiveSkill.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\Butterfly.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\DeployEMPConnon.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\FastAssistance.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\BattleCard\CardATK.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Buff.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\LuoLiSi.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\YouYinChuan.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\Boar.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\CannonEMP.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\Npcs.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Warrior.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\PriorityQueue.cs" />

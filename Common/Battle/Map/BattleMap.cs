@@ -128,6 +128,9 @@ namespace Avocat
         // 判断指定位置是否已经被占据
         public bool BlockedAt(int x, int y)
         {
+            if (x < 0 || x >= Width || y < 0 || y >= Height)
+                return true;
+
             return (warriors[x, y] != null && warriors[x, y].IsObstacle) || (items[x, y] != null && items[x, y].IsObstacle);
         }
 
@@ -142,7 +145,7 @@ namespace Avocat
             warrior.Map.ForeachWarriors((x, y, target) =>
             {
                 // 过滤队友和已经死亡的敌人
-                if (target.IsDead || target.Owner == warrior.Owner)
+                if (target.IsDead || target.Team == warrior.Team)
                     return;
 
                 if (nearestTarget == null || MU.ManhattanDist(fx, fy, x, y) < MU.ManhattanDist(fx, fy, tx, ty))

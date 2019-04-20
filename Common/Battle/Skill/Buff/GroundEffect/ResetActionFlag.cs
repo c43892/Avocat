@@ -18,7 +18,7 @@ namespace Avocat
             {
                 Map.ForeachWarriors((i, j, warrior) =>
                 {
-                    if (warrior.Owner != player)
+                    if (warrior.Team != player)
                         return;
 
                     warrior.Moved = false; // 重置行动标记

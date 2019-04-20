@@ -14,7 +14,6 @@ namespace Avocat
     public class RobotPlayer
     {
         Battle Battle { get; set; }
-        public List<WarriorAI> WarriorAIs { get; } = new List<WarriorAI>();
 
         public RobotPlayer(Battle battle)
         {
@@ -27,9 +26,6 @@ namespace Avocat
             // 只处理机器人回合开始
             if (player != 2)
                 yield break;
-
-            for (var i = 0; i < WarriorAIs.Count; i++)
-                yield return WarriorAIs[i].Act();
 
             yield return Battle.ActionDone(2);
         }

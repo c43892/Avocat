@@ -18,7 +18,7 @@ public class PreparingOps : StageOpsLayer
     public override void OnClicked(float x, float y)
     {
         var avatar = BattleStage.Avatars[(int)x, (int)y];
-        if (currentSelAvatar == null && avatar != null && avatar.Warrior.Owner == Room.PlayerMe)
+        if (currentSelAvatar == null && avatar != null && avatar.Warrior.Team == Room.PlayerMe)
         {
             // 选中要移动的角色
             currentSelAvatar = avatar;
@@ -42,7 +42,7 @@ public class PreparingOps : StageOpsLayer
         }
 
         var avatar = BattleStage.Avatars[(int)x, (int)y];
-        if (avatar == null || avatar.Warrior.Owner != Room.PlayerMe)
+        if (avatar == null || avatar.Warrior.Team != Room.PlayerMe)
             return;
 
         // 显示指针，并隐藏准备拖拽的对象

@@ -22,9 +22,9 @@ namespace Avocat
         // 主动释放
         public override IEnumerator Fire()
         {
-            var owner = Owner as BaLuoKe;
+            var owner = Warrior as BaLuoKe;
             Debug.Assert(owner != null, "only BaLuoKe can use this skill");
-            yield return Battle.Transform(Owner, owner.State == "Lancer" ? "Archer" : "Lancer");
+            yield return Battle.Transform(Warrior, owner.State == "Lancer" ? "Archer" : "Lancer");
         }
     }
 }

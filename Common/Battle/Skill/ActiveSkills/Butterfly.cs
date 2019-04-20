@@ -27,7 +27,7 @@ namespace Avocat
                 for (var y = 0; y < map.Height; y++)
                 {
                     var warrior = map.GetWarriorAt(x, y);
-                    if (warrior == null || warrior.Owner != Owner.Owner)
+                    if (warrior == null || warrior.Team != Warrior.Team)
                         continue;
 
                     yield return Battle.AddHP(warrior, warrior.MaxHP / 2);

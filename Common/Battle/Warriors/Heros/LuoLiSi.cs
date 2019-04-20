@@ -24,6 +24,7 @@ namespace Avocat
         protected override void SetupBuffAndSkills()
         {
             FC.Async2Sync(Battle.AddBuff(new ArtisanSpirit(), this)); // 匠心
+            AddActiveSkill(new DeployEMPConnon()); // 炮台
         }
     }
 }

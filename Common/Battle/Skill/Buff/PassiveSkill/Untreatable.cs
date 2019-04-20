@@ -19,7 +19,7 @@ namespace Avocat
 
         IEnumerator OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
         {
-            if (warrior != Owner)
+            if (warrior != Warrior)
                 yield break;
 
             changeDhp(0);

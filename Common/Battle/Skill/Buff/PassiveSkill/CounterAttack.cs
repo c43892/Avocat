@@ -14,7 +14,7 @@ namespace Avocat
     {
         IEnumerator AttackBack(Warrior attacker, Warrior target, List<string> flags)
         {
-            if (target != Owner || flags.Contains("SuppressCounterAttack"))
+            if (target != Warrior || flags.Contains("SuppressCounterAttack"))
                 yield break;
 
             yield return Battle.Attack(target, attacker, "CounterAttack");

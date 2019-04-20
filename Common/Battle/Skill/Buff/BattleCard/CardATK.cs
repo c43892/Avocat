@@ -21,13 +21,13 @@ namespace Avocat
 
         public override IEnumerator OnAttached()
         {
-            yield return Battle.AddATK(Owner, ATK);
+            yield return Battle.AddATK(Warrior, ATK);
             yield return base.OnAttached();
         }
 
         public override IEnumerator OnDetached()
         {
-            yield return Owner.Battle.AddATK(Owner, -ATK);
+            yield return Warrior.Battle.AddATK(Warrior, -ATK);
             yield return base.OnDetached();
         }
     }

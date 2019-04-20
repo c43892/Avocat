@@ -16,17 +16,24 @@ namespace Avocat
         {
             switch (aiType)
             {
-                case "StraightlyForwardAndAttack":
-                    ai.Act = () => StraightlyForwardAndAttack(ai);
+                case "Boar":
+                    ai.ActFirst = () => StraightForwardAndAttack(ai, ai.Warrior.MoveRange);
+                    break;
+                case "EMPConnon":
+                    ai.ActLast = () => CombineAIs(StraightForwardAndAttack(ai), AddHpRoundly(ai, (warrior) => -MU.Clamp((int)(warrior.MaxHP * 0.4f), 1, warrior.HP)));
                     break;
                 case "Dumb":
+                    ai.ActFirst = () => Dumb(ai);
+                    break;
                 default:
-                    ai.Act = () => Dumb(ai);
+                    Debug.Assert(false, "no such type of ai: " + aiType);
                     break;
             }
 
             return ai;
         }
+
+        #region 基本组成功能
 
         // 哑 AI，不做任何事情
         static IEnumerator Dumb(WarriorAI ai)
@@ -35,13 +42,10 @@ namespace Avocat
         }
 
         // 直线走向最近的目标并攻击之
-        static IEnumerator StraightlyForwardAndAttack(WarriorAI ai)
+        static IEnumerator StraightForwardAndAttack(WarriorAI ai, int maxMovingDist = 0)
         {
-            var warrior = ai.Warrior;
-            if (warrior.IsDead)
-                yield break;
-
             // 先寻找最近目标
+            var warrior = ai.Warrior;
             var target = warrior.Map.FindNearestTarget(warrior);
             if (target == null)
                 yield break;
@@ -49,7 +53,7 @@ namespace Avocat
             var bt = warrior.Map.Battle;
 
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
-            if (!warrior.InAttackRange(tx, ty)) // 不在攻击范围内，则先移动过去
+            if (!warrior.InAttackRange(tx, ty) && maxMovingDist > 0) // 不在攻击范围内，则先移动过去
             {
                 warrior.GetPosInMap(out int fx, out int fy);
 
@@ -58,7 +62,7 @@ namespace Avocat
                 path.AddRange(warrior.Map.FindPath(fx, fy, tx, ty, 1));
 
                 // 限制移动距离
-                while (path.Count > warrior.MoveRange * 2)
+                while (path.Count > maxMovingDist * 2)
                     path.RemoveRange(path.Count - 2, 2);
 
                 if (path.Count > 0)
@@ -70,7 +74,22 @@ namespace Avocat
                 yield return bt.Attack(warrior, target);
         }
 
-        #region 基本组成功能
+        // 组合任意多个 ai
+        static IEnumerator CombineAIs(params IEnumerator[] ais)
+        {
+            for (var i = 0; i < ais.Length; i++)
+                yield return ais[i];
+        }
+        
+        // 每回合加血
+        static IEnumerator AddHpRoundly(WarriorAI ai, Func<Warrior, int> calcDhp)
+        {
+            var warrior = ai.Warrior;
+            var bt = warrior.Battle;
+            var dhp = calcDhp(warrior);
+            yield return bt.AddHP(warrior, dhp);
+        }
+
 
         #endregion
     }

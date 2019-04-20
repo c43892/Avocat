@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swift;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,10 @@ namespace Avocat
         public Boar(BattleMap map)
             : base(map, 10, 0)
         {
+            Name = "野猪";
+            MoveRange = 2;
+            AI = new WarriorAI(this).Build("Boar"); // AI
+            FC.Async2Sync(Battle.AddBuff(new CounterAttack(), this)); // 反击 buff
         }
     }
 }

@@ -60,7 +60,7 @@ namespace Avocat
             var moveRange = AvailableCards.Count;
             Map.ForeachWarriors((x, y, warrior) =>
             {
-                if (warrior.Owner == PlayerIndex)
+                if (warrior.Team == PlayerIndex)
                     warrior.MoveRange = moveRange;
             });
         }
@@ -84,20 +84,13 @@ namespace Avocat
             Robot = new RobotPlayer(this);
         }
 
-        // 添加 npc 怪物
-        public void AddNpcWarrior(Npc npc, string aiType)
-        {
-            npc.Owner = 2;
-            Robot.WarriorAIs.Add((new WarriorAI(npc)).Build(aiType));
-        }
-
         // 移动消耗卡牌
         public AsyncCalleeChain<Warrior, List<BattleCard>> BeforeCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
         public AsyncCalleeChain<Warrior, List<BattleCard>> AfterCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
         public AsyncCalleeChain<Warrior, List<BattleCard>> OnCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
         IEnumerator OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
         {
-            if (warrior.Owner != PlayerIndex)
+            if (warrior.Team != PlayerIndex)
                 yield break;
 
             var movedPathLen = movedPath.Count / 2;
