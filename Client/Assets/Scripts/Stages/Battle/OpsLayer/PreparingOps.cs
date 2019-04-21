@@ -47,8 +47,8 @@ public class PreparingOps : StageOpsLayer
 
         // 显示指针，并隐藏准备拖拽的对象
         currentSelAvatar = avatar;
-        PointerIndicator.gameObject.SetActive(true);
-        PointerIndicator.sprite = avatar.SpriteRender.sprite;
+        PointerIndicator.SetActive(true);
+        PointerIndicator.GetComponentInChildren<TextMesh>().text = avatar.Warrior.Name;
         currentSelAvatar.gameObject.SetActive(false);
     }
 
@@ -69,7 +69,7 @@ public class PreparingOps : StageOpsLayer
 
         // 隐藏指针，执行交换操作，并显示被拖拽对象
         Room.DoExchangeWarroirsPosition((int)fx, (int)fy, (int)cx, (int)cy);
-        PointerIndicator.gameObject.SetActive(false);
+        PointerIndicator.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);
         currentSelAvatar = null;
     }

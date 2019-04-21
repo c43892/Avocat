@@ -9,7 +9,7 @@ public class StageOpsLayer
 {
     public BattleStage BattleStage { get; set; }
     public BattleRoomClient Room { get { return BattleStage.Room; } }
-    public SpriteRenderer PointerIndicator { get { return BattleStage.PointerIndicator; } }
+    public GameObject PointerIndicator { get { return BattleStage.PointerIndicator; } }
     public Transform MapRoot { get { return BattleStage.MapRoot; } }
 
     public StageOpsLayer(BattleStage bs)

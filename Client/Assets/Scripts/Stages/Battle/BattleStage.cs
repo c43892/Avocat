@@ -11,7 +11,7 @@ using System;
 public class BattleStage : MonoBehaviour
 {
     // 显示操作指针
-    public SpriteRenderer PointerIndicator;
+    public GameObject PointerIndicator;
 
     // 底层地图操作处理
     public MapGroundLayer MapGround;
