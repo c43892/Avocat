@@ -13,7 +13,7 @@ using Avocat;
 /// <summary>
 /// 战斗卡牌 UI
 /// </summary>
-public class BattleCardUI : MonoBehaviour, IDragHandler, IDropHandler, IBeginDragHandler, IEndDragHandler
+public class BattleCardUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IDropHandler, IBeginDragHandler, IEndDragHandler
 {
     // 拖动中的卡牌
     static BattleCardUI CardInDragging { get; set; }
@@ -42,10 +42,14 @@ public class BattleCardUI : MonoBehaviour, IDragHandler, IDropHandler, IBeginDra
     } BattleCard card;
 
     Vector2 draggingStartPos = Vector2.zero;
-        public void OnBeginDrag(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        draggingStartPos = eventData.position;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
     {
         CardInDragging = this;
-        draggingStartPos = eventData.position;
         originalPos = transform.GetChild(0).localPosition;
         CardInDragging.transform.SetSiblingIndex(-1);
     }
