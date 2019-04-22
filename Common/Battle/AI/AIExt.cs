@@ -20,7 +20,7 @@ namespace Avocat
                     ai.ActFirst = () => StraightForwardAndAttack(ai, ai.Warrior.MoveRange);
                     break;
                 case "EMPConnon":
-                    ai.ActLast = () => CombineAIs(StraightForwardAndAttack(ai), AddHpRoundly(ai, (warrior) => -MU.Clamp((int)(warrior.MaxHP * 0.4f), 1, warrior.HP)));
+                    ai.ActLast = () => CombineAIs(StraightForwardAndAttack(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
                     break;
                 case "Dumb":
                     ai.ActFirst = () => Dumb(ai);

@@ -105,4 +105,17 @@ public class BattleRoomClient
             data.Write(skill.Name);
         });
     }
+
+    // 释放主动技能，带目标
+    public void FireActiveSkillAt(ActiveSkill skill, int x, int y)
+    {
+        var warrior = skill.Warrior;
+        BMS.Send("FireActiveSkillAt", (data) =>
+        {
+            data.Write(warrior.IDInMap);
+            data.Write(skill.Name);
+            data.Write(x);
+            data.Write(y);
+        });
+    }
 }

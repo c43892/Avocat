@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using Swift;
 using Avocat;
 
-public class CombatTestDriver : MonoBehaviour
+public class CombatTestDriver : GameDriver
 {
     public BattleStage BattleStage;
     public GameObject PreparingUI;
@@ -27,8 +27,10 @@ public class CombatTestDriver : MonoBehaviour
 
     BattleReplay currentReplay;
 
-    public void Start()
+    public new void Start()
     {
+        base.Start();
+
         msgLooper = new BattleMessageLooper();
 
         // setup the local replay system
@@ -48,7 +50,8 @@ public class CombatTestDriver : MonoBehaviour
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
 
-        StartCoroutine(msgLooper.Loop());
+        // StartCoroutine(msgLooper.Loop());
+        GameCore.Instance.Get<CoroutineManager>().Start(msgLooper.Loop());
     }
 
     // 开始新游戏
@@ -79,7 +82,7 @@ public class CombatTestDriver : MonoBehaviour
         // build up the whole scene
         BattleStage.Build(room);
 
-        // connect the logic event to the stage and ui logic
+        // link the logic event to the stage and ui logic
         BattleStage.SetupEventHandler(room);
         BattleStageUI.SetupEventHandler(room);
         this.SetupEventHandler(room);

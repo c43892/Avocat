@@ -187,7 +187,7 @@ namespace Avocat
         {
             yield return BeforeAddEN.Invoke(den, (int _den) => den = _den);
 
-            Energy = MU.Clamp(Energy + den, 0, MaxEnergy);
+            Energy = (Energy + den).Clamp(0, MaxEnergy);
 
             yield return OnAddEN.Invoke(den);
             yield return AfterAddEN.Invoke(den);
@@ -209,6 +209,24 @@ namespace Avocat
 
             yield return OnFireSkill.Invoke(skill);
             yield return AfterFireSkill.Invoke(skill);
+        }
+
+        // 释放主动技能
+        protected AsyncCalleeChain<ActiveSkill, int, int> BeforeFireSkillAt = new AsyncCalleeChain<ActiveSkill, int, int>();
+        protected AsyncCalleeChain<ActiveSkill, int, int> AfterFireSkillAt = new AsyncCalleeChain<ActiveSkill, int, int>();
+        public AsyncCalleeChain<ActiveSkill, int, int> OnFireSkillAt = new AsyncCalleeChain<ActiveSkill, int, int>();
+        public virtual IEnumerator FireSkillAt(ActiveSkill skill, int x, int y)
+        {
+            if (Energy < skill.EnergyCost)
+                yield break;
+
+            yield return BeforeFireSkillAt.Invoke(skill, x, y);
+
+            yield return AddEN(-skill.EnergyCost);
+            yield return skill.FireAt(x, y);
+
+            yield return OnFireSkillAt.Invoke(skill, x, y);
+            yield return AfterFireSkillAt.Invoke(skill, x, y);
         }
 
         #endregion

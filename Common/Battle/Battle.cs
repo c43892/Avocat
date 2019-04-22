@@ -244,10 +244,11 @@ namespace Avocat
                 attacker.ActionDone = true;
 
             yield return OnWarriorAttack.Invoke(attacker, target, attackFlags);
-            yield return AfterAttack.Invoke(attacker, target, attackFlags);
 
             if (des != 0) yield return AddES(target, des);
             if (dhp != 0) yield return AddHP(target, dhp);
+
+            yield return AfterAttack.Invoke(attacker, target, attackFlags);
         }
 
         // 角色变形
@@ -443,7 +444,7 @@ namespace Avocat
         {
             yield return BeforeAddHP.Invoke(warrior, dhp, (int _dhp) => dhp = _dhp);
 
-            warrior.HP = MU.Clamp(warrior.HP + dhp, 0, warrior.MaxHP);
+            warrior.HP = (warrior.HP + dhp).Clamp(0, warrior.MaxHP);
 
             yield return OnAddHP.Invoke(warrior, dhp);
             yield return AfterAddHP.Invoke(warrior, dhp);
@@ -463,7 +464,7 @@ namespace Avocat
         {
             yield return BeforeAddES.Invoke(warrior, des, (int _des) => des = _des);
 
-            warrior.ES = MU.Clamp(warrior.ES + des, 0, warrior.MaxES);
+            warrior.ES = (warrior.ES + des).Clamp(0, warrior.MaxES);
 
             yield return OnAddES.Invoke(warrior, des);
             yield return AfterAddES.Invoke(warrior, des);

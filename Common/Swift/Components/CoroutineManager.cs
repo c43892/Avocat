@@ -164,41 +164,6 @@ namespace Swift
         }
     }
 
-    public class YieldOp
-    {
-        public YieldOp(IEnumerator e)
-        {
-            this.e = e;
-            firstTime = true;
-        }
-
-#if JS
-        [Bridge.Script(@"if (this.firstTime) {
-                this.firstTime = false;
-                this.v = this.e.next();
-            }
-            return this.v.value;")]
-#endif
-        public object Current()
-        {
-            return e.Current;
-        }
-
-#if JS
-        [Bridge.Script(@"this.v = this.e.next();
-            return !this.v.done;")]
-#endif
-        public bool MoveNext()
-        {
-            return this.e.MoveNext();
-        }
-
-		IEnumerator e;
-#pragma warning disable 414
-        bool firstTime;
-#pragma warning restore 414
-    }
-
     /// <summary>
     /// 协程管理器
     /// </summary>
@@ -212,14 +177,21 @@ namespace Swift
             // 构造器，需要提供对应的迭代器
             public Coroutine(IEnumerator enumerator)
             {
-                //e = enumerator;
-                op = new YieldOp(enumerator);
+                op = enumerator;
+            }
+
+            bool IEnumeratorNext(IEnumerator itor)
+            {
+                if (itor.Current is IEnumerator && IEnumeratorNext(itor.Current as IEnumerator))
+                    return true;
+                else
+                    return itor.MoveNext();
             }
 
             // 推动协程
             public void Next(int te)
             {
-                this.C = op.Current();
+                var C = op.Current;
 
                 if ((C is TimeWaiter) && ((TimeWaiter)C).t > 0)   // 等待时间
                     ((TimeWaiter)C).t -= te;
@@ -237,41 +209,27 @@ namespace Swift
                     }
                     else
                     {
-                        finished = !op.MoveNext();
+                        Finished = !op.MoveNext();
                         if (ew.IsAutoReset)
                             ew.Reset();
                     }
                 }
+                else if (C is IEnumerator)
+                {
+                    if (!IEnumeratorNext(C as IEnumerator))
+                        Finished = !op.MoveNext();
+                }
                 else if ((C is Coroutine) && !((Coroutine)C).Finished) // 如果还有子协程，则先等子协程处理完
                     return;
                 else
-                    finished = !op.MoveNext();
+                    Finished = !op.MoveNext();
             }
 
             // 协程是否已经结束
-            public bool Finished
-            {
-                get
-                {
-                    return finished;
-                }
-                set
-                {
-                    finished = value;
-                }
-            }
+            public bool Finished { get; set; } = false;
 
             // 要执行的迭代器
-            //IEnumerator e = null;
-            YieldOp op = null;
-            // 结束标记
-            bool finished = false;
-
-            object C = null; // e.Current
-			
-#pragma warning disable 414
-			bool firstTime = true; // 首次，即还未 Next 过（JS使用）
-#pragma warning restore 414
+            IEnumerator op = null;
         }
         
         // 终止一个协程

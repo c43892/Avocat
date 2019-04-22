@@ -7,12 +7,12 @@ using UnityEngine;
 
 public class GameDriver : MonoBehaviour
 {
-    void Awake()
+    protected void Awake()
     {
         GameCore.Instance.Initialize();
     }
 
-    void Start()
+    protected void Start()
     {
         Application.runInBackground = true;
     }

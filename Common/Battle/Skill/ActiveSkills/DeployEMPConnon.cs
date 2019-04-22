@@ -19,28 +19,13 @@ namespace Avocat
         // 能量消耗
         public override int EnergyCost { get => 30; }
 
-        // 主动释放
-        public override IEnumerator Fire()
-        {
-            var foundPos = false;
-            Warrior.GetPosInMap(out int cx, out int cy);
-            int px = 0;
-            int py = 0;
-            FC.For2(-1, 2, -1, 2, (x, y) =>
-            {
-                if (!Map.BlockedAt(cx + x, cy + y))
-                {
-                    foundPos = true;
-                    px = cx + x;
-                    py = cy + y;
-                }
-            }, () => !foundPos);
+        public override string ActiveSkillType { get; } = "fireAt";
 
-            if (foundPos)
-            {
-                var connon = new CannonEMP(Map, Warrior.HP) { Team = Warrior.Team, ATK = Warrior.ATK };
-                yield return Battle.AddWarriorAt(px, py, connon);
-            }
+        // 主动释放
+        public override IEnumerator FireAt(int x, int y)
+        {
+            var connon = new CannonEMP(Map, Warrior.HP) { Team = Warrior.Team, ATK = Warrior.ATK };
+            yield return Battle.AddWarriorAt(x, y, connon);
         }
     }
 }

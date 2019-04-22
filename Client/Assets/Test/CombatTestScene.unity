@@ -2727,10 +2727,6 @@ PrefabInstance:
       propertyPath: BattleStage
       value: 
       objectReference: {fileID: 2077963860}
-    - target: {fileID: 334254732, guid: f87b7ac3c444b9049a7d146227ab6fcd, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnFireActiveSkill
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f87b7ac3c444b9049a7d146227ab6fcd, type: 3}
 --- !u!1001 &5360679074138491635

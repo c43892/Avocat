@@ -68,7 +68,13 @@ public class BattleStageUI : MonoBehaviour
         var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
         Debug.Assert(skill != null, "there is no default active skill");
 
-        Room.FireActiveSkill(skill);
+        if (skill.ActiveSkillType == "fireAt")
+        {
+            // confirm the position and fire at it
+            Room.FireActiveSkillAt(skill, 0, 0);
+        }
+        else
+            Room.FireActiveSkill(skill);
     }
 
     // 检查当前鼠标是否点击在 ui 上

@@ -46,6 +46,17 @@ namespace Avocat
                 var skill = warrior.GetActiveSkillByName(skillName);
                 return Battle.FireSkill(skill);
             });
+
+            bmp.HandleMsg("FireActiveSkillAt", (player, data) =>
+            {
+                var warriorID = data.ReadInt();
+                var skillName = data.ReadString();
+                var x = data.ReadInt();
+                var y = data.ReadInt();
+                var warrior = Battle.Map.GetWarriorsByID(warriorID);
+                var skill = warrior.GetActiveSkillByName(skillName);
+                return Battle.FireSkillAt(skill, x, y);
+            });
         }
     }
 }
