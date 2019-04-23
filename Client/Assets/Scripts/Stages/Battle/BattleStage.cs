@@ -114,9 +114,9 @@ public class BattleStage : MonoBehaviour
         avatar.Warrior = warrior;
         avatar.BattleStage = this;
         avatar.transform.SetParent(MapRoot);
-        var sp = avatar.SpriteRender;
-        sp.sortingOrder = 2;
-        sp.flipX = warrior.Team != Room.PlayerMe;
+        //var sp = avatar.GetComponent<SpriteRenderer>();
+        //sp.sortingOrder = 2;
+        //sp.flipX = warrior.Team != Room.PlayerMe;
 
         avatar.gameObject.SetActive(true);
         avatar.RefreshAttrs();

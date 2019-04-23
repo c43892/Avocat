@@ -12,7 +12,7 @@ namespace Avocat
     public class BattleMapItem
     {
         public string Name { get; set; }
-        public BattleMap Map { get; set; }
+        public BattleMap Map { get; private set; }
         public Battle Battle { get { return Map?.Battle; } }
         public int IDInMap { get; private set; }
         public bool IsObstacle { get; set; } // 是否是障碍，占据地块

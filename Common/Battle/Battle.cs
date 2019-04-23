@@ -55,9 +55,7 @@ namespace Avocat
             for (var i = 0; i < warrior.Buffs.Count; i++)
                 yield return warrior.Buffs[i].OnDetached();
 
-            warrior.GetPosInMap(out int x, out int y);
-            Map.SetWarriorAt(x, y, null);
-            warrior.Map = null;
+            Map.RemoveWarrior(warrior);
 
             yield return OnWarriorRemoved.Invoke(warrior);
             yield return AfterWarriorRemoved.Invoke(warrior);
@@ -86,8 +84,6 @@ namespace Avocat
         {
             if (fx == tx && fy == ty)
                 yield break;
-
-            Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
             yield return BeforeExchangeWarroirsPosition.Invoke(fx, fy, tx, ty);
 

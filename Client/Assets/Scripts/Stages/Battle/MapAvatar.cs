@@ -54,29 +54,19 @@ public class MapAvatar : MonoBehaviour
         }
     } int y;
 
-    public SpriteRenderer SpriteRender {
-        get
-        {
-            if (sr == null)
-                sr = GetComponent<SpriteRenderer>();
-
-            return sr;
-        }
-    } SpriteRenderer sr;
-
-    public static readonly Color ColorDefault = Color.white;
-    public static readonly Color ColorSelected = Color.green;
+    public static readonly Color ColorDefault = Color.black;
+    public static readonly Color ColorSelected = Color.blue;
     public static readonly Color ColorAttacked = Color.gray;
 
     public Color Color
     {
         get
         {
-            return sr.color;
+            return transform.Find("Name").Find("Name").GetComponent<TextMesh>().color;
         }
         set
         {
-            sr.color = value;
+            transform.Find("Name").Find("Name").GetComponent<TextMesh>().color = value;
         }
     }
 }
