@@ -56,7 +56,6 @@ public class BattleStage : MonoBehaviour
         BuildMapGrids();
         BuildMapItems();
         BuildAvatars();
-        SetupAniPlayer(); // 地图动画播放
 
         PreparingOps = new PreparingOps(this); // 准备阶段
         InBattleOps = new InBattleOps(this); // 战斗内一般阶段
@@ -178,7 +177,7 @@ public class BattleStage : MonoBehaviour
         return mapItem;
     }
 
-    void ForeachAvatar(Action<int, int, MapAvatar> act, Func<bool> continueCondition = null)
+    public void ForeachAvatar(Action<int, int, MapAvatar> act, Func<bool> continueCondition = null)
     {
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
@@ -190,7 +189,7 @@ public class BattleStage : MonoBehaviour
         }, continueCondition);
     }
 
-    void ForeachItem(Action<int, int, MapItem> act, Func<bool> continueCondition = null)
+    public void ForeachItem(Action<int, int, MapItem> act, Func<bool> continueCondition = null)
     {
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
@@ -203,7 +202,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 设置角色位置
-    void SetAvatarPosition(MapAvatar avatar, int x, int y)
+    public void SetAvatarPosition(MapAvatar avatar, int x, int y)
     {
         if (avatar != null)
         {
@@ -215,7 +214,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 设置道具位置
-    void SetItemPosition(MapItem item, int x, int y)
+    public void SetItemPosition(MapItem item, int x, int y)
     {
         if (item != null)
         {
@@ -255,115 +254,4 @@ public class BattleStage : MonoBehaviour
         MapGround.OnDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnDragging(fx, fy, cx, cy);
         MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);
     }
-
-    #region 动画播放衔接
-
-    public MapAniPlayer AniPlayer
-    {
-        get
-        {
-            if (aniPlayer == null)
-                aniPlayer = GetComponent<MapAniPlayer>();
-
-            return aniPlayer;
-        }
-    } MapAniPlayer aniPlayer;
-
-    // 挂接动画播放事件
-    void SetupAniPlayer()
-    {
-        // 角色位置变化
-        Room.Battle.OnWarriorPositionExchanged.Add((int fromX, int fromY, int toX, int toY) =>
-        {
-            var avFrom = Avatars[fromX, fromY];
-            var avTo = Avatars[toX, toY];
-
-            SetAvatarPosition(avFrom, toX, toY);
-            SetAvatarPosition(avTo, fromX, fromY);
-        });
-
-        // 回合开始
-        Room.Battle.OnNextRoundStarted.Add((int player) =>
-        {
-            if (player != Room.PlayerMe)
-                return;
-
-            ForeachAvatar((x, y, avatar) => avatar.RefreshAttrs());
-        });
-
-        // 角色攻击
-        IEnumerator OnAttacking(Warrior attacker, Warrior target, List<string> flags)
-        {
-            var avatar = GetAvatarByWarrior(attacker);
-            var targetAvatar = GetAvatarByWarrior(target);
-            yield return AniPlayer.MakeAttacking2(avatar, targetAvatar);
-            avatar.RefreshAttrs();
-            targetAvatar.RefreshAttrs();
-        }
-        Room.Battle.OnWarriorAttack.Add(OnAttacking);
-
-        // 角色移动
-        IEnumerator OnWarriorMovingOnPath(Warrior warrior, int x, int y, List<int> path)
-        {
-            var avatar = Avatars[x, y];
-            Debug.Assert(avatar != null && avatar.Warrior == warrior, "moving target conflicted");
-
-            var tx = path[path.Count - 2];
-            var ty = path[path.Count - 1];
-
-            yield return AniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y));
-
-            SetAvatarPosition(Avatars[tx, ty], x, y);
-            SetAvatarPosition(avatar, tx, ty);
-
-            avatar.RefreshAttrs();
-        }
-        Room.Battle.OnWarriorMovingOnPath.Add(OnWarriorMovingOnPath);
-
-        // 回合开始
-        Room.Battle.OnNextRoundStarted.Add((int player) =>
-        {
-            ForeachAvatar((x, y, avatar) =>
-            {
-                if (avatar.Warrior.Team == player)
-                    avatar.RefreshAttrs();
-            });
-        });
-
-        // 回合结束
-        Room.Battle.OnActionDone.Add((int player) =>
-        {
-            ForeachAvatar((x, y, avatar) =>
-            {
-                if (avatar.Warrior.Team == player)
-                    avatar.RefreshAttrs();
-            });
-        });
-
-        // 角色死亡
-        IEnumerator OnWarriorDying(Warrior warrior)
-        {
-            var avatar = GetAvatarByWarrior(warrior);
-            yield return AniPlayer.MakeDying(avatar);
-            Avatars[avatar.X, avatar.Y] = null;
-            avatar.transform.SetParent(null);
-            Destroy(avatar.gameObject);
-        }
-        Room.Battle.OnWarriorDying.Add(OnWarriorDying);
-
-        // 使用道具
-        IEnumerator OnItemUsed2(UsableItem item, Warrior target)
-        {
-            var mapItem = GetMapItemByItem(item);
-            var avatar = GetAvatarByWarrior(target);
-            yield return AniPlayer.MakeAttacking1(mapItem, avatar);
-            avatar.RefreshAttrs();
-            Items[mapItem.X, mapItem.Y] = null;
-            mapItem.transform.SetParent(null);
-            Destroy(mapItem.gameObject);
-        }
-        (Room.Battle as BattlePVE).OnUseItem2.Add(OnItemUsed2);
-    }
-
-    #endregion
 }

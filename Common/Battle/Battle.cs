@@ -148,7 +148,7 @@ namespace Avocat
         // 重置指定角色行动标记
         public AsyncCalleeChain<Warrior, Action<bool, bool>> BeforeResetActionFlag = new AsyncCalleeChain<Warrior, Action<bool, bool>>();
         public AsyncCalleeChain<Warrior> AfterResetActionFlag = new AsyncCalleeChain<Warrior>();
-        public AsyncCalleeChain<Warrior> DoneResetActionFlag = new AsyncCalleeChain<Warrior>();
+        public AsyncCalleeChain<Warrior> DoResetActionFlag = new AsyncCalleeChain<Warrior>();
         public IEnumerator ResetActionFlag(Warrior warrior)
         {
             var resetMovedFlag = true;
@@ -163,7 +163,7 @@ namespace Avocat
             if (resetMovedFlag) warrior.Moved = false; // 重置行动标记
             if (resetActionFlag) warrior.ActionDone = false; // 重置行动标记
 
-            yield return DoneResetActionFlag.Invoke(warrior);
+            yield return DoResetActionFlag.Invoke(warrior);
             yield return AfterResetActionFlag.Invoke(warrior);
         }
 
@@ -293,7 +293,7 @@ namespace Avocat
             yield return AfterActionDone.Invoke(player);
 
             yield return TryBattleEnd(); // 回合结束时检查战斗结束条件
-            yield return Move2NextPlayer(player); // 行动机会转移至玩家开始行动
+            yield return Move2NextPlayer(player); // 行动机会转移至下一队伍
         }
 
         // 添加角色到地图
