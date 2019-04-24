@@ -24,7 +24,7 @@ public class UseMapItemOps : StageOpsLayer
         if (currentSelItem != null && avatar != null && avatar.Warrior.Team != Room.PlayerMe)
         {
             Room.UseItem2(currentSelItem.Item as UsableItem, avatar.Warrior);
-            currentSelItem.Color = MapAvatar.ColorDefault;
+            currentSelItem.Color = MapItem.ColorDefault;
             currentSelItem = null;
             return;
         }
@@ -85,7 +85,8 @@ public class UseMapItemOps : StageOpsLayer
 
         // 隐藏指针
         PointerIndicator.SetActive(false);
-        currentSelItem.gameObject.SetActive(true);
+        if (currentSelItem != null)
+            currentSelItem.gameObject.SetActive(true);
         currentSelItem = null;
     }
 }

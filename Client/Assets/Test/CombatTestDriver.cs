@@ -73,7 +73,7 @@ public class CombatTestDriver : GameDriver
 
         // items
         FC.Async2Sync(bt.AddItemAt(7, 2, new Trunk(map)));
-        FC.Async2Sync(bt.AddItemAt(7, 4, new Trunk(map)));
+        FC.Async2Sync(bt.AddItemAt(7, 4, new Rock(map)));
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };

@@ -25,7 +25,7 @@ public class MapAvatar : MonoBehaviour
         ShieldText.text = Warrior.ES.ToString();
         ShieldText.transform.parent.gameObject.SetActive(Warrior.ES > 0);
 
-        Color = Warrior.ActionDone ? ColorAttacked : ColorDefault;
+        Color = Warrior.ActionDone ? ColorActionDone : ColorDefault;
     }
 
     public int X
@@ -56,7 +56,7 @@ public class MapAvatar : MonoBehaviour
 
     public static readonly Color ColorDefault = Color.black;
     public static readonly Color ColorSelected = Color.blue;
-    public static readonly Color ColorAttacked = Color.gray;
+    public static readonly Color ColorActionDone = Color.gray;
 
     public Color Color
     {

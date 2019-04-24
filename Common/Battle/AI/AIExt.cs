@@ -17,13 +17,12 @@ namespace Avocat
             switch (aiType)
             {
                 case "Boar":
-                    ai.ActFirst = () => StraightForwardAndAttack(ai, ai.Warrior.MoveRange);
+                    ai.ActLast = () => StraightForwardAndAttack(ai, ai.Warrior.MoveRange);
                     break;
                 case "EMPConnon":
                     ai.ActLast = () => CombineAIs(StraightForwardAndAttack(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
                     break;
                 case "Dumb":
-                    ai.ActFirst = () => Dumb(ai);
                     break;
                 default:
                     Debug.Assert(false, "no such type of ai: " + aiType);
@@ -47,7 +46,7 @@ namespace Avocat
             // 先寻找最近目标
             var warrior = ai.Warrior;
             var target = warrior.Map.FindNearestTarget(warrior);
-            if (target == null)
+            if (warrior.ActionDone || target == null)
                 yield break;
 
             var bt = warrior.Map.Battle;

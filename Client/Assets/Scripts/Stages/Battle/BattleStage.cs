@@ -320,29 +320,23 @@ public class BattleStage : MonoBehaviour
         }
         Room.Battle.OnWarriorMovingOnPath.Add(OnWarriorMovingOnPath);
 
-        // 回合结束
-        Room.Battle.OnActionDone.Add((int player) =>
+        // 回合开始
+        Room.Battle.OnNextRoundStarted.Add((int player) =>
         {
-            if (player != Room.PlayerMe)
-                return;
-
             ForeachAvatar((x, y, avatar) =>
             {
-                avatar.RefreshAttrs();
-                avatar.Color = MapAvatar.ColorDefault;
+                if (avatar.Warrior.Team == player)
+                    avatar.RefreshAttrs();
             });
         });
 
         // 回合结束
         Room.Battle.OnActionDone.Add((int player) =>
         {
-            if (player != Room.PlayerMe)
-                return;
-
             ForeachAvatar((x, y, avatar) =>
             {
-                avatar.RefreshAttrs();
-                avatar.Color = MapAvatar.ColorDefault;
+                if (avatar.Warrior.Team == player)
+                    avatar.RefreshAttrs();
             });
         });
 

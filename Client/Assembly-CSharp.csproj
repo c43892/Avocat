@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\GroundEffect\ResetES.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\ArtisanSpirit.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\CounterAttack.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\Faint.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\Kendo.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\PassiveSkill.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PassiveSkill\StarsTears.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\Hero.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\LuoLiSi.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\YouYinChuan.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Warriors\Items\Rock.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Items\Trunk.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Items\UseableItem.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\Boar.cs" />

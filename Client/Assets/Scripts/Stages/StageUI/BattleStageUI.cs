@@ -26,6 +26,9 @@ public class BattleStageUI : MonoBehaviour
     // 建设值显示
     public GameObject ItemUsage;
 
+    // 回合结束按钮
+    public GameObject ActioDoneBtn;
+
     BattleRoomClient Room { get { return BattleStage.Room; } }
 
     // 刷新战斗卡牌区域
@@ -95,6 +98,11 @@ public class BattleStageUI : MonoBehaviour
         inUsingItemMode = !inUsingItemMode;
         BattleStage.StartUseItem(inUsingItemMode);
         ItemUsage.GetComponent<Image>().color = inUsingItemMode ? Color.red : Color.yellow;
+
+        FC.ForEach(CardsAvailableGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
+        FC.ForEach(CardsStashGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
+        Enerygy.gameObject.SetActive(!inUsingItemMode);
+        ActioDoneBtn.gameObject.SetActive(!inUsingItemMode); 
     }
 
     // 检查当前鼠标是否点击在 ui 上

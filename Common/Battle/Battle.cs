@@ -145,6 +145,28 @@ namespace Avocat
 
         #region 战斗过程
 
+        // 重置指定角色行动标记
+        public AsyncCalleeChain<Warrior, Action<bool, bool>> BeforeResetActionFlag = new AsyncCalleeChain<Warrior, Action<bool, bool>>();
+        public AsyncCalleeChain<Warrior> AfterResetActionFlag = new AsyncCalleeChain<Warrior>();
+        public AsyncCalleeChain<Warrior> DoneResetActionFlag = new AsyncCalleeChain<Warrior>();
+        public IEnumerator ResetActionFlag(Warrior warrior)
+        {
+            var resetMovedFlag = true;
+            var resetActionFlag = true;
+
+            yield return BeforeResetActionFlag.Invoke(warrior, (_resetMovedFlag, _resetActionFlag) =>
+            {
+                resetMovedFlag = _resetMovedFlag;
+                resetActionFlag = _resetActionFlag;
+            });
+
+            if (resetMovedFlag) warrior.Moved = false; // 重置行动标记
+            if (resetActionFlag) warrior.ActionDone = false; // 重置行动标记
+
+            yield return DoneResetActionFlag.Invoke(warrior);
+            yield return AfterResetActionFlag.Invoke(warrior);
+        }
+
         // 回合开始，重置所有角色行动标记
         public AsyncCalleeChain<int> BeforeStartNextRound = new AsyncCalleeChain<int>();
         public AsyncCalleeChain<int> AfterStartNextRound = new AsyncCalleeChain<int>();
@@ -152,15 +174,6 @@ namespace Avocat
         public IEnumerator StartNextRound(int player)
         {
             yield return BeforeStartNextRound.Invoke(player);
-
-            Map.ForeachWarriors((i, j, warrior) =>
-            {
-                if (warrior.Team == player)
-                {
-                    warrior.Moved = false;
-                    warrior.ActionDone = false;
-                }
-            });
 
             // 处理所属当前队伍的 ai
             if (AIs.ContainsKey(player))

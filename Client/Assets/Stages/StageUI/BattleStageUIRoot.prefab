@@ -530,6 +530,7 @@ MonoBehaviour:
   - {fileID: 1738203753191594130}
   Enerygy: {fileID: 3108574015553312272}
   ItemUsage: {fileID: 1364643095956655024}
+  ActioDoneBtn: {fileID: 1387013937392714131}
 --- !u!1 &1387013936641123385
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +702,7 @@ GameObject:
   - component: {fileID: 1387013937392714134}
   - component: {fileID: 1387013937392714133}
   m_Layer: 0
-  m_Name: NextRound
+  m_Name: ActionDone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
