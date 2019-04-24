@@ -11,14 +11,13 @@ static class BattleStageUIOnEvents
     {
         var bt = BattleStageUI.BattleStage.Battle as BattlePVE;
 
-        bt.OnAddEN.Add((int den) => BattleStageUI.RefreshEnergy(bt.Energy));
-
         bt.OnPlayerPrepared.Add((int player) =>
         {
             if (room.Battle.AllPrepared)
             {
                 BattleStageUI.gameObject.SetActive(true);
                 BattleStageUI.RefreshEnergy(bt.Energy);
+                BattleStageUI.RefreshItemUsage(bt.CardUsage);
             }
         });
 
@@ -67,6 +66,7 @@ static class BattleStageUIOnEvents
         });
 
         bt.OnAddEN.Add((den) => BattleStageUI.RefreshEnergy(bt.Energy));
+        bt.OnAddCardDissambleValue.Add((dv) => BattleStageUI.RefreshItemUsage(bt.CardUsage));
 
         InBattleOps.OnCurrentWarriorChanged += () => BattleStageUI.RefreshEnergy(bt.Energy);
     }

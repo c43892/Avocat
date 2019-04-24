@@ -51,7 +51,7 @@ namespace Avocat
                 var id = data.ReadInt();
                 var pathXYArr = data.ReadIntArr();
 
-                var warrior = Battle.Map.GetWarriorsByID(id);
+                var warrior = Battle.Map.GetWarriorByID(id);
                 warrior.MovingPath.Clear();
                 warrior.MovingPath.AddRange(pathXYArr);
 
@@ -63,8 +63,8 @@ namespace Avocat
                 var attackerID = data.ReadInt();
                 var targetID = data.ReadInt();
 
-                var attacker = Battle.Map.GetWarriorsByID(attackerID);
-                var target = Battle.Map.GetWarriorsByID(targetID);
+                var attacker = Battle.Map.GetWarriorByID(attackerID);
+                var target = Battle.Map.GetWarriorByID(targetID);
 
                 return Battle.Attack(attacker, target);
             });

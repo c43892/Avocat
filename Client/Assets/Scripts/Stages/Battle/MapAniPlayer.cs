@@ -121,8 +121,8 @@ public class MapAniPlayer : MonoBehaviour
         }
     }
 
-    // 攻击动画
-    public IEnumerator MakeAttacking(MapAvatar attacker, MapAvatar target)
+    // 攻击动画1
+    public IEnumerator MakeAttacking1(MonoBehaviour attacker, MonoBehaviour target)
     {
         var fx = attacker.transform.localPosition.x;
         var fy = attacker.transform.localPosition.y;
@@ -130,8 +130,17 @@ public class MapAniPlayer : MonoBehaviour
         var ty = target.transform.localPosition.y;
 
         yield return MakeMovingOnPath(attacker.transform, 20, new float[] { fx, fy, tx, ty });
-        attacker.RefreshAttrs();
-        target.RefreshAttrs();
+    }
+
+    // 攻击动画2
+    public IEnumerator MakeAttacking2(MonoBehaviour attacker, MonoBehaviour target)
+    {
+        var fx = attacker.transform.localPosition.x;
+        var fy = attacker.transform.localPosition.y;
+        var tx = target.transform.localPosition.x;
+        var ty = target.transform.localPosition.y;
+
+        yield return MakeMovingOnPath(attacker.transform, 20, new float[] { fx, fy, tx, ty });
         yield return MakeMovingOnPath(attacker.transform, 20, new float[] { tx, ty, fx, fy });
     }
 
@@ -139,8 +148,6 @@ public class MapAniPlayer : MonoBehaviour
     public IEnumerator MakeDying(MapAvatar avatar)
     {
         yield return null;
-        avatar.transform.SetParent(null);
-        Destroy(avatar.gameObject);
     }
 
     #endregion

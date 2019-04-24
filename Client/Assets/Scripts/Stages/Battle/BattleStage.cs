@@ -23,6 +23,7 @@ public class BattleStage : MonoBehaviour
     // 创建地图块模板
     public MapTile MapTile;
     public MapAvatar MapAvatar;
+    public MapItem MapItem;
 
     // 地图显示元素根
     public Transform MapRoot;
@@ -41,6 +42,10 @@ public class BattleStage : MonoBehaviour
         ClearMap();
     }
 
+    public PreparingOps PreparingOps { get; private set; }  // 准备阶段
+    public InBattleOps InBattleOps { get; private set; } // 战斗内一般阶段
+    public UseMapItemOps UseMapItemOps { get; private set; }  // 战斗内地形改造阶段
+
     // 创建场景显示对象
     public void Build(BattleRoomClient room)
     {
@@ -50,8 +55,12 @@ public class BattleStage : MonoBehaviour
 
         BuildMapGrids();
         BuildMapItems();
-        CreateWarroirs();
+        BuildAvatars();
         SetupAniPlayer(); // 地图动画播放
+
+        PreparingOps = new PreparingOps(this); // 准备阶段
+        InBattleOps = new InBattleOps(this); // 战斗内一般阶段
+        UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
 
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
     }
@@ -86,14 +95,23 @@ public class BattleStage : MonoBehaviour
     }
 
     // 构建地图道具层
+    public MapItem[,] Items { get; private set; }
     void BuildMapItems()
     {
+        Items = new MapItem[Map.Width, Map.Height];
+        FC.For2(Map.Width, Map.Height, (x, y) =>
+        {
+            var item = Map.GetItemAt(x, y);
+            if (item == null)
+                return;
 
+            CreateMapItem(x, y, item);
+        });
     }
 
     // 构建地图上的角色
     public MapAvatar[,] Avatars { get; private set; }
-    void CreateWarroirs()
+    void BuildAvatars()
     {
         Avatars = new MapAvatar[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
@@ -110,18 +128,26 @@ public class BattleStage : MonoBehaviour
     public void CreateWarriorAvatar(int x, int y, Warrior warrior)
     {
         var avatar = Instantiate(MapAvatar);
-        avatar.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/Soldier");
         avatar.Warrior = warrior;
         avatar.BattleStage = this;
         avatar.transform.SetParent(MapRoot);
-        //var sp = avatar.GetComponent<SpriteRenderer>();
-        //sp.sortingOrder = 2;
-        //sp.flipX = warrior.Team != Room.PlayerMe;
 
         avatar.gameObject.SetActive(true);
         avatar.RefreshAttrs();
-
         SetAvatarPosition(avatar, x, y);
+    }
+
+    // 创建道具对应的显示对象
+    public void CreateMapItem(int x, int y, BattleMapItem item)
+    {
+        var mapItem = Instantiate(MapItem);
+        mapItem.Item = item;
+        mapItem.BattleStage = this;
+        mapItem.transform.SetParent(MapRoot);
+
+        mapItem.gameObject.SetActive(true);
+        mapItem.RefreshAttrs();
+        SetItemPosition(mapItem, x, y);
     }
 
     // 根据角色获取 Avatar
@@ -134,11 +160,22 @@ public class BattleStage : MonoBehaviour
                 avatar = a;
         }, () => avatar == null);
 
-        if (avatar == null)
-            Debug.Break();
-
         Debug.Assert(avatar != null, "warrior should have a avatar in battle map");
         return avatar;
+    }
+
+    // 根据道具获取 MapItem
+    public MapItem GetMapItemByItem(BattleMapItem item)
+    {
+        MapItem mapItem = null;
+        ForeachItem((x, y, a) =>
+        {
+            if (a != null && a.Item == item)
+                mapItem = a;
+        }, () => mapItem == null);
+
+        Debug.Assert(mapItem != null, "item should have a mapitem in battle map");
+        return mapItem;
     }
 
     void ForeachAvatar(Action<int, int, MapAvatar> act, Func<bool> continueCondition = null)
@@ -150,6 +187,18 @@ public class BattleStage : MonoBehaviour
                 return;
 
             act(x, y, avatar);
+        }, continueCondition);
+    }
+
+    void ForeachItem(Action<int, int, MapItem> act, Func<bool> continueCondition = null)
+    {
+        FC.For2(Map.Width, Map.Height, (x, y) =>
+        {
+            var item = Items[x, y];
+            if (item == null)
+                return;
+
+            act(x, y, item);
         }, continueCondition);
     }
 
@@ -165,16 +214,37 @@ public class BattleStage : MonoBehaviour
         Avatars[x, y] = avatar;
     }
 
+    // 设置道具位置
+    void SetItemPosition(MapItem item, int x, int y)
+    {
+        if (item != null)
+        {
+            item.X = x;
+            item.Y = y;
+        }
+
+        Items[x, y] = item;
+    }
+
     // 开始战斗准备阶段
     public void StartPreparing()
     {
-        CurrentOpLayer = new PreparingOps(this);
+        CurrentOpLayer = PreparingOps;
     }
 
     // 开始战斗阶段
     public void StartFighting()
     {
-        CurrentOpLayer = new InBattleOps(this);
+        CurrentOpLayer = InBattleOps;
+    }
+
+    // 开始/退出地形改造
+    public void StartUseItem(bool enterOrExit)
+    {
+        if (enterOrExit)
+            CurrentOpLayer = UseMapItemOps;
+        else
+            CurrentOpLayer = InBattleOps;
     }
 
     // 挂接地图操作逻辑
@@ -222,12 +292,15 @@ public class BattleStage : MonoBehaviour
         });
 
         // 角色攻击
-        Room.Battle.OnWarriorAttack.Add((Warrior attacker, Warrior target, List<string> flags) =>
+        IEnumerator OnAttacking(Warrior attacker, Warrior target, List<string> flags)
         {
             var avatar = GetAvatarByWarrior(attacker);
             var targetAvatar = GetAvatarByWarrior(target);
-            return AniPlayer.MakeAttacking(avatar, targetAvatar);
-        });
+            yield return AniPlayer.MakeAttacking2(avatar, targetAvatar);
+            avatar.RefreshAttrs();
+            targetAvatar.RefreshAttrs();
+        }
+        Room.Battle.OnWarriorAttack.Add(OnAttacking);
 
         // 角色移动
         IEnumerator OnWarriorMovingOnPath(Warrior warrior, int x, int y, List<int> path)
@@ -280,9 +353,22 @@ public class BattleStage : MonoBehaviour
             yield return AniPlayer.MakeDying(avatar);
             Avatars[avatar.X, avatar.Y] = null;
             avatar.transform.SetParent(null);
-            Destroy(avatar);
+            Destroy(avatar.gameObject);
         }
         Room.Battle.OnWarriorDying.Add(OnWarriorDying);
+
+        // 使用道具
+        IEnumerator OnItemUsed2(UsableItem item, Warrior target)
+        {
+            var mapItem = GetMapItemByItem(item);
+            var avatar = GetAvatarByWarrior(target);
+            yield return AniPlayer.MakeAttacking1(mapItem, avatar);
+            avatar.RefreshAttrs();
+            Items[mapItem.X, mapItem.Y] = null;
+            mapItem.transform.SetParent(null);
+            Destroy(mapItem.gameObject);
+        }
+        (Room.Battle as BattlePVE).OnUseItem2.Add(OnItemUsed2);
     }
 
     #endregion

@@ -20,7 +20,7 @@ namespace Swift
 
         public static void For(int start, int end, Action<int> f, Func<bool> continueCondition = null)
         {
-            for (int i = start; i < end && (continueCondition == null || continueCondition()); i++)
+            for (int i = start; i < end ; i++)
                 f(i);
         }
 
@@ -38,7 +38,7 @@ namespace Swift
         {
             ForFromTo(start1, end1, (i) =>
             {
-                ForFromTo(end1, end2, (j) =>
+                ForFromTo(start2, end2, (j) =>
                 {
                     f(i, j);
                 }, continueCondition);

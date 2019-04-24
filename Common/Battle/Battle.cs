@@ -300,6 +300,20 @@ namespace Avocat
             yield return AfterAddWarrior.Invoke(x, y, warrior);
         }
 
+        // 添加道具到地图
+        public AsyncCalleeChain<int, int, BattleMapItem> BeforeAddItem = new AsyncCalleeChain<int, int, BattleMapItem>();
+        public AsyncCalleeChain<int, int, BattleMapItem> AfterAddItem = new AsyncCalleeChain<int, int, BattleMapItem>();
+        public AsyncCalleeChain<int, int, BattleMapItem> OnAddItem = new AsyncCalleeChain<int, int, BattleMapItem>();
+        public IEnumerator AddItemAt(int x, int y, BattleMapItem item)
+        {
+            yield return BeforeAddItem.Invoke(x, y, item);
+
+            Map.SetItemAt(x, y, item);
+
+            yield return OnAddItem.Invoke(x, y, item);
+            yield return AfterAddItem.Invoke(x, y, item);
+        }
+
         // 重置角色 ai
         public void ResetWarriorAI(Warrior warrior)
         {

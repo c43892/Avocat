@@ -96,6 +96,8 @@
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\Hero.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\LuoLiSi.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\YouYinChuan.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Warriors\Items\Trunk.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Warriors\Items\UseableItem.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\Boar.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\CannonEMP.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\Npcs.cs" />
@@ -150,10 +152,12 @@
     <Compile Include="Assets\Scripts\Stages\Battle\MapAniPlayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapAvatar.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapGroundLayer.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\MapItem.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\InBattleOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\UseMapItemOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\SpriteText.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleCardUI.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleStageUI.cs" />

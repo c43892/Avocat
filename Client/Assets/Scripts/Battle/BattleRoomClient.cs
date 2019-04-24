@@ -118,4 +118,14 @@ public class BattleRoomClient
             data.Write(y);
         });
     }
+
+    // 对目标使用道具
+    public void UseItem2(UsableItem item, Warrior target)
+    {
+        BMS.Send("UseItem2", (data) =>
+        {
+            data.Write(item.IDInMap);
+            data.Write(target.IDInMap);
+        });
+    }
 }

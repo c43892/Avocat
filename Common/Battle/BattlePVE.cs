@@ -19,7 +19,7 @@ namespace Avocat
 
         public static readonly int PlayerIndex = 1; // 玩家是 1，机器人是 2
 
-        // 玩家当前可用战斗卡牌，每回合重新生成
+        // 玩家当前可用战斗卡牌
         public List<BattleCard> AvailableCards = new List<BattleCard>();
 
         // 暂存区的卡牌
@@ -28,6 +28,10 @@ namespace Avocat
         // 玩家能量槽
         public int MaxEnergy { get; set; } = 100;
         public int Energy { get; set; } = 0;
+
+        // 玩家建设值，由卡牌分解生成，可用于使用地图上的道具
+        public int MaxCardUsage { get; set; } = 100;
+        public int CardUsage { get; set; } = 0;
 
         public BattlePVE(BattleMap map, int randSeed, PlayerInfo player)
             :base(map, randSeed)
@@ -193,6 +197,20 @@ namespace Avocat
             yield return AfterAddEN.Invoke(den);
         }
 
+        // 玩家加建设值
+        public AsyncCalleeChain<int, Action<int>> BeforeAddCardDissambleValue = new AsyncCalleeChain<int, Action<int>>();
+        public AsyncCalleeChain<int> AfterAddCardDissambleValue = new AsyncCalleeChain<int>();
+        public AsyncCalleeChain<int> OnAddCardDissambleValue = new AsyncCalleeChain<int>();
+        public IEnumerator AddCardDissambleValue(int dv)
+        {
+            yield return BeforeAddCardDissambleValue.Invoke(dv, (int _dv) => dv = _dv);
+
+            CardUsage = (CardUsage + dv).Clamp(0, MaxCardUsage);
+
+            yield return OnAddCardDissambleValue.Invoke(dv);
+            yield return AfterAddCardDissambleValue.Invoke(dv);
+        }
+
         // 释放主动技能
         protected AsyncCalleeChain<ActiveSkill> BeforeFireSkill = new AsyncCalleeChain<ActiveSkill>();
         protected AsyncCalleeChain<ActiveSkill> AfterFireSkill = new AsyncCalleeChain<ActiveSkill>();
@@ -227,6 +245,24 @@ namespace Avocat
 
             yield return OnFireSkillAt.Invoke(skill, x, y);
             yield return AfterFireSkillAt.Invoke(skill, x, y);
+        }
+
+        // 使用道具
+        protected AsyncCalleeChain<UsableItem, Warrior> BeforeUseItem2 = new AsyncCalleeChain<UsableItem, Warrior>();
+        protected AsyncCalleeChain<UsableItem, Warrior> AfterUseItem2 = new AsyncCalleeChain<UsableItem, Warrior>();
+        public AsyncCalleeChain<UsableItem, Warrior> OnUseItem2 = new AsyncCalleeChain<UsableItem, Warrior>();
+        public virtual IEnumerator UseItem2(UsableItem item, Warrior target)
+        {
+            if (CardUsage < MaxCardUsage)
+                yield break;
+
+            yield return BeforeUseItem2.Invoke(item, target);
+
+            yield return AddCardDissambleValue(-CardUsage);
+            yield return item.Use2(target);
+
+            yield return OnUseItem2.Invoke(item, target);
+            yield return AfterUseItem2.Invoke(item, target);
         }
 
         #endregion

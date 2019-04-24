@@ -12,28 +12,34 @@ namespace Avocat
     /// </summary>
     public class DisassembleCards : Buff
     {
+        public BattlePVE BattlePVE { get => this.Battle as BattlePVE; }
         public List<BattleCard> AvailableCards { get; private set; }
         int Player { get; set; }
-        readonly Action<int, BattleCard[]> OnCardsDisassembled;
+        readonly Action<int, BattleCard[]> OnCardsDisassembledDone;
 
-        public DisassembleCards(int player, List<BattleCard> cardList, Action<int, BattleCard[]> onCardsDisassembled)
+        public DisassembleCards(int player, List<BattleCard> cardList, Action<int, BattleCard[]> onCardsDisassembledDone)
         {
             AvailableCards = cardList;
             Player = player;
-            OnCardsDisassembled = onCardsDisassembled;
+            OnCardsDisassembledDone = onCardsDisassembledDone;
+        }
+
+        IEnumerator DissambleCards(int player)
+        {
+            if (Player != player)
+                yield break;
+
+            // 每张卡牌增加一定建设值
+            var cards = AvailableCards.ToArray();
+            yield return BattlePVE.AddCardDissambleValue(cards.Length * 20);
+
+            AvailableCards.Clear();
+            OnCardsDisassembledDone?.Invoke(player, cards);
         }
 
         public override IEnumerator OnAttached()
         {
-            Battle.BeforeActionDone.Add((int player) =>
-            {
-                if (Player != player)
-                    return;
-
-                var cards = AvailableCards.ToArray();
-                AvailableCards.Clear();
-                OnCardsDisassembled?.Invoke(player, cards);
-            });
+            Battle.BeforeActionDone.Add(DissambleCards);
 
             yield return base.OnAttached();
         }

@@ -80,14 +80,19 @@ namespace Avocat
             warriors[x, y] = null;
         }
 
+        public void RemoveItem(BattleMapItem item)
+        {
+            Debug.Assert(item == null || item.Map == this, "the item is not in the map");
+            FindXY(item, out int x, out int y);
+            items[x, y] = null;
+        }
+
         public void SetWarriorAt(int x, int y, Warrior warrior)
         {
             Debug.Assert(warrior == null || warrior.Map == this, "no warrior on the map specified");
 
             if (warriors[x, y] == warrior)
                 return;
-
-            // refresh the fast search  cache
 
             if (warrior != null && warrior.Map == this)
                 warriors[x, y] = null;
@@ -98,14 +103,43 @@ namespace Avocat
             warriors[x, y] = warrior;
         }
 
+        public void SetItemAt(int x, int y, BattleMapItem item)
+        {
+            Debug.Assert(item == null || item.Map == this, "no item on the map specified");
+
+            if (items[x, y] == item)
+                return;
+
+            if (item != null && item.Map == this)
+                items[x, y] = null;
+
+            if (items[x, y] != null)
+                RemoveItem(items[x, y]);
+
+            items[x, y] = item;
+        }
+
         // 根据 id 寻找指定角色
-        public Warrior GetWarriorsByID(int idInMap)
+        public Warrior GetWarriorByID(int idInMap)
         {
             Warrior target = null;
             ForeachWarriors((x, y, warrior) =>
             {
                 if (warrior.IDInMap == idInMap)
                     target = warrior;
+            }, () => target == null);
+
+            return target;
+        }
+
+        // 根据 id 寻找指定道具
+        public BattleMapItem GetItemByID(int idInMap)
+        {
+            BattleMapItem target = null;
+            ForeachItems((x, y, item) =>
+            {
+                if (item.IDInMap == idInMap)
+                    target = item;
             }, () => target == null);
 
             return target;
@@ -143,6 +177,18 @@ namespace Avocat
                 var warrior = warriors[x, y];
                 if (warrior != null)
                     act(x, y, warrior);
+
+            }, continueCondition);
+        }
+
+        // 迭代所有非空道具
+        public void ForeachItems(Action<int, int, BattleMapItem> act, Func<bool> continueCondition = null)
+        {
+            FC.For2(Width, Height, (x, y) =>
+            {
+                var item = items[x, y];
+                if (item != null)
+                    act(x, y, item);
 
             }, continueCondition);
         }

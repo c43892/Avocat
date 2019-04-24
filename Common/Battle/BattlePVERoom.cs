@@ -42,7 +42,7 @@ namespace Avocat
             {
                 var warriorID = data.ReadInt();
                 var skillName = data.ReadString();
-                var warrior = Battle.Map.GetWarriorsByID(warriorID);
+                var warrior = Battle.Map.GetWarriorByID(warriorID);
                 var skill = warrior.GetActiveSkillByName(skillName);
                 return Battle.FireSkill(skill);
             });
@@ -53,9 +53,18 @@ namespace Avocat
                 var skillName = data.ReadString();
                 var x = data.ReadInt();
                 var y = data.ReadInt();
-                var warrior = Battle.Map.GetWarriorsByID(warriorID);
+                var warrior = Battle.Map.GetWarriorByID(warriorID);
                 var skill = warrior.GetActiveSkillByName(skillName);
                 return Battle.FireSkillAt(skill, x, y);
+            });
+
+            bmp.HandleMsg("UseItem2", (player, data) =>
+            {
+                var itemID = data.ReadInt();
+                var targetID = data.ReadInt();
+                var item = Battle.Map.GetItemByID(itemID);
+                var target = Battle.Map.GetWarriorByID(targetID);
+                return Battle.UseItem2(item as UsableItem, target);
             });
         }
     }

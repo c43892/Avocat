@@ -71,6 +71,10 @@ public class CombatTestDriver : GameDriver
         FC.Async2Sync(bt.AddWarriorAt(5, 3, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
         FC.Async2Sync(bt.AddWarriorAt(5, 5, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
 
+        // items
+        FC.Async2Sync(bt.AddItemAt(7, 2, new Trunk(map)));
+        FC.Async2Sync(bt.AddItemAt(7, 4, new Trunk(map)));
+
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };
 
