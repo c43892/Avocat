@@ -9,14 +9,14 @@ namespace Avocat
 {
     /// <summary>
     /// 黛丽万
-    /// 蝶舞，治疗所有友方单位50%最大生命值
+    /// 蝶舞，治疗所有友方单位 50% 最大生命值
     /// </summary>
     public class Butterfly : ActiveSkill
     {
         public override string Name { get => "Butterfly"; }
 
         // 能量消耗
-        public override int EnergyCost { get => 50; }
+        public override int EnergyCost { get; set; }
 
         // 主动释放
         public override IEnumerator Fire()

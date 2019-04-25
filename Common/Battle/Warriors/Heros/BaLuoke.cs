@@ -17,6 +17,7 @@ namespace Avocat
             : base(bt)
         {
             Name = "巴洛克";
+            SetupBuffAndSkills(new FastAssistance(), new TacticalCommand(() => State == "Archer" ? "EN" : "ATK"));
         }
 
         public int ArcherAttackRange { get; set; }
@@ -45,11 +46,5 @@ namespace Avocat
                 }
             }
         } string state;
-
-        protected override void SetupBuffAndSkills()
-        {
-            FC.Async2Sync(Battle.AddBuff(new TacticalCommand(() => State == "Archer" ? "EN" : "ATK"), this)); // 战术指挥
-            AddActiveSkill(new FastAssistance()); // 快速援护
-        }
     }
 }

@@ -243,10 +243,10 @@ namespace Avocat
             var attackFlags = new List<string>();
             attackFlags.AddRange(flags);
 
+            yield return BeforeAttack.Invoke(attacker, target, attackFlags);
+
             if (attackFlags.Contains("CancelAttack")) // 取消攻击标记
                 yield break;
-
-            yield return BeforeAttack.Invoke(attacker, target, attackFlags);
 
             var des = attacker.ATK >= target.ES ? -target.ES : -attacker.ATK;
             var dhp = attacker.ATK >= target.ES ? -(attacker.ATK - target.ES) : 0;

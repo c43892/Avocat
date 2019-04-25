@@ -17,12 +17,7 @@ namespace Avocat
             : base(bt)
         {
             Name = "黛丽万";
-        }
-
-        protected override void SetupBuffAndSkills()
-        {
-            FC.Async2Sync(Battle.AddBuff(new StarsTears(), this)); // 星之泪
-            AddActiveSkill(new Butterfly()); // 蝶舞
+            SetupBuffAndSkills(new Butterfly(), new StarsTears());
         }
     }
 }

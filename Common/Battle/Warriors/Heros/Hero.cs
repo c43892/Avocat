@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swift;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,15 @@ namespace Avocat
         public Hero(Battle bt)
             : base(bt.Map)
         {
-            SetupBuffAndSkills();
         }
 
-        protected abstract void SetupBuffAndSkills();
+        protected void SetupBuffAndSkills(ActiveSkill a, params Buff[] bs)
+        {
+            if (a != null)
+                AddActiveSkill(Configuration.Config(a));
+
+            foreach (var b in bs)
+                FC.Async2Sync(Battle.AddBuff(Configuration.Config(b), this));
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Avocat
         public override string Name { get => "EMP 炮台"; }
 
         // 能量消耗
-        public override int EnergyCost { get => 30; }
+        public override int EnergyCost { get; set; }
 
         public override string ActiveSkillType { get; } = "fireAt";
 

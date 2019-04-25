@@ -17,12 +17,7 @@ namespace Avocat
             : base(bt)
         {
             Name = "游川隐";
-        }
-
-        protected override void SetupBuffAndSkills()
-        {
-            FC.Async2Sync(Battle.AddBuff(new Kendo(), this)); // 剑道
-            FC.Async2Sync(Battle.AddBuff(new FlashAttack(), this)); // 一闪
+            SetupBuffAndSkills(null, new Kendo(), new FlashAttack());
         }
     }
 }

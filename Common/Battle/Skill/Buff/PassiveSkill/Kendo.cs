@@ -13,12 +13,15 @@ namespace Avocat
     /// </summary>
     public class Kendo : PassiveSkill
     {
+        // 效果持续几回合
+        public int EffectRoundNum { get; set; }
+
         IEnumerator OnAfterAttack(Warrior attacker, Warrior target, List<string> flags)
         {
             if (attacker != Warrior)
                 yield break;
 
-            yield return Battle.AddBuff(new Untreatable(2), target);
+            yield return Battle.AddBuff(new Untreatable(EffectRoundNum), target);
         }
 
         public override IEnumerator OnAttached()

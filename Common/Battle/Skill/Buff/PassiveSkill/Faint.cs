@@ -28,7 +28,7 @@ namespace Avocat
 
         IEnumerator CancelAttack(Warrior attacker, Warrior target, List<string> flags)
         {
-            if (attacker == Warrior)
+            if (attacker != Warrior)
                 yield break;
 
             if (!flags.Contains("CancelAttack"))

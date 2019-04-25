@@ -45,3 +45,4 @@ v15
 /Common/Battle/Skill/Buff/GroundEffect/*.meta
 /Common/Battle/Skill/Buff/PatternSkill/*.meta
 /Common/UserPlayer/*.meta
+/Common/Config/*.meta

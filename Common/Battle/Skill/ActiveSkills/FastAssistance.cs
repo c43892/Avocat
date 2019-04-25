@@ -17,7 +17,7 @@ namespace Avocat
         public override string Name { get => "FastAssistance"; }
 
         // 能量消耗
-        public override int EnergyCost { get => 10; }
+        public override int EnergyCost { get; set; }
 
         // 主动释放
         public override IEnumerator Fire()

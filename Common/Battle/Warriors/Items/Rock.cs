@@ -20,11 +20,13 @@ namespace Avocat
             Name = "岩石";
         }
 
+        public int EffectRoundNum { get; set; }
+
         // 对指定位置使用
         public override IEnumerator Use2(Warrior target)
         {
             if (target != null)
-                yield return Battle.AddBuff(new Faint(2), target);
+                yield return Battle.AddBuff(new Faint(EffectRoundNum), target);
         }
     }
 }

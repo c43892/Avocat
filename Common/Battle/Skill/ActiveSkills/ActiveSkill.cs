@@ -18,7 +18,7 @@ namespace Avocat
         public virtual BattleMap Map { get { return Battle?.Map; } }
 
         // 能量消耗
-        public abstract int EnergyCost { get; }
+        public abstract int EnergyCost { get; set; }
 
         // 主动释放
         public virtual IEnumerator Fire() { throw new Exception("not implemented yet"); }
