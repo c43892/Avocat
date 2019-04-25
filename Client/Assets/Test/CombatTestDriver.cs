@@ -60,16 +60,16 @@ public class CombatTestDriver : GameDriver
         var map = new BattleMap(10, 6); // test map
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }); // test battle
 
-        // heros
-        FC.Async2Sync(bt.AddWarriorAt(2, 1, new DaiLiWan(bt) { Team = 1 }));
-        FC.Async2Sync(bt.AddWarriorAt(2, 2, new LuoLiSi(bt) { Team = 1 }));
-        FC.Async2Sync(bt.AddWarriorAt(2, 3, new YouYinChuan(bt) { Team = 1 }));
-        FC.Async2Sync(bt.AddWarriorAt(2, 4, new BaLuoKe(bt) { Team = 1 }));
-
         // npcs
-        FC.Async2Sync(bt.AddWarriorAt(5, 1, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
-        FC.Async2Sync(bt.AddWarriorAt(5, 3, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
-        FC.Async2Sync(bt.AddWarriorAt(5, 5, new Boar(map) { Team = 2, AttackRange = 1, ATK = 1 }));
+        FC.Async2Sync(bt.AddWarriorAt(5, 1, Configuration.Config(new Boar(map) { Team = 2 })));
+        FC.Async2Sync(bt.AddWarriorAt(5, 3, Configuration.Config(new Boar(map) { Team = 2 })));
+        FC.Async2Sync(bt.AddWarriorAt(5, 5, Configuration.Config(new Boar(map) { Team = 2 })));
+
+        // heros
+        FC.Async2Sync(bt.AddWarriorAt(2, 1, Configuration.Config(new DaiLiWan(bt) { Team = 1 })));
+        FC.Async2Sync(bt.AddWarriorAt(2, 2, Configuration.Config(new LuoLiSi(bt) { Team = 1 })));
+        FC.Async2Sync(bt.AddWarriorAt(2, 3, Configuration.Config(new YouYinChuan(bt) { Team = 1 })));
+        FC.Async2Sync(bt.AddWarriorAt(2, 4, Configuration.Config(new BaLuoKe(bt) { Team = 1 })));
 
         // items
         FC.Async2Sync(bt.AddItemAt(7, 2, new Trunk(map)));

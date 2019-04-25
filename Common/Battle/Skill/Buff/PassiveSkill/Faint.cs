@@ -20,21 +20,32 @@ namespace Avocat
 
         IEnumerator UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
         {
-            if (warrior == Warrior)
-                resetActionFlags(false, false);
+            if (warrior != Warrior)
+                yield break;
 
-            yield return null;
+            resetActionFlags(false, false);
+        }
+
+        IEnumerator CancelAttack(Warrior attacker, Warrior target, List<string> flags)
+        {
+            if (attacker == Warrior)
+                yield break;
+
+            if (!flags.Contains("CancelAttack"))
+                flags.Add("CancelAttack");
         }
 
         public override IEnumerator OnAttached()
         {
             Battle.BeforeResetActionFlag.Add(UnsetActionFlag);
+            Battle.BeforeAttack.Add(CancelAttack);
             yield return base.OnAttached();
         }
 
         public override IEnumerator OnDetached()
         {
             Battle.BeforeResetActionFlag.Del(UnsetActionFlag);
+            Battle.BeforeAttack.Del(CancelAttack);
             yield return base.OnDetached();
         }
     }

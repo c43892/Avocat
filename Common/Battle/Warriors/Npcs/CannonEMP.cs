@@ -14,11 +14,10 @@ namespace Avocat
     /// </summary>
     public class CannonEMP : Npc
     {
-        public CannonEMP(BattleMap map, int maxHP)
-            : base(map, maxHP, 0)
+        public CannonEMP(BattleMap map)
+            : base(map)
         {
             Name = "EMP 炮";
-            AttackRange = 1;
             AI = new WarriorAI(this).Build("EMPConnon");
         }
     }

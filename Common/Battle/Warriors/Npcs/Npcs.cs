@@ -8,8 +8,8 @@ namespace Avocat
 {
     public abstract class Npc : Warrior
     {
-        public Npc(BattleMap map, int maxHP, int maxES)
-            : base(map, maxHP, maxES)
+        public Npc(BattleMap map)
+            : base(map)
         {
         }
     }

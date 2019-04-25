@@ -16,13 +16,9 @@ namespace Avocat
     /// </summary>
     public class Warrior : BattleMapItem
     {
-        public Warrior(BattleMap map, int maxHP, int maxES)
+        public Warrior(BattleMap map)
             :base (map)
         {
-            MaxHP = maxHP;
-            MaxES = maxES;
-            HP = MaxHP;
-            ES = 0;
         }
 
         public WarriorAI AI { get; set; }

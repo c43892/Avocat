@@ -11,8 +11,8 @@ namespace Avocat
     /// </summary>
     public abstract class Hero : Warrior
     {
-        public Hero(Battle bt, int maxHP, int maxES)
-            : base(bt.Map, maxHP, maxES)
+        public Hero(Battle bt)
+            : base(bt.Map)
         {
             SetupBuffAndSkills();
         }

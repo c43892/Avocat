@@ -14,11 +14,9 @@ namespace Avocat
     public class LuoLiSi : Hero
     {
         public LuoLiSi(Battle bt)
-            : base(bt, 10, 10)
+            : base(bt)
         {
             Name = "洛里斯";
-            AttackRange = 1;
-            ATK = 3;
         }
 
         protected override void SetupBuffAndSkills()

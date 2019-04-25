@@ -14,11 +14,9 @@ namespace Avocat
     public class YouYinChuan : Hero
     {
         public YouYinChuan(Battle bt)
-            : base(bt, 10, 10)
+            : base(bt)
         {
             Name = "游川隐";
-            AttackRange = 2;
-            ATK = 1;
         }
 
         protected override void SetupBuffAndSkills()

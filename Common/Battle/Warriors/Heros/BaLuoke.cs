@@ -14,11 +14,15 @@ namespace Avocat
     public class BaLuoKe : Hero, ITransformable
     {
         public BaLuoKe(Battle bt)
-            : base(bt, 10, 10)
+            : base(bt)
         {
             Name = "巴洛克";
-            State = "Archer";
         }
+
+        public int ArcherAttackRange { get; set; }
+        public int ArcherATK { get; set; }
+        public int LancerAttackRange { get; set; }
+        public int LancerATK { get; set; }
 
         public string State {
             get
@@ -31,12 +35,12 @@ namespace Avocat
                 switch (value)
                 {
                     case "Archer": // 弓手
-                        AttackRange = 5;
-                        ATK = 3;
+                        AttackRange = ArcherAttackRange;
+                        ATK = ArcherATK;
                         break;
                     case "Lancer": // 枪兵
-                        AttackRange = 1;
-                        ATK = 5;
+                        AttackRange = LancerAttackRange;
+                        ATK = LancerATK;
                         break;
                 }
             }

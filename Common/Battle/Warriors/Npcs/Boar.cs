@@ -14,10 +14,9 @@ namespace Avocat
     public class Boar : Npc
     {
         public Boar(BattleMap map)
-            : base(map, 10, 0)
+            : base(map)
         {
             Name = "野猪";
-            MoveRange = 2;
             AI = new WarriorAI(this).Build("Boar"); // AI
             FC.Async2Sync(Battle.AddBuff(new CounterAttack(), this)); // 反击 buff
         }

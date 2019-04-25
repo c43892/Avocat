@@ -14,11 +14,9 @@ namespace Avocat
     public class DaiLiWan : Hero
     {
         public DaiLiWan(Battle bt)
-            : base(bt, 10, 10)
+            : base(bt)
         {
             Name = "黛丽万";
-            AttackRange = 3;
-            ATK = 1;
         }
 
         protected override void SetupBuffAndSkills()

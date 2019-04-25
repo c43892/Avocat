@@ -104,6 +104,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\CannonEMP.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Npcs\Npcs.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Warrior.cs" />
+    <Compile Include="Assets\Scripts\Common\Config\Configuration.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\SpatialAStar.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AsyncCalleeChain.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Assets\Test\CombatTestDriver.cs" />
     <Compile Include="Assets\Test\CombatTestUIOnEvent.cs" />
     <Compile Include="Assets\Test\LocalBattleRecorder.cs" />
+    <None Include="Assets\Resources\Config.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/works/Unity/Avocat/Client/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
