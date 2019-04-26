@@ -306,15 +306,23 @@ namespace Swift
             return lst.ToArray();
         }
 
-        public static int FirstIndexOf<T>(this T[] arr, T v)
+        public static int IndexOf<T>(this IEnumerable<T> set, T v, int startindex = 0)
         {
-            if (arr == null || arr.Length == 0)
+            return IndexOf(set, (item) => EqualityComparer<T>.Default.Equals(v, item), startindex);
+        }
+
+        public static int IndexOf<T>(this IEnumerable<T> set, Func<T, bool> filter, int startindex = 0)
+        {
+            if (set == null || set.Count() == 0)
                 return -1;
 
-            for (var i = 0; i < arr.Length; i++)
+            var i = 0;
+            foreach (var item in set)
             {
-                if (EqualityComparer<T>.Default.Equals(arr[i], v))
+                if (filter(item))
                     return i;
+
+                i++;
             }
 
             return -1;

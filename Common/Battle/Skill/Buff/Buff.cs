@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swift;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,18 @@ namespace Avocat
     /// </summary>
     public abstract class BuffCountDown : Buff
     {
+        public int MaxNum { get; set; } = 0;
         public int Num { get; set; } = 0;
 
         public BuffCountDown(int num)
         {
             Num = num;
+        }
+
+        // 叠加回合数
+        public void Expand(int addtionalNum)
+        {
+            Num = (Num + addtionalNum).Clamp(0, MaxNum);
         }
 
         IEnumerator CountDown(int player)

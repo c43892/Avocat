@@ -31,7 +31,7 @@ namespace Avocat
             FC.For(num, (i) =>
             {
                 var type = Battle.Srand.Next(0, BattleCard.BattleCardTypesNum);
-                cards[i] = BattleCard.Create(type);
+                cards[i] = BattleCard.Create(BattleCard.CardTypes[type]);
             });
 
             return cards;

@@ -24,21 +24,43 @@ namespace Avocat
         public WarriorAI AI { get; set; }
 
         public int AvatarID { get; private set; } // 具体的角色形象 ID
-
         public int Team { get; set; } // 是属于哪一个玩家
 
         public int MaxHP { get; set; } // 最大血量
         public int HP { get; set; } // 血量
 
-        public int POW { get; set; } // 魔力值
+        public string AttackingType { get; set; } // 攻击类型：physic - 物理，magic - 法术，chaos - 混乱
 
-        public int ATK { get; set; } // 攻击力
+        public int ATK { get; set; } // 物攻
+        public int ATKInc { get; set; } // 物攻加成
+        public int ATKMore { get; set; } // 物攻加成
+
+        public int POW { get; set; } // 法攻
+        public int POWInc { get; set; } // 法攻加成
+        public int POWMore { get; set; } // 法攻加成
+
+        // 基本攻击力
+        public int BasicAttackValue
+        {
+            get
+            {
+                if (AttackingType == "physic")
+                    return ATK + POW / 2;
+                else if (AttackingType == "magic")
+                    return ATK / 2 + POW;
+                else if (AttackingType == "chaos")
+                    return ATK /2 + POW / 2;
+
+                Debug.Assert(false, "unknown attacking type: " + AttackingType);
+                return 0;
+            }
+        }
+
+        public int ARM { get; set; } // 物盾
+        public int RES { get; set; } // 魔盾
 
         public int MaxES { get; set; } // 最大护盾
         public int ES { get; set; } // 护盾
-
-        public int ARM { get; set; } // 防御值
-        public int RES { get; set; } // 魔抗
 
         public int AttackRange { get; set; } // 最大攻击距离
         public int MoveRange { get; set; } // 最大移动距离

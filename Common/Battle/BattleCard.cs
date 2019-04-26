@@ -13,63 +13,28 @@ namespace Avocat
     /// </summary>
     public abstract class BattleCard
     {
-        public static readonly BattleCard ATK = new BattleCardATK();
-        public static readonly BattleCard ES = new BattleCardES();
-        public static readonly BattleCard HP = new BattleCardHP();
-        public static readonly BattleCard Energy = new EN();
-        public static readonly int BattleCardTypesNum = 4;
+        public static readonly string[] CardTypes = new string[] { "ATK", "ES", "PT", "EN" };
+        public static int BattleCardTypesNum { get => CardTypes.Length; }
 
-        public static int TypeStr2Int(string type)
+        public static BattleCard Create(string type)
         {
             switch (type)
             {
-                case "HP":
-                    return 0;
+                case "PT":
+                    return new BattleCardPotion();
                 case "ES":
-                    return 1;
-                case "ATK":
-                    return 2;
-                case "EN":
-                    return 3;
-            }
-
-            return -1;
-        }
-
-        public static BattleCard Create(int type)
-        {
-            switch (type)
-            {
-                case 0:
-                    return new BattleCardHP();
-                case 1:
                     return new BattleCardES();
-                case 2:
+                case "ATK":
                     return new BattleCardATK();
-                case 3:
+                case "EN":
                     return new EN();
             }
 
             return null;
         }
 
-        public static BattleCard Create(string type)
-        {
-            return Create(TypeStr2Int(type));
-        }
-
         public string Name { get; protected set; }
-
         public abstract IEnumerator ExecuteOn(Warrior warrior);
-    }
-
-    public class BattleCardHP : BattleCard
-    {
-        public BattleCardHP() { Name = "HP"; }
-        public override IEnumerator ExecuteOn(Warrior warrior)
-        {
-            yield return warrior.Battle.AddHP(warrior, 1);
-        }
     }
 
     public class BattleCardATK : BattleCard
@@ -78,8 +43,8 @@ namespace Avocat
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
             var bt = warrior.Battle;
-            var dATK = (warrior.ATK * Calculation.ATKCardEffect / 100).Clamp(1, int.MaxValue);
-            yield return bt.AddBuff(new CardATK() { ATK = dATK }, warrior);
+            var dATK = (warrior.ATK * 15 / 100).Clamp(1, int.MaxValue);
+            yield return bt.AddBuff(new CardATK(), warrior);
         }
     }
 
@@ -88,8 +53,17 @@ namespace Avocat
         public BattleCardES() { Name = "ES"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            var dES = (warrior.MaxES * Calculation.ESCardEffect / 100).Clamp(1, int.MaxValue);
+            var dES = (warrior.MaxES * 25 / 100).Clamp(1, int.MaxValue);
             yield return warrior.Battle.AddES(warrior, dES);
+        }
+    }
+
+    public class BattleCardPotion : BattleCard
+    {
+        public BattleCardPotion() { Name = "PT"; }
+        public override IEnumerator ExecuteOn(Warrior warrior)
+        {
+            yield return warrior.Battle.AddHP(warrior, 15);
         }
     }
 
@@ -98,7 +72,7 @@ namespace Avocat
         public EN() { Name = "EN"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            yield return (warrior.Battle as BattlePVE).AddEN(Calculation.ENCardEffect);
+            yield return (warrior.Battle as BattlePVE).AddEN(15);
         }
     }
 }

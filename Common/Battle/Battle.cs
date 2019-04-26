@@ -228,6 +228,42 @@ namespace Avocat
             yield return AfterMoveOnPath.Invoke(warrior, x, y, movedPath);
         }
 
+        // 计算伤害
+        public delegate void CalculateDamageAction<T1, T2, T3>(Warrior attacker, Warrior target, List<string> flags, out T1 inc, out T2 more, out T3 damageDec);
+        public CalculateDamageAction<int, int, int> BeforeCalculateDamage1;
+        public CalculateDamageAction<int, int, int> BeforeCalculateDamage2;
+        public int CalculateDamage(Warrior attacker, Warrior target, List<string> flags)
+        {
+            // 物理和法术分别取不同的抗性，混乱攻击忽视抗性
+
+            var basicAttackValue = attacker.BasicAttackValue;
+            var inc = 0;
+            var more = 0;
+            var damageDecFac = 0; // 减伤系数
+
+            if (flags.Contains("physic"))
+            {
+                inc = attacker.ATKInc;
+                more = attacker.ATKMore;
+                damageDecFac = target.ARM;
+            }
+            else if (flags.Contains("magic"))
+            {
+                inc = attacker.POWInc;
+                more = attacker.POWMore;
+                damageDecFac = target.RES;
+            }
+
+            // 通知所有可能影响抗性计算的逻辑
+            BeforeCalculateDamage1?.Invoke(attacker, target, flags, out inc, out more, out damageDecFac);
+            BeforeCalculateDamage2?.Invoke(attacker, target, flags, out inc, out more, out damageDecFac);
+
+            // 计算最终攻击值
+            var damage = basicAttackValue * (1 + inc) * (1 + more);
+            damage = damage - damage * damageDecFac / (100 + damageDecFac);
+            return damage < 0 ? 0 : (int)damage;
+        }
+
         // 执行攻击
         public AsyncCalleeChain<Warrior, Warrior, List<string>> BeforeAttack = new AsyncCalleeChain<Warrior, Warrior, List<string>>();
         public AsyncCalleeChain<Warrior, Warrior, List<string>> AfterAttack = new AsyncCalleeChain<Warrior, Warrior, List<string>>();
@@ -240,21 +276,33 @@ namespace Avocat
             if (!attacker.InAttackRange(tx, ty))
                 yield break;
 
+            // 整理攻击标记
             var attackFlags = new List<string>();
             attackFlags.AddRange(flags);
+            attackFlags.Add(attacker.AttackingType);
 
             yield return BeforeAttack.Invoke(attacker, target, attackFlags);
 
             if (attackFlags.Contains("CancelAttack")) // 取消攻击标记
                 yield break;
 
-            Calculation.CalcAttack(attacker, target, attackFlags, out int dhp, out int des);
+            // 计算实际伤害
+            var damage = CalculateDamage(attacker, target, attackFlags);
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
                 attacker.ActionDone = true;
 
             yield return OnWarriorAttack.Invoke(attacker, target, attackFlags);
+
+            // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾
+            var dhp = -damage;
+            var des = 0;
+            if (!attackFlags.Contains("chaos") && target.ES > 0)
+            {
+                dhp = damage > target.ES ? target.ES - damage : 0;
+                des = damage > target.ES ? 0 : damage;
+            }
 
             if (des != 0) yield return AddES(target, des);
             if (dhp != 0) yield return AddHP(target, dhp);
@@ -356,6 +404,7 @@ namespace Avocat
             if (target != null)
             {
                 Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
+
                 target.Buffs.Add(buff);
                 buff.Warrior = target;
             }

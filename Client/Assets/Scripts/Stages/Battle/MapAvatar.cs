@@ -21,7 +21,7 @@ public class MapAvatar : MonoBehaviour
     {
         NameText.text = Warrior.Name;
         HpText.text = Warrior.HP.ToString();
-        PowerText.text = Warrior.ATK.ToString();
+        PowerText.text = Warrior.BasicAttackValue.ToString();
         ShieldText.text = Warrior.ES.ToString();
         ShieldText.transform.parent.gameObject.SetActive(Warrior.ES > 0);
 
