@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Swift;
 
 namespace Avocat
 {
@@ -77,8 +78,7 @@ namespace Avocat
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
             var bt = warrior.Battle;
-            var dATK = (int)(warrior.ATK * 0.15);
-            dATK = dATK == 0 ? 1 : dATK;
+            var dATK = (warrior.ATK * Calculation.ATKCardEffect / 100).Clamp(1, int.MaxValue);
             yield return bt.AddBuff(new CardATK() { ATK = dATK }, warrior);
         }
     }
@@ -88,7 +88,8 @@ namespace Avocat
         public BattleCardES() { Name = "ES"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            yield return warrior.Battle.AddES(warrior, warrior.MaxES / 4);
+            var dES = (warrior.MaxES * Calculation.ESCardEffect / 100).Clamp(1, int.MaxValue);
+            yield return warrior.Battle.AddES(warrior, dES);
         }
     }
 
@@ -97,7 +98,7 @@ namespace Avocat
         public EN() { Name = "EN"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
-            yield return (warrior.Battle as BattlePVE).AddEN(15);
+            yield return (warrior.Battle as BattlePVE).AddEN(Calculation.ENCardEffect);
         }
     }
 }

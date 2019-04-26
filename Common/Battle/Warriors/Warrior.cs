@@ -30,10 +30,15 @@ namespace Avocat
         public int MaxHP { get; set; } // 最大血量
         public int HP { get; set; } // 血量
 
+        public int POW { get; set; } // 魔力值
+
         public int ATK { get; set; } // 攻击力
 
         public int MaxES { get; set; } // 最大护盾
         public int ES { get; set; } // 护盾
+
+        public int ARM { get; set; } // 防御值
+        public int RES { get; set; } // 魔抗
 
         public int AttackRange { get; set; } // 最大攻击距离
         public int MoveRange { get; set; } // 最大移动距离

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swift;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Avocat
         }
 
         public override IEnumerator OnAttached()
-        {
+        { 
             yield return Battle.AddATK(Warrior, ATK);
             yield return base.OnAttached();
         }

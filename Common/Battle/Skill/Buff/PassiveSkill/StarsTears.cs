@@ -19,7 +19,7 @@ namespace Avocat
                 yield break;
 
             var bt = Battle as BattlePVE;
-            var des = 20 + dhp * 0.3;
+            var des = Calculation.StarTearsEffect(dhp);
             yield return bt.AddES(warrior, (int)des);
         }
 

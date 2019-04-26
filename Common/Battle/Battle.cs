@@ -248,8 +248,7 @@ namespace Avocat
             if (attackFlags.Contains("CancelAttack")) // 取消攻击标记
                 yield break;
 
-            var des = attacker.ATK >= target.ES ? -target.ES : -attacker.ATK;
-            var dhp = attacker.ATK >= target.ES ? -(attacker.ATK - target.ES) : 0;
+            Calculation.CalcAttack(attacker, target, attackFlags, out int dhp, out int des);
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))

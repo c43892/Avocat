@@ -31,7 +31,7 @@ namespace Avocat
 
             // 每张卡牌增加一定建设值
             var cards = AvailableCards.ToArray();
-            yield return BattlePVE.AddCardDissambleValue(cards.Length * 20);
+            yield return BattlePVE.AddCardDissambleValue(cards.Length * Calculation.ItemUsagePerCard);
 
             AvailableCards.Clear();
             OnCardsDisassembledDone?.Invoke(player, cards);
