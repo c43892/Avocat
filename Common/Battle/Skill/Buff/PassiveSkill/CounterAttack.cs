@@ -12,12 +12,12 @@ namespace Avocat
     /// </summary>
     public class CounterAttack : PassiveSkill
     {
-        IEnumerator AttackBack(Warrior attacker, Warrior target, List<string> flags)
+        IEnumerator AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (target != Warrior || flags.Contains("SuppressCounterAttack"))
                 yield break;
 
-            yield return Battle.Attack(target, attacker, "CounterAttack");
+            yield return Battle.Attack(target, attacker, this, "CounterAttack");
         }
 
         public override IEnumerator OnAttached()

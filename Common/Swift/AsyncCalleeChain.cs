@@ -127,6 +127,11 @@ namespace Swift
             callee.Add(a);
         }
 
+        public void Del(Func<T1, T2, T3, T4, IEnumerator> a)
+        {
+            callee.Remove(a);
+        }
+
         public void Add(Action<T1, T2, T3, T4> a)
         {
             callee.Add(a);

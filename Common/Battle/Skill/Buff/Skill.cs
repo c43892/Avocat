@@ -8,15 +8,29 @@ using System.Threading.Tasks;
 
 namespace Avocat
 {
+    public interface ISkillWithAXY // 一种伤害计算类型，具体详见数值文档
+    {
+        int A { get; }
+        int X { get; }
+        int Y { get; }
+    }
+
+    /// <summary>
+    /// 所有主被动技能
+    /// </summary>
+    public abstract class Skill
+    {
+        public virtual string Name { get; } // 每个技能必须唯一
+        public virtual Warrior Warrior { get; set; } // 技能在哪个角色身上
+        public virtual Battle Battle { get; set; } // 所属战斗对象
+        public virtual BattleMap Map { get { return Battle?.Map; } }
+    }
+
     /// <summary>
     /// 所有 buff 效果基础结构
     /// </summary>
-    public abstract class Buff
+    public abstract class Buff : Skill
     {
-        public virtual string Name { get; }
-        public virtual Warrior Warrior { get; set; }
-        public virtual Battle Battle { get; set; }
-        public virtual BattleMap Map { get { return Battle?.Map; } }
         public virtual IEnumerator OnAttached() { yield return null; }
         public virtual IEnumerator OnDetached() { yield return null; }
     }

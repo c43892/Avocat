@@ -11,7 +11,7 @@ namespace Avocat
     /// 游川隐
     /// 一闪
     /// </summary>
-    public class FlashAttack : PatternSkill
+    public class FlashAttack : PatternSkill, ISkillWithAXY
     {
         public override string Name => "FlashAttack";
 
@@ -22,7 +22,11 @@ namespace Avocat
         public override IEnumerator Fire()
         {
             var target = Map.FindNearestTarget(Warrior);
-            yield return BT.Attack(Warrior, target, "ExtraAttack", "SuppressCounterAttack");
+            yield return BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack");
         }
+
+        public int A { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

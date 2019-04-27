@@ -35,7 +35,7 @@ static class BattleStageOnEvents
         });
 
         // 角色攻击
-        IEnumerator OnAttacking(Warrior attacker, Warrior target, List<string> flags)
+        IEnumerator OnAttacking(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             var avatar = BattleStage.GetAvatarByWarrior(attacker);
             var targetAvatar = BattleStage.GetAvatarByWarrior(target);

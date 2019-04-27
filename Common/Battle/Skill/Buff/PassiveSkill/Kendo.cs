@@ -16,7 +16,7 @@ namespace Avocat
         // 效果持续几回合
         public int EffectRoundNum { get; set; }
 
-        IEnumerator OnAfterAttack(Warrior attacker, Warrior target, List<string> flags)
+        IEnumerator OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Warrior)
                 yield break;

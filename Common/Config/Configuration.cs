@@ -98,13 +98,21 @@ namespace Avocat
             // 匠心
             dAttrs[typeof(ArtisanSpirit)] = new Dictionary<string, object>
             {
-                ["Shield2Add"] = 10
+                ["ES2Add"] = 10
             };
 
             // 剑道
             dAttrs[typeof(Kendo)] = new Dictionary<string, object>
             {
                 ["EffectRoundNum"] = 2
+            };
+
+            // 一闪
+            dAttrs[typeof(FlashAttack)] = new Dictionary<string, object>
+            {
+                ["A"] = 20,
+                ["X"] = 150,
+                ["Y"] = 40
             };
 
             // 树干
@@ -122,7 +130,7 @@ namespace Avocat
 
         public static T Config<T>(T target)
         {
-            var type = typeof(T);
+            var type = target.GetType();
             if (!dAttrs.ContainsKey(type))
                 return target;
 

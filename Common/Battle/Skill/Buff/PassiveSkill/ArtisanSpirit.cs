@@ -13,7 +13,7 @@ namespace Avocat
     /// </summary>
     public class ArtisanSpirit : PassiveSkill
     {
-        public int Shield2Add { get; set; }
+        public int ES2Add { get; set; }
 
         IEnumerator AddEN(int player)
         {
@@ -21,7 +21,7 @@ namespace Avocat
                 yield break;
 
             var bt = Battle as BattlePVE;
-            yield return bt.AddEN(Shield2Add);
+            yield return bt.AddEN(ES2Add);
         }
 
         public override IEnumerator OnAttached()

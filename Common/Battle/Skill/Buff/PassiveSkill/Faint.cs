@@ -26,7 +26,7 @@ namespace Avocat
             resetActionFlags(false, false);
         }
 
-        IEnumerator CancelAttack(Warrior attacker, Warrior target, List<string> flags)
+        IEnumerator CancelAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Warrior)
                 yield break;
