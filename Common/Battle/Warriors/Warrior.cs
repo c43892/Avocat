@@ -62,13 +62,14 @@ namespace Avocat
         public int MaxES { get; set; } // 最大护盾
         public int ES { get; set; } // 护盾
 
-        public int AttackRange { get; set; } // 最大攻击距离
+        public int[] AttackRange { get; set; } // 最大攻击距离
         public int MoveRange { get; set; } // 最大移动距离
 
         public bool InAttackRange(int tx, int ty)
         {
             GetPosInMap(out int x, out int y);
-            return MU.ManhattanDist(x, y, tx, ty) <= AttackRange;
+            var dist = MU.ManhattanDist(x, y, tx, ty);
+            return FC.IndexOf(AttackRange, dist) >= 0;
         }
 
         // 本回合是否已经移动过

@@ -26,7 +26,7 @@ namespace Avocat
                 ["POW"] = 10,
                 ["ARM"] = 0,
                 ["RES"] = 0,
-                ["AttackRange"] = 1,
+                ["AttackRange"] = new int[] { 1 },
                 ["MoveRange"] = 2,
             };
 
@@ -40,7 +40,7 @@ namespace Avocat
                 ["POW"] = 64,
                 ["ARM"] = 17,
                 ["RES"] = 32,
-                ["AttackRange"] = 2,
+                ["AttackRange"] = new int[] { 1, 2 },
             };
 
             // 洛里斯
@@ -53,7 +53,7 @@ namespace Avocat
                 ["POW"] = 83,
                 ["ARM"] = 22,
                 ["RES"] = 20,
-                ["AttackRange"] = 2,
+                ["AttackRange"] = new int[] { 1, 2 },
             };
 
             // 游川隐
@@ -66,7 +66,7 @@ namespace Avocat
                 ["POW"] = 0,
                 ["ARM"] = 34,
                 ["RES"] = 28,
-                ["AttackRange"] = 1,
+                ["AttackRange"] = new int[] { 1 },
             };
 
             // 巴洛克
@@ -79,7 +79,8 @@ namespace Avocat
                 ["POW"] = 71,
                 ["ARM"] = 20,
                 ["RES"] = 20,
-                ["AttackRange"] = 1,
+                ["ArcherAttackRange"] = new int[] { 1, 2, 3 },
+                ["LancerAttackRange"] = new int[] { 1 },
                 ["State"] = "Lancer"
             };
 

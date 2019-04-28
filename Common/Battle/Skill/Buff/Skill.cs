@@ -22,8 +22,6 @@ namespace Avocat
     {
         public virtual string Name { get; } // 每个技能必须唯一
         public virtual Warrior Warrior { get; set; } // 技能在哪个角色身上
-        public virtual Battle Battle { get; set; } // 所属战斗对象
-        public virtual BattleMap Map { get { return Battle?.Map; } }
     }
 
     /// <summary>
@@ -31,6 +29,8 @@ namespace Avocat
     /// </summary>
     public abstract class Buff : Skill
     {
+        public virtual Battle Battle { get; set; } // 所属战斗对象
+        public virtual BattleMap Map { get { return Battle?.Map; } }
         public virtual IEnumerator OnAttached() { yield return null; }
         public virtual IEnumerator OnDetached() { yield return null; }
     }

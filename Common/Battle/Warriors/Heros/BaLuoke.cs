@@ -20,9 +20,9 @@ namespace Avocat
             SetupBuffAndSkills(new FastAssistance(), new TacticalCommand(() => State == "Archer" ? "EN" : "ATK"));
         }
 
-        public int ArcherAttackRange { get; set; }
+        public int[] ArcherAttackRange { get; set; }
         public int ArcherATK { get; set; }
-        public int LancerAttackRange { get; set; }
+        public int[] LancerAttackRange { get; set; }
         public int LancerATK { get; set; }
 
         public string State {

@@ -237,7 +237,6 @@ namespace Avocat
             // 物理和法术分别取不同的抗性，混乱攻击忽视抗性
 
             var basicAttack = attacker.BasicAttackValue;
-
             if (skill is ISkillWithAXY)
                 basicAttack = Calculation.CalcBasicAttackByAXY(attacker, skill as ISkillWithAXY);
 
@@ -258,7 +257,7 @@ namespace Avocat
                 damageDecFac = target.RES;
             }
 
-            // 通知所有可能影响抗性计算的逻辑
+            // 通知所有可能影响各种系数的计算逻辑
             BeforeCalculateDamage1?.Invoke(attacker, target, flags, out inc, out more, out damageDecFac);
             BeforeCalculateDamage2?.Invoke(attacker, target, flags, out inc, out more, out damageDecFac);
 
@@ -303,7 +302,7 @@ namespace Avocat
             if (!attackFlags.Contains("chaos") && target.ES > 0)
             {
                 dhp = damage > target.ES ? target.ES - damage : 0;
-                des = damage > target.ES ? 0 : damage;
+                des = damage > target.ES ? 0 : -damage;
             }
 
             if (des != 0) yield return AddES(target, des);

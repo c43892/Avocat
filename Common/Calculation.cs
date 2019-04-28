@@ -28,7 +28,7 @@ namespace Avocat
         // 星之泪效果公式
         public static int StarTearsEffect(int dhp)
         {
-            return dhp > 0 ? 20 + dhp * 3 / 10 : 0;
+            return dhp <= 0 ? 0 : 20 + dhp * 3 / 10;
         }
     }
 }
