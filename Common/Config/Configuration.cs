@@ -41,6 +41,7 @@ namespace Avocat
                 ["ARM"] = 17,
                 ["RES"] = 32,
                 ["AttackRange"] = new int[] { 1, 2 },
+                ["CardType"] = "PT", // 药水卡
             };
 
             // 洛里斯
@@ -54,6 +55,7 @@ namespace Avocat
                 ["ARM"] = 22,
                 ["RES"] = 20,
                 ["AttackRange"] = new int[] { 1, 2 },
+                ["CardType"] = "ES", // 盾卡
             };
 
             // 游川隐
@@ -67,6 +69,7 @@ namespace Avocat
                 ["ARM"] = 34,
                 ["RES"] = 28,
                 ["AttackRange"] = new int[] { 1 },
+                ["CardType"] = "ATK", // 攻击卡
             };
 
             // 巴洛克
@@ -81,7 +84,8 @@ namespace Avocat
                 ["RES"] = 20,
                 ["ArcherAttackRange"] = new int[] { 1, 2, 3 },
                 ["LancerAttackRange"] = new int[] { 1 },
-                ["State"] = "Lancer"
+                ["State"] = "Lancer",
+                ["CardType"] = "EN", // 能量卡
             };
 
             // 快速援护
@@ -114,6 +118,12 @@ namespace Avocat
                 ["A"] = 20,
                 ["X"] = 150,
                 ["Y"] = 40
+            };
+
+            // EMP 炮台
+            dAttrs[typeof(DeployEMPConnon)] = new Dictionary<string, object>
+            {
+                ["EnergyCost"] = 30
             };
 
             // 树干

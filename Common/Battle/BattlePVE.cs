@@ -80,10 +80,7 @@ namespace Avocat
             FC.Async2Sync(AddBuff(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards())));
 
             // 行动开始前，生成新卡牌
-            FC.Async2Sync(AddBuff(new GenCards(PlayerIndex,
-                (player) => player == 1 ? 5 : 0,
-                (player, cards) => ResetAvailableCards(cards)
-            )));
+            FC.Async2Sync(AddBuff(new GenCards(PlayerIndex, (player, cards) => ResetAvailableCards(cards))));
 
             Robot = new RobotPlayer(this);
         }

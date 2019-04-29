@@ -30,7 +30,7 @@ namespace Avocat
                     return new EN();
             }
 
-            return null;
+            throw new Exception("unknown card type: " + type);
         }
 
         public string Name { get; protected set; }

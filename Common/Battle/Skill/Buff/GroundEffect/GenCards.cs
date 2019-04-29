@@ -13,14 +13,12 @@ namespace Avocat
     /// </summary>
     public class GenCards : Buff
     {
-        Func<int, int> NumCardsGen = null;
         readonly Action<int, BattleCard[]> CardsGeneratedCallback = null;
         int Player { get; set; }
 
-        public GenCards(int player, Func<int, int> getNumCardsGen = null, Action<int, BattleCard[]> onCardsGenerated = null)
+        public GenCards(int player, Action<int, BattleCard[]> onCardsGenerated = null)
         {
             Player = player;
-            NumCardsGen = getNumCardsGen;
             CardsGeneratedCallback = onCardsGenerated;
         }
 
@@ -45,9 +43,21 @@ namespace Avocat
                     return;
 
                 // 填充卡片
-                var num = NumCardsGen == null ? 0 : NumCardsGen(player);
-                if (num > 0)
-                    CardsGeneratedCallback(player, GenNextCards(num));
+
+                // 两张随机
+                var twoRandomCards = GenNextCards(2);
+                // 每个英雄一张
+                var cardsByHeros = new List<BattleCard>();
+                Battle.Map.ForeachWarriors(Player, (x, y, warrior) =>
+                {
+                    if (!(warrior is Hero))
+                        return;
+
+                    cardsByHeros.Add(BattleCard.Create((warrior as Hero).CardType));
+                });
+
+                cardsByHeros.InsertRange(0, twoRandomCards);
+                CardsGeneratedCallback(player, cardsByHeros.ToArray());
             });
 
             yield return base.OnAttached();

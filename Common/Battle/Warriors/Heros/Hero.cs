@@ -25,5 +25,8 @@ namespace Avocat
             foreach (var b in bs)
                 FC.Async2Sync(Battle.AddBuff(Configuration.Config(b), this));
         }
+
+        // 刷什么类型的卡
+        public virtual string CardType { get; set; }
     }
 }

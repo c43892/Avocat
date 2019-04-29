@@ -181,6 +181,18 @@ namespace Avocat
             }, continueCondition);
         }
 
+        // 迭代所有非空战斗角色
+        public void ForeachWarriors(int team, Action<int, int, Warrior> act, Func<bool> continueCondition = null)
+        {
+            FC.For2(Width, Height, (x, y) =>
+            {
+                var warrior = warriors[x, y];
+                if (warrior != null && warrior.Team == team)
+                    act(x, y, warrior);
+
+            }, continueCondition);
+        }
+
         // 迭代所有非空道具
         public void ForeachItems(Action<int, int, BattleMapItem> act, Func<bool> continueCondition = null)
         {
