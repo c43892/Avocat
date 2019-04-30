@@ -73,6 +73,30 @@ public class BattleStage : MonoBehaviour
             DestroyImmediate(MapRoot.GetChild(0).gameObject);
     }
 
+    // 创建maptile用于显示攻击范围
+    public MapTile CreateMapTile(float x, float y)
+    {
+        var tile = Instantiate(MapTile);
+        tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/MapTile");
+        tile.transform.SetParent(MapRoot);
+        tile.X = (int)x;
+        tile.Y = (int)y;
+        tile.gameObject.name = "Range";
+        tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        tile.gameObject.SetActive(true);
+        return tile;
+    }
+
+    // 摧毁用于显示攻击范围的格子
+    public void RemoveTile(List<MapTile> pathATKRange)
+    {
+        foreach (MapTile map in pathATKRange)
+        {
+            Destroy(map.gameObject);
+        }
+        pathATKRange.Clear();
+    }
+
     // 构建地块层
     public StageOpsLayer CurrentOpLayer { get; private set; }
     public MapTile[,] Tiles { get; private set; }

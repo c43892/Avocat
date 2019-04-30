@@ -64,6 +64,39 @@ public class InBattleOps : StageOpsLayer
         }
     } Warrior curSelWarrior;
 
+    List<MapTile> pathATKRange = new List<MapTile>();
+    // 显示攻击范围
+    public void ShowAttackRange(float x, float y, Warrior worrior)
+    {
+        Debug.Assert(pathATKRange.Count == 0, "path range is not empty now.");
+        // MU.ManhattanDist(x, y, tx, ty) <= AttackRange
+        FC.For(worrior.AttackRange.Length,(i) => {
+            int minX = (x - worrior.AttackRange[i]) < 0 ? 0 : (int)(x - worrior.AttackRange[i]);
+            int maxX = (x + worrior.AttackRange[i]) >= BattleStage.Map.Width ? BattleStage.Map.Width : (int)(x + worrior.AttackRange[i] + 1);
+            int minY = (y - worrior.AttackRange[i]) < 0 ? 0 : (int)(y - worrior.AttackRange[i]);
+            int maxY = (y + worrior.AttackRange[i]) >= BattleStage.Map.Height ? BattleStage.Map.Height : (int)(y + worrior.AttackRange[i] + 1);
+            FC.For2(minX, maxX, minY, maxY, (tx, ty) =>
+            {
+                if (MU.ManhattanDist((int)x, (int)y, tx, ty) == worrior.AttackRange[i])
+                {
+                    var tile = BattleStage.CreateMapTile(tx, ty);
+                    pathATKRange.Add(tile);
+                }
+            });
+        });
+
+        FC.For(0, pathATKRange.Count, i =>
+        {
+            pathATKRange[i].GetComponent<SpriteRenderer>().color = Color.red;
+        });
+    }
+
+    // 清除攻击范围显示
+    public void RemoveShowAttackRange()
+    {
+        BattleStage.RemoveTile(pathATKRange);
+    }
+
     public override void OnClicked(float x, float y)
     {
         // 获取当前点击目标
@@ -77,11 +110,16 @@ public class InBattleOps : StageOpsLayer
                 {
                     // 选中己方角色，等待攻击指令
                     CurrentSelWarrior = warrior;
-                    if (CurrentSelWarrior != null)
+                    if (CurrentSelWarrior != null) {
                         status = "selectingAttackTarget";
+                        ShowAttackRange(x, y, CurrentSelWarrior);
+                    }
+                        
                 }
                 break;
             case "selectingAttackTarget":
+                // 再次点击时清除攻击范围显示
+                RemoveShowAttackRange();
                 if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
                     // 点空地
@@ -108,6 +146,8 @@ public class InBattleOps : StageOpsLayer
                 {
                     // 点己方角色，切换操作对象
                     CurrentSelWarrior = warrior;
+                    if (CurrentSelWarrior != null && !warrior.ActionDone)
+                        ShowAttackRange(x, y, CurrentSelWarrior);
                 }
                 else if (CurrentSelWarrior != null)
                 {
@@ -208,6 +248,11 @@ public class InBattleOps : StageOpsLayer
         });
 
         status = "selectingAttackTarget";
+        // 显示移动结束时攻击范围
+        int lastX = pathInSel[pathInSel.Count - 1].X;
+        int lastY = pathInSel[pathInSel.Count - 1].Y;
+        RemoveShowAttackRange();
+        ShowAttackRange((float)lastX, (float)lastY, CurrentSelWarrior);
     }
 
     // 执行攻击指令

@@ -75,6 +75,23 @@ namespace Swift
                 f(i++, d);
             }
         }
+        ///Map函数
+        public static T[] Map<T>(T[] preData, Func<T, T> f, Func<bool> continueCondition = null)
+        {
+            T[] postData = new T[preData.Length];
+            if (preData == null)
+                return null;
+
+            var i = 0;
+            foreach (var d in preData)
+            {
+                if (continueCondition != null && !continueCondition())
+                    break;
+
+               postData[i++] = f(d);
+            }
+            return postData;
+        }
 
         public static void RectForCenterAt(int cx, int cy, int halfW, int halfH, Action<int, int> f, Func<bool> continueCondition = null)
         {
