@@ -315,6 +315,30 @@ namespace Avocat
             yield return AfterAttack.Invoke(attacker, target, skill, attackFlags);
         }
 
+        // 模拟攻击行为的伤害数值，但并不执行攻击行为
+        public IEnumerator SimulateAttackingDamage(Warrior attacker, Warrior target, Skill skill, Action<int> onDamage, params string[] flags)
+        {
+            Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
+
+            target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
+            if (!attacker.InAttackRange(tx, ty))
+                yield break;
+
+            // 整理攻击标记
+            var attackFlags = new List<string>();
+            attackFlags.AddRange(flags);
+            attackFlags.Add(attacker.AttackingType);
+
+            yield return BeforeAttack.Invoke(attacker, target, skill, attackFlags);
+
+            if (attackFlags.Contains("CancelAttack")) // 取消攻击标记
+                yield break;
+
+            // 计算实际伤害
+            var damage = CalculateDamage(attacker, target, skill, attackFlags);
+            onDamage(damage);
+        }
+
         // 角色变形
         public AsyncCalleeChain<Warrior, string> BeforeTransfrom = new AsyncCalleeChain<Warrior, string>();
         public AsyncCalleeChain<Warrior, string> AfterTransfrom = new AsyncCalleeChain<Warrior, string>();

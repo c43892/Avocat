@@ -83,13 +83,19 @@ namespace Swift
         // 判断给定左边是否在指定矩形范围内
         public static bool InRect(this Vec2 v, Vec2 min, Vec2 max)
         {
-            return v.x >= min.x && v.x <= max.x && v.y >= min.y && v.y <= max.y;
+            return InRect(v.x, v.y, min.x, min.y, max.x - min.x + 1, max.y - min.y + 1);
         }
 
         // 判断给定左边是否在指定矩形范围内
         public static bool InRect(this Vec2 v, Vec2 max)
         {
             return v.InRect(Vec2.Zero, max);
+        }
+
+        // 判断给定左边是否在指定矩形范围内
+        public static bool InRect(Fix64 x, Fix64 y, Fix64 left, Fix64 top, Fix64 width, Fix64 height)
+        {
+            return x >= left && x <= x + width - 1 && y >= top && y <= top + height - 1;
         }
 
         // 计算曼哈顿距离

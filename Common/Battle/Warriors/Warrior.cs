@@ -60,6 +60,17 @@ namespace Avocat
             }
         }
 
+        // 计算防御力评估值
+        public int GetEstimatedDefence(string attackType = null)
+        {
+            if (attackType == "physic")
+                return ARM;
+            else if (attackType == "magic")
+                return RES;
+            else
+                return (ARM + RES) / 2;
+        }
+
         public int ARM { get; set; } // 物盾
         public int RES { get; set; } // 魔盾
 

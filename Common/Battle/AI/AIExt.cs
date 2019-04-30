@@ -35,13 +35,19 @@ namespace Avocat
                     return -1;
                 else if (dist2Target[a] > dist2Target[b])
                     return 1;
+                else if (a.Warrior.BasicAttackValue > b.Warrior.BasicAttackValue)
+                    return -1;
+                else if (a.Warrior.BasicAttackValue < b.Warrior.BasicAttackValue)
+                    return 1;
+                else if (a.Warrior.HP < b.Warrior.HP)
+                    return 1;
                 else if (a.Warrior.HP > b.Warrior.HP)
                     return -1;
                 else if (a.Warrior.HP < b.Warrior.HP)
                     return 1;
-                else if (a.Warrior.ARM + a.Warrior.RES > b.Warrior.ARM + b.Warrior.RES)
+                else if (a.Warrior.GetEstimatedDefence() > b.Warrior.GetEstimatedDefence())
                     return -1;
-                else if (a.Warrior.ARM + a.Warrior.RES < b.Warrior.ARM + b.Warrior.RES)
+                else if (a.Warrior.GetEstimatedDefence() < b.Warrior.GetEstimatedDefence())
                     return -1;
                 else
                     return 0;
@@ -132,7 +138,8 @@ namespace Avocat
             var map = warrior.Map;
 
             // 检查在移动后可以攻击到的敌人
-            var target = FindPriorTarget(warrior, FindTargetsReachable(warrior));
+            Warrior target = null;
+            yield return FindPriorTarget(warrior, FindTargetsReachable(warrior), (t) => target = t);
             if (target == null)
             {
                 // 没有够得到的攻击目标
@@ -208,12 +215,6 @@ namespace Avocat
             return targets.ToArray();
         }
 
-        // 从多个攻击目标中，挑选一个最优先
-        public static Warrior FindPriorTarget(Warrior warrior, Warrior[] targets)
-        {
-            return targets.Length > 0 ? targets[0] : null;
-        }
-
         // 寻找血量最少的目标
         public static Warrior FindTheWeakestTarget(Warrior warrior)
         {
@@ -224,8 +225,13 @@ namespace Avocat
                 if (warrior.Team == target.Team) // 过滤掉队友
                     return;
 
-                if (weakestTarget == null || weakestTarget.HP > target.HP)
+                if ((weakestTarget == null || weakestTarget.HP > target.HP) // 选血量少的
+                    || (weakestTarget.HP == target.HP && weakestTarget.ES > target.ES) // 血量相同选护盾少的
+                    || (weakestTarget.HP == target.HP && weakestTarget.ES == target.ES
+                    && (weakestTarget.GetEstimatedDefence(warrior.AttackingType) > target.GetEstimatedDefence(warrior.AttackingType)))) // 血量护盾相同选防低的
+                {
                     weakestTarget = target;
+                }
             });
 
             return weakestTarget;
@@ -244,7 +250,17 @@ namespace Avocat
                 if (warrior.Team != target.Team || warrior == target) // 过滤掉敌人和自己
                     return;
 
-                if (nearestTeammate == null || MU.ManhattanDist(fx, fy, tx, ty) < MU.ManhattanDist(fx, fy, nearestX, nearestY))
+                if (// 选距离最近的
+                    (nearestTeammate == null || MU.ManhattanDist(fx, fy, tx, ty) < MU.ManhattanDist(fx, fy, nearestX, nearestY))
+                    // 距离相同选 HP 高的
+                    || (MU.ManhattanDist(fx, fy, tx, ty) == MU.ManhattanDist(fx, fy, nearestX, nearestY) && nearestTeammate.HP < target.HP)
+                    // 距离，HP 相同选防御高的
+                    || (MU.ManhattanDist(fx, fy, tx, ty) == MU.ManhattanDist(fx, fy, nearestX, nearestY)
+                    && nearestTeammate.HP == target.HP && nearestTeammate.GetEstimatedDefence() < target.GetEstimatedDefence())
+                    // 距离，HP，防御相同选攻击高的
+                    || (MU.ManhattanDist(fx, fy, tx, ty) == MU.ManhattanDist(fx, fy, nearestX, nearestY)
+                    && nearestTeammate.HP == target.HP && nearestTeammate.GetEstimatedDefence() == target.GetEstimatedDefence()
+                    && (nearestTeammate.BasicAttackValue < target.BasicAttackValue)))
                 {
                     nearestX = tx;
                     nearestY = ty;
@@ -253,6 +269,118 @@ namespace Avocat
             });
 
             return nearestTeammate;
+        }
+
+        // 从多个攻击目标中，挑选一个最优先
+        public static IEnumerator FindPriorTarget(Warrior warrior, Warrior[] targets, Action<Warrior> onSelTarget)
+        {
+            if (targets.Length == 0)
+            {
+                onSelTarget(null);
+                yield break;
+            }
+            else if (targets.Length == 1)
+            {
+                onSelTarget(targets[0]);
+                yield break;
+            }
+
+            // 对目标进行评分
+            var priorityScore = new Dictionary<Warrior, int>();
+            foreach (var t in targets)
+                yield return GetTargetPriorityScore(warrior, t, (score) => priorityScore[t] = score);
+
+            // 防御最低的目标额外 2 分
+            Warrior lowestDefenceOne = null;
+            foreach (var t in targets)
+            {
+                if (lowestDefenceOne == null 
+                    || lowestDefenceOne.GetEstimatedDefence(warrior.AttackingType) > t.GetEstimatedDefence(warrior.AttackingType))
+                    lowestDefenceOne = t;
+            }
+            priorityScore[lowestDefenceOne] += 2;
+
+            // 攻击最低的目标额外 1 分
+            Warrior lowestAttackOne = null;
+            foreach (var t in targets)
+            {
+                if (lowestAttackOne == null || lowestAttackOne.BasicAttackValue > t.BasicAttackValue)
+                    lowestAttackOne = t;
+            }
+            priorityScore[lowestAttackOne] += 1;
+
+            targets.SwiftSort((a, b) => priorityScore[b] - priorityScore[a]);
+            onSelTarget(targets[0]);
+        }
+
+        // 计算目标优先级分数
+        public static IEnumerator GetTargetPriorityScore(Warrior warrior, Warrior target, Action<int> onScore)
+        {
+            var score = 0;
+
+            // 不能反击，5 分
+            if (target.GetActiveSkillByName("CounterAttack") == null)
+                score += 5;
+
+            // 能击杀的，10 分
+            var damage = 0;
+            yield return warrior.Battle.SimulateAttackingDamage(warrior, target, null, (d) => damage = d);
+            if (damage >= target.HP + target.ES)
+                score += 10;
+
+            // 无护盾的目标，3 分
+            if (target.ES <= 0)
+                score += 3;
+
+            // 血量 < 50% ，3 分
+            if (target.HP * 2 < target.MaxES)
+                score += 3;
+            else if (target.HP * 4 < target.MaxES * 3) // 血量 < 75%，1 分
+                score += 1;
+
+            // 没有相邻队友，2 分
+            if (CheckTeammateInDistance(warrior, 1).Length == 0)
+                score += 2;
+
+            // 被围攻，3 分
+            if (CheckThreatenedEnemies(warrior).Length > 1)
+                score += 3;
+
+            onScore(score);
+        }
+
+        // 检查指定范围内有多少队友
+        public static Warrior[] CheckTeammateInDistance(Warrior warrior, int dist)
+        {
+            var map = warrior.Map;
+            warrior.GetPosInMap(out int cx, out int cy);
+            var teammates = new List<Warrior>();
+            FC.RectForCenterAt(cx, cy, dist, dist, (x, y) =>
+            {
+                if (!MU.InRect(cx, cy, 0, 0, map.Width, map.Height))
+                    return;
+
+                var t = map.GetWarriorAt(x, y);
+                if (t != null && t.Team == warrior.Team)
+                    teammates.Add(t);
+            });
+
+            return teammates.ToArray();
+        }
+
+        // 检查有多少敌人可以攻击到指定目标
+        public static Warrior[] CheckThreatenedEnemies(Warrior target)
+        {
+            var map = target.Map;
+            target.GetPosInMap(out int cx, out int cy);
+            var enemies = new List<Warrior>();
+            map.ForeachWarriors((x, y, e) =>
+            {
+                if (e.InAttackRange(cx, cy))
+                    enemies.Add(e);
+            });
+
+            return enemies.ToArray();
         }
 
         //// 根据攻击者和目标确定攻击站位
