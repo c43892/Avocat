@@ -94,7 +94,7 @@ namespace Avocat
             yield return ForwardAndAttack(ai, target);
         }
 
-        // 指向指定目标
+        // 走向指定目标
         static IEnumerator Forward2Target(WarriorAI ai, Warrior target)
         {
             var warrior = ai.Warrior;
@@ -139,7 +139,7 @@ namespace Avocat
 
             // 检查在移动后可以攻击到的敌人
             Warrior target = null;
-            yield return FindPriorTarget(warrior, FindTargetsReachable(warrior), (t) => target = t);
+            yield return FindPriorTarget(warrior, FindTargetsReachable(warrior).Keys.ToArray(), (t) => target = t);
             if (target == null)
             {
                 // 没有够得到的攻击目标
@@ -160,8 +160,19 @@ namespace Avocat
             else
             {
                 // 根据要攻击的目标确定站位
-                // CheckoutAttackingPosition(warrior, target, out int tx, out int ty);
-                yield return ForwardAndAttack(ai, target);
+                var tx = 0;
+                var ty = 0;
+                yield return CheckoutAttackingPosition(warrior, target, (x, y) => { tx = x; ty = y; });
+
+                warrior.GetPosInMap(out int fx, out int fy);
+                var path = map.FindPath(fx, fy, tx, ty, warrior.MoveRange);
+                if (path.Count > 0)
+                {
+                    warrior.MovingPath.Clear();
+                    warrior.MovingPath.AddRange(path);
+                    yield return bt.MoveOnPath(warrior);
+                }
+                yield return bt.Attack(warrior, target);
             }
         }
 
@@ -184,9 +195,9 @@ namespace Avocat
         #endregion
 
         // 计算给定角色移动后，可以攻击到哪些目标
-        static Warrior[] FindTargetsReachable(Warrior warrior)
+        static Dictionary<Warrior, KeyValuePair<int, int>> FindTargetsReachable(Warrior warrior)
         {
-            var targets = new List<Warrior>(); // 潜在可以攻击到的目标
+            var targets = new Dictionary<Warrior, KeyValuePair<int, int>>(); // 潜在可以攻击到的目标，及对应的站位
             var map = warrior.Map;
             warrior.GetPosInMap(out int fx, out int fy);
             map.ForeachWarriors((tx, ty, target) =>
@@ -210,10 +221,10 @@ namespace Avocat
 
                 // 如果寻路结果的终点，可以攻击到目标，则加入候选列表
                 if (warrior.AttackRange.IndexOf(MU.ManhattanDist(dstX, dstY, tx, ty)) >= 0)
-                    targets.Add(target);
+                    targets[target] = new KeyValuePair<int, int>(dstX, dstY);
             });
 
-            return targets.ToArray();
+            return targets;
         }
 
         // 寻找血量最少的目标
@@ -358,7 +369,7 @@ namespace Avocat
             var teammates = new List<Warrior>();
             FC.RectForCenterAt(cx, cy, dist, dist, (x, y) =>
             {
-                if (!MU.InRect(cx, cy, 0, 0, map.Width, map.Height))
+                if (!MU.InRect(x, y, 0, 0, map.Width, map.Height))
                     return;
 
                 var t = map.GetWarriorAt(x, y);
@@ -384,10 +395,95 @@ namespace Avocat
             return enemies.ToArray();
         }
 
-        //// 根据攻击者和目标确定攻击站位
-        //public static void CheckoutAttackingPosition(Warrior attacker, Warrior target, out int tx, out int ty)
-        //{
+        // 根据攻击者和目标确定攻击站位
+        public static IEnumerator CheckoutAttackingPosition(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        {
+            if (attacker.AttackRange.Length == 1 && attacker.AttackRange[0] == 1)
+                yield return CheckoutPosition4CloseAttacking(attacker, target, onStandPos);
+            else
+                yield return CheckoutPosition4FarAttacking(attacker, target, onStandPos);
+        }
 
-        //}
+        // 近战攻击者站位逻辑
+        public static IEnumerator CheckoutPosition4CloseAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        {
+            // 计算哪些位置可以攻击到指定目标，并保留这些位置，及在这些位置上可以攻击到的目标列表
+
+            var targetWithStandPos = FindTargetsReachable(attacker);
+            var standPos2Targets = new Dictionary<KeyValuePair<int, int>, List<Warrior>>();
+
+            foreach (var t in targetWithStandPos.Keys)
+            {
+                var pos = targetWithStandPos[t];
+                if (!standPos2Targets.ContainsKey(pos))
+                    standPos2Targets[pos] = new List<Warrior>();
+
+                standPos2Targets[pos].Add(t);
+            }
+
+            // 可攻击目标中不包含指定目标的站位，不需要考虑
+            foreach (var pos in standPos2Targets.Keys.ToArray())
+            {
+                if (standPos2Targets[pos].IndexOf(target) < 0)
+                    standPos2Targets.Remove(pos);
+            }
+
+
+            Warrior lowestDefenceOne = null;  // 防御最低的目
+            Warrior lowestAttackOne = null; // 攻击最低的目标
+
+            // 对这些位置进行评分
+            var pos2Score = new Dictionary<KeyValuePair<int, int>, int>();
+            foreach (var pos in standPos2Targets.Keys)
+            {
+                var x = pos.Key;
+                var y = pos.Value;
+
+                var score = 0;
+                foreach (var t in standPos2Targets[pos])
+                {
+                    // 无反击能力，2 分
+                    if (t.GetActiveSkillByName("CounterAttack") == null)
+                        score += 2;
+
+                    // 能击杀的，3 分
+                    var damage = 0;
+                    yield return attacker.Battle.SimulateAttackingDamage(attacker, t, null, (d) => damage = d);
+                    if (damage >= target.HP + target.ES)
+                        score += 10;
+
+                    // 保留防御最低的目标
+                    if (lowestDefenceOne == null
+                            || lowestDefenceOne.GetEstimatedDefence(attacker.AttackingType) > t.GetEstimatedDefence(attacker.AttackingType))
+                        lowestDefenceOne = t;
+
+                    // 保留攻击最低的目标
+                    if (lowestAttackOne == null || lowestAttackOne.BasicAttackValue > t.BasicAttackValue)
+                        lowestAttackOne = t;
+                }
+
+                pos2Score[pos] = score;
+            }
+
+            foreach (var pos in standPos2Targets.Keys)
+            {
+                // 能攻击到防御最低的目标，额外 2 分
+                if (standPos2Targets[pos].IndexOf(lowestDefenceOne) >= 0)
+                    pos2Score[pos] += 2;
+
+                // 能攻击到攻击最低的目标，额外 1 分
+                if (standPos2Targets[pos].IndexOf(lowestAttackOne) >= 0)
+                    pos2Score[pos] += 1;
+            }
+
+            var posArr = standPos2Targets.Keys.ToArray();
+            posArr.SwiftSort((a, b) => pos2Score[b] - pos2Score[a]);
+            onStandPos(posArr[0].Key, posArr[0].Value);
+        }
+
+        public static IEnumerator CheckoutPosition4FarAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        {
+            yield return null;
+        }
     }
 }
