@@ -12,6 +12,42 @@ namespace Avocat
 {
     public static class AIUtils
     {
+        // 根据优先级重新排序 ai 执行顺序
+        public static void Resort(this WarriorAI[] ais)
+        {
+            // 最近敌人的距离
+            var dist2Target = new Dictionary<WarriorAI, int>();
+            foreach (var ai in ais)
+            {
+                ai.Warrior.GetPosInMap(out int fx, out int fy);
+                var target = ai.Warrior.Map.FindNearestTarget(ai.Warrior);
+                if (target != null)
+                {
+                    target.GetPosInMap(out int tx, out int ty);
+                    dist2Target[ai] = MU.ManhattanDist(fx, fy, tx, ty);
+                }
+            }
+
+            // 排序权重：距离敌人距离小，攻击力高，HP 高，防御高
+            ais.SwiftSort((a, b) =>
+            {
+                if (dist2Target[a] < dist2Target[b])
+                    return -1;
+                else if (dist2Target[a] > dist2Target[b])
+                    return 1;
+                else if (a.Warrior.HP > b.Warrior.HP)
+                    return -1;
+                else if (a.Warrior.HP < b.Warrior.HP)
+                    return 1;
+                else if (a.Warrior.ARM + a.Warrior.RES > b.Warrior.ARM + b.Warrior.RES)
+                    return -1;
+                else if (a.Warrior.ARM + a.Warrior.RES < b.Warrior.ARM + b.Warrior.RES)
+                    return -1;
+                else
+                    return 0;
+            });
+        }
+
         public static WarriorAI Build(this WarriorAI ai, string aiType)
         {
             switch (aiType)
@@ -116,7 +152,8 @@ namespace Avocat
             }
             else
             {
-                throw new Exception("not implemented yet");
+                // 根据要攻击的目标确定站位
+                // CheckoutAttackingPosition(warrior, target, out int tx, out int ty);
             }
         }
 
@@ -217,5 +254,11 @@ namespace Avocat
 
             return nearestTeammate;
         }
+
+        //// 根据攻击者和目标确定攻击站位
+        //public static void CheckoutAttackingPosition(Warrior attacker, Warrior target, out int tx, out int ty)
+        //{
+
+        //}
     }
 }

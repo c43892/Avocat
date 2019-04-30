@@ -177,9 +177,13 @@ namespace Avocat
 
             // 处理所属当前队伍的 ai
             if (AIs.ContainsKey(player))
+            {
+                var ais = AIs[player].Values.ToArray();
+                ais.Resort();
                 foreach (var id in AIs[player].Keys.ToArray())
                     yield return AIs[player][id].ActFirst?.Invoke();
-
+            }
+                
             yield return OnNextRoundStarted.Invoke(player);
             yield return AfterStartNextRound.Invoke(player);
         }
@@ -338,8 +342,12 @@ namespace Avocat
 
             // 处理所属当前队伍的 ai
             if (AIs.ContainsKey(player))
+            {
+                var ais = AIs[player].Values.ToArray();
+                ais.Resort();
                 foreach (var id in AIs[player].Keys.ToArray())
                     yield return AIs[player][id].ActLast?.Invoke();
+            }
 
             yield return AfterActionDone.Invoke(player);
 
