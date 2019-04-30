@@ -161,6 +161,7 @@ namespace Avocat
             {
                 // 根据要攻击的目标确定站位
                 // CheckoutAttackingPosition(warrior, target, out int tx, out int ty);
+                yield return ForwardAndAttack(ai, target);
             }
         }
 

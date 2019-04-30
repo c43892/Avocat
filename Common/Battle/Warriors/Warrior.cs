@@ -131,8 +131,7 @@ namespace Avocat
         // 获取主动技能
         public ActiveSkill GetActiveSkillByName(string name)
         {
-            Debug.Assert(activeSkills.ContainsKey(name), "skill named: " + name + " doest not exist.");
-            return activeSkills[name];
+            return activeSkills.ContainsKey(name) ? activeSkills[name] : null;
         }
 
         // 获取默认主动技能
