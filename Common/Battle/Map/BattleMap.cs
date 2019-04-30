@@ -284,19 +284,19 @@ namespace Avocat
         }
 
         // 寻路
-        public List<int> FindPath(int fx, int fy, int tx, int ty, int radius)
+        public List<int> FindPath(int fx, int fy, int tx, int ty, int maxSteps)
         {
             var path = new List<int>();
 
-            var nodes = pathFinder.Search(fx, fy, tx, ty, radius, true);
+            var nodes = pathFinder.Search(fx, fy, tx, ty, maxSteps, true);
             if (nodes != null)
             {
                 nodes.RemoveFirst(); // remove the src node
-                foreach (var n in nodes)
+                FC.ForEach(nodes, (i, n) =>
                 {
                     path.Add((int)n.Pos.x);
                     path.Add((int)n.Pos.y);
-                }
+                }, () => path.Count < maxSteps * 2);
             }
 
             return path;

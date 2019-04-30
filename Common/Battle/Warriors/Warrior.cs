@@ -6,6 +6,9 @@ using Swift;
 
 namespace Avocat
 {
+    /// <summary>
+    /// 有变身能力
+    /// </summary>
     public interface ITransformable
     {
         string State { set; }
@@ -21,7 +24,8 @@ namespace Avocat
         {
         }
 
-        public WarriorAI AI { get; set; }
+        public WarriorAI AI { get; set; } // AI 类型
+        public bool IsBoss { get; set; } = false; // 是否是 boss
 
         public int AvatarID { get; private set; } // 具体的角色形象 ID
         public int Team { get; set; } // 是属于哪一个玩家

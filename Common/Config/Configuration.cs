@@ -26,7 +26,7 @@ namespace Avocat
                 ["POW"] = 10,
                 ["ARM"] = 0,
                 ["RES"] = 0,
-                ["AttackRange"] = new int[] { 1 },
+                ["AttackRange"] = new int[] { 1, 2 },
                 ["MoveRange"] = 2,
             };
 
