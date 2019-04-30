@@ -51,7 +51,10 @@ namespace Avocat
             yield return BeforeWarriorRemoved.Invoke(warrior);
 
             // 移除角色前，先移除身上的 buff 效果和 AI
-            AIs[warrior.Team].Remove(warrior.IDInMap);
+
+            if (AIs.ContainsKey(warrior.Team))
+                AIs[warrior.Team].Remove(warrior.IDInMap);
+
             for (var i = 0; i < warrior.Buffs.Count; i++)
                 yield return warrior.Buffs[i].OnDetached();
 
