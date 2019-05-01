@@ -280,6 +280,10 @@ namespace Avocat
         {
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
+            // 在连续指令的情况下，可能条件已经不满足
+            if (attacker == null || target == null)
+                yield break;
+
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
                 yield break;

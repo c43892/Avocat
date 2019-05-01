@@ -30,7 +30,7 @@ namespace Avocat
 
         public override IEnumerator OnAttached()
         {
-            Battle.BeforeStartNextRound.Add(ImplResetActionFlags);
+            Battle.AfterActionDone.Add(ImplResetActionFlags);
             yield return base.OnAttached();
         }
     }

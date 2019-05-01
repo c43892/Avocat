@@ -21,7 +21,7 @@ namespace Avocat
             if (!target.InAttackRange(x, y))
                 yield break;
 
-            yield return Battle.Attack(target, attacker, this, "CounterAttack");
+            yield return Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack");
         }
 
         public override IEnumerator OnAttached()

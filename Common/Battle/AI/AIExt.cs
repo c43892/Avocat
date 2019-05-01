@@ -88,7 +88,7 @@ namespace Avocat
                     ai.ActLast = () => NormalNpcMonster(ai);
                     break;
                 case "EMPConnon":
-                    ai.ActLast = () => CombineAIs(StraightForwardAndAttack(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
+                    ai.ActLast = () => CombineAIs(NormalNpcMonster(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
                     break;
                 case "Dumb":
                     break;
@@ -109,7 +109,7 @@ namespace Avocat
         }
 
         // 走向最近的目标并攻击之
-        static IEnumerator StraightForwardAndAttack(WarriorAI ai)
+        static IEnumerator Forward2NearestTargetAndAttack(WarriorAI ai)
         {
             // 先寻找最近目标
             var warrior = ai.Warrior;
