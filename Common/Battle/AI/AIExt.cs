@@ -54,6 +54,26 @@ namespace Avocat
             });
         }
 
+        // 是否能够反击
+        public static bool CanAttackBack(this Warrior warrior, Warrior attacker)
+        {
+            // 检查反击技能
+            var s = warrior.GetActiveSkillByName("CounterAttack");
+            if (s == null)
+                return false;
+
+            // 检查攻击范围
+            attacker.GetPosInMap(out int x, out int y);
+            if (!warrior.InAttackRange(x, y))
+                return false;
+
+            // 检查它限制行动的 buff
+            if (warrior.GetBuffByName("Faint") != null)
+                return false;
+
+            return true;
+        }
+
         public static WarriorAI Build(this WarriorAI ai, string aiType)
         {
             switch (aiType)
@@ -331,7 +351,7 @@ namespace Avocat
             var score = 0;
 
             // 不能反击，5 分
-            if (target.GetActiveSkillByName("CounterAttack") == null)
+            if (!target.CanAttackBack(warrior))
                 score += 5;
 
             // 能击杀的，10 分
@@ -443,7 +463,7 @@ namespace Avocat
                 foreach (var t in standPos2Targets[pos])
                 {
                     // 无反击能力，2 分
-                    if (t.GetActiveSkillByName("CounterAttack") == null)
+                    if (t.CanAttackBack(attacker))
                         score += 2;
 
                     // 能击杀的，3 分

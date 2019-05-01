@@ -17,6 +17,10 @@ namespace Avocat
             if (target != Warrior || flags.Contains("SuppressCounterAttack"))
                 yield break;
 
+            attacker.GetPosInMap(out int x, out int y);
+            if (!target.InAttackRange(x, y))
+                yield break;
+
             yield return Battle.Attack(target, attacker, this, "CounterAttack");
         }
 

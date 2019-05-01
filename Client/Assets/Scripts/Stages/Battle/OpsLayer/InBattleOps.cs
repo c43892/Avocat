@@ -53,12 +53,7 @@ public class InBattleOps : StageOpsLayer
                 curSelWarrior.MovingPath.Clear();
             }
 
-            FC.ForEach(pathInSel, (i, tile) =>
-            {
-                tile.Color = MapTile.ColorDefault;
-                tile.Card = null;
-            });
-            pathInSel.Clear();
+            ClearSelTiles();
 
             OnCurrentWarriorChanged?.Invoke();
         }
@@ -89,6 +84,17 @@ public class InBattleOps : StageOpsLayer
         {
             pathATKRange[i].GetComponent<SpriteRenderer>().color = Color.red;
         });
+    }
+
+    // 清除路劲显示
+    public void ClearSelTiles()
+    {
+        FC.ForEach(pathInSel, (i, tile) =>
+        {
+            tile.Color = MapTile.ColorDefault;
+            tile.Card = null;
+        });
+        pathInSel.Clear();
     }
 
     // 清除攻击范围显示

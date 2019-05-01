@@ -155,5 +155,12 @@ namespace Avocat
             if (defaultSkillName == name)
                 defaultSkillName = null;
         }
+
+        // 获取指定名称的 buff 或被动技能
+        public Buff GetBuffByName(string name)
+        {
+            var n = Buffs.IndexOf((buff) => buff.Name == name);
+            return n < 0 ? null : Buffs[n];
+        }
     }
 }
