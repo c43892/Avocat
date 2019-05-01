@@ -120,10 +120,16 @@ namespace Avocat
                 ["Y"] = 40
             };
 
-            // EMP 炮台
+            // 放置 EMP 炮台
             dAttrs[typeof(DeployEMPConnon)] = new Dictionary<string, object>
             {
-                ["EnergyCost"] = 30
+                ["EnergyCost"] = 30,
+            };
+
+            // EMP 炮台
+            dAttrs[typeof(CannonEMP)] = new Dictionary<string, object>
+            {
+                ["AttackRange"] = new int[] { 1 }
             };
 
             // 树干
