@@ -528,15 +528,16 @@ namespace Avocat
                 var score = 0;
                 foreach (var t in standPos2Targets[pos])
                 {
-                    //// 无反击能力，2 分
-                    //if (t.CanAttackBack(attacker))
-                    //    score += 2;
+                    // 进战敌人，2 分，远程敌人，1 分
+                    score += t.IsCloseAttack() ? 2 : 1;
 
-                    //// 能击杀的，3 分
-                    //var damage = 0;
-                    //yield return attacker.Battle.SimulateAttackingDamage(attacker, t, null, (d) => damage = d);
-                    //if (damage >= target.HP + target.ES)
-                    //    score += 10;
+                    // 敌人没有反击能力，2 分
+                    if (t.CanAttackBack(attacker))
+                        score += 2;
+
+                    // 能攻击到自己，并且自己无法反击，则 -2 分，能反击则 1
+                    if (t.InAttackRange(x, y))
+                        score += attacker.CanAttackBack(t) ? 1 : -2;
                 }
 
                 pos2Score[pos] = score;

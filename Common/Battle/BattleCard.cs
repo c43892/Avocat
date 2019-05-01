@@ -44,7 +44,7 @@ namespace Avocat
         {
             var bt = warrior.Battle;
             var dATK = (warrior.ATK * 15 / 100).Clamp(1, int.MaxValue);
-            yield return bt.AddBuff(new CardATK(), warrior);
+            yield return bt.AddBuff(new CardATK() { ATK = dATK }, warrior);
         }
     }
 
