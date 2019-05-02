@@ -27,7 +27,7 @@ namespace Avocat
                 case "ATK":
                     return new BattleCardATK();
                 case "EN":
-                    return new EN();
+                    return new BattleCardEN();
             }
 
             throw new Exception("unknown card type: " + type);
@@ -67,9 +67,9 @@ namespace Avocat
         }
     }
 
-    public class EN : BattleCard
+    public class BattleCardEN : BattleCard
     {
-        public EN() { Name = "EN"; }
+        public BattleCardEN() { Name = "EN"; }
         public override IEnumerator ExecuteOn(Warrior warrior)
         {
             yield return (warrior.Battle as BattlePVE).AddEN(15);
