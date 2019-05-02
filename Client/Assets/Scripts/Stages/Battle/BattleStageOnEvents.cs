@@ -80,6 +80,10 @@ static class BattleStageOnEvents
             {
                 if (avatar.Warrior.Team == player)
                     avatar.RefreshAttrs();
+
+                var op = BattleStage.CurrentOpLayer as InBattleOps;
+                op.RemoveShowAttackRange();
+                op.ClearSelTiles();
             });
         });
 

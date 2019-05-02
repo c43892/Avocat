@@ -54,6 +54,32 @@ namespace Avocat
             });
         }
 
+        // 是否能够反击
+        public static bool CanAttackBack(this Warrior warrior, Warrior attacker)
+        {
+            // 检查反击技能
+            var s = warrior.GetActiveSkillByName("CounterAttack");
+            if (s == null)
+                return false;
+
+            // 检查攻击范围
+            attacker.GetPosInMap(out int x, out int y);
+            if (!warrior.InAttackRange(x, y))
+                return false;
+
+            // 检查它限制行动的 buff
+            if (warrior.GetBuffByName("Faint") != null)
+                return false;
+
+            return true;
+        }
+
+        // 是否是近战单位
+        public static bool IsCloseAttack(this Warrior warrior)
+        {
+            return warrior.AttackRange.Length == 1 && warrior.AttackRange[0] == 1;
+        }
+
         public static WarriorAI Build(this WarriorAI ai, string aiType)
         {
             switch (aiType)
@@ -62,7 +88,7 @@ namespace Avocat
                     ai.ActLast = () => NormalNpcMonster(ai);
                     break;
                 case "EMPConnon":
-                    ai.ActLast = () => CombineAIs(StraightForwardAndAttack(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
+                    ai.ActLast = () => CombineAIs(NormalNpcMonster(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
                     break;
                 case "Dumb":
                     break;
@@ -83,7 +109,7 @@ namespace Avocat
         }
 
         // 走向最近的目标并攻击之
-        static IEnumerator StraightForwardAndAttack(WarriorAI ai)
+        static IEnumerator Forward2NearestTargetAndAttack(WarriorAI ai)
         {
             // 先寻找最近目标
             var warrior = ai.Warrior;
@@ -143,7 +169,7 @@ namespace Avocat
             if (target == null)
             {
                 // 没有够得到的攻击目标
-                if (warrior.AttackRange.Length == 1 && warrior.AttackRange[0] == 1) // 近战单位
+                if (warrior.IsCloseAttack()) // 近战单位
                 {
                     // 近战单位，就寻找血量最少的目标，向其移动
                     target = FindTheWeakestTarget(warrior);
@@ -331,7 +357,7 @@ namespace Avocat
             var score = 0;
 
             // 不能反击，5 分
-            if (target.GetActiveSkillByName("CounterAttack") == null)
+            if (!target.CanAttackBack(warrior))
                 score += 5;
 
             // 能击杀的，10 分
@@ -398,14 +424,13 @@ namespace Avocat
         // 根据攻击者和目标确定攻击站位
         public static IEnumerator CheckoutAttackingPosition(Warrior attacker, Warrior target, Action<int, int> onStandPos)
         {
-            if (attacker.AttackRange.Length == 1 && attacker.AttackRange[0] == 1)
-                yield return CheckoutPosition4CloseAttacking(attacker, target, onStandPos);
-            else
-                yield return CheckoutPosition4FarAttacking(attacker, target, onStandPos);
+            yield return attacker.IsCloseAttack() ?
+                CheckoutPosition4CloseAttacking(attacker, target, onStandPos)
+                 : CheckoutPosition4FarAttacking(attacker, target, onStandPos);
         }
 
-        // 近战攻击者站位逻辑
-        public static IEnumerator CheckoutPosition4CloseAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        // 获取可以攻击到目标的所有站位列表
+        public static Dictionary<KeyValuePair<int, int>, List<Warrior>> GetPosListWithTargetReachable(Warrior attacker, Warrior target)
         {
             // 计算哪些位置可以攻击到指定目标，并保留这些位置，及在这些位置上可以攻击到的目标列表
 
@@ -428,6 +453,13 @@ namespace Avocat
                     standPos2Targets.Remove(pos);
             }
 
+            return standPos2Targets;
+        }
+
+        // 近战攻击者站位逻辑
+        public static IEnumerator CheckoutPosition4CloseAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        {
+            var standPos2Targets = GetPosListWithTargetReachable(attacker, target);
 
             Warrior lowestDefenceOne = null;  // 防御最低的目
             Warrior lowestAttackOne = null; // 攻击最低的目标
@@ -443,7 +475,7 @@ namespace Avocat
                 foreach (var t in standPos2Targets[pos])
                 {
                     // 无反击能力，2 分
-                    if (t.GetActiveSkillByName("CounterAttack") == null)
+                    if (t.CanAttackBack(attacker))
                         score += 2;
 
                     // 能击杀的，3 分
@@ -481,8 +513,40 @@ namespace Avocat
             onStandPos(posArr[0].Key, posArr[0].Value);
         }
 
+        // 远程攻击者的站位逻辑
         public static IEnumerator CheckoutPosition4FarAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
         {
+            var standPos2Targets = GetPosListWithTargetReachable(attacker, target);
+
+            // 对这些位置进行评分
+            var pos2Score = new Dictionary<KeyValuePair<int, int>, int>();
+            foreach (var pos in standPos2Targets.Keys)
+            {
+                var x = pos.Key;
+                var y = pos.Value;
+
+                var score = 0;
+                foreach (var t in standPos2Targets[pos])
+                {
+                    // 进战敌人，2 分，远程敌人，1 分
+                    score += t.IsCloseAttack() ? 2 : 1;
+
+                    // 敌人没有反击能力，2 分
+                    if (t.CanAttackBack(attacker))
+                        score += 2;
+
+                    // 能攻击到自己，并且自己无法反击，则 -2 分，能反击则 1
+                    if (t.InAttackRange(x, y))
+                        score += attacker.CanAttackBack(t) ? 1 : -2;
+                }
+
+                pos2Score[pos] = score;
+            }
+
+            var posArr = standPos2Targets.Keys.ToArray();
+            posArr.SwiftSort((a, b) => pos2Score[b] - pos2Score[a]);
+            onStandPos(posArr[0].Key, posArr[0].Value);
+
             yield return null;
         }
     }
