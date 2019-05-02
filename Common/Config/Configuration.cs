@@ -20,14 +20,14 @@ namespace Avocat
             // 野猪
             dAttrs[typeof(Boar)] = new Dictionary<string, object>
             {
-                ["AttackingType"] = "physic",
-                ["MaxHP"] = 200,
+                ["AttackingType"] = "physic", // 攻击类型, physic, magic
+                ["MaxHP"] = 200, // 最大血量，如果没有设置 HP，默认初始血量就是最大血量
                 ["ATK"] = 10,
                 ["POW"] = 10,
                 ["ARM"] = 0,
                 ["RES"] = 0,
-                ["AttackRange"] = new int[] { 1 },
-                ["MoveRange"] = 2,
+                ["AttackRange"] = new int[] { 1 }, // 攻击范围，如果不是 1 或者不止一个范围，就认为是远程攻击
+                ["MoveRange"] = 2, // 最大移动距离
             };
 
             // 黛丽万
@@ -91,7 +91,7 @@ namespace Avocat
             // 快速援护
             dAttrs[typeof(FastAssistance)] = new Dictionary<string, object>
             {
-                ["EnergyCost"] = 50
+                ["EnergyCost"] = 50 // 能量消耗
             };
 
             // 蝶舞
@@ -103,24 +103,25 @@ namespace Avocat
             // 匠心
             dAttrs[typeof(ArtisanSpirit)] = new Dictionary<string, object>
             {
-                ["ES2Add"] = 10
+                ["ES2Add"] = 10 // 每次加多少盾
             };
 
             // 剑道
             dAttrs[typeof(Kendo)] = new Dictionary<string, object>
             {
-                ["EffectRoundNum"] = 2
+                ["EffectRoundNum"] = 2 // 创伤效果持续回合数
             };
 
             // 一闪
             dAttrs[typeof(FlashAttack)] = new Dictionary<string, object>
             {
+                // 伤害计算参数
                 ["A"] = 20,
                 ["X"] = 150,
                 ["Y"] = 40
             };
 
-            // 放置 EMP 炮台
+            // 放置 EMP 炮台的技能
             dAttrs[typeof(DeployEMPConnon)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 30,
