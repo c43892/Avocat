@@ -15,6 +15,7 @@ public class CombatTestDriver : GameDriver
     public BattleStageUI BattleStageUI;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
+    Battle Battle { get { return Room?.Battle; } }
 
     BattleMessageLooper msgLooper;
     LocalBattleRecorder Recoder
@@ -24,8 +25,6 @@ public class CombatTestDriver : GameDriver
             return GetComponent<LocalBattleRecorder>();
         }
     }
-
-    BattleReplay currentReplay;
 
     public new void Start()
     {
@@ -37,20 +36,22 @@ public class CombatTestDriver : GameDriver
         Recoder.LoadAll();
         msgLooper.OnMessageIn += (byte[] data) =>
         {
-            if (currentReplay == null)
+            if (currentReplay != null)
+                return;
+
+            if (Battle.Replay == null)
             {
-                currentReplay = new BattleReplay { Time = DateTime.Now.Ticks };
-                Recoder.AddReplay(currentReplay);
+                Battle.Replay = new BattleReplay() { Time = DateTime.Now.Ticks };
+                Recoder.AddReplay(Battle.Replay);
             }
 
-            currentReplay.Messages.Add(data);
+            Battle.Replay.Messages.Add(data);
             Recoder.SaveAll();
         };
 
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
 
-        // StartCoroutine(msgLooper.Loop());
         GameCore.Instance.Get<CoroutineManager>().Start(msgLooper.Loop());
     }
 
@@ -95,8 +96,6 @@ public class CombatTestDriver : GameDriver
         PreparingUI.SetActive(true);
         BattleStage.gameObject.SetActive(true);
         BattleStage.StartPreparing();
-
-        currentReplay = null;
     }
 
     // 准备完毕
@@ -125,12 +124,13 @@ public class CombatTestDriver : GameDriver
     }
 
     // 播放游戏录像
+    BattleReplay currentReplay;
     public void OnPlayReplay(int i)
     {
         OnStartNewBattle();
         currentReplay = Recoder.Replays[i];
         Recoder.Play(currentReplay, (data) => msgLooper.SendRaw(data));
-        currentReplay.Messages.Clear();
+        currentReplay = currentReplay;
     }
 
     // 游戏结束确定

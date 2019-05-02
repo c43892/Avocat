@@ -64,7 +64,6 @@ public class InBattleOps : StageOpsLayer
     public void ShowAttackRange(float x, float y, Warrior worrior)
     {
         Debug.Assert(pathATKRange.Count == 0, "path range is not empty now.");
-        // MU.ManhattanDist(x, y, tx, ty) <= AttackRange
         FC.For(worrior.AttackRange.Length,(i) => {
             int minX = (x - worrior.AttackRange[i]) < 0 ? 0 : (int)(x - worrior.AttackRange[i]);
             int maxX = (x + worrior.AttackRange[i]) >= BattleStage.Map.Width ? BattleStage.Map.Width : (int)(x + worrior.AttackRange[i] + 1);

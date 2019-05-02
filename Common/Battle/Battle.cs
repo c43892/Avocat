@@ -33,6 +33,9 @@ namespace Avocat
             }
         } BattleMap map = null;
 
+        // 本场游戏录像
+        public BattleReplay Replay { get; set; }
+
         public Battle(BattleMap map, int randSeed)
         {
             Srand = new SRandom(randSeed);
