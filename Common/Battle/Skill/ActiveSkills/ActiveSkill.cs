@@ -14,7 +14,6 @@ namespace Avocat
     {
         public virtual Battle Battle { get => Warrior.Battle; } // 所属战斗对象
         public virtual BattleMap Map { get { return Battle?.Map; } }
-
         // 能量消耗
         public abstract int EnergyCost { get; set; }
 

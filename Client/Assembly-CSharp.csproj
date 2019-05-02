@@ -160,7 +160,9 @@
     <Compile Include="Assets\Scripts\Stages\Battle\MapItem.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\InBattleOps.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\IWithRange.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\SkillsOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\UseMapItemOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\SpriteText.cs" />

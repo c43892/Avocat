@@ -125,6 +125,7 @@ namespace Avocat
             dAttrs[typeof(DeployEMPConnon)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 30,
+                ["Range"] = 2
             };
 
             // EMP 炮台

@@ -169,7 +169,7 @@ public class InBattleOps : StageOpsLayer
     }
 
     // 拖拽连续选择行动路径
-    List<MapTile> pathInSel = new List<MapTile>();
+   public List<MapTile> pathInSel = new List<MapTile>();
     public override void OnStartDragging(float x, float y)
     {
         // 获取当前点击目标
@@ -238,7 +238,8 @@ public class InBattleOps : StageOpsLayer
             }
         }
     }
-
+    public int lastX;
+    public int lastY;
     public override void OnEndDragging(float fx, float fy, float cx, float cy)
     {
         if (status != "selectingPath")
@@ -254,8 +255,8 @@ public class InBattleOps : StageOpsLayer
 
         status = "selectingAttackTarget";
         // 显示移动结束时攻击范围
-        int lastX = pathInSel[pathInSel.Count - 1].X;
-        int lastY = pathInSel[pathInSel.Count - 1].Y;
+        lastX = pathInSel[pathInSel.Count - 1].X;
+        lastY = pathInSel[pathInSel.Count - 1].Y;
         RemoveShowAttackRange();
         ShowAttackRange((float)lastX, (float)lastY, CurrentSelWarrior);
     }

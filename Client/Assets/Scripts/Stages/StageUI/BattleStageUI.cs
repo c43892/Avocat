@@ -13,6 +13,7 @@ public class BattleStageUI : MonoBehaviour
 {
     // 战斗场景
     public BattleStage BattleStage;
+    public bool enterSkillStage;
 
     // 可用的卡组区域
     public BattleCardUI[] CardsAvailableGroup;
@@ -76,16 +77,41 @@ public class BattleStageUI : MonoBehaviour
         Room.ActionDone();
     }
 
+    public int selX;
+    public int selY;
     // 释放主动技能
     public void OnFireActiveSkill()
     {
+        enterSkillStage = true;
         var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
         Debug.Assert(skill != null, "there is no default active skill");
-
         if (skill.ActiveSkillType == "fireAt")
         {
             // confirm the position and fire at it
-            Room.FireActiveSkillAt(skill, 0, 0);
+            var cx = 0;
+            var cy = 0;
+            Warrior warrior = BattleStage.InBattleOps.CurrentSelWarrior;
+            warrior.GetPosInMap(out int x, out int y);
+            List<int> movingPath = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.MovingPath;
+            if (movingPath != null && movingPath.Count >= 2)
+            {
+                cx = movingPath[movingPath.Count - 2];
+                cy = movingPath[movingPath.Count - 1];
+            }
+            else
+            {
+                cx = x;
+                cy = y;
+            }
+            BattleStage.StartSkillStage(enterSkillStage);
+            if (enterSkillStage)
+            {
+                BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selx, sely) =>
+                  {
+                      Room.FireActiveSkillAt(skill, selx, sely);
+                  });
+            }
+
         }
         else
             Room.FireActiveSkill(skill);
