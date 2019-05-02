@@ -45,6 +45,7 @@ public class BattleStage : MonoBehaviour
     public PreparingOps PreparingOps { get; private set; }  // 准备阶段
     public InBattleOps InBattleOps { get; private set; } // 战斗内一般阶段
     public UseMapItemOps UseMapItemOps { get; private set; }  // 战斗内地形改造阶段
+    public SkillsOps SkillOps { get; private set; }
 
     // 创建场景显示对象
     public void Build(BattleRoomClient room)
@@ -60,7 +61,7 @@ public class BattleStage : MonoBehaviour
         PreparingOps = new PreparingOps(this); // 准备阶段
         InBattleOps = new InBattleOps(this); // 战斗内一般阶段
         UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
-
+        SkillOps = new SkillsOps(this); //  战斗内释放技能阶段
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
     }
 
@@ -268,6 +269,24 @@ public class BattleStage : MonoBehaviour
             CurrentOpLayer = UseMapItemOps;
         else
             CurrentOpLayer = InBattleOps;
+    }
+
+    // 判断是否进入释放技能阶段
+    public void StartSkillStage(bool enterOrExit) {
+        if (enterOrExit)
+        {
+            CurrentOpLayer = SkillOps;
+        }
+        else {
+            CurrentOpLayer = InBattleOps;
+        }
+    }
+
+    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
+    {
+
+        SkillOps.ShowSkillAttackRange(cx, cy, (IWithRange)skill, onSelPos);
+        
     }
 
     // 挂接地图操作逻辑
