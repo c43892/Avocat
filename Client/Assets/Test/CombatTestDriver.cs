@@ -130,7 +130,6 @@ public class CombatTestDriver : GameDriver
         OnStartNewBattle();
         currentReplay = Recoder.Replays[i];
         Recoder.Play(currentReplay, (data) => msgLooper.SendRaw(data));
-        currentReplay = currentReplay;
     }
 
     // 游戏结束确定

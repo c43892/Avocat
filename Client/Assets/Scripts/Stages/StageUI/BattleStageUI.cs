@@ -103,15 +103,15 @@ public class BattleStageUI : MonoBehaviour
                 cx = x;
                 cy = y;
             }
+
             BattleStage.StartSkillStage(enterSkillStage);
             if (enterSkillStage)
             {
                 BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selx, sely) =>
-                  {
-                      Room.FireActiveSkillAt(skill, selx, sely);
-                  });
+                {
+                    Room.FireActiveSkillAt(skill, selx, sely);
+                });
             }
-
         }
         else
             Room.FireActiveSkill(skill);

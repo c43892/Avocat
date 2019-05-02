@@ -93,7 +93,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PatternSkill\FlashAttack.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\PatternSkill\PatternSkill.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Skill.cs" />
-    <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\BaLuoke.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\BaLuoKe.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\DaiLiWan.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\Hero.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Heros\LuoLiSi.cs" />
@@ -160,9 +160,8 @@
     <Compile Include="Assets\Scripts\Stages\Battle\MapItem.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapTile.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\InBattleOps.cs" />
-    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\IWithRange.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PosSelOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
-    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\SkillsOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\UseMapItemOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\SpriteText.cs" />
