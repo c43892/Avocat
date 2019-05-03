@@ -17,7 +17,7 @@ namespace Avocat
             : base(bt)
         {
             Name = "游川隐";
-            SetupBuffAndSkills(Configuration.Config(new TimeBack()), Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
+            SetupBuffAndSkills(null /* Configuration.Config(new TimeBack()) */, Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
         }
     }
 }

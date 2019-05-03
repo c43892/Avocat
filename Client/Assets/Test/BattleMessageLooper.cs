@@ -30,7 +30,7 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         msgs.Enqueue(buff.Data);
     }
 
-    public event Action<int, byte[]> OnMessageIn = null;
+    public Action<int, byte[]> OnMessageIn { get; set; }
 
     public void Clear()
     {

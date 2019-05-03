@@ -51,7 +51,8 @@ public class CombatTestDriver : GameDriver
     public void StartGame()
     {
         var map = new BattleMap(10, 6); // test map
-        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }); // test battle
+        var s = DateTime.Now.ToLocalTime().ToString();
+        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:"+ s, Name = "战斗测试:"+ s }); // test battle
 
         // npcs
         FC.Async2Sync(bt.AddWarriorAt(5, 1, Configuration.Config(new Boar(map) { Team = 2 })));

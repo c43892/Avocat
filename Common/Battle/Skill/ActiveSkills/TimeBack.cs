@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Swift;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,38 @@ namespace Avocat
         // 主动释放
         public override IEnumerator Fire()
         {
-            Battle.Replay.Messages.RemoveAt(Battle.Replay.Messages.Count - 1);
-            yield return Battle.TriggerTimeBack();
+            var msgs = Battle.Replay.Messages;
+            if (msgs.Count == 0)
+                yield break;
+
+            var i = 0;
+            var actionDownCount = 0;
+            while (true)
+            {
+                if (i >= msgs.Count)
+                    break;
+
+                var msg = msgs[msgs.Count - i - 1];
+                var op = (new RingBuffer(msg)).ReadString();
+
+                // 消息往回退到 PlayerPrepared 或者上上个 ActionDone 为止
+                if (op == "PlayerPrepared")
+                    break;
+                else if (op == "ActionDone")
+                {
+                    actionDownCount++;
+                    if (actionDownCount == 2)
+                        break;
+                }
+
+                i++;
+            }
+
+            if (i > 1)
+            {
+                Battle.Replay.Messages.RemoveRange(Battle.Replay.Messages.Count - i, i);
+                yield return Battle.TriggerTimeBack();
+            }
         }
     }
 }

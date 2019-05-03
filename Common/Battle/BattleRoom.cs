@@ -14,7 +14,7 @@ namespace Avocat
     public interface IBattlemessageProvider
     {
         void HandleMsg(string msg, Func<int, IReadableBuffer, IEnumerator> handler);
-        event Action<int, byte[]> OnMessageIn;
+        Action<int, byte[]> OnMessageIn { get; set; }
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace Avocat
         public event Action ReplayChanged = null;
         public virtual void RegisterBattleMessageHandlers(IBattlemessageProvider bmp)
         {
-            bmp.OnMessageIn += (int seqNo, byte[] data) =>
+            bmp.OnMessageIn = (int seqNo, byte[] data) =>
             {
                 if (seqNo > Battle.Replay.Messages.Count)
                 {
