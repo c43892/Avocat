@@ -34,21 +34,6 @@ public class CombatTestDriver : GameDriver
 
         // setup the local replay system
         Recoder.LoadAll();
-        msgLooper.OnMessageIn += (byte[] data) =>
-        {
-            if (currentReplay != null)
-                return;
-
-            if (Battle.Replay == null)
-            {
-                Battle.Replay = new BattleReplay() { Time = DateTime.Now.Ticks };
-                Recoder.AddReplay(Battle.Replay);
-            }
-
-            Battle.Replay.Messages.Add(data);
-            Recoder.SaveAll();
-        };
-
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
 
@@ -57,6 +42,13 @@ public class CombatTestDriver : GameDriver
 
     // 开始新游戏
     public void OnStartNewBattle()
+    {
+        StartGame();
+        Recoder.AddReplay(Battle.Replay);
+    }
+
+    // 开始游戏，可能是新游戏，也可能是播放录像
+    public void StartGame()
     {
         var map = new BattleMap(10, 6); // test map
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester", Name = "战斗测试" }); // test battle
@@ -78,6 +70,13 @@ public class CombatTestDriver : GameDriver
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };
+        room.BattleRoom.ReplayChanged += () =>
+        {
+            if (!Recoder.Exists(bt.Replay))
+                Recoder.AddReplay(bt.Replay);
+
+            Recoder.SaveAll();
+        };
 
         // setup the fake message loop
         room.BMS = msgLooper;
@@ -124,12 +123,16 @@ public class CombatTestDriver : GameDriver
     }
 
     // 播放游戏录像
-    BattleReplay currentReplay;
     public void OnPlayReplay(int i)
     {
-        OnStartNewBattle();
-        currentReplay = Recoder.Replays[i];
-        Recoder.Play(currentReplay, (data) => msgLooper.SendRaw(data));
+        StartGame();
+        PlayReplay(Recoder.Replays[i]);
+    }
+
+    public void PlayReplay(BattleReplay replay)
+    {
+        Battle.Replay.Messages.AddRange(replay.Messages);
+        Recoder.Play(replay, (data) => msgLooper.SendRaw(data));
     }
 
     // 游戏结束确定

@@ -34,7 +34,7 @@ namespace Avocat
         } BattleMap map = null;
 
         // 本场游戏录像
-        public BattleReplay Replay { get; set; }
+        public BattleReplay Replay { get; } = new BattleReplay { Time = DateTime.Now.Ticks };
 
         public Battle(BattleMap map, int randSeed)
         {

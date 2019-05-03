@@ -38,6 +38,11 @@ public class LocalBattleRecorder : MonoBehaviour
             replays.RemoveAt(0);
     }
 
+    public bool Exists(BattleReplay replay)
+    {
+        return replays.Contains(replay);
+    }
+
     public void SaveAll()
     {
         using (var w = new BinaryWriter(new FileStream(SaveFile, FileMode.Create)))

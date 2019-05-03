@@ -14,6 +14,7 @@ namespace Avocat
     public interface IBattlemessageProvider
     {
         void HandleMsg(string msg, Func<int, IReadableBuffer, IEnumerator> handler);
+        event Action<int, byte[]> OnMessageIn;
     }
 
     /// <summary>
@@ -30,8 +31,18 @@ namespace Avocat
         }
 
         // 注册所有战斗消息
+        public event Action ReplayChanged = null;
         public virtual void RegisterBattleMessageHandlers(IBattlemessageProvider bmp)
         {
+            bmp.OnMessageIn += (int seqNo, byte[] data) =>
+            {
+                if (seqNo > Battle.Replay.Messages.Count)
+                {
+                    Battle.Replay.Messages.Add(data);
+                    ReplayChanged?.Invoke();
+                }
+            };
+
             bmp.HandleMsg("ExchangeWarroirsPosition", (player, data) =>
             {
                 var fx = data.ReadInt();

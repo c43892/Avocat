@@ -13,6 +13,7 @@ using System.Collections;
 /// </summary>
 public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
 {
+    int SeqNo = 0;
     Queue<byte[]> msgs = new Queue<byte[]>();
 
     public void SendRaw(byte[] data)
@@ -29,12 +30,13 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         msgs.Enqueue(buff.Data);
     }
 
-    public event Action<byte[]> OnMessageIn = null;
+    public event Action<int, byte[]> OnMessageIn = null;
 
     public void Clear()
     {
         msgs.Clear();
         hs.Clear();
+        SeqNo = 0;
     }
 
     Dictionary<string, Func<int, IReadableBuffer, IEnumerator>> hs = new Dictionary<string, Func<int, IReadableBuffer, IEnumerator>>();
@@ -50,7 +52,8 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
             if (msgs.Count > 0)
             {
                 var data = msgs.Dequeue();
-                OnMessageIn.SC(data);
+
+                OnMessageIn.SC(++SeqNo, data);
 
                 var buff = new RingBuffer();
                 buff.Write(data);
