@@ -85,12 +85,12 @@ public class BattleStageUI : MonoBehaviour
         enterSkillStage = true;
         var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
         Debug.Assert(skill != null, "there is no default active skill");
+        Warrior warrior = BattleStage.InBattleOps.CurrentSelWarrior;
         if (skill.ActiveSkillType == "fireAt")
         {
             // confirm the position and fire at it
             var cx = 0;
             var cy = 0;
-            Warrior warrior = BattleStage.InBattleOps.CurrentSelWarrior;
             warrior.GetPosInMap(out int x, out int y);
             List<int> movingPath = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.MovingPath;
             if (movingPath != null && movingPath.Count >= 2)
@@ -103,18 +103,33 @@ public class BattleStageUI : MonoBehaviour
                 cx = x;
                 cy = y;
             }
-
             BattleStage.StartSkillStage(enterSkillStage);
-            if (enterSkillStage)
-            {
-                BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selx, sely) =>
-                {
-                    Room.FireActiveSkillAt(skill, selx, sely);
-                });
-            }
+            BattleStage.SkillOps.ShowSkillAttackRange(cx, cy, (IWithRange)skill, null, null);
+            StartCoroutine(Example(skill,warrior));
+            //if (enterSkillStage)
+            //{
+            //    BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selx, sely) =>
+            //      {
+            //          Room.FireActiveSkillAt(skill, selx, sely);
+            //      },()=> {
+            //          Room.DoMoveOnPath(warrior);
+            //      });
+            //}
+
         }
         else
             Room.FireActiveSkill(skill);
+    }
+
+    public IEnumerator Example(ActiveSkill skill, Warrior warrior)
+    {
+        yield return new WaitUntil(() => BattleStage.SkillOps.choosePos == true);
+        if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
+        {
+            BattleStage.InBattleOps.ClearSelTiles();
+            Room.DoMoveOnPath(warrior);
+        }
+        Room.FireActiveSkillAt(skill, BattleStage.SkillOps.posX, BattleStage.SkillOps.posY);
     }
 
     // 进入地图改造模式

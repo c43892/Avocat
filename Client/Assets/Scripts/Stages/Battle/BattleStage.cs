@@ -13,6 +13,10 @@ public class BattleStage : MonoBehaviour
     // 显示操作指针
     public GameObject PointerIndicator;
 
+    public GameObject BattleStageUIRoot;
+    public GameObject actionDone;
+    public GameObject energy;
+
     // 底层地图操作处理
     public MapGroundLayer MapGround;
 
@@ -36,7 +40,7 @@ public class BattleStage : MonoBehaviour
     {
         SetupGroundOps(); // 所有操作转交当前操作层逻辑
     }
-
+    
     public void Clear()
     {
         ClearMap();
@@ -279,16 +283,35 @@ public class BattleStage : MonoBehaviour
         if (enterOrExit)
         {
             CurrentOpLayer = SkillOps;
+            HideButton();
         }
         else {
             CurrentOpLayer = InBattleOps;
+            GetButton();
         }
     }
 
-    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
+    // 隐藏energy和Done按钮
+    public void HideButton()
+    {
+        actionDone = GameObject.Find("ActionDone");
+        energy = GameObject.Find("Energy");
+        actionDone.SetActive(false);
+        energy.SetActive(false);
+    }
+
+// 恢复energy和Done按钮
+    public void GetButton()
+    {     
+        actionDone.SetActive(true);
+        energy.SetActive(true);
+
+    }
+
+    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos, Action moveWorrior)
     {
 
-        SkillOps.ShowRange(cx, cy, (IWithRange)skill, onSelPos);
+        SkillOps.ShowSkillAttackRange(cx, cy, skill, onSelPos,moveWorrior);
         
     }
 
