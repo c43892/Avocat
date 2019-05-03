@@ -19,7 +19,9 @@ public class PosSelOps : StageOpsLayer
            : base(bs)
     {
     }
-
+    public bool choosePos;
+    public int posX;
+    public int posY;
     List<MapTile> Range = new List<MapTile>();
     IWithRange iRange;
     Action<int, int> onSelPos = null;
@@ -80,7 +82,12 @@ public class PosSelOps : StageOpsLayer
             if (CheckRange((int)x, (int)y, Range))
             {
                 RemoveShowRange();
-                onSelPos((int)x, (int)y);
+                BattleStage.InBattleOps.RemoveShowAttackRange();
+                choosePos = true;
+                posX = (int)x;
+                posY = (int)y;
+                //  onSelPos((int)x, (int)y);
+                BattleStage.StartSkillStage(false);
             }
             else
             {

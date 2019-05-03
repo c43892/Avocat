@@ -82,7 +82,6 @@ public class BattleStageUI : MonoBehaviour
     // 释放主动技能
     public void OnFireActiveSkill()
     {
-        enterSkillStage = true;
         var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
         Debug.Assert(skill != null, "there is no default active skill");
         Warrior warrior = BattleStage.InBattleOps.CurrentSelWarrior;
@@ -103,19 +102,9 @@ public class BattleStageUI : MonoBehaviour
                 cx = x;
                 cy = y;
             }
-            BattleStage.StartSkillStage(enterSkillStage);
-            BattleStage.SkillOps.ShowSkillAttackRange(cx, cy, (IWithRange)skill, null, null);
+            BattleStage.StartSkillStage(true);
+            BattleStage.SkillOps.ShowRange(cx, cy, (IWithRange)skill, null);
             StartCoroutine(Example(skill,warrior));
-            //if (enterSkillStage)
-            //{
-            //    BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selx, sely) =>
-            //      {
-            //          Room.FireActiveSkillAt(skill, selx, sely);
-            //      },()=> {
-            //          Room.DoMoveOnPath(warrior);
-            //      });
-            //}
-
         }
         else
             Room.FireActiveSkill(skill);

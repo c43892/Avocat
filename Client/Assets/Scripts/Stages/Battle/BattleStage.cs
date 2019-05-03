@@ -308,10 +308,10 @@ public class BattleStage : MonoBehaviour
 
     }
 
-    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos, Action moveWorrior)
+    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
     {
 
-        SkillOps.ShowSkillAttackRange(cx, cy, skill, onSelPos,moveWorrior);
+        SkillOps.ShowRange(cx, cy, skill, onSelPos);
         
     }
 
