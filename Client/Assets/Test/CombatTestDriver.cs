@@ -84,7 +84,11 @@ public class CombatTestDriver : GameDriver
         room.RegisterBattleMessageHandlers(msgLooper);
 
         // build up the whole scene
-        BattleStage.Build(room);
+        BattleStage.Build(room, (replay) =>
+        {
+            StartGame();
+            PlayReplay(replay);
+        });
 
         // link the logic event to the stage and ui logic
         BattleStage.SetupEventHandler(room);

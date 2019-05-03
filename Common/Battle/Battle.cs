@@ -495,6 +495,13 @@ namespace Avocat
             yield return AfterBuffRemoved.Invoke(buff, target);
         }
 
+        // 促发时光倒流
+        public AsyncCalleeChain<BattleReplay> OnTimeBackTriggered = new AsyncCalleeChain<BattleReplay>();
+        public IEnumerator TriggerTimeBack()
+        {
+            yield return OnTimeBackTriggered.Invoke(Replay);
+        }
+
         #endregion
 
         #region 战斗基本流程

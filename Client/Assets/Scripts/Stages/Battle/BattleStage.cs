@@ -47,8 +47,10 @@ public class BattleStage : MonoBehaviour
     public UseMapItemOps UseMapItemOps { get; private set; }  // 战斗内地形改造阶段
     public PosSelOps SkillOps { get; private set; }
 
+    public Action<BattleReplay> OnTimeBackTriggered { get; private set; }
+
     // 创建场景显示对象
-    public void Build(BattleRoomClient room)
+    public void Build(BattleRoomClient room, Action<BattleReplay> onTimeBackTriggered)
     {
         ClearMap();
 
@@ -63,6 +65,7 @@ public class BattleStage : MonoBehaviour
         UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
         SkillOps = new PosSelOps(this); //  战斗内释放技能阶段
         MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
+        OnTimeBackTriggered = onTimeBackTriggered;
     }
 
     void ClearMap()

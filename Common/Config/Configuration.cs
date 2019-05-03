@@ -134,6 +134,12 @@ namespace Avocat
                 ["AttackRange"] = new int[] { 1 }
             };
 
+            // 时光倒流
+            dAttrs[typeof(TimeBack)] = new Dictionary<string, object>
+            {
+                ["EnergyCost"] = 1
+            };
+
             // 树干
             dAttrs[typeof(Trunk)] = new Dictionary<string, object>
             {

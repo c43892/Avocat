@@ -141,5 +141,10 @@ static class BattleStageOnEvents
         {
             BattleStage.CreateWarriorAvatar(x, y, warrior);
         });
+
+        bt.OnTimeBackTriggered.Add((BattleReplay replay) =>
+        {
+            BattleStage.OnTimeBackTriggered(replay);
+        });
     }
 }

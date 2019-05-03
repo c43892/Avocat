@@ -21,7 +21,8 @@ namespace Avocat
         // 主动释放
         public override IEnumerator Fire()
         {
-            yield return null;
+            Battle.Replay.Messages.RemoveAt(Battle.Replay.Messages.Count - 1);
+            yield return Battle.TriggerTimeBack();
         }
     }
 }

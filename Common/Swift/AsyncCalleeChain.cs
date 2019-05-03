@@ -7,6 +7,43 @@ using System.Threading.Tasks;
 
 namespace Swift
 {
+    public class AsyncCalleeChain
+    {
+        List<object> callee = new List<object>();
+
+        public void Add(Func<IEnumerator> a)
+        {
+            callee.Add(a);
+        }
+
+        public void Del(Func<IEnumerator> a)
+        {
+            callee.Remove(a);
+        }
+
+        public void Add(Action a)
+        {
+            callee.Add(a);
+        }
+
+        public void Del(Action a)
+        {
+            callee.Remove(a);
+        }
+
+        public IEnumerator Invoke()
+        {
+            var arr = callee.ToArray();
+            for (var i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] is Action)
+                    (arr[i] as Action)();
+                else
+                    yield return (arr[i] as Func<IEnumerator>)();
+            }
+        }
+    }
+
     public class AsyncCalleeChain<T>
     {
         List<object> callee = new List<object>();
