@@ -104,15 +104,17 @@ public class BattleStageUI : MonoBehaviour
             }
             BattleStage.StartSkillStage(true);
             BattleStage.SkillOps.ShowRange(cx, cy, (IWithRange)skill, null);
+            // 调用协程
             StartCoroutine(Example(skill,warrior));
         }
         else
             Room.FireActiveSkill(skill);
     }
-
+    // 用协程来控制战士移动和放置炮台
     public IEnumerator Example(ActiveSkill skill, Warrior warrior)
     {
         yield return new WaitUntil(() => BattleStage.SkillOps.choosePos == true);
+        BattleStage.SkillOps.choosePos = false;
         if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
         {
             BattleStage.InBattleOps.ClearSelTiles();
