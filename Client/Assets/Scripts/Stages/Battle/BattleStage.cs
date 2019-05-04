@@ -99,9 +99,8 @@ public class BattleStage : MonoBehaviour
     public void RemoveTile(List<MapTile> pathATKRange)
     {
         foreach (MapTile map in pathATKRange)
-        {
             Destroy(map.gameObject);
-        }
+
         pathATKRange.Clear();
     }
 
