@@ -28,6 +28,7 @@ namespace Avocat
         // 玩家能量槽
         public int MaxEnergy { get; set; } = 100;
         public int Energy { get; set; } = 0;
+        public int PreShowEnergy { get; set; } = 0;
 
         // 玩家建设值，由卡牌分解生成，可用于使用地图上的道具
         public int MaxCardUsage { get; set; } = 100;

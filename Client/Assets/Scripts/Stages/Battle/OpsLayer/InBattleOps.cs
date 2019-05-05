@@ -85,7 +85,7 @@ public class InBattleOps : StageOpsLayer
         });
     }
 
-    // 清除路劲显示
+    // 清除路径显示
     public void ClearSelTiles()
     {
         FC.ForEach(pathInSel, (i, tile) =>
@@ -124,6 +124,7 @@ public class InBattleOps : StageOpsLayer
                 break;
             case "selectingAttackTarget":
                 // 再次点击时清除攻击范围显示
+                ClearCardVisited();
                 RemoveShowAttackRange();
                 if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
@@ -134,8 +135,9 @@ public class InBattleOps : StageOpsLayer
                         && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 1] == (int)y)
                     {
                         // 如果是移动目的地，则直接移动
-                        if (CurrentSelWarrior.MovingPath.Count > 0)
-                            Room.DoMoveOnPath(CurrentSelWarrior);
+                        if (CurrentSelWarrior.MovingPath.Count > 0) {
+                            Room.DoMoveOnPath(CurrentSelWarrior);                            
+                        }                          
 
                         CurrentSelWarrior = null;
                         status = "selectingWarrior";
@@ -184,12 +186,14 @@ public class InBattleOps : StageOpsLayer
         }
 
         CurrentSelWarrior = warrior;
+        (CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy = (CurrentSelWarrior.Battle as BattlePVE).Energy;
         var tile = BattleStage.Tiles[(int)x, (int)y];
         pathInSel.Clear();
         pathInSel.Add(tile);
         status = "selectingPath";
     }
 
+    BattleCard lastCard;
     public override void OnDragging(float fx, float fy, float cx, float cy)
     {
         if (status != "selectingPath")
@@ -212,6 +216,23 @@ public class InBattleOps : StageOpsLayer
                 pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
                 pathInSel[pathInSel.Count - 1].SetDir(0, 0);
             }
+            // 退回的牌记为未访问
+            lastCard.visited = false;
+            // 判断退回的是否为能量牌
+            if (lastCard.Name == "EN")
+            {
+                PreMinusEnergy();
+            }
+
+            if (pathInSel.Count >= 2)
+            {
+                lastCard = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 2];
+            }
+            else if (pathInSel.Count == 1)
+            {
+                lastCard = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
+            }
+
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
         {
@@ -223,6 +244,19 @@ public class InBattleOps : StageOpsLayer
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
             if (dist == 1 && !Room.Battle.Map.BlockedAt(tile.X, tile.Y))
             {
+                // 获得头节点卡牌
+                var card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
+                lastCard = card;
+                // 标记头节点卡牌为已访问
+                if (!card.visited)
+                {
+                    card.visited = true;
+                    if (card.Name == "EN")
+                    {
+                        PreAddEnergy();
+                    }
+                }
+
                 if (pathInSel.Count > 1) // 头节点不变色显示
                 {
                     var cd = pathInSel[pathInSel.Count - 1];
@@ -265,5 +299,31 @@ public class InBattleOps : StageOpsLayer
     void DoAttack(Warrior attacker, Warrior target)
     {
         Room.DoAttack(attacker, target);
+    }
+
+    // 预加能量
+    public void PreAddEnergy()
+    {
+        var bt = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
+        (CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy += 15;
+        bt.RefreshEnergy((CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy);
+    }
+
+    // 预减能量
+    public void PreMinusEnergy()
+    {
+        var bt = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
+        (CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy -= 15;
+        bt.RefreshEnergy((CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy);
+    }
+
+    // 将卡牌都设为未访问状态
+    public void ClearCardVisited()
+    {
+        FC.For(0, (Room.Battle as BattlePVE).AvailableCards.Count, (i) =>
+        {
+            (Room.Battle as BattlePVE).AvailableCards[i].visited = false;
+        });
+        
     }
 }

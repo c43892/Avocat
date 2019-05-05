@@ -25,12 +25,13 @@ public class PosSelOps : StageOpsLayer
     List<MapTile> Range = new List<MapTile>();
     IWithRange iRange;
     Action<int, int> onSelPos = null;
+    Action moveWarrior = null;
 
     // 显示范围
-    public void ShowRange(int cx, int cy, IWithRange iRange, Action< int, int> onSelPos)
+    public void ShowRange(int cx, int cy, IWithRange iRange, Action< int, int> onSelPos, Action moveWarrior)
     {
         Debug.Assert(Range.Count == 0, "path asasrange is not empty now.");
-
+        this.moveWarrior = moveWarrior;
         this.iRange = iRange;
         this.onSelPos = onSelPos;
         var map = BattleStage.Map;
@@ -97,4 +98,18 @@ public class PosSelOps : StageOpsLayer
             }
         }
     }
+
+    // 释放技能
+    public IEnumerator releaseSkill()
+    {
+        yield return new WaitUntil(() => BattleStage.SkillOps.choosePos == true);
+        BattleStage.SkillOps.choosePos = false;
+        if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
+        {
+            BattleStage.InBattleOps.ClearSelTiles();
+            moveWarrior();
+        }
+        onSelPos(posX, posY);
+    }
+
 }

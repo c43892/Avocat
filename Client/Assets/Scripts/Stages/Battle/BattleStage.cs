@@ -305,13 +305,12 @@ public class BattleStage : MonoBehaviour
     {     
         actionDone.SetActive(true);
         energy.SetActive(true);
-
     }
 
-    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
+    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos, Action warrior)
     {
 
-        SkillOps.ShowRange(cx, cy, skill, onSelPos);
+        SkillOps.ShowRange(cx, cy, skill, onSelPos, warrior);
         
     }
 

@@ -103,24 +103,27 @@ public class BattleStageUI : MonoBehaviour
                 cy = y;
             }
             BattleStage.StartSkillStage(true);
-            BattleStage.SkillOps.ShowRange(cx, cy, (IWithRange)skill, null);
+            BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selX, selY) =>
+            {
+                Room.FireActiveSkillAt(skill, selX, selY);
+            }, () =>
+            {
+                Room.DoMoveOnPath(warrior);
+            });
             // 调用协程
-            StartCoroutine(Example(skill,warrior));
+            StartCoroutine(BattleStage.SkillOps.releaseSkill());
         }
-        else
+        else {
+            if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
+            {
+                BattleStage.SkillOps.RemoveShowRange();
+                BattleStage.InBattleOps.RemoveShowAttackRange();
+                BattleStage.InBattleOps.ClearSelTiles();
+                Room.DoMoveOnPath(warrior);
+            }
             Room.FireActiveSkill(skill);
-    }
-    // 用协程来控制战士移动和放置炮台
-    public IEnumerator Example(ActiveSkill skill, Warrior warrior)
-    {
-        yield return new WaitUntil(() => BattleStage.SkillOps.choosePos == true);
-        BattleStage.SkillOps.choosePos = false;
-        if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
-        {
-            BattleStage.InBattleOps.ClearSelTiles();
-            Room.DoMoveOnPath(warrior);
         }
-        Room.FireActiveSkillAt(skill, BattleStage.SkillOps.posX, BattleStage.SkillOps.posY);
+            
     }
 
     // 进入地图改造模式
