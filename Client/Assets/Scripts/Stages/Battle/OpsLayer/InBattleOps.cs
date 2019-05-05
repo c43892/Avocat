@@ -4,6 +4,7 @@ using UnityEngine;
 using Swift;
 using Avocat;
 using System;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// 准备阶段操作：移动英雄位置
@@ -36,6 +37,7 @@ public class InBattleOps : StageOpsLayer
         }
         private set
         {
+            ClearSelTiles();
             if (curSelWarrior == value || (value != null && value.ActionDone))
                 return;
 
@@ -119,7 +121,6 @@ public class InBattleOps : StageOpsLayer
                         status = "selectingAttackTarget";
                         ShowAttackRange(x, y, CurrentSelWarrior);
                     }
-                        
                 }
                 break;
             case "selectingAttackTarget":
@@ -171,7 +172,7 @@ public class InBattleOps : StageOpsLayer
     }
 
     // 拖拽连续选择行动路径
-   public List<MapTile> pathInSel = new List<MapTile>();
+    public List<MapTile> pathInSel = new List<MapTile>();
     public override void OnStartDragging(float x, float y)
     {
         // 获取当前点击目标
