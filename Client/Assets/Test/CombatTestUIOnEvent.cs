@@ -12,18 +12,18 @@ static class BattleTestUIOnEvents
     {
         var bt = CombatTestDriver.BattleStage.Battle as BattlePVE;
 
-        room.Battle.OnPlayerPrepared.Add((int player) =>
+        room.Battle.OnPlayerPrepared += (int player) =>
         {
             if (room.Battle.AllPrepared)
             {
                 CombatTestDriver.PreparingUI.SetActive(false);
             }
-        });
+        };
 
-        room.Battle.OnBattleEnded.Add((winner) =>
+        room.Battle.OnBattleEnded += (winner) =>
         {
             CombatTestDriver.GameOverUI.SetActive(true);
             CombatTestDriver.GameOverUI.transform.Find("Title").GetComponent<Text>().text = winner == room.PlayerMe ? "Win" : "Lose";
-        });
+        };
     }
 }

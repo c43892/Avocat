@@ -39,8 +39,8 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
         SeqNo = 0;
     }
 
-    Dictionary<string, Func<int, IReadableBuffer, IEnumerator>> hs = new Dictionary<string, Func<int, IReadableBuffer, IEnumerator>>();
-    public void HandleMsg(string msg, Func<int, IReadableBuffer, IEnumerator> r)
+    Dictionary<string, Action<int, IReadableBuffer>> hs = new Dictionary<string, Action<int, IReadableBuffer>>();
+    public void HandleMsg(string msg, Action<int, IReadableBuffer> r)
     {
         hs[msg] = r;
     }
@@ -61,7 +61,7 @@ public class BattleMessageLooper : IBattlemessageProvider, IBattleMessageSender
                 var op = buff.ReadString();
                 var player = buff.ReadInt();
                 Debug.Assert(hs.ContainsKey(op), "no handler for message: " + op);
-                yield return hs[op](player, buff);
+                hs[op](player, buff);
             }
             else
                 yield return null;

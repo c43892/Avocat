@@ -35,45 +35,45 @@ namespace Avocat
 
         public string Name { get; protected set; }
         public bool visited = false;
-        public abstract IEnumerator ExecuteOn(Warrior warrior);
+        public abstract void ExecuteOn(Warrior warrior);
     }
 
     public class BattleCardATK : BattleCard
     {
         public BattleCardATK() { Name = "ATK"; }
-        public override IEnumerator ExecuteOn(Warrior warrior)
+        public override void ExecuteOn(Warrior warrior)
         {
             var bt = warrior.Battle;
             var dATK = (warrior.ATK * 15 / 100).Clamp(1, int.MaxValue);
-            yield return bt.AddBuff(new CardATK() { ATK = dATK }, warrior);
+            bt.AddBuff(new CardATK() { ATK = dATK }, warrior);
         }
     }
 
     public class BattleCardES : BattleCard
     {
         public BattleCardES() { Name = "ES"; }
-        public override IEnumerator ExecuteOn(Warrior warrior)
+        public override void ExecuteOn(Warrior warrior)
         {
             var dES = (warrior.MaxES * 25 / 100).Clamp(1, int.MaxValue);
-            yield return warrior.Battle.AddES(warrior, dES);
+            warrior.Battle.AddES(warrior, dES);
         }
     }
 
     public class BattleCardPotion : BattleCard
     {
         public BattleCardPotion() { Name = "PT"; }
-        public override IEnumerator ExecuteOn(Warrior warrior)
+        public override void ExecuteOn(Warrior warrior)
         {
-            yield return warrior.Battle.AddHP(warrior, 15);
+            warrior.Battle.AddHP(warrior, 15);
         }
     }
 
     public class BattleCardEN : BattleCard
     {
         public BattleCardEN() { Name = "EN"; }
-        public override IEnumerator ExecuteOn(Warrior warrior)
+        public override void ExecuteOn(Warrior warrior)
         {
-            yield return (warrior.Battle as BattlePVE).AddEN(15);
+            (warrior.Battle as BattlePVE).AddEN(15);
         }
     }
 }

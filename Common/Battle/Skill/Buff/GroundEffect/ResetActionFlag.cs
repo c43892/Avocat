@@ -12,7 +12,7 @@ namespace Avocat
     /// </summary>
     public class ResetActionFlag : Buff
     {
-        IEnumerator ImplResetActionFlags(int player)
+        void ImplResetActionFlags(int player)
         {
             for (var i = 0; i < Map.Width; i++)
             {
@@ -23,15 +23,15 @@ namespace Avocat
                         continue;
 
                     // 重置行动标记
-                    yield return Battle.ResetActionFlag(warrior);
+                    Battle.ResetActionFlag(warrior);
                 }
             }
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.AfterActionDone.Add(ImplResetActionFlags);
-            yield return base.OnAttached();
+            Battle.AfterActionDone += ImplResetActionFlags;
+            base.OnAttached();
         }
     }
 }

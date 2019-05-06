@@ -23,7 +23,7 @@ namespace Avocat
                 AddActiveSkill(Configuration.Config(a));
 
             foreach (var b in bs)
-                FC.Async2Sync(Battle.AddBuff(Configuration.Config(b), this));
+                Battle.AddBuff(Configuration.Config(b), this);
         }
 
         // 刷什么类型的卡

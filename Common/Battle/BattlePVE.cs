@@ -78,22 +78,22 @@ namespace Avocat
             ConsumeCardsOnMoving();
 
             // 行动结束分解剩余卡牌
-            FC.Async2Sync(AddBuff(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards())));
+            AddBuff(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards()));
 
             // 行动开始前，生成新卡牌
-            FC.Async2Sync(AddBuff(new GenCards(PlayerIndex, (player, cards) => ResetAvailableCards(cards))));
+            AddBuff(new GenCards(PlayerIndex, (player, cards) => ResetAvailableCards(cards)));
 
             Robot = new RobotPlayer(this);
         }
 
         // 移动消耗卡牌
-        public AsyncCalleeChain<Warrior, List<BattleCard>> BeforeCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
-        public AsyncCalleeChain<Warrior, List<BattleCard>> AfterCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
-        public AsyncCalleeChain<Warrior, List<BattleCard>> OnCardsConsumed = new AsyncCalleeChain<Warrior, List<BattleCard>>();
-        IEnumerator OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
+        public event Action<Warrior, List<BattleCard>> BeforeCardsConsumed = null;
+        public event Action<Warrior, List<BattleCard>> AfterCardsConsumed = null;
+        public event Action<Warrior, List<BattleCard>> OnCardsConsumed = null;
+        void OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
         {
             if (warrior.Team != PlayerIndex)
-                yield break;
+                return;
 
             var movedPathLen = movedPath.Count / 2;
             Debug.Assert(movedPathLen <= AvailableCards.Count, "moved path grids should not be more than cards number");
@@ -106,31 +106,31 @@ namespace Avocat
                 AvailableCards.RemoveAt(0);
             }
 
-            yield return BeforeCardsConsumed.Invoke(warrior, cards);
+            BeforeCardsConsumed?.Invoke(warrior, cards);
 
             for (var i = 0; i < cards.Count; i++)
-                yield return cards[i].ExecuteOn(warrior);
+                cards[i].ExecuteOn(warrior);
 
-            yield return OnCardsConsumed.Invoke(warrior, cards);
+            OnCardsConsumed?.Invoke(warrior, cards);
 
             ResetAvailableCards();
 
-            yield return AfterCardsConsumed.Invoke(warrior, cards);
+            AfterCardsConsumed?.Invoke(warrior, cards);
         }
 
         BattlePVE ConsumeCardsOnMoving()
         {
-            AfterMoveOnPath.Add(OnAfterMoveOnPath);
+            AfterMoveOnPath += OnAfterMoveOnPath;
             return this;
         }
 
         // 交换战斗卡牌位置
-        public AsyncCalleeChain<int, int, int, int> BeforeBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
-        public AsyncCalleeChain<int, int, int, int> AfterBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
-        public AsyncCalleeChain<int, int, int, int> OnBattleCardsExchange = new AsyncCalleeChain<int, int, int, int>();
-        public IEnumerator ExchangeBattleCards(int g1, int n1, int g2, int n2)
+        public event Action<int, int, int, int> BeforeBattleCardsExchange = null;
+        public event Action<int, int, int, int> AfterBattleCardsExchange = null;
+        public event Action<int, int, int, int> OnBattleCardsExchange = null;
+        public void ExchangeBattleCards(int g1, int n1, int g2, int n2)
         {
-            yield return BeforeBattleCardsExchange.Invoke(g1, n1, g2, n2);
+            BeforeBattleCardsExchange?.Invoke(g1, n1, g2, n2);
 
             var lst1 = g1 == 0 ? AvailableCards : StashedCards;
             var lst2 = g2 == 0 ? AvailableCards : StashedCards;
@@ -160,107 +160,105 @@ namespace Avocat
 
             ResetAvailableCards();
 
-            yield return OnBattleCardsExchange.Invoke(g1, n1, g2, n2);
-            yield return AfterBattleCardsExchange.Invoke(g1, n1, g2, n2);
+            OnBattleCardsExchange?.Invoke(g1, n1, g2, n2);
+            AfterBattleCardsExchange?.Invoke(g1, n1, g2, n2);
         }
 
         // 增加一张战斗卡牌
-        public AsyncCalleeChain<BattleCard> BeforeAddBattleCard = new AsyncCalleeChain<BattleCard>();
-        public AsyncCalleeChain<BattleCard> AfterAddBattleCard = new AsyncCalleeChain<BattleCard>();
-        public AsyncCalleeChain<BattleCard> OnAddBattleCard = new AsyncCalleeChain<BattleCard>();
-        public IEnumerator AddBattleCard(BattleCard card)
+        public event Action<BattleCard> BeforeAddBattleCard = null;
+        public event Action<BattleCard> AfterAddBattleCard = null;
+        public event Action<BattleCard> OnAddBattleCard = null;
+        public void AddBattleCard(BattleCard card)
         {
-            yield return BeforeAddBattleCard.Invoke(card);
+            BeforeAddBattleCard?.Invoke(card);
 
             AvailableCards.Add(card);
             ResetAvailableCards();
 
-            yield return OnAddBattleCard.Invoke(card);
-            yield return AfterAddBattleCard.Invoke(card);
+            OnAddBattleCard?.Invoke(card);
+            AfterAddBattleCard?.Invoke(card);
         }
 
         #region 角色操作包装
 
         // 玩家加能量
-        public AsyncCalleeChain<int, Action<int>> BeforeAddEN = new AsyncCalleeChain<int, Action<int>>();
-        public AsyncCalleeChain<int> AfterAddEN = new AsyncCalleeChain<int>();
-        public AsyncCalleeChain<int> OnAddEN = new AsyncCalleeChain<int>();
-        public IEnumerator AddEN(int den)
+        public event Action<int, Action<int>> BeforeAddEN = null;
+        public event Action<int> AfterAddEN = null;
+        public event Action<int> OnAddEN = null;
+        public void AddEN(int den)
         {
-            yield return BeforeAddEN.Invoke(den, (int _den) => den = _den);
-
+            BeforeAddEN?.Invoke(den, (int _den) => den = _den);
             Energy = (Energy + den).Clamp(0, MaxEnergy);
-
-            yield return OnAddEN.Invoke(den);
-            yield return AfterAddEN.Invoke(den);
+            OnAddEN?.Invoke(den);
+            AfterAddEN?.Invoke(den);
         }
 
         // 玩家加建设值
-        public AsyncCalleeChain<int, Action<int>> BeforeAddCardDissambleValue = new AsyncCalleeChain<int, Action<int>>();
-        public AsyncCalleeChain<int> AfterAddCardDissambleValue = new AsyncCalleeChain<int>();
-        public AsyncCalleeChain<int> OnAddCardDissambleValue = new AsyncCalleeChain<int>();
-        public IEnumerator AddCardDissambleValue(int dv)
+        public event Action<int, Action<int>> BeforeAddCardDissambleValue = null;
+        public event Action<int> AfterAddCardDissambleValue = null;
+        public event Action<int> OnAddCardDissambleValue = null;
+        public void AddCardDissambleValue(int dv)
         {
-            yield return BeforeAddCardDissambleValue.Invoke(dv, (int _dv) => dv = _dv);
+            BeforeAddCardDissambleValue?.Invoke(dv, (int _dv) => dv = _dv);
 
             CardUsage = (CardUsage + dv).Clamp(0, MaxCardUsage);
 
-            yield return OnAddCardDissambleValue.Invoke(dv);
-            yield return AfterAddCardDissambleValue.Invoke(dv);
+            OnAddCardDissambleValue?.Invoke(dv);
+            AfterAddCardDissambleValue?.Invoke(dv);
         }
 
         // 释放主动技能
-        protected AsyncCalleeChain<ActiveSkill> BeforeFireSkill = new AsyncCalleeChain<ActiveSkill>();
-        protected AsyncCalleeChain<ActiveSkill> AfterFireSkill = new AsyncCalleeChain<ActiveSkill>();
-        public AsyncCalleeChain<ActiveSkill> OnFireSkill = new AsyncCalleeChain<ActiveSkill>();
-        public virtual IEnumerator FireSkill(ActiveSkill skill)
+        public event Action<ActiveSkill> BeforeFireSkill = null;
+        public event Action<ActiveSkill> AfterFireSkill = null;
+        public event Action<ActiveSkill> OnFireSkill = null;
+        public virtual void FireSkill(ActiveSkill skill)
         {
             if (Energy < skill.EnergyCost)
-                yield break;
+                return;
 
-            yield return BeforeFireSkill.Invoke(skill);
+            BeforeFireSkill?.Invoke(skill);
 
-            yield return AddEN(-skill.EnergyCost);
-            yield return skill.Fire();
+            AddEN(-skill.EnergyCost);
+            skill.Fire();
 
-            yield return OnFireSkill.Invoke(skill);
-            yield return AfterFireSkill.Invoke(skill);
+            OnFireSkill?.Invoke(skill);
+            AfterFireSkill?.Invoke(skill);
         }
 
         // 释放主动技能
-        protected AsyncCalleeChain<ActiveSkill, int, int> BeforeFireSkillAt = new AsyncCalleeChain<ActiveSkill, int, int>();
-        protected AsyncCalleeChain<ActiveSkill, int, int> AfterFireSkillAt = new AsyncCalleeChain<ActiveSkill, int, int>();
-        public AsyncCalleeChain<ActiveSkill, int, int> OnFireSkillAt = new AsyncCalleeChain<ActiveSkill, int, int>();
-        public virtual IEnumerator FireSkillAt(ActiveSkill skill, int x, int y)
+        public event Action<ActiveSkill, int, int> BeforeFireSkillAt = null;
+        public event Action<ActiveSkill, int, int> AfterFireSkillAt = null;
+        public event Action<ActiveSkill, int, int> OnFireSkillAt = null;
+        public virtual void FireSkillAt(ActiveSkill skill, int x, int y)
         {
             if (Energy < skill.EnergyCost)
-                yield break;
+                return;
 
-            yield return BeforeFireSkillAt.Invoke(skill, x, y);
+            BeforeFireSkillAt?.Invoke(skill, x, y);
 
-            yield return AddEN(-skill.EnergyCost);
-            yield return skill.FireAt(x, y);
+            AddEN(-skill.EnergyCost);
+            skill.FireAt(x, y);
 
-            yield return OnFireSkillAt.Invoke(skill, x, y);
-            yield return AfterFireSkillAt.Invoke(skill, x, y);
+            OnFireSkillAt?.Invoke(skill, x, y);
+            AfterFireSkillAt?.Invoke(skill, x, y);
         }
 
         // 使用道具
-        protected AsyncCalleeChain<UsableItem, Warrior> BeforeUseItem2 = new AsyncCalleeChain<UsableItem, Warrior>();
-        protected AsyncCalleeChain<UsableItem, Warrior> AfterUseItem2 = new AsyncCalleeChain<UsableItem, Warrior>();
-        public AsyncCalleeChain<UsableItem, Warrior> OnUseItem2 = new AsyncCalleeChain<UsableItem, Warrior>();
-        public virtual IEnumerator UseItem2(UsableItem item, Warrior target)
+        public event Action<UsableItem, Warrior> BeforeUseItem2 = null;
+        public event Action<UsableItem, Warrior> AfterUseItem2 = null;
+        public event Action<UsableItem, Warrior> OnUseItem2 = null;
+        public virtual void UseItem2(UsableItem item, Warrior target)
         {
             if (CardUsage < MaxCardUsage)
-                yield break;
+                return;
 
-            yield return BeforeUseItem2.Invoke(item, target);
+            BeforeUseItem2?.Invoke(item, target);
 
-            yield return AddCardDissambleValue(-CardUsage);
-            yield return item.Use2(target);
+            AddCardDissambleValue(-CardUsage);
+            item.Use2(target);
 
-            yield return OnUseItem2.Invoke(item, target);
-            yield return AfterUseItem2.Invoke(item, target);
+            OnUseItem2?.Invoke(item, target);
+            AfterUseItem2?.Invoke(item, target);
         }
 
         #endregion

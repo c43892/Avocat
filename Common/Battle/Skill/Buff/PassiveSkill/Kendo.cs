@@ -16,24 +16,24 @@ namespace Avocat
         // 效果持续几回合
         public int EffectRoundNum { get; set; }
 
-        IEnumerator OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Warrior)
-                yield break;
+                return;
 
-            yield return Battle.AddBuff(new Untreatable(EffectRoundNum), target);
+            Battle.AddBuff(new Untreatable(EffectRoundNum), target);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.AfterAttack.Add(OnAfterAttack);
-            yield return base.OnAttached();
+            Battle.AfterAttack += OnAfterAttack;
+           base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.AfterAttack.Del(OnAfterAttack);
-            yield return base.OnDetached();
+            Battle.AfterAttack -= OnAfterAttack;
+            base.OnDetached();
         }
     }
 }

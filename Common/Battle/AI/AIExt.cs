@@ -88,7 +88,10 @@ namespace Avocat
                     ai.ActLast = () => NormalNpcMonster(ai);
                     break;
                 case "EMPConnon":
-                    ai.ActLast = () => CombineAIs(NormalNpcMonster(ai), AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP)));
+                    ai.ActLast = () => {
+                        NormalNpcMonster(ai);
+                        AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP));
+                    };
                     break;
                 case "Dumb":
                     break;
@@ -109,19 +112,19 @@ namespace Avocat
         }
 
         // 走向最近的目标并攻击之
-        static IEnumerator Forward2NearestTargetAndAttack(WarriorAI ai)
+        static void Forward2NearestTargetAndAttack(WarriorAI ai)
         {
             // 先寻找最近目标
             var warrior = ai.Warrior;
             var target = warrior.Map.FindNearestTarget(warrior);
             if (warrior.ActionDone || target == null)
-                yield break;
+                return;
 
-            yield return ForwardAndAttack(ai, target);
+            ForwardAndAttack(ai, target);
         }
 
         // 走向指定目标
-        static IEnumerator Forward2Target(WarriorAI ai, Warrior target)
+        static void Forward2Target(WarriorAI ai, Warrior target)
         {
             var warrior = ai.Warrior;
             var bt = warrior.Map.Battle;
@@ -136,11 +139,11 @@ namespace Avocat
                 path.RemoveRange(path.Count - 2, 2);
 
             if (path.Count > 0)
-                yield return bt.MoveOnPath(warrior);
+                bt.MoveOnPath(warrior);
         }
 
         // 走向指定目标，并攻击之
-        static IEnumerator ForwardAndAttack(WarriorAI ai, Warrior target)
+        static void ForwardAndAttack(WarriorAI ai, Warrior target)
         {
             var warrior = ai.Warrior;
             var bt = warrior.Map.Battle;
@@ -149,15 +152,15 @@ namespace Avocat
 
             // 不在攻击范围内，则先移动过去
             if (!warrior.InAttackRange(tx, ty) && warrior.MoveRange > 0)
-                yield return Forward2Target(ai, target);
+                Forward2Target(ai, target);
 
             // 攻击目标
             if (warrior.InAttackRange(tx, ty))
-                yield return bt.Attack(warrior, target);
+                bt.Attack(warrior, target);
         }
 
         // 普通怪物 npc 战斗逻辑
-        static IEnumerator NormalNpcMonster(WarriorAI ai)
+        static void NormalNpcMonster(WarriorAI ai)
         {
             var warrior = ai.Warrior;
             var bt = warrior.Map.Battle;
@@ -165,7 +168,7 @@ namespace Avocat
 
             // 检查在移动后可以攻击到的敌人
             Warrior target = null;
-            yield return FindPriorTarget(warrior, FindTargetsReachable(warrior).Keys.ToArray(), (t) => target = t);
+            FindPriorTarget(warrior, FindTargetsReachable(warrior).Keys.ToArray(), (t) => target = t);
             if (target == null)
             {
                 // 没有够得到的攻击目标
@@ -173,14 +176,14 @@ namespace Avocat
                 {
                     // 近战单位，就寻找血量最少的目标，向其移动
                     target = FindTheWeakestTarget(warrior);
-                    yield return ForwardAndAttack(ai, target);
+                    ForwardAndAttack(ai, target);
                 }
                 else
                 {
                     // 远程单位，就寻找最近的队友，向其移动
                     target = FindTheNearestTeammate(warrior);
                     if (target != null)
-                        yield return Forward2Target(ai, target);
+                        Forward2Target(ai, target);
                 }
             }
             else
@@ -188,7 +191,7 @@ namespace Avocat
                 // 根据要攻击的目标确定站位
                 var tx = 0;
                 var ty = 0;
-                yield return CheckoutAttackingPosition(warrior, target, (x, y) => { tx = x; ty = y; });
+                CheckoutAttackingPosition(warrior, target, (x, y) => { tx = x; ty = y; });
 
                 warrior.GetPosInMap(out int fx, out int fy);
                 var path = map.FindPath(fx, fy, tx, ty, warrior.MoveRange);
@@ -196,26 +199,19 @@ namespace Avocat
                 {
                     warrior.MovingPath.Clear();
                     warrior.MovingPath.AddRange(path);
-                    yield return bt.MoveOnPath(warrior);
+                    bt.MoveOnPath(warrior);
                 }
-                yield return bt.Attack(warrior, target);
+                bt.Attack(warrior, target);
             }
-        }
-
-        // 组合任意多个 ai
-        static IEnumerator CombineAIs(params IEnumerator[] ais)
-        {
-            for (var i = 0; i < ais.Length; i++)
-                yield return ais[i];
         }
         
         // 每回合加血
-        static IEnumerator AddHpRoundly(WarriorAI ai, Func<Warrior, int> calcDhp)
+        static void AddHpRoundly(WarriorAI ai, Func<Warrior, int> calcDhp)
         {
             var warrior = ai.Warrior;
             var bt = warrior.Battle;
             var dhp = calcDhp(warrior);
-            yield return bt.AddHP(warrior, dhp);
+            bt.AddHP(warrior, dhp);
         }
 
         #endregion
@@ -310,23 +306,23 @@ namespace Avocat
         }
 
         // 从多个攻击目标中，挑选一个最优先
-        public static IEnumerator FindPriorTarget(Warrior warrior, Warrior[] targets, Action<Warrior> onSelTarget)
+        public static void FindPriorTarget(Warrior warrior, Warrior[] targets, Action<Warrior> onSelTarget)
         {
             if (targets.Length == 0)
             {
                 onSelTarget(null);
-                yield break;
+                return;
             }
             else if (targets.Length == 1)
             {
                 onSelTarget(targets[0]);
-                yield break;
+                return;
             }
 
             // 对目标进行评分
             var priorityScore = new Dictionary<Warrior, int>();
             foreach (var t in targets)
-                yield return GetTargetPriorityScore(warrior, t, (score) => priorityScore[t] = score);
+                GetTargetPriorityScore(warrior, t, (score) => priorityScore[t] = score);
 
             // 防御最低的目标额外 2 分
             Warrior lowestDefenceOne = null;
@@ -352,7 +348,7 @@ namespace Avocat
         }
 
         // 计算目标优先级分数
-        public static IEnumerator GetTargetPriorityScore(Warrior warrior, Warrior target, Action<int> onScore)
+        public static void GetTargetPriorityScore(Warrior warrior, Warrior target, Action<int> onScore)
         {
             var score = 0;
 
@@ -362,7 +358,7 @@ namespace Avocat
 
             // 能击杀的，10 分
             var damage = 0;
-            yield return warrior.Battle.SimulateAttackingDamage(warrior, target, null, (d) => damage = d);
+            warrior.Battle.SimulateAttackingDamage(warrior, target, null, (d) => damage = d);
             if (damage >= target.HP + target.ES)
                 score += 10;
 
@@ -422,11 +418,12 @@ namespace Avocat
         }
 
         // 根据攻击者和目标确定攻击站位
-        public static IEnumerator CheckoutAttackingPosition(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        public static void CheckoutAttackingPosition(Warrior attacker, Warrior target, Action<int, int> onStandPos)
         {
-            yield return attacker.IsCloseAttack() ?
-                CheckoutPosition4CloseAttacking(attacker, target, onStandPos)
-                 : CheckoutPosition4FarAttacking(attacker, target, onStandPos);
+            if (attacker.IsCloseAttack())
+                CheckoutPosition4CloseAttacking(attacker, target, onStandPos);
+            else
+                CheckoutPosition4FarAttacking(attacker, target, onStandPos);
         }
 
         // 获取可以攻击到目标的所有站位列表
@@ -457,7 +454,7 @@ namespace Avocat
         }
 
         // 近战攻击者站位逻辑
-        public static IEnumerator CheckoutPosition4CloseAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        public static void CheckoutPosition4CloseAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
         {
             var standPos2Targets = GetPosListWithTargetReachable(attacker, target);
 
@@ -480,7 +477,7 @@ namespace Avocat
 
                     // 能击杀的，3 分
                     var damage = 0;
-                    yield return attacker.Battle.SimulateAttackingDamage(attacker, t, null, (d) => damage = d);
+                    attacker.Battle.SimulateAttackingDamage(attacker, t, null, (d) => damage = d);
                     if (damage >= target.HP + target.ES)
                         score += 10;
 
@@ -514,7 +511,7 @@ namespace Avocat
         }
 
         // 远程攻击者的站位逻辑
-        public static IEnumerator CheckoutPosition4FarAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
+        public static void CheckoutPosition4FarAttacking(Warrior attacker, Warrior target, Action<int, int> onStandPos)
         {
             var standPos2Targets = GetPosListWithTargetReachable(attacker, target);
 
@@ -546,8 +543,6 @@ namespace Avocat
             var posArr = standPos2Targets.Keys.ToArray();
             posArr.SwiftSort((a, b) => pos2Score[b] - pos2Score[a]);
             onStandPos(posArr[0].Key, posArr[0].Value);
-
-            yield return null;
         }
     }
 }

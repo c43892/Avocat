@@ -19,10 +19,10 @@ namespace Avocat
         public override string[] CardsPattern { get; protected set; } = new string[] { "ATK", "ES" };
 
         // 寻找附近目标攻击
-        public override IEnumerator Fire()
+        public override void Fire()
         {
             var target = Map.FindNearestTarget(Warrior);
-            yield return BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack");
+            BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack");
         }
 
         public int A { get; set; }

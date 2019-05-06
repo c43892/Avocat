@@ -18,16 +18,16 @@ namespace Avocat
         public RobotPlayer(Battle battle)
         {
             Battle = battle;
-            Battle.AfterStartNextRound.Add(OnAfterStartNextRound);
+            Battle.AfterStartNextRound += OnAfterStartNextRound;
         }
 
-        IEnumerator OnAfterStartNextRound(int player)
+        void OnAfterStartNextRound(int player)
         {
             // 只处理机器人回合开始
             if (player != 2)
-                yield break;
+                return;
 
-            yield return Battle.ActionDone(2);
+            Battle.ActionDone(2);
         }
     }
 }

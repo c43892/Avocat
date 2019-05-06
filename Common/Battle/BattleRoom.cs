@@ -13,7 +13,7 @@ namespace Avocat
 {
     public interface IBattlemessageProvider
     {
-        void HandleMsg(string msg, Func<int, IReadableBuffer, IEnumerator> handler);
+        void HandleMsg(string msg, Action<int, IReadableBuffer> handler);
         Action<int, byte[]> OnMessageIn { get; set; }
     }
 
@@ -49,12 +49,12 @@ namespace Avocat
                 var fy = data.ReadInt();
                 var tx = data.ReadInt();
                 var ty = data.ReadInt();
-                return Battle.ExchangeWarroirsPosition(fx, fy, tx, ty);
+                Battle.ExchangeWarroirsPosition(fx, fy, tx, ty);
             });
 
             bmp.HandleMsg("PlayerPrepared", (player, data) =>
             {
-                return Battle.PlayerPrepared(player);
+                Battle.PlayerPrepared(player);
             });
 
             bmp.HandleMsg("MoveOnPath", (player, data) =>
@@ -66,7 +66,7 @@ namespace Avocat
                 warrior.MovingPath.Clear();
                 warrior.MovingPath.AddRange(pathXYArr);
 
-                return Battle.MoveOnPath(warrior);
+                Battle.MoveOnPath(warrior);
             });
 
             bmp.HandleMsg("Attack", (player, data) =>
@@ -77,12 +77,12 @@ namespace Avocat
                 var attacker = Battle.Map.GetWarriorByID(attackerID);
                 var target = Battle.Map.GetWarriorByID(targetID);
 
-                return Battle.Attack(attacker, target);
+                Battle.Attack(attacker, target);
             });
 
             bmp.HandleMsg("ActionDone", (player, data) =>
             {
-                return Battle.ActionDone(player);
+                Battle.ActionDone(player);
             });
         }
 

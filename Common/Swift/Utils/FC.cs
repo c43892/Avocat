@@ -351,14 +351,5 @@ namespace Swift
             FC.For(len, (i) => { subArr[i] = arr[start + i]; });
             return subArr;
         }
-
-        public static void Async2Sync(IEnumerator asyncAct)
-        {
-            while (asyncAct.MoveNext())
-            {
-                if (asyncAct.Current is IEnumerator c)
-                    Async2Sync(c);
-            }
-        }
     }
 }

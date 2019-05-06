@@ -18,10 +18,10 @@ namespace Avocat
         public abstract int EnergyCost { get; set; }
 
         // 主动释放
-        public virtual IEnumerator Fire() { throw new Exception("not implemented yet"); }
+        public virtual void Fire() { throw new Exception("not implemented yet"); }
 
         // 主动释放
-        public virtual IEnumerator FireAt(int x, int y) { throw new Exception("not implemented yet"); }
+        public virtual void FireAt(int x, int y) { throw new Exception("not implemented yet"); }
 
         public virtual string ActiveSkillType { get; } = "fire"; // or fireAt
     }

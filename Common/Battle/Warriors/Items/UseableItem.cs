@@ -18,6 +18,6 @@ namespace Avocat
         }
 
         // 对指定位置使用
-        public virtual IEnumerator Use2(Warrior target) { throw new Exception("not implemented yet"); }
+        public virtual void Use2(Warrior target) { throw new Exception("not implemented yet"); }
     }
 }

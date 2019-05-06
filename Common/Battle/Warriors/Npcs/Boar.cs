@@ -18,7 +18,7 @@ namespace Avocat
         {
             Name = "野猪";
             AI = new WarriorAI(this).Build("NormalNpcMonster"); // AI
-            FC.Async2Sync(Battle.AddBuff(new CounterAttack(), this)); // 反击 buff
+            Battle.AddBuff(new CounterAttack(), this); // 反击 buff
         }
     }
 }

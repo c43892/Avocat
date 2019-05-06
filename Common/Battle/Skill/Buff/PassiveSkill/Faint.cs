@@ -18,35 +18,35 @@ namespace Avocat
         {
         }
 
-        IEnumerator UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
+        void UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
         {
             if (warrior != Warrior)
-                yield break;
+                return;
 
             resetActionFlags(false, false);
         }
 
-        IEnumerator CancelAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void CancelAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Warrior)
-                yield break;
+                return;
 
             if (!flags.Contains("CancelAttack"))
                 flags.Add("CancelAttack");
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeResetActionFlag.Add(UnsetActionFlag);
-            Battle.BeforeAttack.Add(CancelAttack);
-            yield return base.OnAttached();
+            Battle.BeforeResetActionFlag += UnsetActionFlag;
+            Battle.BeforeAttack += CancelAttack;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.BeforeResetActionFlag.Del(UnsetActionFlag);
-            Battle.BeforeAttack.Del(CancelAttack);
-            yield return base.OnDetached();
+            Battle.BeforeResetActionFlag -= UnsetActionFlag;
+            Battle.BeforeAttack -= CancelAttack;
+            base.OnDetached();
         }
     }
 }

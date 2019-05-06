@@ -35,9 +35,9 @@ namespace Avocat
             return cards;
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeStartNextRound.Add((int player) =>
+            Battle.BeforeStartNextRound += (int player) =>
             {
                 if (Player != player)
                     return;
@@ -58,9 +58,9 @@ namespace Avocat
 
                 cardsByHeros.InsertRange(0, twoRandomCards);
                 CardsGeneratedCallback(player, cardsByHeros.ToArray());
-            });
+            };
 
-            yield return base.OnAttached();
+            base.OnAttached();
         }
     }
 }

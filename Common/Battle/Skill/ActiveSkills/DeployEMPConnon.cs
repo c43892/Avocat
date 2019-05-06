@@ -23,10 +23,10 @@ namespace Avocat
 
 
         // 主动释放
-        public override IEnumerator FireAt(int x, int y)
+        public override void FireAt(int x, int y)
         {
             var connon = Configuration.Config(new CannonEMP(Map) { Team = Warrior.Team, ATK = Warrior.ATK, MaxHP = Warrior.HP, HP = Warrior.HP });
-            yield return Battle.AddWarriorAt(x, y, connon);
+            Battle.AddWarriorAt(x, y, connon);
         }
     }
 }

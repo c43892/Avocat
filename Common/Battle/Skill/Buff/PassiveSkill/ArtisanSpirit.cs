@@ -15,25 +15,25 @@ namespace Avocat
     {
         public int ES2Add { get; set; }
 
-        IEnumerator AddEN(int player)
+        void AddEN(int player)
         {
             if (player != Warrior.Team)
-                yield break;
+                return;
 
             var bt = Battle as BattlePVE;
-            yield return bt.AddEN(ES2Add);
+            bt.AddEN(ES2Add);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeStartNextRound.Add(AddEN);
-            yield return base.OnAttached();
+            Battle.BeforeStartNextRound += AddEN;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.BeforeStartNextRound.Del(AddEN);
-            yield return null;
+            Battle.BeforeStartNextRound -= AddEN;
+            base.OnDetached();
         }
     }
 }

@@ -46,12 +46,12 @@ namespace Avocat
         public Dictionary<int, Dictionary<int, WarriorAI>> AIs { get; } = new Dictionary<int, Dictionary<int, WarriorAI>>();
 
         // 移除指定角色
-        protected AsyncCalleeChain<Warrior> BeforeWarriorRemoved = new AsyncCalleeChain<Warrior>();
-        protected AsyncCalleeChain<Warrior> AfterWarriorRemoved = new AsyncCalleeChain<Warrior>();
-        public AsyncCalleeChain<Warrior> OnWarriorRemoved = new AsyncCalleeChain<Warrior>();
-        public IEnumerator RemoveWarrior(Warrior warrior)
+        public event Action<Warrior> BeforeWarriorRemoved = null;
+        public Action<Warrior> AfterWarriorRemoved = null;
+        public Action<Warrior> OnWarriorRemoved = null;
+        public void RemoveWarrior(Warrior warrior)
         {
-            yield return BeforeWarriorRemoved.Invoke(warrior);
+            BeforeWarriorRemoved?.Invoke(warrior);
 
             // 移除角色前，先移除身上的 buff 效果和 AI
 
@@ -59,12 +59,12 @@ namespace Avocat
                 AIs[warrior.Team].Remove(warrior.IDInMap);
 
             for (var i = 0; i < warrior.Buffs.Count; i++)
-                yield return warrior.Buffs[i].OnDetached();
+                warrior.Buffs[i].OnDetached();
 
             Map.RemoveWarrior(warrior);
 
-            yield return OnWarriorRemoved.Invoke(warrior);
-            yield return AfterWarriorRemoved.Invoke(warrior);
+            OnWarriorRemoved?.Invoke(warrior);
+            AfterWarriorRemoved?.Invoke(warrior);
         }
 
         #region 战斗准备过程
@@ -83,42 +83,39 @@ namespace Avocat
         }
 
         // 交换英雄位置
-        protected AsyncCalleeChain<int, int, int, int> BeforeExchangeWarroirsPosition = new AsyncCalleeChain<int, int, int, int>();
-        protected AsyncCalleeChain<int, int, int, int> AfterExchangeWarroirsPosition = new AsyncCalleeChain<int, int, int, int>();
-        public AsyncCalleeChain<int, int, int, int> OnWarriorPositionExchanged = new AsyncCalleeChain<int, int, int, int>();
-        public IEnumerator ExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
+        public event Action<int, int, int, int> BeforeExchangeWarroirsPosition = null;
+        public event Action<int, int, int, int> AfterExchangeWarroirsPosition = null;
+        public event Action<int, int, int, int> OnWarriorPositionExchanged = null;
+        public void ExchangeWarroirsPosition(int fx, int fy, int tx, int ty)
         {
             if (fx == tx && fy == ty)
-                yield break;
+                return;
 
-            yield return BeforeExchangeWarroirsPosition.Invoke(fx, fy, tx, ty);
+            BeforeExchangeWarroirsPosition?.Invoke(fx, fy, tx, ty);
 
             var tmp = Map.GetWarriorAt(fx, fy);
             Map.SetWarriorAt(fx, fy, Map.GetWarriorAt(tx, ty));
             Map.SetWarriorAt(tx, ty, tmp);
 
-            yield return OnWarriorPositionExchanged.Invoke(fx, fy, tx, ty);
-            yield return AfterExchangeWarroirsPosition.Invoke(fx, fy, tx, ty);
+            OnWarriorPositionExchanged?.Invoke(fx, fy, tx, ty);
+            AfterExchangeWarroirsPosition?.Invoke(fx, fy, tx, ty);
         }
+
+        // 玩家完成战斗准备
+        public abstract void PlayerPreparedImpl(int player);
+        public abstract bool AllPrepared { get; }
 
         // 完成战斗准备
-        protected AsyncCalleeChain<int> BeforePlayerPrepared = new AsyncCalleeChain<int>();
-        protected AsyncCalleeChain<int> AfterPlayerPrepared = new AsyncCalleeChain<int>();
-        public abstract void PlayerPreparedImpl(int player);
-        public AsyncCalleeChain<int> OnPlayerPrepared = new AsyncCalleeChain<int>(); // 有玩家完成战斗准备
-        public IEnumerator PlayerPrepared(int player)
+        protected event Action<int> BeforePlayerPrepared = null;
+        protected event Action<int> AfterPlayerPrepared = null;
+        public event Action<int> OnPlayerPrepared = null; // 有玩家完成战斗准备
+        public void PlayerPrepared(int player)
         {
-            yield return BeforePlayerPrepared.Invoke(player);
-
+            BeforePlayerPrepared?.Invoke(player);
             PlayerPreparedImpl(player);
-
-            yield return AfterPlayerPrepared.Invoke(player);
-
-            yield return OnPlayerPrepared.Invoke(player);
+            AfterPlayerPrepared?.Invoke(player);
+            OnPlayerPrepared?.Invoke(player);
         }
-
-        // 检查所有玩家是否都已经完成战斗准备
-        public abstract bool AllPrepared { get; }
 
         // 检查战斗结束条件，0 表示尚未结束，否则返回值表示胜利玩家
         // 检查战斗结束条件
@@ -152,15 +149,15 @@ namespace Avocat
         #region 战斗过程
 
         // 重置指定角色行动标记
-        public AsyncCalleeChain<Warrior, Action<bool, bool>> BeforeResetActionFlag = new AsyncCalleeChain<Warrior, Action<bool, bool>>();
-        public AsyncCalleeChain<Warrior> AfterResetActionFlag = new AsyncCalleeChain<Warrior>();
-        public AsyncCalleeChain<Warrior> DoResetActionFlag = new AsyncCalleeChain<Warrior>();
-        public IEnumerator ResetActionFlag(Warrior warrior)
+        public event Action<Warrior, Action<bool, bool>> BeforeResetActionFlag = null;
+        public event Action<Warrior> AfterResetActionFlag = null;
+        public event Action<Warrior> DoResetActionFlag = null;
+        public void ResetActionFlag(Warrior warrior)
         {
             var resetMovedFlag = true;
             var resetActionFlag = true;
 
-            yield return BeforeResetActionFlag.Invoke(warrior, (_resetMovedFlag, _resetActionFlag) =>
+            BeforeResetActionFlag?.Invoke(warrior, (_resetMovedFlag, _resetActionFlag) =>
             {
                 resetMovedFlag = _resetMovedFlag;
                 resetActionFlag = _resetActionFlag;
@@ -169,17 +166,17 @@ namespace Avocat
             if (resetMovedFlag) warrior.Moved = false; // 重置行动标记
             if (resetActionFlag) warrior.ActionDone = false; // 重置行动标记
 
-            yield return DoResetActionFlag.Invoke(warrior);
-            yield return AfterResetActionFlag.Invoke(warrior);
+            DoResetActionFlag?.Invoke(warrior);
+            AfterResetActionFlag?.Invoke(warrior);
         }
 
         // 回合开始，重置所有角色行动标记
-        public AsyncCalleeChain<int> BeforeStartNextRound = new AsyncCalleeChain<int>();
-        public AsyncCalleeChain<int> AfterStartNextRound = new AsyncCalleeChain<int>();
-        public AsyncCalleeChain<int> OnNextRoundStarted = new AsyncCalleeChain<int>();
-        public IEnumerator StartNextRound(int player)
+        public event Action<int> BeforeStartNextRound = null;
+        public event Action<int> AfterStartNextRound = null;
+        public event Action<int> OnNextRoundStarted = null;
+        public void StartNextRound(int player)
         {
-            yield return BeforeStartNextRound.Invoke(player);
+            BeforeStartNextRound?.Invoke(player);
 
             // 处理所属当前队伍的 ai
             if (AIs.ContainsKey(player))
@@ -187,18 +184,18 @@ namespace Avocat
                 var ais = AIs[player].Values.ToArray();
                 ais.Resort();
                 foreach (var id in AIs[player].Keys.ToArray())
-                    yield return AIs[player][id].ActFirst?.Invoke();
+                    AIs[player][id].ActFirst?.Invoke();
             }
                 
-            yield return OnNextRoundStarted.Invoke(player);
-            yield return AfterStartNextRound.Invoke(player);
+            OnNextRoundStarted?.Invoke(player);
+            AfterStartNextRound?.Invoke(player);
         }
 
         // 角色沿路径移动
-        public AsyncCalleeChain<Warrior> BeforeMoveOnPath = new AsyncCalleeChain<Warrior>();
-        public AsyncCalleeChain<Warrior, int, int, List<int>> AfterMoveOnPath = new AsyncCalleeChain<Warrior, int, int, List<int>>();
-        public AsyncCalleeChain<Warrior, int, int, List<int>> OnWarriorMovingOnPath = new AsyncCalleeChain<Warrior, int, int, List<int>>(); // 角色沿路径移动
-        public IEnumerator MoveOnPath(Warrior warrior)
+        public event Action<Warrior> BeforeMoveOnPath = null;
+        public event Action<Warrior, int, int, List<int>> AfterMoveOnPath = null;
+        public event Action<Warrior, int, int, List<int>> OnWarriorMovingOnPath = null; // 角色沿路径移动
+        public void MoveOnPath(Warrior warrior)
         {
             Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
 
@@ -206,9 +203,9 @@ namespace Avocat
             Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
 
             if (warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
-                yield break;
+                return;
 
-            yield return BeforeMoveOnPath.Invoke(warrior);
+            BeforeMoveOnPath?.Invoke(warrior);
 
             List<int> movedPath = new List<int>(); // 实际落实了的移动路径
             var lstPathXY = warrior.MovingPath;
@@ -234,14 +231,14 @@ namespace Avocat
 
             warrior.Moved = true;
 
-            yield return OnWarriorMovingOnPath.Invoke(warrior, x, y, movedPath);
-            yield return AfterMoveOnPath.Invoke(warrior, x, y, movedPath);
+            OnWarriorMovingOnPath?.Invoke(warrior, x, y, movedPath);
+            AfterMoveOnPath?.Invoke(warrior, x, y, movedPath);
         }
 
         // 计算伤害
-        public delegate void CalculateDamageAction<T1, T2, T3>(Warrior attacker, Warrior target, List<string> flags, out T1 inc, out T2 more, out T3 damageDec);
-        public CalculateDamageAction<int, int, int> BeforeCalculateDamage1;
-        public CalculateDamageAction<int, int, int> BeforeCalculateDamage2;
+        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, out int inc, out int more, out int damageDec);
+        public event CalculateDamageAction BeforeCalculateDamage1;
+        public event CalculateDamageAction BeforeCalculateDamage2;
         public int CalculateDamage(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             // 物理和法术分别取不同的抗性，混乱攻击忽视抗性
@@ -276,30 +273,30 @@ namespace Avocat
         }
 
         // 执行攻击
-        public AsyncCalleeChain<Warrior, Warrior, Skill, List<string>> BeforeAttack = new AsyncCalleeChain<Warrior, Warrior, Skill, List<string>>();
-        public AsyncCalleeChain<Warrior, Warrior, Skill, List<string>> AfterAttack = new AsyncCalleeChain<Warrior, Warrior, Skill, List<string>>();
-        public AsyncCalleeChain<Warrior, Warrior, Skill, List<string>> OnWarriorAttack = new AsyncCalleeChain<Warrior, Warrior, Skill, List<string>>(); // 角色进行攻击
-        public IEnumerator Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
+        public event Action<Warrior, Warrior, Skill, List<string>> BeforeAttack = null;
+        public event Action<Warrior, Warrior, Skill, List<string>> AfterAttack = null;
+        public event Action<Warrior, Warrior, Skill, List<string>> OnWarriorAttack = null; // 角色进行攻击
+        public void Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
         {
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
             // 在连续指令的情况下，可能条件已经不满足
             if (attacker == null || target == null)
-                yield break;
+                return;
 
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
-                yield break;
+                return;
 
             // 整理攻击标记
             var attackFlags = new List<string>();
             attackFlags.AddRange(flags);
             attackFlags.Add(attacker.AttackingType);
 
-            yield return BeforeAttack.Invoke(attacker, target, skill, attackFlags);
+            BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
-            if (attackFlags.Contains("CancelAttack")) // 取消攻击标记
-                yield break;
+            if (attackFlags.Contains("CancelAttack")) // 取消攻击
+                return;
 
             // 计算实际伤害
             var damage = CalculateDamage(attacker, target, skill, attackFlags);
@@ -308,7 +305,7 @@ namespace Avocat
             if (!attackFlags.Contains("ExtraAttack"))
                 attacker.ActionDone = true;
 
-            yield return OnWarriorAttack.Invoke(attacker, target, skill, attackFlags);
+            OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
 
             // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾
             var dhp = -damage;
@@ -319,30 +316,30 @@ namespace Avocat
                 des = damage > target.ES ? 0 : -damage;
             }
 
-            if (des != 0) yield return AddES(target, des);
-            if (dhp != 0) yield return AddHP(target, dhp);
+            if (des != 0) AddES(target, des);
+            if (dhp != 0) AddHP(target, dhp);
 
-            yield return AfterAttack.Invoke(attacker, target, skill, attackFlags);
+            AfterAttack?.Invoke(attacker, target, skill, attackFlags);
         }
 
         // 模拟攻击行为的伤害数值，但并不执行攻击行为
-        public IEnumerator SimulateAttackingDamage(Warrior attacker, Warrior target, Skill skill, Action<int> onDamage, params string[] flags)
+        public void SimulateAttackingDamage(Warrior attacker, Warrior target, Skill skill, Action<int> onDamage, params string[] flags)
         {
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
-                yield break;
+                return;
 
             // 整理攻击标记
             var attackFlags = new List<string>();
             attackFlags.AddRange(flags);
             attackFlags.Add(attacker.AttackingType);
 
-            yield return BeforeAttack.Invoke(attacker, target, skill, attackFlags);
+            BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
-            if (attackFlags.Contains("CancelAttack")) // 取消攻击标记
-                yield break;
+            if (attackFlags.Contains("CancelAttack")) // 取消攻击
+                return;
 
             // 计算实际伤害
             var damage = CalculateDamage(attacker, target, skill, attackFlags);
@@ -350,29 +347,29 @@ namespace Avocat
         }
 
         // 角色变形
-        public AsyncCalleeChain<Warrior, string> BeforeTransfrom = new AsyncCalleeChain<Warrior, string>();
-        public AsyncCalleeChain<Warrior, string> AfterTransfrom = new AsyncCalleeChain<Warrior, string>();
-        public AsyncCalleeChain<Warrior, string> OnTransfrom = new AsyncCalleeChain<Warrior, string>();
-        public IEnumerator Transform(Warrior warrior, string state)
+        public event Action<Warrior, string> BeforeTransfrom = null;
+        public event Action<Warrior, string> AfterTransfrom = null;
+        public event Action<Warrior, string> OnTransfrom = null;
+        public void Transform(Warrior warrior, string state)
         {
             Debug.Assert(warrior is ITransformable, "the warrior is not transformable");
 
-            yield return BeforeTransfrom.Invoke(warrior, state);
+            BeforeTransfrom?.Invoke(warrior, state);
 
             (warrior as ITransformable).State = state;
 
-            yield return OnTransfrom.Invoke(warrior, state);
-            yield return AfterTransfrom.Invoke(warrior, state);
+            OnTransfrom?.Invoke(warrior, state);
+            AfterTransfrom?.Invoke(warrior, state);
         }
 
         // 玩家本回合行动结束
-        public AsyncCalleeChain<int> BeforeActionDone = new AsyncCalleeChain<int>();
-        public AsyncCalleeChain<int> AfterActionDone = new AsyncCalleeChain<int>();
-        public AsyncCalleeChain<int> OnActionDone = new AsyncCalleeChain<int>();
-        public IEnumerator ActionDone(int player)
+        public event Action<int> BeforeActionDone = null;
+        public event Action<int> AfterActionDone = null;
+        public event Action<int> OnActionDone = null;
+        public void ActionDone(int player)
         {
-            yield return BeforeActionDone.Invoke(player);
-            yield return OnActionDone.Invoke(player);
+            BeforeActionDone?.Invoke(player);
+            OnActionDone?.Invoke(player);
 
             // 处理所属当前队伍的 ai
             if (AIs.ContainsKey(player))
@@ -380,44 +377,44 @@ namespace Avocat
                 var ais = AIs[player].Values.ToArray();
                 ais.Resort();
                 foreach (var id in AIs[player].Keys.ToArray())
-                    yield return AIs[player][id].ActLast?.Invoke();
+                     AIs[player][id].ActLast?.Invoke();
             }
 
-            yield return AfterActionDone.Invoke(player);
+            AfterActionDone?.Invoke(player);
 
-            yield return TryBattleEnd(); // 回合结束时检查战斗结束条件
-            yield return Move2NextPlayer(player); // 行动机会转移至下一队伍
+            TryBattleEnd(); // 回合结束时检查战斗结束条件
+            Move2NextPlayer(player); // 行动机会转移至下一队伍
         }
 
         // 添加角色到地图
-        public AsyncCalleeChain<int, int, Warrior> BeforeAddWarrior = new AsyncCalleeChain<int, int, Warrior>();
-        public AsyncCalleeChain<int, int, Warrior> AfterAddWarrior = new AsyncCalleeChain<int, int, Warrior>();
-        public AsyncCalleeChain<int, int, Warrior> OnAddWarrior = new AsyncCalleeChain<int, int, Warrior>();
-        public IEnumerator AddWarriorAt(int x, int y, Warrior warrior)
+        public event Action<int, int, Warrior> BeforeAddWarrior = null;
+        public event Action<int, int, Warrior> AfterAddWarrior = null;
+        public event Action<int, int, Warrior> OnAddWarrior = null;
+        public void AddWarriorAt(int x, int y, Warrior warrior)
         {
-            yield return BeforeAddWarrior.Invoke(x, y, warrior);
+            BeforeAddWarrior?.Invoke(x, y, warrior);
 
             Map.SetWarriorAt(x, y, warrior);
 
             if (warrior.AI != null)
                 ResetWarriorAI(warrior);
 
-            yield return OnAddWarrior.Invoke(x, y, warrior);
-            yield return AfterAddWarrior.Invoke(x, y, warrior);
+            OnAddWarrior?.Invoke(x, y, warrior);
+            AfterAddWarrior?.Invoke(x, y, warrior);
         }
 
         // 添加道具到地图
-        public AsyncCalleeChain<int, int, BattleMapItem> BeforeAddItem = new AsyncCalleeChain<int, int, BattleMapItem>();
-        public AsyncCalleeChain<int, int, BattleMapItem> AfterAddItem = new AsyncCalleeChain<int, int, BattleMapItem>();
-        public AsyncCalleeChain<int, int, BattleMapItem> OnAddItem = new AsyncCalleeChain<int, int, BattleMapItem>();
-        public IEnumerator AddItemAt(int x, int y, BattleMapItem item)
+        public event Action<int, int, BattleMapItem> BeforeAddItem = null;
+        public event Action<int, int, BattleMapItem> AfterAddItem = null;
+        public event Action<int, int, BattleMapItem> OnAddItem = null;
+        public void AddItemAt(int x, int y, BattleMapItem item)
         {
-            yield return BeforeAddItem.Invoke(x, y, item);
+            BeforeAddItem?.Invoke(x, y, item);
 
             Map.SetItemAt(x, y, item);
 
-            yield return OnAddItem.Invoke(x, y, item);
-            yield return AfterAddItem.Invoke(x, y, item);
+            OnAddItem?.Invoke(x, y, item);
+            AfterAddItem?.Invoke(x, y, item);
         }
 
         // 重置角色 ai
@@ -437,17 +434,16 @@ namespace Avocat
         /// 添加 buff 或被动技能，如果目标对象为 null，则认为是场地效果
         /// </summary>
         protected List<Buff> GroundBuffs = new List<Buff>();
-        protected AsyncCalleeChain<Buff, Warrior> BeforeBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        protected AsyncCalleeChain<Buff, Warrior> AfterBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        public AsyncCalleeChain<Buff, Warrior> OnBuffAttached = new AsyncCalleeChain<Buff, Warrior>();
-        public virtual IEnumerator AddBuff(Buff buff, Warrior target = null)
+        protected event Action<Buff, Warrior> BeforeBuffAttached = null;
+        protected event Action<Buff, Warrior> AfterBuffAttached = null;
+        public event Action<Buff, Warrior> OnBuffAttached = null;
+        public virtual void AddBuff(Buff buff, Warrior target = null)
         {
-            yield return BeforeBuffAttached.Invoke(buff, target);
+            BeforeBuffAttached?.Invoke(buff, target);
 
             if (target != null)
             {
                 Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
-
                 target.Buffs.Add(buff);
                 buff.Warrior = target;
             }
@@ -458,23 +454,23 @@ namespace Avocat
             }
 
             buff.Battle = this;
-            yield return buff.OnAttached();
+            buff.OnAttached();
 
-            yield return OnBuffAttached.Invoke(buff, target);
-            yield return AfterBuffAttached.Invoke(buff, target);
+            OnBuffAttached?.Invoke(buff, target);
+            AfterBuffAttached?.Invoke(buff, target);
         }
 
         /// <summary>
         /// 移除 buff 或被动技能效果
         /// </summary>
-        protected AsyncCalleeChain<Buff, Warrior> BeforeBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
-        protected AsyncCalleeChain<Buff, Warrior> AfterBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
-        public AsyncCalleeChain<Buff, Warrior> OnBuffRemoved = new AsyncCalleeChain<Buff, Warrior>();
-        public virtual IEnumerator RemoveBuff(Buff buff)
+        protected event Action<Buff, Warrior> BeforeBuffRemoved = null;
+        protected event Action<Buff, Warrior> AfterBuffRemoved = null;
+        public event Action<Buff, Warrior> OnBuffRemoved = null;
+        public virtual void RemoveBuff(Buff buff)
         {
             var target = buff.Warrior;
 
-            yield return BeforeBuffRemoved.Invoke(buff, target);
+            BeforeBuffRemoved?.Invoke(buff, target);
 
             if (target != null)
             {
@@ -487,19 +483,19 @@ namespace Avocat
                 GroundBuffs.Remove(buff);
             }
 
-            yield return buff.OnDetached();
+            buff.OnDetached();
             buff.Warrior = null;
             buff.Battle = null;
 
-            yield return OnBuffRemoved.Invoke(buff, target);
-            yield return AfterBuffRemoved.Invoke(buff, target);
+            OnBuffRemoved?.Invoke(buff, target);
+            AfterBuffRemoved?.Invoke(buff, target);
         }
 
         // 促发时光倒流
-        public AsyncCalleeChain<BattleReplay> OnTimeBackTriggered = new AsyncCalleeChain<BattleReplay>();
-        public IEnumerator TriggerTimeBack()
+        public event Action<BattleReplay> OnTimeBackTriggered = null;
+        public void TriggerTimeBack()
         {
-            yield return OnTimeBackTriggered.Invoke(Replay);
+            OnTimeBackTriggered(Replay);
         }
 
         #endregion
@@ -510,10 +506,10 @@ namespace Avocat
         List<int> playerSeq = new List<int>();  // 当前剩余轮转
 
         // 所有玩家完成战斗准备，自动开始新回合
-        IEnumerator OnAfterPlayerPrepared(int player)
+        void OnAfterPlayerPrepared(int player)
         {
             if (AllPrepared)
-                yield return StartNextRound(playerSeq[0]);
+                StartNextRound(playerSeq[0]);
         }
 
         // 多玩家行动机会的轮转
@@ -522,11 +518,11 @@ namespace Avocat
             this.players = players;
             playerSeq.AddRange(players);
 
-            AfterPlayerPrepared.Add(OnAfterPlayerPrepared);
+            AfterPlayerPrepared += OnAfterPlayerPrepared;
         }
 
         // 行动机会转移至玩家开始行动
-        public virtual IEnumerator Move2NextPlayer(int lastPlayer)
+        public virtual void Move2NextPlayer(int lastPlayer)
         {
             // 行动机会轮转至下一玩家
             Debug.Assert(lastPlayer == playerSeq[0]);
@@ -534,24 +530,24 @@ namespace Avocat
             if (playerSeq.Count == 0)
                 playerSeq.AddRange(players);
 
-            yield return StartNextRound(playerSeq[0]);
+            StartNextRound(playerSeq[0]);
         }
 
         // 结束战斗
-        public AsyncCalleeChain<int> OnBattleEnded = new AsyncCalleeChain<int>(); // 战斗结束通知
-        public IEnumerator TryBattleEnd()
+        public event Action<int> OnBattleEnded = null; // 战斗结束通知
+        public void TryBattleEnd()
         {
             var r = CheckEndCondition();
             if (r != 0)
-                yield return OnBattleEnded.Invoke(r);
+                OnBattleEnded.Invoke(r);
         }
 
         // 构建基本逻辑，参数表示玩家轮转编号列表
         protected virtual Battle Build(params int[] players)
         {
             BattleStatusTransfer(players);
-            FC.Async2Sync(AddBuff(new ResetES())); // 回合开始时重置护盾
-            FC.Async2Sync(AddBuff(new ResetActionFlag())); // 回合开始时重置行动标记
+            AddBuff(new ResetES()); // 回合开始时重置护盾
+            AddBuff(new ResetActionFlag()); // 回合开始时重置行动标记
             return this;
         }
 
@@ -560,54 +556,54 @@ namespace Avocat
         #region 角色操作包装
 
         // 角色加血
-        public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddHP = new AsyncCalleeChain<Warrior, int, Action<int>>();
-        public AsyncCalleeChain<Warrior, int> AfterAddHP = new AsyncCalleeChain<Warrior, int>();
-        public AsyncCalleeChain<Warrior, int> OnAddHP = new AsyncCalleeChain<Warrior, int>();
-        public AsyncCalleeChain<Warrior> OnWarriorDying = new AsyncCalleeChain<Warrior>(); // 角色死亡
-        public IEnumerator AddHP(Warrior warrior, int dhp)
+        public event Action<Warrior, int, Action<int>> BeforeAddHP = null;
+        public event Action<Warrior, int> AfterAddHP = null;
+        public event Action<Warrior, int> OnAddHP = null;
+        public event Action<Warrior> OnWarriorDying = null; // 角色死亡
+        public void AddHP(Warrior warrior, int dhp)
         {
-            yield return BeforeAddHP.Invoke(warrior, dhp, (int _dhp) => dhp = _dhp);
+            BeforeAddHP?.Invoke(warrior, dhp, (int _dhp) => dhp = _dhp);
 
             warrior.HP = (warrior.HP + dhp).Clamp(0, warrior.MaxHP);
 
-            yield return OnAddHP.Invoke(warrior, dhp);
-            yield return AfterAddHP.Invoke(warrior, dhp);
+            OnAddHP?.Invoke(warrior, dhp);
+            AfterAddHP?.Invoke(warrior, dhp);
 
             if (warrior.IsDead)
             {
-                yield return OnWarriorDying.Invoke(warrior);
-                yield return RemoveWarrior(warrior);
+                OnWarriorDying?.Invoke(warrior);
+                RemoveWarrior(warrior);
             }
         }
 
         // 角色加盾
-        public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddES = new AsyncCalleeChain<Warrior, int, Action<int>>();
-        public AsyncCalleeChain<Warrior, int> AfterAddES = new AsyncCalleeChain<Warrior, int>();
-        public AsyncCalleeChain<Warrior, int> OnAddES = new AsyncCalleeChain<Warrior, int>();
-        public IEnumerator AddES(Warrior warrior, int des)
+        public event Action<Warrior, int, Action<int>> BeforeAddES = null;
+        public event Action<Warrior, int> AfterAddES = null;
+        public event Action<Warrior, int> OnAddES = null;
+        public void AddES(Warrior warrior, int des)
         {
-            yield return BeforeAddES.Invoke(warrior, des, (int _des) => des = _des);
+            BeforeAddES?.Invoke(warrior, des, (int _des) => des = _des);
 
             warrior.ES = (warrior.ES + des).Clamp(0, warrior.MaxES);
 
-            yield return OnAddES.Invoke(warrior, des);
-            yield return AfterAddES.Invoke(warrior, des);
+            OnAddES?.Invoke(warrior, des);
+            AfterAddES?.Invoke(warrior, des);
         }
 
         // 角色加攻
-        public AsyncCalleeChain<Warrior, int, Action<int>> BeforeAddATK = new AsyncCalleeChain<Warrior, int, Action<int>>();
-        public AsyncCalleeChain<Warrior, int> AfterAddATK = new AsyncCalleeChain<Warrior, int>();
-        public AsyncCalleeChain<Warrior, int> OnAddATK = new AsyncCalleeChain<Warrior, int>();
-        public IEnumerator AddATK(Warrior warrior, int atk)
+        public event Action<Warrior, int, Action<int>> BeforeAddATK = null;
+        public event Action<Warrior, int> AfterAddATK = null;
+        public event Action<Warrior, int> OnAddATK = null;
+        public void AddATK(Warrior warrior, int atk)
         {
-            yield return BeforeAddATK.Invoke(warrior, atk, (int _atk) => atk = _atk);
+            BeforeAddATK?.Invoke(warrior, atk, (int _atk) => atk = _atk);
 
             warrior.ATK += atk;
             if (warrior.ATK < 0)
                 warrior.ATK = 0;
 
-            yield return OnAddATK.Invoke(warrior, atk);
-            yield return AfterAddATK.Invoke(warrior, atk);
+            OnAddATK?.Invoke(warrior, atk);
+            AfterAddATK?.Invoke(warrior, atk);
         }
 
         #endregion

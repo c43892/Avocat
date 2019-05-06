@@ -18,13 +18,13 @@ namespace Avocat
         public abstract string[] CardsPattern { get; protected set; }
 
         // 触发效果
-        public abstract IEnumerator Fire();
+        public abstract void Fire();
 
         // 检查卡牌模式
-        public virtual IEnumerator CheckPatternTrigger(Warrior warrior, List<BattleCard> cards)
+        public virtual void CheckPatternTrigger(Warrior warrior, List<BattleCard> cards)
         {
             if (warrior != Warrior)
-                yield break;
+                return;
 
             var matched = false;
             for (var i = 0; i + CardsPattern.Length <= cards.Count && !matched; i++)
@@ -36,19 +36,19 @@ namespace Avocat
             }
 
             if (matched)
-                yield return Fire();
+                Fire();
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            BT.AfterCardsConsumed.Add(CheckPatternTrigger);
-            yield return base.OnAttached();
+            BT.AfterCardsConsumed += CheckPatternTrigger;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            BT.AfterCardsConsumed.Del(CheckPatternTrigger);
-            yield return base.OnDetached();
+            BT.AfterCardsConsumed -= CheckPatternTrigger;
+            base.OnDetached();
         }
     }
 }

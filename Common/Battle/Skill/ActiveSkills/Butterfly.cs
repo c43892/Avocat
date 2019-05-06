@@ -19,7 +19,7 @@ namespace Avocat
         public override int EnergyCost { get; set; }
 
         // 主动释放
-        public override IEnumerator Fire()
+        public override void Fire()
         {
             var map = Battle.Map;
             for (var x = 0; x < map.Width; x++)
@@ -30,7 +30,7 @@ namespace Avocat
                     if (warrior == null || warrior.Team != Warrior.Team)
                         continue;
 
-                    yield return Battle.AddHP(warrior, warrior.MaxHP / 2);
+                    Battle.AddHP(warrior, warrior.MaxHP / 2);
                 }
             }
         }

@@ -19,7 +19,7 @@ namespace Avocat
             Warrior = warrior;
         }
 
-        public Func<IEnumerator> ActFirst;
-        public Func<IEnumerator> ActLast;
+        public Action ActFirst;
+        public Action ActLast;
     }
 }

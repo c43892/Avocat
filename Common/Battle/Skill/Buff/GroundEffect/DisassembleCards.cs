@@ -24,24 +24,23 @@ namespace Avocat
             OnCardsDisassembledDone = onCardsDisassembledDone;
         }
 
-        IEnumerator DissambleCards(int player)
+        void DissambleCards(int player)
         {
             if (Player != player)
-                yield break;
+                return;
 
             // 每张卡牌增加一定建设值
             var cards = AvailableCards.ToArray();
-            yield return BattlePVE.AddCardDissambleValue(cards.Length * 20);
+            BattlePVE.AddCardDissambleValue(cards.Length * 20);
 
             AvailableCards.Clear();
             OnCardsDisassembledDone?.Invoke(player, cards);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeActionDone.Add(DissambleCards);
-
-            yield return base.OnAttached();
+            Battle.BeforeActionDone += DissambleCards;
+            base.OnAttached();
         }
     }
 }

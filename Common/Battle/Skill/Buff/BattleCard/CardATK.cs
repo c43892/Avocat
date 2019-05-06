@@ -20,16 +20,16 @@ namespace Avocat
         {
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         { 
-            yield return Battle.AddATK(Warrior, ATK);
-            yield return base.OnAttached();
+            Battle.AddATK(Warrior, ATK);
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            yield return Warrior.Battle.AddATK(Warrior, -ATK);
-            yield return base.OnDetached();
+            Warrior.Battle.AddATK(Warrior, -ATK);
+            base.OnDetached();
         }
     }
 }

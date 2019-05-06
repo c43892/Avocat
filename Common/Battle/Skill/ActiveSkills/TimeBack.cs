@@ -20,11 +20,11 @@ namespace Avocat
         public override int EnergyCost { get; set; }
 
         // 主动释放
-        public override IEnumerator Fire()
+        public override void Fire()
         {
             var msgs = Battle.Replay.Messages;
             if (msgs.Count == 0)
-                yield break;
+                return;
 
             var i = 0;
             var actionDownCount = 0;
@@ -52,7 +52,7 @@ namespace Avocat
             if (i > 1)
             {
                 Battle.Replay.Messages.RemoveRange(Battle.Replay.Messages.Count - i, i);
-                yield return Battle.TriggerTimeBack();
+                Battle.TriggerTimeBack();
             }
         }
     }

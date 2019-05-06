@@ -7,6 +7,18 @@ using System.Threading.Tasks;
 
 namespace Swift
 {
+    public class Async
+    {
+        public static void Async2Sync(IEnumerator asyncAct)
+        {
+            while (asyncAct.MoveNext())
+            {
+                if (asyncAct.Current is IEnumerator c)
+                    Async2Sync(c);
+            }
+        }
+    }
+
     public class AsyncCalleeChain
     {
         List<object> callee = new List<object>();

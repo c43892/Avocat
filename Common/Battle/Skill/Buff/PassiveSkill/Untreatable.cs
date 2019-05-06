@@ -17,24 +17,24 @@ namespace Avocat
         {
         }
 
-        IEnumerator OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
+        void OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
         {
             if (warrior != Warrior || dhp <= 0)
-                yield break;
+                return;
 
             changeDhp(0);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeAddHP.Add(OnBeforeAddHp);
-            yield return base.OnAttached();
+            Battle.BeforeAddHP += OnBeforeAddHp;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.BeforeAddHP.Del(OnBeforeAddHp);
-            yield return base.OnDetached();
+            Battle.BeforeAddHP -= OnBeforeAddHp;
+            base.OnDetached();
         }
     }
 }

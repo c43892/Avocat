@@ -11,7 +11,7 @@ static class BattleStageUIOnEvents
     {
         var bt = BattleStageUI.BattleStage.Battle as BattlePVE;
 
-        bt.OnPlayerPrepared.Add((int player) =>
+        bt.OnPlayerPrepared += (int player) =>
         {
             if (room.Battle.AllPrepared)
             {
@@ -19,27 +19,27 @@ static class BattleStageUIOnEvents
                 BattleStageUI.RefreshEnergy(bt.Energy);
                 BattleStageUI.RefreshItemUsage(bt.CardUsage);
             }
-        });
+        };
 
-        bt.OnBattleEnded.Add((winner) =>
+        bt.OnBattleEnded += (winner) =>
         {
             BattleStageUI.gameObject.SetActive(false);
-        });
+        };
 
-        bt.OnActionDone.Add((player) =>
+        bt.OnActionDone += (player) =>
         {
             if (player != room.PlayerMe)
                 return;
 
             BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
-        });
+        };
 
-        bt.OnAddBattleCard.Add((card) =>
+        bt.OnAddBattleCard += (card) =>
         {
             BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
-        });
+        };
 
-        bt.OnNextRoundStarted.Add((player) =>
+        bt.OnNextRoundStarted += (player) =>
         {
             if (player != room.PlayerMe)
                 return;
@@ -47,9 +47,9 @@ static class BattleStageUIOnEvents
             var availableCards = new List<BattleCard>();
             availableCards.AddRange(bt.AvailableCards);
             BattleStageUI.RefreshCardsAvailable(availableCards);
-        });
+        };
 
-        bt.OnCardsConsumed.Add((warrior, cards) =>
+        bt.OnCardsConsumed += (warrior, cards) =>
         {
             if (warrior.Team != room.PlayerMe)
                 return;
@@ -57,16 +57,16 @@ static class BattleStageUIOnEvents
             var availableCards = new List<BattleCard>();
             availableCards.AddRange(bt.AvailableCards);
             BattleStageUI.RefreshCardsAvailable(availableCards);
-        });
+        };
 
-        bt.OnBattleCardsExchange.Add((int g1, int n1, int g2, int n2) =>
+        bt.OnBattleCardsExchange += (int g1, int n1, int g2, int n2) =>
         {
             BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
             BattleStageUI.RefreshCardsStarshed(bt.StashedCards);
-        });
+        };
 
-        bt.OnAddEN.Add((den) => BattleStageUI.RefreshEnergy(bt.Energy));
-        bt.OnAddCardDissambleValue.Add((dv) => BattleStageUI.RefreshItemUsage(bt.CardUsage));
+        bt.OnAddEN += (den) => BattleStageUI.RefreshEnergy(bt.Energy);
+        bt.OnAddCardDissambleValue += (dv) => BattleStageUI.RefreshItemUsage(bt.CardUsage);
 
         InBattleOps.OnCurrentWarriorChanged += () => BattleStageUI.RefreshEnergy(bt.Energy);
     }

@@ -19,26 +19,26 @@ namespace Avocat
             GetCardType = getCardType;
         }
 
-        IEnumerator AddBattleCard(int player)
+        void AddBattleCard(int player)
         {
             if (player != Warrior.Team)
-                yield break;
+                return;
 
             var bt = Battle as BattlePVE;
             var card = BattleCard.Create(GetCardType());
-            yield return bt.AddBattleCard(card);
+            bt.AddBattleCard(card);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeStartNextRound.Add(AddBattleCard);
-            yield return base.OnAttached();
+            Battle.BeforeStartNextRound += AddBattleCard;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.BeforeStartNextRound.Del(AddBattleCard);
-            yield return null;
+            Battle.BeforeStartNextRound -= AddBattleCard;
+            base.OnDetached();
         }
     }
 }

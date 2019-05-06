@@ -31,8 +31,8 @@ namespace Avocat
     {
         public virtual Battle Battle { get; set; } // 所属战斗对象
         public virtual BattleMap Map { get { return Battle?.Map; } }
-        public virtual IEnumerator OnAttached() { yield return null; }
-        public virtual IEnumerator OnDetached() { yield return null; }
+        public virtual void OnAttached() { }
+        public virtual void OnDetached() { }
     }
 
     /// <summary>
@@ -54,26 +54,26 @@ namespace Avocat
             Num = (Num + addtionalNum).Clamp(0, MaxNum);
         }
 
-        IEnumerator CountDown(int player)
+        void CountDown(int player)
         {
             if (player != Warrior.Team)
-                yield break;
+                return;
 
             Num--;
             if (Num <= 0)
-                yield return Battle.RemoveBuff(this);
+                Battle.RemoveBuff(this);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeActionDone.Add(CountDown);
-            yield return base.OnAttached();
+            Battle.BeforeActionDone += CountDown;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.BeforeActionDone.Del(CountDown);
-            yield return base.OnDetached();
+            Battle.BeforeActionDone -= CountDown;
+            base.OnDetached();
         }
     }
 }

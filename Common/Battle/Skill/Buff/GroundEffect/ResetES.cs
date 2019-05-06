@@ -12,9 +12,9 @@ namespace Avocat
     /// </summary>
     public class ResetES : Buff
     {
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.BeforeStartNextRound.Add((int player) =>
+            Battle.BeforeStartNextRound += (int player) =>
             {
                 Map.ForeachWarriors((i, j, warrior) =>
                 {
@@ -23,9 +23,9 @@ namespace Avocat
 
                     warrior.ES = 0; // 重置所有护甲
                 });
-            });
+            };
 
-            yield return base.OnAttached();
+            base.OnAttached();
         }
     }
 }

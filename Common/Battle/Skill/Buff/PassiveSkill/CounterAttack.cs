@@ -12,28 +12,28 @@ namespace Avocat
     /// </summary>
     public class CounterAttack : PassiveSkill
     {
-        IEnumerator AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (target != Warrior || flags.Contains("SuppressCounterAttack"))
-                yield break;
+                return;
 
             attacker.GetPosInMap(out int x, out int y);
             if (!target.InAttackRange(x, y))
-                yield break;
+                return;
 
-            yield return Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack");
+             Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack");
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.AfterAttack.Add(AttackBack);
-            yield return base.OnAttached();
+            Battle.AfterAttack += AttackBack;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.AfterAttack.Del(AttackBack);
-            yield return null;
+            Battle.AfterAttack -= AttackBack;
+            base.OnDetached();
         }
     }
 }

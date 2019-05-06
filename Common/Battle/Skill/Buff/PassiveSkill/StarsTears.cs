@@ -13,26 +13,26 @@ namespace Avocat
     /// </summary>
     public class StarsTears : PassiveSkill
     {
-        IEnumerator OnAfterAddHp(Warrior warrior, int dhp)
+        void OnAfterAddHp(Warrior warrior, int dhp)
         {
             if (warrior.Team != Warrior.Team || warrior == Warrior || dhp <= 0)
-                yield break;
+                return;
 
             var bt = Battle as BattlePVE;
             var des = Calculation.StarTearsEffect(dhp);
-            yield return bt.AddES(warrior, (int)des);
+            bt.AddES(warrior, (int)des);
         }
 
-        public override IEnumerator OnAttached()
+        public override void OnAttached()
         {
-            Battle.AfterAddHP.Add(OnAfterAddHp);
-            yield return base.OnAttached();
+            Battle.AfterAddHP += OnAfterAddHp;
+            base.OnAttached();
         }
 
-        public override IEnumerator OnDetached()
+        public override void OnDetached()
         {
-            Battle.AfterAddHP.Del(OnAfterAddHp);
-            yield return base.OnDetached();
+            Battle.AfterAddHP -= OnAfterAddHp;
+            base.OnDetached();
         }
     }
 }
