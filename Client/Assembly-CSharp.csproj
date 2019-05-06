@@ -109,7 +109,6 @@
     <Compile Include="Assets\Scripts\Common\Config\Configuration.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\SpatialAStar.cs" />
-    <Compile Include="Assets\Scripts\Common\Swift\AsyncCalleeChain.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\BufferExtension.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\IBuffer.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\Interfaces.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="Assets\Scripts\Common\Swift\StateMachine\StateMachineCombination.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\StateMachine\StateMachineManager.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\StateMachine\StateTransition.cs" />
+    <Compile Include="Assets\Scripts\Common\Swift\Utils\Async.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Utils\DM.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Utils\FC.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Utils\Md5Utils.cs" />

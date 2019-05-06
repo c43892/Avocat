@@ -10,20 +10,25 @@ static class BattleStageUIOnEvents
     public static void SetupEventHandler(this BattleStageUI BattleStageUI, BattleRoomClient room)
     {
         var bt = BattleStageUI.BattleStage.Battle as BattlePVE;
+        var aniPlayer = BattleStageUI.AniPlayer;
 
         bt.OnPlayerPrepared += (int player) =>
         {
             if (room.Battle.AllPrepared)
             {
-                BattleStageUI.gameObject.SetActive(true);
-                BattleStageUI.RefreshEnergy(bt.Energy);
-                BattleStageUI.RefreshItemUsage(bt.CardUsage);
+                aniPlayer.Add(aniPlayer.Op(() =>
+                {
+                    BattleStageUI.gameObject.SetActive(true);
+                    BattleStageUI.RefreshEnergy(bt.Energy);
+                    BattleStageUI.RefreshItemUsage(bt.CardUsage);
+                }));
             }
         };
 
         bt.OnBattleEnded += (winner) =>
         {
-            BattleStageUI.gameObject.SetActive(false);
+            aniPlayer.Add(aniPlayer.Op(() => BattleStageUI.gameObject.SetActive(false)));
+
         };
 
         bt.OnActionDone += (player) =>
@@ -31,12 +36,12 @@ static class BattleStageUIOnEvents
             if (player != room.PlayerMe)
                 return;
 
-            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
+            aniPlayer.Add(aniPlayer.Op(() => BattleStageUI.RefreshCardsAvailable(bt.AvailableCards)));
         };
 
         bt.OnAddBattleCard += (card) =>
         {
-            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
+            aniPlayer.Add(aniPlayer.Op(() => BattleStageUI.RefreshCardsAvailable(bt.AvailableCards)));
         };
 
         bt.OnNextRoundStarted += (player) =>
@@ -44,9 +49,12 @@ static class BattleStageUIOnEvents
             if (player != room.PlayerMe)
                 return;
 
-            var availableCards = new List<BattleCard>();
-            availableCards.AddRange(bt.AvailableCards);
-            BattleStageUI.RefreshCardsAvailable(availableCards);
+            aniPlayer.Add(aniPlayer.Op(() =>
+            {
+                var availableCards = new List<BattleCard>();
+                availableCards.AddRange(bt.AvailableCards);
+                BattleStageUI.RefreshCardsAvailable(availableCards);
+            }));
         };
 
         bt.OnCardsConsumed += (warrior, cards) =>
@@ -54,20 +62,26 @@ static class BattleStageUIOnEvents
             if (warrior.Team != room.PlayerMe)
                 return;
 
-            var availableCards = new List<BattleCard>();
-            availableCards.AddRange(bt.AvailableCards);
-            BattleStageUI.RefreshCardsAvailable(availableCards);
+            aniPlayer.Add(aniPlayer.Op(() =>
+            {
+                var availableCards = new List<BattleCard>();
+                availableCards.AddRange(bt.AvailableCards);
+                BattleStageUI.RefreshCardsAvailable(availableCards);
+            }));
         };
 
         bt.OnBattleCardsExchange += (int g1, int n1, int g2, int n2) =>
         {
-            BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
-            BattleStageUI.RefreshCardsStarshed(bt.StashedCards);
+            aniPlayer.Add(aniPlayer.Op(() =>
+            {
+                BattleStageUI.RefreshCardsAvailable(bt.AvailableCards);
+                BattleStageUI.RefreshCardsStarshed(bt.StashedCards);
+            }));
         };
 
-        bt.OnAddEN += (den) => BattleStageUI.RefreshEnergy(bt.Energy);
-        bt.OnAddCardDissambleValue += (dv) => BattleStageUI.RefreshItemUsage(bt.CardUsage);
+        bt.OnAddEN += (den) => aniPlayer.Add(aniPlayer.Op(() => BattleStageUI.RefreshEnergy(bt.Energy)));
+        bt.OnAddCardDissambleValue += (dv) => aniPlayer.Add(aniPlayer.Op(() => BattleStageUI.RefreshItemUsage(bt.CardUsage)));
 
-        InBattleOps.OnCurrentWarriorChanged += () => BattleStageUI.RefreshEnergy(bt.Energy);
+        InBattleOps.OnCurrentWarriorChanged += () => aniPlayer.Add(aniPlayer.Op(() => BattleStageUI.RefreshEnergy(bt.Energy)));
     }
 }

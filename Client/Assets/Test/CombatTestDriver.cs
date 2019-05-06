@@ -87,6 +87,8 @@ public class CombatTestDriver : GameDriver
         // build up the whole scene
         BattleStage.Build(room, (replay) =>
         {
+            // var aniPlayer = BattleStage.GetComponent<MapAniPlayer>();
+            // aniPlayer.AnimationTimeScaleFactor = 10000;
             StartGame();
             PlayReplay(replay);
         });

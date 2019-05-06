@@ -15,6 +15,8 @@ public class BattleStageUI : MonoBehaviour
     public BattleStage BattleStage;
     public bool enterSkillStage;
 
+    public MapAniPlayer AniPlayer { get => BattleStage.GetComponent<MapAniPlayer>(); }
+
     // 可用的卡组区域
     public BattleCardUI[] CardsAvailableGroup;
 

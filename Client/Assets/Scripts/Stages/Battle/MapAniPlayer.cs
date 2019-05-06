@@ -24,10 +24,41 @@ public class MapAniPlayer : MonoBehaviour
         }
     } BattleStage stage;
 
+    // 动画播放速率
+    public float AnimationTimeScaleFactor { get; set; } = 1;
+
+    #region 动画队列
+
+    Queue<KeyValuePair<IEnumerator, Action>> anis = new Queue<KeyValuePair<IEnumerator, Action>>();
+
+    // 添加动画到动画队列
+    public void Add(IEnumerator ani, Action onEnded = null)
+    {
+        anis.Enqueue(new KeyValuePair<IEnumerator, Action>(ani, onEnded));
+
+        if (anis.Count == 1)
+            StartCoroutine(PlayAnis());
+    }
+
+    IEnumerator PlayAnis()
+    {
+        while (anis.Count > 0)
+        {
+            var pair = anis.Peek();
+            var ani = pair.Key;
+            var onEnded = pair.Value;
+            yield return ani;
+            onEnded?.Invoke();
+            anis.Dequeue();
+        }
+    }
+
+    #endregion
+
     #region 构建不同动画
 
     // 执行指定动作
-    IEnumerator Op(Action op)
+    public IEnumerator Op(Action op)
     {
         yield return null;
         op();
@@ -79,7 +110,7 @@ public class MapAniPlayer : MonoBehaviour
         var i = 0;
         while (i < path.Length)
         {
-            var overNodesNum = RunOnPath(path, Time.deltaTime * velocity, tar.localPosition.x, tar.localPosition.y, i, out float x, out float y);
+            var overNodesNum = RunOnPath(path, Time.deltaTime * velocity * AnimationTimeScaleFactor, tar.localPosition.x, tar.localPosition.y, i, out float x, out float y);
             tar.localPosition = new Vector2(x, y);
 
             if (overNodesNum > 0)
