@@ -34,7 +34,6 @@ namespace Avocat
         }
 
         public string Name { get; protected set; }
-        public bool visited = false;
         public abstract void ExecuteOn(Warrior warrior);
     }
 

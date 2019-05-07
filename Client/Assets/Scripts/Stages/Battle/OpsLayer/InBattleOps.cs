@@ -59,14 +59,16 @@ public class InBattleOps : StageOpsLayer
 
             OnCurrentWarriorChanged?.Invoke();
         }
-    } Warrior curSelWarrior;
-
+    }
+    Warrior curSelWarrior;
     List<MapTile> pathATKRange = new List<MapTile>();
+
     // 显示攻击范围
     public void ShowAttackRange(float x, float y, Warrior worrior)
     {
         Debug.Assert(pathATKRange.Count == 0, "path range is not empty now.");
-        FC.For(worrior.AttackRange.Length,(i) => {
+        FC.For(worrior.AttackRange.Length, (i) =>
+        {
             int minX = (x - worrior.AttackRange[i]) < 0 ? 0 : (int)(x - worrior.AttackRange[i]);
             int maxX = (x + worrior.AttackRange[i]) >= BattleStage.Map.Width ? BattleStage.Map.Width : (int)(x + worrior.AttackRange[i] + 1);
             int minY = (y - worrior.AttackRange[i]) < 0 ? 0 : (int)(y - worrior.AttackRange[i]);
@@ -117,29 +119,29 @@ public class InBattleOps : StageOpsLayer
                 {
                     // 选中己方角色，等待攻击指令
                     CurrentSelWarrior = warrior;
-                    if (CurrentSelWarrior != null) {
+                    if (CurrentSelWarrior != null)
+                    {
                         status = "selectingAttackTarget";
                         ShowAttackRange(x, y, CurrentSelWarrior);
                     }
                 }
                 break;
             case "selectingAttackTarget":
+
                 // 再次点击时清除攻击范围显示
-                ClearCardVisited();
                 RemoveShowAttackRange();
                 if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
                     // 点空地
-
                     if (CurrentSelWarrior.MovingPath.Count >= 2
                         && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 2] == (int)x
                         && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 1] == (int)y)
                     {
                         // 如果是移动目的地，则直接移动
-                        if (CurrentSelWarrior.MovingPath.Count > 0) {
-                            Room.DoMoveOnPath(CurrentSelWarrior);                            
-                        }                          
-
+                        if (CurrentSelWarrior.MovingPath.Count > 0)
+                        {
+                            Room.DoMoveOnPath(CurrentSelWarrior);
+                        }
                         CurrentSelWarrior = null;
                         status = "selectingWarrior";
                     }
@@ -187,10 +189,9 @@ public class InBattleOps : StageOpsLayer
         }
 
         CurrentSelWarrior = warrior;
-        (CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy = (CurrentSelWarrior.Battle as BattlePVE).Energy;
         var tile = BattleStage.Tiles[(int)x, (int)y];
-        pathInSel.Clear();
-        pathInSel.Add(tile);
+        ClearPath();
+        AddPath(tile);
         status = "selectingPath";
     }
 
@@ -209,7 +210,7 @@ public class InBattleOps : StageOpsLayer
         if (tile == secondTailTile)
         {
             // 回退指向尾部第二块，则从路径中退掉尾部第一块
-            pathInSel.RemoveAt(pathInSel.Count - 1);
+            RemovePath(pathInSel.Count - 1);
             tailTile.Color = MapTile.ColorDefault;
             tailTile.Card = null;
             if (pathInSel.Count > 1) // 头节点不变色显示
@@ -217,23 +218,6 @@ public class InBattleOps : StageOpsLayer
                 pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
                 pathInSel[pathInSel.Count - 1].SetDir(0, 0);
             }
-            // 退回的牌记为未访问
-            lastCard.visited = false;
-            // 判断退回的是否为能量牌
-            if (lastCard.Name == "EN")
-            {
-                PreMinusEnergy();
-            }
-
-            if (pathInSel.Count >= 2)
-            {
-                lastCard = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 2];
-            }
-            else if (pathInSel.Count == 1)
-            {
-                lastCard = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
-            }
-
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
         {
@@ -245,19 +229,6 @@ public class InBattleOps : StageOpsLayer
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
             if (dist == 1 && !Room.Battle.Map.BlockedAt(tile.X, tile.Y))
             {
-                // 获得头节点卡牌
-                var card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
-                lastCard = card;
-                // 标记头节点卡牌为已访问
-                if (!card.visited)
-                {
-                    card.visited = true;
-                    if (card.Name == "EN")
-                    {
-                        PreAddEnergy();
-                    }
-                }
-
                 if (pathInSel.Count > 1) // 头节点不变色显示
                 {
                     var cd = pathInSel[pathInSel.Count - 1];
@@ -269,7 +240,7 @@ public class InBattleOps : StageOpsLayer
                 tile.Color = MapTile.ColorSelectedHead;
                 tile.Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
                 tile.SetDir(0, 0);
-                pathInSel.Add(tile);
+                AddPath(tile);
             }
         }
     }
@@ -287,8 +258,8 @@ public class InBattleOps : StageOpsLayer
             CurrentSelWarrior.MovingPath.Add(tile.X);
             CurrentSelWarrior.MovingPath.Add(tile.Y);
         });
-
         status = "selectingAttackTarget";
+
         // 显示移动结束时攻击范围
         lastX = pathInSel[pathInSel.Count - 1].X;
         lastY = pathInSel[pathInSel.Count - 1].Y;
@@ -302,29 +273,43 @@ public class InBattleOps : StageOpsLayer
         Room.DoAttack(attacker, target);
     }
 
-    // 预加能量
-    public void PreAddEnergy()
+    // 增加路径的时候刷新能量
+    public void AddPath(MapTile tile)
     {
-        var bt = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
-        (CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy += 15;
-        bt.RefreshEnergy((CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy);
+        pathInSel.Add(tile);
+        RefreshEnergy();
     }
 
-    // 预减能量
-    public void PreMinusEnergy()
+    // 减少路径的时候刷新能量
+    public void RemovePath(int i)
     {
-        var bt = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
-        (CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy -= 15;
-        bt.RefreshEnergy((CurrentSelWarrior.Battle as BattlePVE).PreShowEnergy);
+        pathInSel.RemoveAt(i);
+        RefreshEnergy();
     }
 
-    // 将卡牌都设为未访问状态
-    public void ClearCardVisited()
+    // 清除路径的时候刷新能量
+    public void ClearPath()
     {
-        FC.For(0, (Room.Battle as BattlePVE).AvailableCards.Count, (i) =>
+        pathInSel.Clear();
+        RefreshEnergy();
+    }
+
+    // 刷新能量
+    public void RefreshEnergy()
+    {
+        int energy = 0;
+        if (pathInSel.Count > 1)
         {
-            (Room.Battle as BattlePVE).AvailableCards[i].visited = false;
-        });
-        
+            FC.For(1, pathInSel.Count, (i) =>
+            {
+                if ((Room.Battle as BattlePVE).AvailableCards[i-1].Name == "EN")
+                {
+                    energy += 15;
+                }
+            });
+        }
+        var en =(CurrentSelWarrior.Battle as BattlePVE).Energy + energy;
+        var bt = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
+        bt.RefreshEnergy(en);
     }
 }

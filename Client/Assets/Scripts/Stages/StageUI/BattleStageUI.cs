@@ -79,8 +79,6 @@ public class BattleStageUI : MonoBehaviour
         Room.ActionDone();
     }
 
-    public int selX;
-    public int selY;
     // 释放主动技能
     public void OnFireActiveSkill()
     {
@@ -106,14 +104,14 @@ public class BattleStageUI : MonoBehaviour
             }
             BattleStage.StartSkillStage(true);
             BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selX, selY) =>
-            {
+            {               
+                if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
+                {
+                    BattleStage.InBattleOps.ClearSelTiles();
+                    Room.DoMoveOnPath(warrior);
+                }
                 Room.FireActiveSkillAt(skill, selX, selY);
-            }, () =>
-            {
-                Room.DoMoveOnPath(warrior);
             });
-            // 调用协程
-            StartCoroutine(BattleStage.SkillOps.releaseSkill());
         }
         else {
             if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
@@ -124,8 +122,7 @@ public class BattleStageUI : MonoBehaviour
                 Room.DoMoveOnPath(warrior);
             }
             Room.FireActiveSkill(skill);
-        }
-            
+        }       
     }
 
     // 进入地图改造模式

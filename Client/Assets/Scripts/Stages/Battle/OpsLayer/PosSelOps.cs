@@ -19,19 +19,14 @@ public class PosSelOps : StageOpsLayer
            : base(bs)
     {
     }
-    public bool choosePos;
-    public int posX;
-    public int posY;
     List<MapTile> Range = new List<MapTile>();
     IWithRange iRange;
     Action<int, int> onSelPos = null;
-    Action moveWarrior = null;
 
     // 显示范围
-    public void ShowRange(int cx, int cy, IWithRange iRange, Action< int, int> onSelPos, Action moveWarrior)
+    public void ShowRange(int cx, int cy, IWithRange iRange, Action< int, int> onSelPos)
     {
         Debug.Assert(Range.Count == 0, "path asasrange is not empty now.");
-        this.moveWarrior = moveWarrior;
         this.iRange = iRange;
         this.onSelPos = onSelPos;
         var map = BattleStage.Map;
@@ -60,7 +55,6 @@ public class PosSelOps : StageOpsLayer
         foreach (MapTile tile in range)
             if (tile.X == (int)x && tile.Y == (int)y)
                 return true;
-
         return false;
     }
 
@@ -76,7 +70,6 @@ public class PosSelOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         var warrior = avatar == null ? null : avatar.Warrior;
-
         if (warrior == null)
         {
             // 点空地
@@ -84,10 +77,7 @@ public class PosSelOps : StageOpsLayer
             {
                 RemoveShowRange();
                 BattleStage.InBattleOps.RemoveShowAttackRange();
-                choosePos = true;
-                posX = (int)x;
-                posY = (int)y;
-                //  onSelPos((int)x, (int)y);
+                onSelPos((int)x, (int)y);
                 BattleStage.StartSkillStage(false);
             }
             else
@@ -98,18 +88,4 @@ public class PosSelOps : StageOpsLayer
             }
         }
     }
-
-    // 释放技能
-    public IEnumerator releaseSkill()
-    {
-        yield return new WaitUntil(() => BattleStage.SkillOps.choosePos == true);
-        BattleStage.SkillOps.choosePos = false;
-        if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
-        {
-            BattleStage.InBattleOps.ClearSelTiles();
-            moveWarrior();
-        }
-        onSelPos(posX, posY);
-    }
-
 }
