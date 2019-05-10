@@ -28,15 +28,23 @@ public class MapAniPlayer : MonoBehaviour
     public float AnimationTimeScaleFactor { get; set; } = 1;
 
     #region 动画队列
+    
+    class AniNodeInfo
+    {
+        public IEnumerator Ani;
+        public Action OnEnded;
+    }
 
-    Queue<KeyValuePair<IEnumerator, Action>> anis = new Queue<KeyValuePair<IEnumerator, Action>>();
+    Queue<AniNodeInfo> anis = new Queue<AniNodeInfo>();
 
     // 添加动画到动画队列
-    public void Add(IEnumerator ani, Action onEnded = null)
+    MapAniPlayer Add(IEnumerator ani, Action onEnded = null)
     {
-        anis.Enqueue(new KeyValuePair<IEnumerator, Action>(ani, onEnded));
+        anis.Enqueue(new AniNodeInfo() { Ani = ani, OnEnded = onEnded });
         if (anis.Count == 1)
             StartCoroutine(PlayAnis());
+
+        return this;
     }
 
     IEnumerator PlayAnis()
@@ -44,8 +52,8 @@ public class MapAniPlayer : MonoBehaviour
         while (anis.Count > 0)
         {
             var pair = anis.Peek();
-            var ani = pair.Key;
-            var onEnded = pair.Value;
+            var ani = pair.Ani;
+            var onEnded = pair.OnEnded;
             yield return ani;
             onEnded?.Invoke();
             anis.Dequeue();
@@ -56,8 +64,16 @@ public class MapAniPlayer : MonoBehaviour
 
     #region 构建不同动画
 
+    public MapAniPlayer OnEnded(Action onEnded)
+    {
+        Debug.Assert(anis.Count > 0, "current animation is null");
+        anis.Peek().OnEnded = onEnded;
+        return this;
+    }
+
     // 执行指定动作
-    public IEnumerator Op(Action op)
+    public MapAniPlayer Op(Action op) => Add(OpImpl(op));
+    IEnumerator OpImpl(Action op)
     {
         yield return null;
         op();
@@ -102,7 +118,8 @@ public class MapAniPlayer : MonoBehaviour
     }
 
     // 沿路径移动动画
-    public IEnumerator MakeMovingOnPath(Transform tar, float velocity, float[] path, Action onPosChanged = null)
+    public MapAniPlayer MakeMovingOnPath(Transform tar, float velocity, float[] path, Action onPosChanged = null) => Add(MakeMovingOnPathImpl(tar, velocity, path, onPosChanged));
+    IEnumerator MakeMovingOnPathImpl(Transform tar, float velocity, float[] path, Action onPosChanged = null)
     {
         yield return null;
 
@@ -123,7 +140,8 @@ public class MapAniPlayer : MonoBehaviour
     }
 
     // 攻击动画1
-    public IEnumerator MakeAttacking1(MonoBehaviour attacker, MonoBehaviour target)
+    public MapAniPlayer MakeAttacking1(MonoBehaviour attacker, MonoBehaviour target) => Add(MakeAttacking1Impl(attacker, target));
+    IEnumerator MakeAttacking1Impl(MonoBehaviour attacker, MonoBehaviour target)
     {
         var fx = attacker.transform.localPosition.x;
         var fy = attacker.transform.localPosition.y;
@@ -134,7 +152,8 @@ public class MapAniPlayer : MonoBehaviour
     }
 
     // 攻击动画2
-    public IEnumerator MakeAttacking2(MonoBehaviour attacker, MonoBehaviour target)
+    public MapAniPlayer MakeAttacking2(MonoBehaviour attacker, MonoBehaviour target) => Add(MakeAttacking2Impl(attacker, target));
+    IEnumerator MakeAttacking2Impl(MonoBehaviour attacker, MonoBehaviour target)
     {
         var fx = attacker.transform.localPosition.x;
         var fy = attacker.transform.localPosition.y;
@@ -146,7 +165,8 @@ public class MapAniPlayer : MonoBehaviour
     }
 
     // 角色死亡
-    public IEnumerator MakeDying(MapAvatar avatar)
+    public MapAniPlayer MakeDying(MapAvatar avatar) => Add(MakeDyingImpl(avatar));
+    IEnumerator MakeDyingImpl(MapAvatar avatar)
     {
         yield return null;
     }

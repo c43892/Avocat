@@ -15,13 +15,10 @@ public class BattleStageUI : MonoBehaviour
     public BattleStage BattleStage;
     public bool enterSkillStage;
 
+    // 卡牌区域
+    public BattleCardArea CardArea;
+
     public MapAniPlayer AniPlayer { get => BattleStage.GetComponent<MapAniPlayer>(); }
-
-    // 可用的卡组区域
-    public BattleCardUI[] CardsAvailableGroup;
-
-    // 暂存卡牌区域
-    public BattleCardUI[] CardsStashGroup;
 
     // 能量槽显示
     public GameObject Enerygy;
@@ -33,18 +30,6 @@ public class BattleStageUI : MonoBehaviour
     public GameObject ActioDoneBtn;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
-
-    // 刷新战斗卡牌区域
-    public void RefreshCardsAvailable(List<BattleCard> cards = null)
-    {
-        FC.ForEach(CardsAvailableGroup, (i, c) => c.Card = i < cards.Count ? cards[i] : null);
-    }
-
-    // 刷新暂存卡牌区域
-    public void RefreshCardsStarshed(List<BattleCard> cards = null)
-    {
-        FC.ForEach(CardsStashGroup, (i, c) => c.Card = i < cards.Count ? cards[i] : null);
-    }
 
     // 刷新能量槽
     public void RefreshEnergy(int energy)
@@ -133,8 +118,8 @@ public class BattleStageUI : MonoBehaviour
         BattleStage.StartUseItem(inUsingItemMode);
         ItemUsage.GetComponent<Image>().color = inUsingItemMode ? Color.red : Color.yellow;
 
-        FC.ForEach(CardsAvailableGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
-        FC.ForEach(CardsStashGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
+        // FC.ForEach(CardsAvailableGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
+        // FC.ForEach(CardsStashGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
         Enerygy.gameObject.SetActive(!inUsingItemMode);
         ActioDoneBtn.gameObject.SetActive(!inUsingItemMode); 
     }

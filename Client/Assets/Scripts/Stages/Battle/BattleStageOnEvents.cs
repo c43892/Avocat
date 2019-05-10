@@ -21,11 +21,11 @@ static class BattleStageOnEvents
             var avFrom = BattleStage.Avatars[fromX, fromY];
             var avTo = BattleStage.Avatars[toX, toY];
 
-            aniPlayer.Add(aniPlayer.Op(() =>
+            aniPlayer.Op(() =>
             {
                 BattleStage.SetAvatarPosition(avFrom, toX, toY);
                 BattleStage.SetAvatarPosition(avTo, fromX, fromY);
-            }));
+            });
         };
 
         // 回合开始
@@ -34,9 +34,9 @@ static class BattleStageOnEvents
             if (player != room.PlayerMe)
                 return;
 
-            aniPlayer.Add(aniPlayer.Op(() =>
+            aniPlayer.Op(() =>
                 BattleStage.ForeachAvatar((x, y, avatar) => avatar.RefreshAttrs())
-            ));
+            );
         };
 
         // 角色攻击
@@ -44,7 +44,7 @@ static class BattleStageOnEvents
         {
             var avatar = BattleStage.GetAvatarByWarrior(attacker);
             var targetAvatar = BattleStage.GetAvatarByWarrior(target);
-            aniPlayer.Add(aniPlayer.MakeAttacking2(avatar, targetAvatar),
+            aniPlayer.MakeAttacking2(avatar, targetAvatar).OnEnded(
                 () =>
                 {
                     avatar.RefreshAttrs();
@@ -62,33 +62,34 @@ static class BattleStageOnEvents
             var avatar = BattleStage.GetAvatarByWarrior(warrior);
             Debug.Assert(avatar != null && avatar.Warrior != warrior, "the avatar is not just on the start position");
 
-            aniPlayer.Add(
-                aniPlayer.MakeMovingOnPath(avatar.transform, 5, FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)),
-                () => {
-                    BattleStage.SetAvatarPosition(null, x, y);
-                    BattleStage.SetAvatarPosition(avatar, tx, ty);
-                    avatar.RefreshAttrs();
-                }
-            );
+            aniPlayer.MakeMovingOnPath(
+                avatar.transform, 5,
+                FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)
+            ).OnEnded(() =>
+            {
+                BattleStage.SetAvatarPosition(null, x, y);
+                BattleStage.SetAvatarPosition(avatar, tx, ty);
+                avatar.RefreshAttrs();
+            });
         };
 
         // 回合开始
         room.Battle.OnNextRoundStarted += (int player) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() =>
+            aniPlayer.Op(() =>
             {
                 BattleStage.ForeachAvatar((x, y, avatar) =>
                 {
                     if (avatar.Warrior.Team == player)
                         avatar.RefreshAttrs();
                 });
-            }));
+            });
         };
 
         // 回合结束
         room.Battle.OnActionDone += (int player) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() =>
+            aniPlayer.Op(() =>
             {
                 BattleStage.ForeachAvatar((x, y, avatar) =>
                 {
@@ -99,14 +100,14 @@ static class BattleStageOnEvents
                     op.RemoveShowAttackRange();
                     op.ClearSelTiles();
                 });
-            }));
+            });
         };
 
         // 角色死亡
         room.Battle.OnWarriorDying += (Warrior warrior) =>
         {
             var avatar = BattleStage.GetAvatarByWarrior(warrior);
-            aniPlayer.Add(aniPlayer.MakeDying(avatar),
+            aniPlayer.MakeDying(avatar).OnEnded(
                 () =>
                 {
                     BattleStage.SetAvatarPosition(null, avatar.X, avatar.Y);
@@ -121,7 +122,7 @@ static class BattleStageOnEvents
         {
             var mapItem = BattleStage.GetMapItemByItem(item);
             var avatar = BattleStage.GetAvatarByWarrior(target);
-            aniPlayer.Add(aniPlayer.MakeAttacking1(mapItem, avatar),
+            aniPlayer.MakeAttacking1(mapItem, avatar).OnEnded(
                 () =>
                 {
                     avatar.RefreshAttrs();
@@ -134,41 +135,41 @@ static class BattleStageOnEvents
 
         bt.OnPlayerPrepared += (int player) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() =>
+            aniPlayer.Op(() =>
             {
                 if (room.Battle.AllPrepared)
                     BattleStage.StartFighting();
-            }));
+            });
         };
 
         bt.OnAddHP += (warrior, dhp) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs()));
+            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs());
         };
 
         bt.OnAddATK += (warrior, dATK) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs()));
+            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs());
         };
 
         bt.OnAddES += (warrior, des) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs()));
+            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs());
         };
 
         bt.OnTransfrom += (warrior, state) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs()));
+            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs());
         };
 
         bt.OnAddWarrior += (x, y, warrior) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() => BattleStage.CreateWarriorAvatar(x, y, warrior)));
+            aniPlayer.Op(() => BattleStage.CreateWarriorAvatar(x, y, warrior));
         };
 
         bt.OnTimeBackTriggered += (BattleReplay replay) =>
         {
-            aniPlayer.Add(aniPlayer.Op(() => BattleStage.OnTimeBackTriggered(replay)));
+            aniPlayer.Op(() => BattleStage.OnTimeBackTriggered(replay));
         };
     }
 }
