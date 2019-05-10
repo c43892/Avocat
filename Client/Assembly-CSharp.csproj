@@ -170,6 +170,7 @@
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleStageUI.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleStageUIOnEvents.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\SettingUI.cs" />
+    <Compile Include="Assets\Scripts\Stages\StageUI\WinConditionUI.cs" />
     <Compile Include="Assets\Test\BattleMessageLooper.cs" />
     <Compile Include="Assets\Test\CombatTestDriver.cs" />
     <Compile Include="Assets\Test\CombatTestUIOnEvent.cs" />
