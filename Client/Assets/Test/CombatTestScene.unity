@@ -936,7 +936,7 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 0
-  m_HDR: 1
+  m_HDR: 0
   m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
@@ -957,12 +957,6 @@ Transform:
   m_Father: {fileID: 1185388014}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &585895911 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1387013936339068726, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-    type: 3}
-  m_PrefabInstance: {fileID: 1387013937034378800}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &679040387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1438,7 +1432,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1387013937034378800}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585895911}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9af0c32613a57a44c9dcac830e09d9bc, type: 3}
@@ -2750,12 +2744,12 @@ PrefabInstance:
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
@@ -2802,9 +2796,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: BattleStageUIRoot
-      value: 
-      objectReference: {fileID: 585895911}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}

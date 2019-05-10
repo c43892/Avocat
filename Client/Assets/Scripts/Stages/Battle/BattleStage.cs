@@ -68,7 +68,7 @@ public class BattleStage : MonoBehaviour
         InBattleOps = new InBattleOps(this); // 战斗内一般阶段
         UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
         SkillOps = new PosSelOps(this); //  战斗内释放技能阶段
-        MapGround.Area = new Rect(MapRoot.transform.localPosition.x, MapRoot.transform.localPosition.y, Map.Width, Map.Height);
+        MapGround.Area = new Rect(0, 0, Map.Width, Map.Height);
         OnTimeBackTriggered = onTimeBackTriggered;
     }
 

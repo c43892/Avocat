@@ -35,7 +35,6 @@ public class MapAniPlayer : MonoBehaviour
     public void Add(IEnumerator ani, Action onEnded = null)
     {
         anis.Enqueue(new KeyValuePair<IEnumerator, Action>(ani, onEnded));
-
         if (anis.Count == 1)
             StartCoroutine(PlayAnis());
     }
