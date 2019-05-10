@@ -18,6 +18,7 @@ static class BattleStageUIOnEvents
             {
                 aniPlayer.Op(() =>
                 {
+                    BattleStageUI.ActioDoneBtn.gameObject.SetActive(true);
                     BattleStageUI.gameObject.SetActive(true);
                     BattleStageUI.RefreshEnergy(bt.Energy);
                     BattleStageUI.RefreshItemUsage(bt.CardUsage);
