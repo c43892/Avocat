@@ -300,19 +300,19 @@ public class InBattleOps : StageOpsLayer
     // 刷新能量
     public void RefreshEnergy()
     {
+        var bt = BattleStage.Battle as BattlePVE;
+
+        // 规划的路径上的能量卡先算进来
         int energy = 0;
-        if (pathInSel.Count > 1)
+        if (pathInSel.Count > 0)
         {
-            FC.For(1, pathInSel.Count, (i) =>
+            FC.For(pathInSel.Count, (i) =>
             {
-                if ((Room.Battle as BattlePVE).AvailableCards[i-1].Name == "EN")
-                {
-                    energy += 15;
-                }
+                var c = bt.AvailableCards[i] as BattleCardEN;
+                energy += c == null ? 0 : c.Energy;
             });
         }
 
-        var bt = BattleStage.Battle as BattlePVE;
         var en = bt.Energy + energy;
         BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.RefreshEnergy(en, bt.MaxEnergy);
     }

@@ -69,10 +69,11 @@ namespace Avocat
 
     public class BattleCardEN : BattleCard
     {
+        public int Energy { get => 15; }
         public BattleCardEN() { Name = "EN"; }
         public override void ExecuteOn(Warrior warrior)
         {
-            (warrior.Battle as BattlePVE).AddEN(15);
+            (warrior.Battle as BattlePVE).AddEN(Energy);
         }
     }
 }
