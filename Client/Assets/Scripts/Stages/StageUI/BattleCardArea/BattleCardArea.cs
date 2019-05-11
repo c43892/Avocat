@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Swift;
 using Avocat;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 战斗卡牌区域
@@ -17,6 +18,9 @@ public class BattleCardArea : MonoBehaviour
 
     // 暂存卡牌区域
     public BattleCardUI[] CardsStashGroup;
+
+    // 能量条
+    public Image EnergyBar;
 
     private void Awake()
     {
@@ -34,5 +38,11 @@ public class BattleCardArea : MonoBehaviour
     public void RefreshCardsStarshed(List<BattleCard> cards = null)
     {
         FC.ForEach(CardsStashGroup, (i, c) => c.Card = i < cards.Count ? cards[i] : null);
+    }
+
+    // 刷新能量值显示
+    public void RefreshEnergy(int energy, int maxEnerge)
+    {
+        EnergyBar.rectTransform.anchorMax = new Vector2(energy / (float)maxEnerge, 1);
     }
 }

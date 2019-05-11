@@ -309,7 +309,6 @@ public class InBattleOps : StageOpsLayer
             });
         }
         var en =(CurrentSelWarrior.Battle as BattlePVE).Energy + energy;
-        var bt = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
-        bt.RefreshEnergy(en);
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.RefreshEnergy(en, (BattleStage.Battle as BattlePVE).MaxEnergy);
     }
 }

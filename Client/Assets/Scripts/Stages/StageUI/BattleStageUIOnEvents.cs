@@ -20,7 +20,7 @@ static class BattleStageUIOnEvents
                 {
                     BattleStageUI.ActioDoneBtn.gameObject.SetActive(true);
                     BattleStageUI.gameObject.SetActive(true);
-                    BattleStageUI.RefreshEnergy(bt.Energy);
+                    BattleStageUI.CardArea.RefreshEnergy(bt.Energy, bt.MaxEnergy);
                     BattleStageUI.RefreshItemUsage(bt.CardUsage);
                 });
             }
@@ -79,9 +79,9 @@ static class BattleStageUIOnEvents
             });
         };
 
-        bt.OnAddEN += (den) => aniPlayer.Op(() => BattleStageUI.RefreshEnergy(bt.Energy));
+        bt.OnAddEN += (den) => aniPlayer.Op(() => BattleStageUI.CardArea.RefreshEnergy(bt.Energy, bt.MaxEnergy));
         bt.OnAddCardDissambleValue += (dv) => aniPlayer.Op(() => BattleStageUI.RefreshItemUsage(bt.CardUsage));
 
-        InBattleOps.OnCurrentWarriorChanged += () => aniPlayer.Op(() => BattleStageUI.RefreshEnergy(bt.Energy));
+        InBattleOps.OnCurrentWarriorChanged += () => aniPlayer.Op(() => BattleStageUI.CardArea.RefreshEnergy(bt.Energy, bt.MaxEnergy));
     }
 }

@@ -980,6 +980,7 @@ MonoBehaviour:
   CardsStashGroup:
   - {fileID: 4612405544561587322}
   - {fileID: 5539182993444949807}
+  EnergyBar: {fileID: 2804018243503759195}
 --- !u!1 &2896766899244387198
 GameObject:
   m_ObjectHideFlags: 0
