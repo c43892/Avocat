@@ -59,8 +59,8 @@ static class BattleStageOnEvents
             var tx = path[path.Count - 2];
             var ty = path[path.Count - 1];
 
-            var avatar = BattleStage.GetAvatarByWarrior(warrior);
-            Debug.Assert(avatar != null && avatar.Warrior != warrior, "the avatar is not just on the start position");
+            MapAvatar avatar = BattleStage.GetAvatarByWarrior(warrior);
+            Debug.Assert(avatar != null && avatar.Warrior == warrior, "the avatar is not just on the start position");
 
             aniPlayer.MakeMovingOnPath(
                 avatar.transform, 5,
@@ -98,7 +98,7 @@ static class BattleStageOnEvents
 
                     var op = BattleStage.CurrentOpLayer as InBattleOps;
                     op.RemoveShowAttackRange();
-                    op.ClearSelTiles();
+                    op.ClearPath();
                 });
             });
         };

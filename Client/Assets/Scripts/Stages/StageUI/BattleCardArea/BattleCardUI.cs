@@ -25,7 +25,18 @@ public class BattleCardUI : MonoBehaviour, IPointerDownHandler, IDragHandler, ID
     public int IndexInGroup { get; set; } // 在所属卡牌组中的顺序索引值
 
     // 是否在已选择的路径中
-    public bool SelectedInPath { get; set; }
+    public bool SelectedInPath
+    {
+        get
+        {
+            return selectedInPath;
+        }
+        set
+        {
+            selectedInPath = value;
+            BgSel.SetActive(card != null && SelectedInPath);
+        }
+    } bool selectedInPath = false;
 
     // 处理卡牌拖动交换事件
     public static event Action<int, int, int, int> OnCardExchanged = null;

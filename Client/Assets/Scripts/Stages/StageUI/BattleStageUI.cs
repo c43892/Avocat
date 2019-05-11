@@ -92,7 +92,7 @@ public class BattleStageUI : MonoBehaviour
             {               
                 if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
                 {
-                    BattleStage.InBattleOps.ClearSelTiles();
+                    BattleStage.InBattleOps.ClearPath();
                     Room.DoMoveOnPath(warrior);
                 }
                 Room.FireActiveSkillAt(skill, selX, selY);
@@ -103,7 +103,7 @@ public class BattleStageUI : MonoBehaviour
             {
                 BattleStage.SkillOps.RemoveShowRange();
                 BattleStage.InBattleOps.RemoveShowAttackRange();
-                BattleStage.InBattleOps.ClearSelTiles();
+                BattleStage.InBattleOps.ClearPath();
                 Room.DoMoveOnPath(warrior);
             }
             Room.FireActiveSkill(skill);

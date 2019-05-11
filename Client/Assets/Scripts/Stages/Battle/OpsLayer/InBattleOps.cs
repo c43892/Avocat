@@ -37,7 +37,7 @@ public class InBattleOps : StageOpsLayer
         }
         private set
         {
-            ClearSelTiles();
+            ClearPath();
             if (curSelWarrior == value || (value != null && value.ActionDone))
                 return;
 
@@ -55,7 +55,7 @@ public class InBattleOps : StageOpsLayer
                 curSelWarrior.MovingPath.Clear();
             }
 
-            ClearSelTiles();
+            ClearPath();
 
             OnCurrentWarriorChanged?.Invoke();
         }
@@ -89,17 +89,6 @@ public class InBattleOps : StageOpsLayer
         });
     }
 
-    // 清除路径显示
-    public void ClearSelTiles()
-    {
-        FC.ForEach(pathInSel, (i, tile) =>
-        {
-            tile.Color = MapTile.ColorDefault;
-            tile.Card = null;
-        });
-        pathInSel.Clear();
-    }
-
     // 清除攻击范围显示
     public void RemoveShowAttackRange()
     {
@@ -110,7 +99,7 @@ public class InBattleOps : StageOpsLayer
     {
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
-        var warrior = avatar == null ? null : avatar.Warrior;
+        var warrior = avatar?.Warrior;
 
         switch (status)
         {
@@ -179,7 +168,7 @@ public class InBattleOps : StageOpsLayer
     {
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
-        var warrior = avatar == null ? null : avatar.Warrior;
+        var warrior = avatar?.Warrior;
         if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
         {
             // 从空地拖拽和点空地一样的效果
@@ -195,7 +184,6 @@ public class InBattleOps : StageOpsLayer
         status = "selectingPath";
     }
 
-    BattleCard lastCard;
     public override void OnDragging(float fx, float fy, float cx, float cy)
     {
         if (status != "selectingPath")
@@ -278,6 +266,7 @@ public class InBattleOps : StageOpsLayer
     {
         pathInSel.Add(tile);
         RefreshEnergy();
+        RefreshBattleCardSelStatus();
     }
 
     // 减少路径的时候刷新能量
@@ -285,13 +274,27 @@ public class InBattleOps : StageOpsLayer
     {
         pathInSel.RemoveAt(i);
         RefreshEnergy();
+        RefreshBattleCardSelStatus();
     }
 
     // 清除路径的时候刷新能量
     public void ClearPath()
     {
+        FC.ForEach(pathInSel, (i, tile) =>
+        {
+            tile.Color = MapTile.ColorDefault;
+            tile.Card = null;
+        });
+
         pathInSel.Clear();
         RefreshEnergy();
+        RefreshBattleCardSelStatus();
+    }
+
+    // 刷新卡牌选中状态
+    public void RefreshBattleCardSelStatus()
+    {
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.SetCardSels(pathInSel.Count);
     }
 
     // 刷新能量
@@ -308,7 +311,9 @@ public class InBattleOps : StageOpsLayer
                 }
             });
         }
-        var en =(CurrentSelWarrior.Battle as BattlePVE).Energy + energy;
-        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.RefreshEnergy(en, (BattleStage.Battle as BattlePVE).MaxEnergy);
+
+        var bt = BattleStage.Battle as BattlePVE;
+        var en = bt.Energy + energy;
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.RefreshEnergy(en, bt.MaxEnergy);
     }
 }

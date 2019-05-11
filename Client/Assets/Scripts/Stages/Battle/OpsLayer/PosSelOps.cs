@@ -19,6 +19,7 @@ public class PosSelOps : StageOpsLayer
            : base(bs)
     {
     }
+
     List<MapTile> Range = new List<MapTile>();
     IWithRange iRange;
     Action<int, int> onSelPos = null;

@@ -45,4 +45,10 @@ public class BattleCardArea : MonoBehaviour
     {
         EnergyBar.rectTransform.anchorMax = new Vector2(energy / (float)maxEnerge, 1);
     }
+
+    // 刷新卡牌选中状态
+    public void SetCardSels(int cnt)
+    {
+        FC.ForEach(CardsAvailableGroup, (i, c) => c.SelectedInPath = i < cnt);
+    }
 }
