@@ -294,7 +294,8 @@ public class InBattleOps : StageOpsLayer
     // 刷新卡牌选中状态
     public void RefreshBattleCardSelStatus()
     {
-        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.SetCardSels(pathInSel.Count);
+        // 路径节点中第一个节点是不算在路径长度内的
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.SetCardSels(pathInSel.Count - 1);
     }
 
     // 刷新能量
@@ -306,9 +307,10 @@ public class InBattleOps : StageOpsLayer
         int energy = 0;
         if (pathInSel.Count > 0)
         {
-            FC.For(pathInSel.Count, (i) =>
+            // 路径起始点不消耗卡牌
+            FC.For(1, pathInSel.Count, (i) =>
             {
-                var c = bt.AvailableCards[i] as BattleCardEN;
+                var c = bt.AvailableCards[i-1] as BattleCardEN;
                 energy += c == null ? 0 : c.Energy;
             });
         }
