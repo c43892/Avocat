@@ -38,9 +38,11 @@ public class MapAniPlayer : MonoBehaviour
     Queue<AniNodeInfo> anis = new Queue<AniNodeInfo>();
 
     // 添加动画到动画队列
+    AniNodeInfo tail = null;
     MapAniPlayer Add(IEnumerator ani, Action onEnded = null)
     {
-        anis.Enqueue(new AniNodeInfo() { Ani = ani, OnEnded = onEnded });
+        tail = new AniNodeInfo() { Ani = ani, OnEnded = onEnded };
+        anis.Enqueue(tail);
         if (anis.Count == 1)
             StartCoroutine(PlayAnis());
 
@@ -58,6 +60,8 @@ public class MapAniPlayer : MonoBehaviour
             onEnded?.Invoke();
             anis.Dequeue();
         }
+
+        tail = null;
     }
 
     #endregion
@@ -66,8 +70,8 @@ public class MapAniPlayer : MonoBehaviour
 
     public MapAniPlayer OnEnded(Action onEnded)
     {
-        Debug.Assert(anis.Count > 0, "current animation is null");
-        anis.Peek().OnEnded = onEnded;
+        Debug.Assert(anis.Count > 0 && tail != null, "current animation is null");
+        tail.OnEnded = onEnded;
         return this;
     }
 
