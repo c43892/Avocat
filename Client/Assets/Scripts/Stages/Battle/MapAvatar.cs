@@ -17,15 +17,21 @@ public class MapAvatar : MonoBehaviour
     // 对应的角色
     public Warrior Warrior { get; set; }
 
+    // 刷新属性值到指定值
+    public void RefreshAttrs2(int hp, int basicAttackValue, int es, bool actionDone)
+    {
+        HpText.text = hp.ToString();
+        PowerText.text = basicAttackValue.ToString();
+        ShieldText.text = es.ToString();
+        ShieldText.transform.parent.gameObject.SetActive(es > 0);
+        Color = actionDone ? ColorActionDone : ColorDefault;
+    }
+
+    // 刷新属性值
     public void RefreshAttrs()
     {
         NameText.text = Warrior.Name;
-        HpText.text = Warrior.HP.ToString();
-        PowerText.text = Warrior.BasicAttackValue.ToString();
-        ShieldText.text = Warrior.ES.ToString();
-        ShieldText.transform.parent.gameObject.SetActive(Warrior.ES > 0);
-
-        Color = Warrior.ActionDone ? ColorActionDone : ColorDefault;
+        RefreshAttrs2(Warrior.HP, Warrior.BasicAttackValue, Warrior.ES, Warrior.ActionDone);
     }
 
     public int X

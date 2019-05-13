@@ -152,7 +152,7 @@ public class MapAniPlayer : MonoBehaviour
         var tx = target.transform.localPosition.x;
         var ty = target.transform.localPosition.y;
 
-        yield return MakeMovingOnPath(attacker.transform, 20, new float[] { fx, fy, tx, ty });
+        yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { fx, fy, tx, ty });
     }
 
     // 攻击动画2
@@ -164,8 +164,8 @@ public class MapAniPlayer : MonoBehaviour
         var tx = target.transform.localPosition.x;
         var ty = target.transform.localPosition.y;
 
-        yield return MakeMovingOnPath(attacker.transform, 20, new float[] { fx, fy, tx, ty });
-        yield return MakeMovingOnPath(attacker.transform, 20, new float[] { tx, ty, fx, fy });
+        yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { fx, fy, tx, ty });
+        yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { tx, ty, fx, fy });
     }
 
     // 角色死亡
