@@ -17,6 +17,7 @@ public class BattleStageUI : MonoBehaviour
 
     // 卡牌区域
     public BattleCardArea CardArea;
+    public SkillButtonUI ButtonUI;
 
     public MapAniPlayer AniPlayer { get => BattleStage.GetComponent<MapAniPlayer>(); }
 

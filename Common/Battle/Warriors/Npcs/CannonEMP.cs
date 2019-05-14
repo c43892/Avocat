@@ -18,6 +18,7 @@ namespace Avocat
             : base(map)
         {
             Name = "EMP 炮";
+            EnglishName = "EMPCannon";
             AI = new WarriorAI(this).Build("EMPConnon");
         }
     }

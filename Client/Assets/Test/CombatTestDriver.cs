@@ -95,6 +95,7 @@ public class CombatTestDriver : GameDriver
 
         // link the logic event to the stage and ui logic
         BattleStage.SetupEventHandler(room);
+        BattleStage.SetupUIHandler(room);
         BattleStageUI.SetupEventHandler(room);
         this.SetupEventHandler(room);
 

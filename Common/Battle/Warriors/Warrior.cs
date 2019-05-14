@@ -23,7 +23,7 @@ namespace Avocat
             :base (map)
         {
         }
-
+        public string EnglishName;
         public WarriorAI AI { get; set; } // AI 类型
         public bool IsBoss { get; set; } = false; // 是否是 boss
 
@@ -42,6 +42,7 @@ namespace Avocat
         public int POW { get; set; } // 法攻
         public int POWInc { get; set; } // 法攻加成
         public int POWMore { get; set; } // 法攻加成
+        public PatternSkill PatternSkill { get; set; }
 
         // 基本攻击力
         public int BasicAttackValue

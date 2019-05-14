@@ -16,7 +16,6 @@ namespace Avocat
             : base(bt.Map)
         {
         }
-
         protected void SetupBuffAndSkills(ActiveSkill a, params Buff[] bs)
         {
             if (a != null)

@@ -17,6 +17,7 @@ namespace Avocat
             : base(bt)
         {
             Name = "黛丽万";
+            EnglishName = "DaiLiWan";
             SetupBuffAndSkills(new Butterfly(), new StarsTears());
         }
     }

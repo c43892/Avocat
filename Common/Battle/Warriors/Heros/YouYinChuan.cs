@@ -17,6 +17,8 @@ namespace Avocat
             : base(bt)
         {
             Name = "游川隐";
+            EnglishName = "YouChuanYin";
+            PatternSkill = new FlashAttack();
             SetupBuffAndSkills(null /* Configuration.Config(new TimeBack()) */, Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
         }
     }

@@ -17,9 +17,10 @@ namespace Avocat
             : base(bt)
         {
             Name = "巴洛克";
+            EnglishName = "BaLuoKe";
             SetupBuffAndSkills(new FastAssistance(), new TacticalCommand(() => State == "Archer" ? "EN" : "ATK"));
         }
-
+        
         public int[] ArcherAttackRange { get; set; }
         public int ArcherATK { get; set; }
         public int[] LancerAttackRange { get; set; }

@@ -14,7 +14,7 @@ namespace Avocat
     /// </summary>
     public class DeployEMPConnon : ActiveSkill, IWithRange
     {
-        public override string Name { get => "EMP 炮台"; }
+        public override string Name { get => "EMP"; }
         // 能量消耗
         public override int EnergyCost { get; set; }
         public override string ActiveSkillType { get; } = "fireAt";

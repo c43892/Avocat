@@ -4,6 +4,7 @@ using UnityEngine;
 using Swift;
 using Avocat;
 using System;
+using UnityEngine.UI;
 
 /// <summary>
 /// 战斗场景
@@ -14,8 +15,9 @@ public class BattleStage : MonoBehaviour
     public GameObject PointerIndicator;
 
     public GameObject BattleStageUIRoot;
-    public GameObject actionDone;
-    public GameObject energy;
+    public GameObject ActionDoneButton;
+    public GameObject SkillButton;
+    public GameObject characterUI;
 
     // 底层地图操作处理
     public MapGroundLayer MapGround;
@@ -293,17 +295,15 @@ public class BattleStage : MonoBehaviour
     // 隐藏energy和Done按钮
     public void HideButton()
     {
-        actionDone = GameObject.Find("ActionDone");
-        energy = GameObject.Find("Energy");
-        actionDone.SetActive(false);
-        energy.SetActive(false);
+        ActionDoneButton.GetComponent<Button>().interactable = false;
+        SkillButton.GetComponent<Button>().interactable = false;
     }
 
 // 恢复energy和Done按钮
     public void GetButton()
-    {     
-        actionDone.SetActive(true);
-        energy.SetActive(true);
+    {
+        ActionDoneButton.GetComponent<Button>().interactable = true;
+        SkillButton.GetComponent<Button>().interactable = true;
     }
 
     public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
