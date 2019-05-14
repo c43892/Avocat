@@ -55,8 +55,8 @@ public class MapAniPlayer : MonoBehaviour
         {
             var pair = anis.Peek();
             var ani = pair.Ani;
-            var onEnded = pair.OnEnded;
             yield return ani;
+            var onEnded = pair.OnEnded;
             onEnded?.Invoke();
             anis.Dequeue();
         }

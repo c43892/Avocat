@@ -131,6 +131,7 @@ namespace Avocat
             // EMP 炮台
             dAttrs[typeof(CannonEMP)] = new Dictionary<string, object>
             {
+                ["AttackingType"] = "physic",
                 ["AttackRange"] = new int[] { 1 }
             };
 
