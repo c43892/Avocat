@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Swift;
@@ -16,6 +17,16 @@ public class MapAvatar : MonoBehaviour
 
     // 对应的角色
     public Warrior Warrior { get; set; }
+
+    // 延迟刷新属性显示，值按照当前属性值算
+    public Action DelayRefreshAttrs()
+    {
+        var hp = Warrior.HP;
+        var atk = Warrior.BasicAttackValue;
+        var es = Warrior.ES;
+        var actionDone = Warrior.ActionDone;
+        return () => RefreshAttrs2(hp, atk, es, actionDone);
+    }
 
     // 刷新属性值到指定值
     public void RefreshAttrs2(int hp, int basicAttackValue, int es, bool actionDone)

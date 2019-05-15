@@ -36,38 +36,21 @@ static class BattleStageOnEvents
 
             BattleStage.ForeachAvatar((x, y, avatar) =>
             {
-                var warrior = avatar.Warrior;
-                var hp = warrior.HP;
-                var atk = warrior.BasicAttackValue;
-                var es = warrior.ES;
-                var actionDone = warrior.ActionDone;
-                aniPlayer.Op(() => avatar.RefreshAttrs2(hp, atk, es, actionDone));
+                var doRefresh = avatar.DelayRefreshAttrs();
+                aniPlayer.Op(doRefresh);
             });
         };
 
         // 角色攻击
         room.Battle.OnWarriorAttack += (Warrior attacker, Warrior target, Skill skill, List<string> flags) =>
         {
-            var avatar = BattleStage.GetAvatarByWarrior(attacker);
+            var attackerAvatar = BattleStage.GetAvatarByWarrior(attacker);
             var targetAvatar = BattleStage.GetAvatarByWarrior(target);
 
-            var hpAtr = attacker.HP;
-            var atkAtr = attacker.BasicAttackValue;
-            var esAtr = attacker.ES;
-            var actionDoneAtr = attacker.ActionDone;
+            var doAttackerRefresh = attackerAvatar.DelayRefreshAttrs();
+            var doTargetRefresh = attackerAvatar.DelayRefreshAttrs();
 
-            var hpTar = target.HP;
-            var atkTar = target.BasicAttackValue;
-            var esTar = target.ES;
-            var actionDoneTar = target.ActionDone;
-
-            aniPlayer.MakeAttacking2(avatar, targetAvatar).OnEnded(
-                () =>
-                {
-                    avatar.RefreshAttrs2(hpAtr, atkAtr, esAtr, actionDoneAtr);
-                    targetAvatar.RefreshAttrs2(hpTar, atkTar, esTar, actionDoneTar);
-                }
-            );
+            aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
         };
 
         // 角色移动
@@ -79,10 +62,7 @@ static class BattleStageOnEvents
             MapAvatar avatar = BattleStage.GetAvatarByWarrior(warrior);
             Debug.Assert(avatar != null && avatar.Warrior == warrior, "the avatar is not just on the start position");
 
-            var hp = warrior.HP;
-            var atk = warrior.BasicAttackValue;
-            var es = warrior.ES;
-            var actionDone = warrior.ActionDone;
+            var doRefresh = avatar.DelayRefreshAttrs();
             aniPlayer.MakeMovingOnPath(
                 avatar.transform, 5,
                 FC.ToArray(path, (i, p, doSkip) => i % 2 == 0 ? p + avatar.CenterOffset.x : p + avatar.CenterOffset.y)
@@ -90,7 +70,7 @@ static class BattleStageOnEvents
             {
                 BattleStage.SetAvatarPosition(null, x, y);
                 BattleStage.SetAvatarPosition(avatar, tx, ty);
-                // avatar.RefreshAttrs2(hp, atk, es, actionDone);
+                doRefresh();
             });
         };
 
@@ -102,12 +82,8 @@ static class BattleStageOnEvents
                 if (avatar.Warrior.Team != team)
                     return;
 
-                var warrior = avatar.Warrior;
-                var hp = warrior.HP;
-                var atk = warrior.BasicAttackValue;
-                var es = warrior.ES;
-                var actionDone = warrior.ActionDone;
-                aniPlayer.Op(() => avatar.RefreshAttrs2(hp, atk, es, actionDone));
+                var doRefresh = avatar.DelayRefreshAttrs();
+                aniPlayer.Op(doRefresh);
             });
         };
 
@@ -126,12 +102,8 @@ static class BattleStageOnEvents
                 if (avatar.Warrior.Team != team)
                     return;
 
-                var warrior = avatar.Warrior;
-                var hp = warrior.HP;
-                var atk = warrior.BasicAttackValue;
-                var es = warrior.ES;
-                var actionDone = warrior.ActionDone;
-                aniPlayer.Op(() => avatar.RefreshAttrs2(hp, atk, es, actionDone));
+                var doRefresh = avatar.DelayRefreshAttrs();
+                aniPlayer.Op(doRefresh);
             });
         };
 
@@ -155,15 +127,11 @@ static class BattleStageOnEvents
             var mapItem = BattleStage.GetMapItemByItem(item);
             var avatar = BattleStage.GetAvatarByWarrior(target);
 
-            var hp = target.HP;
-            var atk = target.BasicAttackValue;
-            var es = target.ES;
-            var actionDone = target.ActionDone;
-
+            var doRefresh = avatar.DelayRefreshAttrs();
             aniPlayer.MakeAttacking1(mapItem, avatar).OnEnded(
                 () =>
                 {
-                    // avatar.RefreshAttrs2(hp, atk, es, actionDone);
+                    doRefresh();
                     BattleStage.Items[mapItem.X, mapItem.Y] = null;
                     mapItem.transform.SetParent(null);
                     BattleStage.Destroy(mapItem.gameObject);
@@ -182,38 +150,26 @@ static class BattleStageOnEvents
 
         bt.OnAddHP += (warrior, dhp) =>
         {
-            var hp = warrior.HP;
-            var atk = warrior.BasicAttackValue;
-            var es = warrior.ES;
-            var actionDone = warrior.ActionDone;
-            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs2(hp, atk, es, actionDone));
+            var doRefresh = BattleStage.GetAvatarByWarrior(warrior).DelayRefreshAttrs();
+            aniPlayer.Op(doRefresh);
         };
 
         bt.OnAddATK += (warrior, dATK) =>
         {
-            var hp = warrior.HP;
-            var atk = warrior.BasicAttackValue;
-            var es = warrior.ES;
-            var actionDone = warrior.ActionDone;
-            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs2(hp, atk, es, actionDone));
+            var doRefresh = BattleStage.GetAvatarByWarrior(warrior).DelayRefreshAttrs();
+            aniPlayer.Op(doRefresh);
         };
 
         bt.OnAddES += (warrior, des) =>
         {
-            var hp = warrior.HP;
-            var atk = warrior.BasicAttackValue;
-            var es = warrior.ES;
-            var actionDone = warrior.ActionDone;
-            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs2(hp, atk, es, actionDone));
+            var doRefresh = BattleStage.GetAvatarByWarrior(warrior).DelayRefreshAttrs();
+            aniPlayer.Op(doRefresh);
         };
 
         bt.OnTransfrom += (warrior, state) =>
         {
-            var hp = warrior.HP;
-            var atk = warrior.BasicAttackValue;
-            var es = warrior.ES;
-            var actionDone = warrior.ActionDone;
-            aniPlayer.Op(() => BattleStage.GetAvatarByWarrior(warrior).RefreshAttrs2(hp, atk, es, actionDone));
+            var doRefresh = BattleStage.GetAvatarByWarrior(warrior).DelayRefreshAttrs();
+            aniPlayer.Op(doRefresh);
         };
 
         bt.OnAddWarrior += (x, y, warrior) =>
