@@ -25,7 +25,11 @@ public class MapAvatar : MonoBehaviour
         var atk = Warrior.BasicAttackValue;
         var es = Warrior.ES;
         var actionDone = Warrior.ActionDone;
-        return () => RefreshAttrs2(hp, atk, es, actionDone);
+        return () =>
+        {
+            if (this != null) // may has been destroyed.
+                RefreshAttrs2(hp, atk, es, actionDone);
+        };
     }
 
     // 刷新属性值到指定值
