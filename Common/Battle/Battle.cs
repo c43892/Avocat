@@ -164,7 +164,7 @@ namespace Avocat
             });
 
             if (resetMovedFlag) warrior.Moved = false; // 重置行动标记
-            if (resetActionFlag) warrior.ActionDone = false; // 重置行动标记
+            if (resetActionFlag) SetActionFlag(warrior, false); // 重置行动标记
 
             DoResetActionFlag?.Invoke(warrior);
             AfterResetActionFlag?.Invoke(warrior);
@@ -272,6 +272,18 @@ namespace Avocat
             return Calculation.CalcDamage(basicAttack, inc, more, damageDecFac);
         }
 
+        // 变更行动标记
+        public event Action<Warrior, bool> BeforeSetActionFlag = null;
+        public event Action<Warrior, bool> AfterSetActionFlag = null;
+        public event Action<Warrior, bool> OnSetActionFlag = null;
+        public void SetActionFlag(Warrior warrior, bool acted)
+        {
+            BeforeSetActionFlag?.Invoke(warrior, acted);
+            warrior.ActionDone = acted;
+            OnSetActionFlag?.Invoke(warrior, acted);
+            AfterSetActionFlag?.Invoke(warrior, acted);
+        }
+
         // 执行攻击
         public event Action<Warrior, Warrior, Skill, List<string>> BeforeAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> AfterAttack = null;
@@ -303,7 +315,7 @@ namespace Avocat
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
-                attacker.ActionDone = true;
+                SetActionFlag(attacker, true);
 
             OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
 
