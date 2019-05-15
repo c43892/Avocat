@@ -18,11 +18,11 @@ static class BattleStageOnEvents
         // 角色位置变化
         room.Battle.OnWarriorPositionExchanged += (int fromX, int fromY, int toX, int toY) =>
         {
-            var avFrom = BattleStage.Avatars[fromX, fromY];
-            var avTo = BattleStage.Avatars[toX, toY];
-
             aniPlayer.Op(() =>
             {
+                var avFrom = BattleStage.Avatars[fromX, fromY];
+                var avTo = BattleStage.Avatars[toX, toY];
+
                 BattleStage.SetAvatarPosition(avFrom, toX, toY);
                 BattleStage.SetAvatarPosition(avTo, fromX, fromY);
             });
@@ -114,12 +114,15 @@ static class BattleStageOnEvents
         // 回合结束
         room.Battle.OnActionDone += (int team) =>
         {
-            BattleStage.ForeachAvatar((x, y, avatar) =>
+            aniPlayer.Op(() =>
             {
                 var op = BattleStage.CurrentOpLayer as InBattleOps;
                 op.RemoveShowAttackRange();
                 op.ClearPath();
+            });
 
+            BattleStage.ForeachAvatar((x, y, avatar) =>
+            {
                 if (avatar.Warrior.Team != team)
                     return;
 
