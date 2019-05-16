@@ -12,67 +12,85 @@ public class SkillButtonUI : MonoBehaviour
     public GameObject energyHint;
     public Text energy;
     public GameObject[] skillCards;
-    // Start is called before the first frame update
-    void Start()
-    {
+    public GameObject ItemUsage;
+    public GameObject EndButton;
+    public Battle battle;
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void UpdateSkill(Warrior warrior)
     {
-        skill.GetComponent<Image>().enabled = true;
-        if (warrior.GetDefaultActiveSkill() is ActiveSkill)
+        skill.SetActive(true);
+        ItemUsage.SetActive(false);
+        if (warrior.GetDefaultActiveSkill() is ActiveSkill) // 若为主动技能
         {
             skill.GetComponent<Image>().sprite = Resources.Load("UI/Skill/" + warrior.GetDefaultActiveSkill().Name, typeof(Sprite)) as Sprite;
             energyHint.SetActive(true);
             skillHint.SetActive(false);
 
-            // 如果是主动技能可以点击
+            // 如果是主动技能则使用button
             skill.GetComponent<Button>().enabled = true;
             energy.text = (warrior.GetDefaultActiveSkill() as ActiveSkill).EnergyCost.ToString();
         }
-        else if (warrior.PatternSkill != null)
+        else if (warrior.PatternSkill != null) // 若为pattern技能
         {
             skill.GetComponent<Image>().sprite = Resources.Load("UI/Skill/" + warrior.PatternSkill.Name, typeof(Sprite)) as Sprite;
             energyHint.SetActive(false);
             skillHint.SetActive(true);
 
-            // 如果是pattern技能则不能点击
+            // 如果是pattern技能则不使用button
             skill.GetComponent<Button>().enabled = false;
-            if (skillCards.Length >= warrior.PatternSkill.CardsPattern.Length)
+
+            // 先将显示技能提示区域变为不可见
+            FC.For(skillCards.Length, (i) =>
             {
-                FC.For(warrior.PatternSkill.CardsPattern.Length, (i) =>
-                {
-                     skillCards[i].SetActive(true);
-                     skillCards[i].GetComponent<Image>().sprite = Resources.Load("UI/CardType/" + warrior.PatternSkill.CardsPattern[i], typeof(Sprite)) as Sprite;
-                });
-                if (skillCards.Length > warrior.PatternSkill.CardsPattern.Length)
-                {
-                    FC.For(warrior.PatternSkill.CardsPattern.Length, skillCards.Length, (i) =>
-                     {
-                         skillCards[i].SetActive(false);
-                     });
-                }
+              skillCards[i].SetActive(false);
+            });
 
-            }
-
+            // 将技能提示栏的图片更换为pattern技能的出招顺序
+            FC.For(warrior.PatternSkill.CardsPattern.Length, (i) =>
+            {
+                skillCards[i].SetActive(true);
+                skillCards[i].GetComponent<Image>().sprite = Resources.Load("UI/CardType/" + warrior.PatternSkill.CardsPattern[i], typeof(Sprite)) as Sprite;
+            });
         }
     }
-    public void UpdateSkillState(int en)
+
+    // 更新技能状态
+    public void UpdateSkillState(int en, Warrior warrior)
     {
-        if (en >= int.Parse(energy.text))
+        if (warrior == null)
+            return;
+        if (!warrior.ActionDone)
         {
-            skill.GetComponent<Button>().interactable = true;
+            if (en >= int.Parse(energy.text))
+            {
+                skill.GetComponent<Button>().interactable = true;
+            }
+            else
+            {
+                skill.GetComponent<Button>().interactable = false;
+            }
         }
-        else
-        {
+        else {
             skill.GetComponent<Button>().interactable = false;
         }
     }
 
+    // 显示地形改造按钮
+    public void UpdateItemUsage() {
+        skill.SetActive(false);
+        ItemUsage.SetActive(true);
+        energyHint.SetActive(false);
+        skillHint.SetActive(false);
+    }
+
+    public void HideButton() {
+        skill.SetActive(false);
+        EndButton.SetActive(false);
+    }
+
+    public void ShowButton()
+    {
+        skill.SetActive(true);
+        EndButton.SetActive(true);
+    }
 }

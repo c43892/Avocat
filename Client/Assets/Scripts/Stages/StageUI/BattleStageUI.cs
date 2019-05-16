@@ -17,7 +17,10 @@ public class BattleStageUI : MonoBehaviour
 
     // 卡牌区域
     public BattleCardArea CardArea;
-    public SkillButtonUI ButtonUI;
+    public SkillButtonUI SkillButtonUI;
+    public CharacterInfoUI CharacterInfoUI;
+
+    public ObstacleUI obstacleUI;
 
     public MapAniPlayer AniPlayer { get => BattleStage.GetComponent<MapAniPlayer>(); }
 
@@ -31,25 +34,6 @@ public class BattleStageUI : MonoBehaviour
     public GameObject ActioDoneBtn;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
-
-    //// 刷新能量槽
-    //public void RefreshEnergy(int energy)
-    //{
-    //    Enerygy.GetComponent<Image>().color = energy == 100 ? Color.yellow : Color.white;
-    //    Enerygy.GetComponentInChildren<Text>().text = energy.ToString();
-
-    //    var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
-    //    if (skill != null && energy >= skill.EnergyCost)
-    //    {
-    //        Enerygy.GetComponent<Button>().interactable = true;
-    //        Enerygy.GetComponent<Image>().color = Color.green;
-    //    }
-    //    else
-    //    {
-    //        Enerygy.GetComponent<Button>().interactable = false;
-    //        Enerygy.GetComponent<Image>().color = Color.red;
-    //    }
-    //}
 
     // 刷新建设值
     public void RefreshItemUsage(int v)

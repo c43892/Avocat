@@ -12,6 +12,9 @@ namespace Avocat
     /// </summary>
     public class CounterAttack : PassiveSkill
     {
+        public override string Name { get; } = "CounterAttack";
+        public override bool isBattleBUFF { get; set; } = true;
+
         void AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (target != Warrior || flags.Contains("SuppressCounterAttack"))

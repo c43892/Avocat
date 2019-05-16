@@ -18,6 +18,7 @@ namespace Avocat
             : base(map)
         {
             Name = "岩石";
+            EnglishName = "Rock";
         }
 
         public int EffectRoundNum { get; set; }

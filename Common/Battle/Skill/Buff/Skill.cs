@@ -31,6 +31,7 @@ namespace Avocat
     {
         public virtual Battle Battle { get; set; } // 所属战斗对象
         public virtual BattleMap Map { get { return Battle?.Map; } }
+        public virtual bool isBattleBUFF { get; set; }
         public virtual void OnAttached() { }
         public virtual void OnDetached() { }
     }

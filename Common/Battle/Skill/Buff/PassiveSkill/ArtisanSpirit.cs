@@ -14,7 +14,7 @@ namespace Avocat
     public class ArtisanSpirit : PassiveSkill
     {
         public int ES2Add { get; set; }
-
+        public override string Name { get; } = "ArtisanSpirit";
         void AddEN(int player)
         {
             if (player != Warrior.Team)

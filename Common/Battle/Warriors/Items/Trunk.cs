@@ -18,8 +18,9 @@ namespace Avocat
             : base(map)
         {
             Name = "树干";
+            EnglishName = "Trunk";
         }
-
+        
         public int EffectRoundNum { get; set; }
 
         // 对指定位置使用

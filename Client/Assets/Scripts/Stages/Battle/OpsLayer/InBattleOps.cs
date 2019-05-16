@@ -100,19 +100,25 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         var warrior = avatar?.Warrior;
-
+        var item = Room.Battle.Map.GetItemAt((int)x, (int)y);
         switch (status)
         {
             case "selectingWarrior":
+
+                // 隐藏信息栏
+                BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.gameObject.SetActive(false);
+                BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().obstacleUI.gameObject.SetActive(false);
+                BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateItemUsage();
                 if (warrior != null)
                 {
                     // 显示人物信息栏
-                    BattleStage.characterUI.SetActive(true);
-                    BattleStage.characterUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
+                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
 
                     if (warrior.Team == Room.PlayerMe)
                     {
-                        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().ButtonUI.UpdateSkill(warrior);
+                        // 刷新技能
+                        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkill(warrior);
+                        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
                         // 选中己方角色，等待攻击指令
                         CurrentSelWarrior = warrior;
                         if (CurrentSelWarrior != null)
@@ -122,13 +128,19 @@ public class InBattleOps : StageOpsLayer
                         }
                     }
                 }
+                else if (item != null) // 显示障碍物信息栏
+                     BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().obstacleUI.UpdateObstacleInfo(item);
                 break;
             case "selectingAttackTarget":
+
+                // 显示地形改造按钮
+                BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateItemUsage();
 
                 // 再次点击时清除攻击范围显示
                 RemoveShowAttackRange();
                 if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
+
                     // 点空地
                     if (CurrentSelWarrior.MovingPath.Count >= 2
                         && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 2] == (int)x
@@ -142,14 +154,18 @@ public class InBattleOps : StageOpsLayer
                         CurrentSelWarrior = null;
                         status = "selectingWarrior";
                     }
-                    else
+                    else 
                     {
+                        if (item != null) // 点障碍物
+                            BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().obstacleUI.UpdateObstacleInfo(item);
+
                         // 否则恢复初始状态
                         CurrentSelWarrior = null;
                         status = "selectingWarrior";
 
-                        // 隐藏人物信息栏
-                        BattleStage.characterUI.SetActive(false);
+                        // 点空地或者障碍物则隐藏人物信息栏
+                        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.gameObject.SetActive(false);
+
                     }
                 }
                 else if (warrior.Team == Room.PlayerMe)
@@ -158,27 +174,30 @@ public class InBattleOps : StageOpsLayer
                     CurrentSelWarrior = warrior;
 
                     // 显示人物信息栏
-                    BattleStage.characterUI.SetActive(true);
-                    BattleStage.characterUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
-                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().ButtonUI.UpdateSkill(warrior);
+                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.UpdateWarriorInfo(warrior);
+                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkill(warrior);
+                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
 
                     if (CurrentSelWarrior != null && !warrior.ActionDone)
                         ShowAttackRange(x, y, CurrentSelWarrior);
                 }
                 else if (CurrentSelWarrior != null)
                 {
-                    // 显示人物信息栏
-                    BattleStage.characterUI.SetActive(true);
-                    BattleStage.characterUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
+                    // 显示敌军信息栏
+                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.UpdateWarriorInfo(warrior);
+                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateItemUsage();
 
                     // 点对方角色，指定攻击指令
                     if (CurrentSelWarrior.MovingPath.Count > 0)
                         Room.DoMoveOnPath(CurrentSelWarrior);
-
                     DoAttack(CurrentSelWarrior, warrior);
+
+                    // 判断是否该刷新技能图片
+                    BattleStage.Battle.SetActionFlag(CurrentSelWarrior, CurrentSelWarrior.ActionDone);
                     CurrentSelWarrior = null;
                     status = "selectingWarrior";
                 }
+
                 break;
         }
     }
@@ -188,6 +207,12 @@ public class InBattleOps : StageOpsLayer
     public override void OnStartDragging(float x, float y)
     {
         RemoveShowAttackRange();
+
+        // 隐藏信息栏
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.gameObject.SetActive(false);
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().obstacleUI.gameObject.SetActive(false);
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateItemUsage();
+
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         var warrior = avatar?.Warrior;
@@ -198,14 +223,14 @@ public class InBattleOps : StageOpsLayer
             status = "selectingWarrior";
 
             // 不显示人物信息栏
-            BattleStage.characterUI.SetActive(false);
+            BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.gameObject.SetActive(false);
             return;
         }
 
         // 显示人物信息栏
-        BattleStage.characterUI.SetActive(true);
-        BattleStage.characterUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
-        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().ButtonUI.UpdateSkill(warrior);
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.UpdateWarriorInfo(warrior);
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkill(warrior);
+
         CurrentSelWarrior = warrior;
         var tile = BattleStage.Tiles[(int)x, (int)y];
         ClearPath();
@@ -346,6 +371,6 @@ public class InBattleOps : StageOpsLayer
 
         var en = bt.Energy + energy;
         BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CardArea.RefreshEnergy(en, bt.MaxEnergy);
-        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().ButtonUI.UpdateSkillState(en);
+        BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkillState(en,CurrentSelWarrior);
     }
 }

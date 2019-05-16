@@ -15,9 +15,7 @@ public class BattleStage : MonoBehaviour
     public GameObject PointerIndicator;
 
     public GameObject BattleStageUIRoot;
-    public GameObject ActionDoneButton;
-    public GameObject SkillButton;
-    public GameObject characterUI;
+
 
     // 底层地图操作处理
     public MapGroundLayer MapGround;
@@ -284,26 +282,12 @@ public class BattleStage : MonoBehaviour
         if (enterOrExit)
         {
             CurrentOpLayer = SkillOps;
-            HideButton();
+            BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.HideButton();
         }
         else {
             CurrentOpLayer = InBattleOps;
-            GetButton();
+            BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.ShowButton();
         }
-    }
-
-    // 隐藏energy和Done按钮
-    public void HideButton()
-    {
-        ActionDoneButton.GetComponent<Button>().interactable = false;
-        SkillButton.GetComponent<Button>().interactable = false;
-    }
-
-// 恢复energy和Done按钮
-    public void GetButton()
-    {
-        ActionDoneButton.GetComponent<Button>().interactable = true;
-        SkillButton.GetComponent<Button>().interactable = true;
     }
 
     public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)

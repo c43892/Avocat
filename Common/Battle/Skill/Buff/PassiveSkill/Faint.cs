@@ -17,7 +17,8 @@ namespace Avocat
             : base(num)
         {
         }
-
+        public override string Name { get; } = "Faint";
+        public override bool isBattleBUFF { get; set; } = true;
         void UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
         {
             if (warrior != Warrior)

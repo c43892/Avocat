@@ -15,7 +15,7 @@ namespace Avocat
     {
         // 效果持续几回合
         public int EffectRoundNum { get; set; }
-
+        public override string Name { get; } = "Kendo";
         void OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Warrior)

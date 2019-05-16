@@ -13,6 +13,7 @@ namespace Avocat
     /// </summary>
     public class StarsTears : PassiveSkill
     {
+        public override string Name { get;} = "StarsTears";
         void OnAfterAddHp(Warrior warrior, int dhp)
         {
             if (warrior.Team != Warrior.Team || warrior == Warrior || dhp <= 0)

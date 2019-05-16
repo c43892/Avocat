@@ -14,6 +14,7 @@ namespace Avocat
     public class TacticalCommand : PassiveSkill
     {
         Func<string> GetCardType { get; set; }
+        public override string Name { get; } = "TacticalCommand";
         public TacticalCommand(Func<string> getCardType)
         {
             GetCardType = getCardType;
