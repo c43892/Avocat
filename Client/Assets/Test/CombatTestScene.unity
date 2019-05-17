@@ -8238,12 +8238,12 @@ PrefabInstance:
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
@@ -8294,21 +8294,5 @@ PrefabInstance:
       propertyPath: BattleStageUIRoot
       value: 
       objectReference: {fileID: 793381593}
-    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: characterUI
-      value: 
-      objectReference: {fileID: 210317405}
-    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: SkillButton
-      value: 
-      objectReference: {fileID: 1320852072}
-    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: ActionDoneButton
-      value: 
-      objectReference: {fileID: 2017415454}
-    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: skillButtonUI
-      value: 
-      objectReference: {fileID: 2136265970}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}

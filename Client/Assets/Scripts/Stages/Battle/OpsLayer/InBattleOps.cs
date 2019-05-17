@@ -208,26 +208,29 @@ public class InBattleOps : StageOpsLayer
     public List<MapTile> pathInSel = new List<MapTile>();
     public override void OnStartDragging(float x, float y)
     {
+        // 获取当前点击目标
+        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        var warrior = avatar?.Warrior;
+        if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
+        {
+            // 拖动地图
+            //CurrentSelWarrior = null;
+            //status = "selectingWarrior";
+
+            //// 不显示人物信息栏
+            //StageUI.CharacterInfoUI.gameObject.SetActive(false);
+            //return;
+
+            base.OnStartDragging(x, y);
+            return;
+        }
+
         RemoveShowAttackRange();
 
         // 隐藏信息栏
         StageUI.CharacterInfoUI.gameObject.SetActive(false);
         StageUI.obstacleUI.gameObject.SetActive(false);
         StageUI.SkillButtonUI.UpdateItemUsage();
-
-        // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
-        var warrior = avatar?.Warrior;
-        if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
-        {
-            // 从空地拖拽和点空地一样的效果
-            CurrentSelWarrior = null;
-            status = "selectingWarrior";
-
-            // 不显示人物信息栏
-            StageUI.CharacterInfoUI.gameObject.SetActive(false);
-            return;
-        }
 
         // 显示人物信息栏
         StageUI.CharacterInfoUI.UpdateWarriorInfo(warrior);
@@ -240,12 +243,15 @@ public class InBattleOps : StageOpsLayer
         status = "selectingPath";
     }
 
-    public override void OnDragging(float fx, float fy, float cx, float cy)
+    public override void OnDragging(float fx, float fy, float tx, float ty)
     {
         if (status != "selectingPath")
+        {
+            base.OnDragging(fx, fy, tx, ty);
             return;
+        }
 
-        var tile = BattleStage.Tiles[(int)cx, (int)cy];
+        var tile = BattleStage.Tiles[(int)tx, (int)ty];
         var tailTile = pathInSel[pathInSel.Count - 1];
         if (tile == tailTile)
             return;

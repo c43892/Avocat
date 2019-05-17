@@ -43,7 +43,10 @@ public class PreparingOps : StageOpsLayer
 
         var avatar = BattleStage.Avatars[(int)x, (int)y];
         if (avatar == null || avatar.Warrior.Team != Room.PlayerMe)
+        {
+            base.OnStartDragging(x, y);
             return;
+        }
 
         // 显示指针，并隐藏准备拖拽的对象
         currentSelAvatar = avatar;
@@ -52,23 +55,26 @@ public class PreparingOps : StageOpsLayer
         currentSelAvatar.gameObject.SetActive(false);
     }
 
-    public override void OnDragging(float fx, float fy, float cx, float cy)
+    public override void OnDragging(float fx, float fy, float tx, float ty)
     {
         if (currentSelAvatar == null)
+        {
+            base.OnDragging(fx, fy, tx, ty);
             return;
+        }
 
         // 移动指针
         var rootPos = MapRoot.transform.localPosition;
-        PointerIndicator.transform.localPosition = new Vector2(rootPos.x + cx, rootPos.y - cy);
+        PointerIndicator.transform.localPosition = new Vector2(rootPos.x + tx, rootPos.y - ty);
     }
 
-    public override void OnEndDragging(float fx, float fy, float cx, float cy)
+    public override void OnEndDragging(float fx, float fy, float tx, float ty)
     {
         if (currentSelAvatar == null)
             return;
 
         // 隐藏指针，执行交换操作，并显示被拖拽对象
-        Room.DoExchangeWarroirsPosition((int)fx, (int)fy, (int)cx, (int)cy);
+        Room.DoExchangeWarroirsPosition((int)fx, (int)fy, (int)tx, (int)ty);
         PointerIndicator.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);
         currentSelAvatar = null;

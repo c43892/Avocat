@@ -37,6 +37,9 @@ public class CombatTestDriver : GameDriver
         BattleStage.gameObject.SetActive(false);
         StartingUI.SetActive(true);
 
+        // enable multiTouch
+        Input.multiTouchEnabled = true;
+
         GameCore.Instance.Get<CoroutineManager>().Start(msgLooper.Loop());
     }
 

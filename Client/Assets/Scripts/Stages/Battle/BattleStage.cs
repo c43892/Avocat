@@ -14,9 +14,9 @@ public class BattleStage : MonoBehaviour
     // 显示操作指针
     public GameObject PointerIndicator;
 
+    // 场景 UI 根节点
     public GameObject BattleStageUIRoot;
-
-
+    
     // 底层地图操作处理
     public MapGroundLayer MapGround;
 
@@ -29,8 +29,8 @@ public class BattleStage : MonoBehaviour
     public MapAvatar MapAvatar;
     public MapItem MapItem;
 
-    // 地图显示元素根
-    public Transform MapRoot;
+    public Transform MapRoot; // 地图显示元素根，挂接所有模型光效等
+    public Transform SceneOffset; // 处理场景缩放与平移
 
     public BattleRoomClient Room { get; private set; }
     public Battle Battle { get { return Room?.Battle; } }
@@ -68,8 +68,10 @@ public class BattleStage : MonoBehaviour
         InBattleOps = new InBattleOps(this); // 战斗内一般阶段
         UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
         SkillOps = new PosSelOps(this); //  战斗内释放技能阶段
-        MapGround.Area = new Rect(0, 0, Map.Width, Map.Height);
         OnTimeBackTriggered = onTimeBackTriggered;
+
+        // 将场景中心移动到屏幕中心
+        SceneOffset.transform.localPosition = new Vector3(-Map.Width / 2, Map.Height / 2, 0);
     }
 
     void ClearMap()
@@ -304,5 +306,6 @@ public class BattleStage : MonoBehaviour
         MapGround.OnStartDragging += (float x, float y) => CurrentOpLayer.OnStartDragging(x, y);
         MapGround.OnDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnDragging(fx, fy, cx, cy);
         MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);
+        MapGround.OnScaling += (float scale) => CurrentOpLayer.OnScaling(scale);
     }
 }
