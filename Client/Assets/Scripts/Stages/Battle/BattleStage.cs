@@ -302,7 +302,7 @@ public class BattleStage : MonoBehaviour
     // 挂接地图操作逻辑
     void SetupGroundOps()
     {
-        MapGround.OnClicked += (float x, float y) => CurrentOpLayer.OnClicked((int)x, (int)y);
+        MapGround.OnClicked += (float x, float y) => CurrentOpLayer.OnClicked(x, y);
         MapGround.OnStartDragging += (float x, float y) => CurrentOpLayer.OnStartDragging(x, y);
         MapGround.OnDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnDragging(fx, fy, cx, cy);
         MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);

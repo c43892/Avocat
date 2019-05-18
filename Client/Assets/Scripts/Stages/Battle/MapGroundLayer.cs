@@ -19,24 +19,33 @@ public class MapGroundLayer : MonoBehaviour
 
     public event Action<float> OnScaling;
 
-    Vector2 fromPos;
     string opStatus = "default"; // default, down, pressing, dragging, scaling
 
-    //public Rect Area
-    //{
-    //    get
-    //    {
-    //        return area;
-    //    }
-    //    set
-    //    {
-    //        area = value;
-    //        transform.localPosition = new Vector3(area.x, area.y);
-    //        transform.localScale = new Vector3(area.width, area.height, 1);
-    //    }
-    //} Rect area;
+    // 需要手动校正两个触点的 id
+    int[] ptid = new int[] { -1, -1 };
+    Vector2 pt0Pos = Vector2.zero;
+    void AdjustPointerID()
+    {
+        if (Input.touchCount <= 1)
+        {
+            ptid[0] = 0;
+            ptid[1] = -1;
+            if (Input.touchCount == 1)
+                pt0Pos = Input.touches[0].position;
 
-    bool CheckPointerRelativePosition(out Vector2 v2)
+            return;
+        }
+
+        if (ptid[1] < 0)
+        {
+            var dp0 = (Input.touches[0].position - pt0Pos).magnitude;
+            var dp1 = (Input.touches[1].position - pt0Pos).magnitude;
+            ptid[0] = dp0 < dp1 ? 0 : 1;
+            ptid[1] = dp0 < dp1 ? 1 : 0;
+        }
+    }
+
+    bool CheckPointerRelativePosition(out Vector2 v2, int pt = 0)
     {
         v2 = Vector2.zero;
 
@@ -44,112 +53,107 @@ public class MapGroundLayer : MonoBehaviour
         if (BattleStageUI.CheckGuiRaycastObjects())
             return false;
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var ray = Camera.main.ScreenPointToRay(Input.touchCount == 0 ? (Vector2)Input.mousePosition : Input.touches[ptid[pt]].position);
         var hitInfos = Physics2D.GetRayIntersectionAll(ray);
         if (hitInfos.Length > 0 && hitInfos[0].collider?.gameObject == gameObject)
         {
-            var pos = transform.worldToLocalMatrix.MultiplyPoint(hitInfos[0].point);
-            v2 = new Vector2(pos.x * transform.localScale.x, -pos.y * transform.localScale.y);
+            v2 = hitInfos[0].point;
             return true;
         }
 
         return false;
     }
 
+    Vector2 dragFrom;
     private void OnMouseDown()
     {
-        switch (opStatus)
-        {
-            case "default":
-                if (CheckPointerRelativePosition(out fromPos))
-                {
-                    opStatus = "down";
-                    draggingLastPos = fromPos;
-                }
-                break;
-        }
-    }
+        AdjustPointerID();
+        if (Input.touchCount > 1) return;
+        if (!CheckPointerRelativePosition(out Vector2 pt)) return;
 
-    Vector2 touch1From;
-    Vector2 touch1To;
-    Vector2 touch2From;
-    Vector2 touch2To;
-    private void Update()
-    {
-        if (Input.touchCount <= 1)
-            return;
-
-        if (opStatus != "scaling")
-        {
-            opStatus = "scaling";
-            touch1From = Input.touches[0].position;
-            touch1To = Input.touches[0].position;
-            touch2From = Input.touches[1].position;
-            touch2To = Input.touches[1].position;
-        }
-        else
-        {
-            touch1To = Input.touches[0].position;
-            touch2To = Input.touches[1].position;
-
-            // 计算缩放中心的位移
-            var centreFrom = (touch1From + touch2From) / 2;
-            var centreTo = (touch1To + touch2To) / 2;
-            var centerOffset = centreTo - centreFrom;
-
-            // 计算缩放
-            var len1 = (touch2From - touch1From).sqrMagnitude;
-            var len2 = (touch2To - touch1To).sqrMagnitude;
-            var scale = len2 - len1;
-            OnDragging.SC(centreFrom.x, centreFrom.y, centreTo.x, centreTo.y);
-            OnScaling.SC(scale);
-        }
+        opStatus = "down";
+        dragFrom = pt;
     }
 
     private void OnMouseUp()
     {
-        if (!CheckPointerRelativePosition(out var currentPos))
-            return;
+        AdjustPointerID();
+        if (opStatus == "down")
+            OnClicked.SC(dragFrom.x, dragFrom.y);
+        else if (opStatus == "dragging")
+            OnEndDragging.SC(dragFrom.x, dragFrom.y, lastDraggingPos.x, lastDraggingPos.y);
 
-        switch (opStatus)
+        opStatus = "default";
+    }
+
+    Vector2 draggingOffset;
+    Vector2 lastDraggingPos;
+    private void OnMouseDrag()
+    {
+        AdjustPointerID();
+        if (!CheckPointerRelativePosition(out Vector2 pt)) return;
+
+        if (opStatus == "down")
         {
-            case "down":
-                opStatus = "default";
-                OnClicked.SC(fromPos.x, fromPos.y);
-                break;
-            case "dragging":
-                opStatus = "default";
-                OnEndDragging.SC(fromPos.x, fromPos.y, currentPos.x, currentPos.y);
-                break;
-            case "scaling":
-                opStatus = "default";
-                break;
+            if ((pt - dragFrom).sqrMagnitude <= 0.1f)
+                return;
+
+            opStatus = "dragging";
+            OnStartDragging.SC(dragFrom.x, dragFrom.y);
+            lastDraggingPos = dragFrom;
+            draggingOffset = Vector2.zero;
+        }
+        else if (opStatus == "dragging")
+        {
+            var dPos = pt - lastDraggingPos;
+            lastDraggingPos = pt;
+            draggingOffset += dPos;
+            OnDragging.SC(dragFrom.x, dragFrom.y, dragFrom.x + draggingOffset.x, dragFrom.y + draggingOffset.y);
         }
     }
 
-    Vector2 draggingLastPos;
-    private void OnMouseDrag()
+    Vector2 centreFrom;
+    private void Update()
     {
-        if (!CheckPointerRelativePosition(out var currentPos))
-            return;
+        AdjustPointerID();
+        if (!CheckPointerRelativePosition(out Vector2 pt)) return;
 
-        switch (opStatus)
+        if (opStatus == "scaling")
         {
-            case "down":
-                if ((currentPos - draggingLastPos).magnitude < 0.1f)
-                    return;
-
+            if (Input.touchCount == 0)
+            {
+                OnEndDragging.SC(dragFrom.x, dragFrom.y, lastDraggingPos.x, lastDraggingPos.y);
+                opStatus = "default";
+            }
+            else if (Input.touchCount == 1)
+            {
+                lastDraggingPos = pt;
                 opStatus = "dragging";
-                OnStartDragging.SC(currentPos.x, currentPos.y);
-                OnDragging.SC(fromPos.x, fromPos.y, currentPos.x, currentPos.y);
-                break;
-            case "dragging":
-                if ((currentPos - draggingLastPos).magnitude < 0.1f)
-                    return;
+            }
+            else
+            {
+                if (!CheckPointerRelativePosition(out Vector2 pt1, 1)) return;
 
-                draggingLastPos = currentPos;
-                OnDragging.SC(fromPos.x, fromPos.y, currentPos.x, currentPos.y);
-                break;
+                var centreTo = (pt1 + pt) / 2;
+                var dPos = centreTo - centreFrom;
+                centreFrom = centreTo;
+                draggingOffset += dPos;
+                lastDraggingPos = pt;
+                OnDragging.SC(dragFrom.x, dragFrom.y, dragFrom.x + draggingOffset.x, dragFrom.y + draggingOffset.y);
+            }
+        }
+        else if (Input.touchCount == 2)
+        {
+            if (!CheckPointerRelativePosition(out Vector2 pt1, 1)) return;
+            if (opStatus != "dragging")
+            {
+                lastDraggingPos = dragFrom = pt;
+                draggingOffset = Vector2.zero;
+                OnStartDragging.SC(dragFrom.x, dragFrom.y);
+            }
+
+            centreFrom = (pt1 + pt) / 2;
+            opStatus = "scaling";
         }
     }
 }

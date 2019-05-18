@@ -99,10 +99,12 @@ public class InBattleOps : StageOpsLayer
 
     public override void OnClicked(float x, float y)
     {
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+
         // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
         var warrior = avatar?.Warrior;
-        var item = Room.Battle.Map.GetItemAt((int)x, (int)y);
+        var item = Room.Battle.Map.GetItemAt((int)gx, (int)gy);
         switch (status)
         {
             case "selectingWarrior":
@@ -145,8 +147,8 @@ public class InBattleOps : StageOpsLayer
 
                     // 点空地
                     if (CurrentSelWarrior.MovingPath.Count >= 2
-                        && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 2] == (int)x
-                        && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 1] == (int)y)
+                        && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 2] == (int)gx
+                        && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 1] == (int)gy)
                     {
                         // 如果是移动目的地，则直接移动
                         if (CurrentSelWarrior.MovingPath.Count > 0)
@@ -208,19 +210,13 @@ public class InBattleOps : StageOpsLayer
     public List<MapTile> pathInSel = new List<MapTile>();
     public override void OnStartDragging(float x, float y)
     {
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+
         // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
         var warrior = avatar?.Warrior;
         if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
         {
-            // 拖动地图
-            //CurrentSelWarrior = null;
-            //status = "selectingWarrior";
-
-            //// 不显示人物信息栏
-            //StageUI.CharacterInfoUI.gameObject.SetActive(false);
-            //return;
-
             base.OnStartDragging(x, y);
             return;
         }
@@ -237,7 +233,7 @@ public class InBattleOps : StageOpsLayer
         StageUI.SkillButtonUI.UpdateSkill(warrior);
 
         CurrentSelWarrior = warrior;
-        var tile = BattleStage.Tiles[(int)x, (int)y];
+        var tile = BattleStage.Tiles[(int)gx, (int)gy];
         ClearPath();
         AddPath(tile);
         status = "selectingPath";
@@ -251,7 +247,8 @@ public class InBattleOps : StageOpsLayer
             return;
         }
 
-        var tile = BattleStage.Tiles[(int)tx, (int)ty];
+        WorldPos2ScenePos(tx, ty, out float gtx, out float gty);
+        var tile = BattleStage.Tiles[(int)gtx, (int)gty];
         var tailTile = pathInSel[pathInSel.Count - 1];
         if (tile == tailTile)
             return;
@@ -294,9 +291,10 @@ public class InBattleOps : StageOpsLayer
             }
         }
     }
+
     public int lastX;
     public int lastY;
-    public override void OnEndDragging(float fx, float fy, float cx, float cy)
+    public override void OnEndDragging(float fx, float fy, float tx, float ty)
     {
         if (status != "selectingPath")
             return;

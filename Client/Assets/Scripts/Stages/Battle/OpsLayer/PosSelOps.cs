@@ -68,17 +68,19 @@ public class PosSelOps : StageOpsLayer
     // 返回选择的位置
     public override void OnClicked(float x, float y)
     {
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+
         // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
         var warrior = avatar == null ? null : avatar.Warrior;
         if (warrior == null)
         {
             // 点空地
-            if (CheckRange((int)x, (int)y, Range))
+            if (CheckRange((int)gx, (int)gy, Range))
             {
                 RemoveShowRange();
                 BattleStage.InBattleOps.RemoveShowAttackRange();
-                onSelPos((int)x, (int)y);
+                onSelPos((int)gx, (int)gy);
                 BattleStage.StartSkillStage(false);
             }
             else

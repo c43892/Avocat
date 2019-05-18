@@ -17,7 +17,9 @@ public class PreparingOps : StageOpsLayer
 
     public override void OnClicked(float x, float y)
     {
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+
+        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
         if (currentSelAvatar == null && avatar != null && avatar.Warrior.Team == Room.PlayerMe)
         {
             // 选中要移动的角色
@@ -28,7 +30,7 @@ public class PreparingOps : StageOpsLayer
         {
             // 交换角色位置
             currentSelAvatar.Color = MapAvatar.ColorDefault;
-            Room.DoExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)x, (int)y);
+            Room.DoExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)gx, (int)gy);
             currentSelAvatar = null;
         }
     }
@@ -41,7 +43,8 @@ public class PreparingOps : StageOpsLayer
             currentSelAvatar = null;
         }
 
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
         if (avatar == null || avatar.Warrior.Team != Room.PlayerMe)
         {
             base.OnStartDragging(x, y);
@@ -64,17 +67,20 @@ public class PreparingOps : StageOpsLayer
         }
 
         // 移动指针
-        var rootPos = MapRoot.transform.localPosition;
-        PointerIndicator.transform.localPosition = new Vector2(rootPos.x + tx, rootPos.y - ty);
+        WorldPos2ScenePos(tx, ty, out float gtx, out float gty);
+        PointerIndicator.transform.localPosition = new Vector2(gtx, -gty);
     }
 
     public override void OnEndDragging(float fx, float fy, float tx, float ty)
     {
+        WorldPos2ScenePos(fx, fy, out float gfx, out float gfy);
+        WorldPos2ScenePos(tx, ty, out float gtx, out float gty);
+
         if (currentSelAvatar == null)
             return;
 
         // 隐藏指针，执行交换操作，并显示被拖拽对象
-        Room.DoExchangeWarroirsPosition((int)fx, (int)fy, (int)tx, (int)ty);
+        Room.DoExchangeWarroirsPosition((int)gfx, (int)gfy, (int)gtx, (int)gty);
         PointerIndicator.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);
         currentSelAvatar = null;

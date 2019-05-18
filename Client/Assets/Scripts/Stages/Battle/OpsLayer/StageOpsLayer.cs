@@ -18,6 +18,12 @@ public class StageOpsLayer
         BattleStage = bs;
     }
 
+    public void WorldPos2ScenePos(float x, float y, out float tx, out float ty)
+    {
+        tx = x - SceneOffset.transform.position.x;
+        ty = SceneOffset.transform.position.y - y;
+    }
+
     public virtual void OnClicked(float x, float y)
     {
     }
@@ -34,7 +40,7 @@ public class StageOpsLayer
     {
         var offset = new Vector2(tx - fx, ty - fy);
         SceneOffset.transform.localPosition =
-            new Vector3(fromPos.x + offset.x, fromPos.y - offset.y, fromPos.z);
+            new Vector3(fromPos.x + offset.x, fromPos.y + offset.y, fromPos.z);
     }
 
     public virtual void OnEndDragging(float fx, float fy, float cx, float cy)

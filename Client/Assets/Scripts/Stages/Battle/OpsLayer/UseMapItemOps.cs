@@ -18,7 +18,8 @@ public class UseMapItemOps : StageOpsLayer
 
     public override void OnClicked(float x, float y)
     {
-        var avatar = BattleStage.Avatars[(int)x, (int)y];
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
 
         // 如果已经由选择道具，再次选择地方角色，则对其使用道具
         if (currentSelItem != null && avatar != null && avatar.Warrior.Team != Room.PlayerMe)
@@ -31,7 +32,7 @@ public class UseMapItemOps : StageOpsLayer
 
         // 表示对敌方使用道具，则是其它情况
 
-        var item = BattleStage.Items[(int)x, (int)y];
+        var item = BattleStage.Items[(int)gx, (int)gy];
 
         if (currentSelItem != null)
         {
@@ -56,7 +57,8 @@ public class UseMapItemOps : StageOpsLayer
             currentSelItem = null;
         }
 
-        var item = BattleStage.Items[(int)x, (int)y];
+        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        var item = BattleStage.Items[(int)gx, (int)gy];
         if (item == null)
             return;
 
@@ -67,19 +69,21 @@ public class UseMapItemOps : StageOpsLayer
         currentSelItem.gameObject.SetActive(false);
     }
 
-    public override void OnDragging(float fx, float fy, float cx, float cy)
+    public override void OnDragging(float fx, float fy, float tx, float ty)
     {
         if (currentSelItem == null)
             return;
 
         // 移动指针
+        WorldPos2ScenePos(tx, ty, out float tgx, out float tgy);
         var rootPos = MapRoot.transform.localPosition;
-        PointerIndicator.transform.localPosition = new Vector2(rootPos.x + cx, rootPos.y - cy);
+        PointerIndicator.transform.localPosition = new Vector2(rootPos.x + tgx, rootPos.y - tgy);
     }
 
-    public override void OnEndDragging(float fx, float fy, float cx, float cy)
+    public override void OnEndDragging(float fx, float fy, float tx, float ty)
     {
-        var target = BattleStage.Avatars[(int)cx, (int)cy];
+        WorldPos2ScenePos(tx, ty, out float tgx, out float tgy);
+        var target = BattleStage.Avatars[(int)tgx, (int)tgy];
         if (currentSelItem != null && target != null && target.Warrior.Team != Room.PlayerMe)
             Room.UseItem2(currentSelItem.Item as UsableItem, target.Warrior); // 执行操作
 
@@ -87,6 +91,7 @@ public class UseMapItemOps : StageOpsLayer
         PointerIndicator.SetActive(false);
         if (currentSelItem != null)
             currentSelItem.gameObject.SetActive(true);
+
         currentSelItem = null;
     }
 }
