@@ -317,6 +317,6 @@ public class BattleStage : MonoBehaviour
         MapGround.OnDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnDragging(fx, fy, cx, cy);
         MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);
         MapGround.OnStartScaling += () => CurrentOpLayer.OnStartScaling();
-        MapGround.OnScaling += (float scale) => CurrentOpLayer.OnScaling(scale);
+        MapGround.OnScaling += (float scale, float cx, float cy) => CurrentOpLayer.OnScaling(scale, cx, cy);
     }
 }
