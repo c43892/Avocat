@@ -74,7 +74,7 @@ public class BattleStageUI : MonoBehaviour
             }
             BattleStage.StartSkillStage(true);
             BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selX, selY) =>
-            {               
+            {
                 if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
                 {
                     BattleStage.InBattleOps.ClearPath();
@@ -83,16 +83,17 @@ public class BattleStageUI : MonoBehaviour
                 Room.FireActiveSkillAt(skill, selX, selY);
             });
         }
-        else {
+        else
+        {
             if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
             {
-                BattleStage.SkillOps.RemoveShowRange();
+                BattleStage.PosSelOps.RemoveShowRange();
                 BattleStage.InBattleOps.RemoveShowAttackRange();
                 BattleStage.InBattleOps.ClearPath();
                 Room.DoMoveOnPath(warrior);
             }
             Room.FireActiveSkill(skill);
-        }       
+        }
     }
 
     // 进入地图改造模式
@@ -103,8 +104,6 @@ public class BattleStageUI : MonoBehaviour
         BattleStage.StartUseItem(inUsingItemMode);
         ItemUsage.GetComponent<Image>().color = inUsingItemMode ? Color.red : Color.yellow;
 
-        // FC.ForEach(CardsAvailableGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
-        // FC.ForEach(CardsStashGroup, (i, c) => c.gameObject.SetActive(!inUsingItemMode));
         Enerygy.gameObject.SetActive(!inUsingItemMode);
         ActioDoneBtn.gameObject.SetActive(!inUsingItemMode); 
     }

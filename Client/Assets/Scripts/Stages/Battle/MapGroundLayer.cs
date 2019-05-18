@@ -17,6 +17,7 @@ public class MapGroundLayer : MonoBehaviour
     public event Action<float, float, float, float> OnDragging;
     public event Action<float, float, float, float> OnEndDragging;
 
+    public event Action OnStartScaling;
     public event Action<float> OnScaling;
 
     string opStatus = "default"; // default, down, pressing, dragging, scaling
@@ -112,7 +113,10 @@ public class MapGroundLayer : MonoBehaviour
         }
     }
 
-    Vector2 centreFrom;
+    // Vector2 centreFrom;
+    Vector2 pt0From;
+    Vector2 pt1From;
+    float totalScale;
     private void Update()
     {
         AdjustPointerID();
@@ -134,12 +138,22 @@ public class MapGroundLayer : MonoBehaviour
             {
                 if (!CheckPointerRelativePosition(out Vector2 pt1, 1)) return;
 
+                var centreFrom = (pt0From + pt1From) / 2;
                 var centreTo = (pt1 + pt) / 2;
                 var dPos = centreTo - centreFrom;
-                centreFrom = centreTo;
+                // centreFrom = centreTo;
+                
                 draggingOffset += dPos;
                 lastDraggingPos = pt;
                 OnDragging.SC(dragFrom.x, dragFrom.y, dragFrom.x + draggingOffset.x, dragFrom.y + draggingOffset.y);
+
+                var s = (pt1 - pt).magnitude / (pt1From - pt0From).magnitude;
+                totalScale *= s;
+
+                OnScaling.SC(totalScale);
+
+                pt0From = pt;
+                pt1From = pt1;
             }
         }
         else if (Input.touchCount == 2)
@@ -152,8 +166,13 @@ public class MapGroundLayer : MonoBehaviour
                 OnStartDragging.SC(dragFrom.x, dragFrom.y);
             }
 
-            centreFrom = (pt1 + pt) / 2;
+            // centreFrom = (pt1 + pt) / 2;
+            pt0From = pt;
+            pt1From = pt1;
+            totalScale = 1;
             opStatus = "scaling";
+
+            OnStartScaling.SC();
         }
     }
 }

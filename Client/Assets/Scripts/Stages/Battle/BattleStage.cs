@@ -49,7 +49,7 @@ public class BattleStage : MonoBehaviour
     public PreparingOps PreparingOps { get; private set; }  // 准备阶段
     public InBattleOps InBattleOps { get; private set; } // 战斗内一般阶段
     public UseMapItemOps UseMapItemOps { get; private set; }  // 战斗内地形改造阶段
-    public PosSelOps SkillOps { get; private set; }
+    public PosSelOps PosSelOps { get; private set; }
 
     public Action<BattleReplay> OnTimeBackTriggered { get; private set; }
 
@@ -67,7 +67,7 @@ public class BattleStage : MonoBehaviour
         PreparingOps = new PreparingOps(this); // 准备阶段
         InBattleOps = new InBattleOps(this); // 战斗内一般阶段
         UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
-        SkillOps = new PosSelOps(this); //  战斗内释放技能阶段
+        PosSelOps = new PosSelOps(this); //  战斗内释放技能阶段
         OnTimeBackTriggered = onTimeBackTriggered;
 
         // 将场景中心移动到屏幕中心
@@ -91,6 +91,7 @@ public class BattleStage : MonoBehaviour
         tile.transform.SetParent(MapRoot);
         tile.X = (int)x;
         tile.Y = (int)y;
+        tile.transform.localScale = Vector3.one;
         tile.gameObject.name = "Range";
         tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
         tile.gameObject.SetActive(true);
@@ -280,13 +281,15 @@ public class BattleStage : MonoBehaviour
     }
 
     // 判断是否进入释放技能阶段
-    public void StartSkillStage(bool enterOrExit) {
+    public void StartSkillStage(bool enterOrExit)
+    {
         if (enterOrExit)
         {
-            CurrentOpLayer = SkillOps;
+            CurrentOpLayer = PosSelOps;
             BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.HideButton();
         }
-        else {
+        else
+        {
             CurrentOpLayer = InBattleOps;
             BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.ShowButton();
         }
@@ -294,9 +297,7 @@ public class BattleStage : MonoBehaviour
 
     public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
     {
-
-        SkillOps.ShowRange(cx, cy, skill, onSelPos);
-        
+        PosSelOps.ShowRange(cx, cy, skill, onSelPos);
     }
 
     // 挂接地图操作逻辑
@@ -306,6 +307,7 @@ public class BattleStage : MonoBehaviour
         MapGround.OnStartDragging += (float x, float y) => CurrentOpLayer.OnStartDragging(x, y);
         MapGround.OnDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnDragging(fx, fy, cx, cy);
         MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);
+        MapGround.OnStartScaling += () => CurrentOpLayer.OnStartScaling();
         MapGround.OnScaling += (float scale) => CurrentOpLayer.OnScaling(scale);
     }
 }

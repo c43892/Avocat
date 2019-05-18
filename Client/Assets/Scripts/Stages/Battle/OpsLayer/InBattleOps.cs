@@ -128,7 +128,7 @@ public class InBattleOps : StageOpsLayer
                         if (CurrentSelWarrior != null)
                         {
                             status = "selectingAttackTarget";
-                            ShowAttackRange(x, y, CurrentSelWarrior);
+                            ShowAttackRange(gx, gy, CurrentSelWarrior);
                         }
                     }
                 }
@@ -144,7 +144,6 @@ public class InBattleOps : StageOpsLayer
                 RemoveShowAttackRange();
                 if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
-
                     // 点空地
                     if (CurrentSelWarrior.MovingPath.Count >= 2
                         && CurrentSelWarrior.MovingPath[CurrentSelWarrior.MovingPath.Count - 2] == (int)gx
@@ -169,7 +168,6 @@ public class InBattleOps : StageOpsLayer
 
                         // 点空地或者障碍物则隐藏人物信息栏
                         StageUI.CharacterInfoUI.gameObject.SetActive(false);
-
                     }
                 }
                 else if (warrior.Team == Room.PlayerMe)
@@ -183,7 +181,7 @@ public class InBattleOps : StageOpsLayer
                     StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
 
                     if (CurrentSelWarrior != null && !warrior.ActionDone)
-                        ShowAttackRange(x, y, CurrentSelWarrior);
+                        ShowAttackRange(gx, gy, CurrentSelWarrior);
                 }
                 else if (CurrentSelWarrior != null)
                 {

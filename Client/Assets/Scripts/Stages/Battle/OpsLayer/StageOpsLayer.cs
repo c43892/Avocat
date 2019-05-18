@@ -20,8 +20,9 @@ public class StageOpsLayer
 
     public void WorldPos2ScenePos(float x, float y, out float tx, out float ty)
     {
-        tx = x - SceneOffset.transform.position.x;
-        ty = SceneOffset.transform.position.y - y;
+        var scale = SceneOffset.transform.localScale;
+        tx = (x - SceneOffset.transform.position.x) / scale.x;
+        ty = (SceneOffset.transform.position.y - y) / scale.y;
     }
 
     public virtual void OnClicked(float x, float y)
@@ -49,7 +50,15 @@ public class StageOpsLayer
 
     // 场景缩放
 
+    float s;
+
+    public virtual void OnStartScaling()
+    {
+        s = SceneOffset.transform.localScale.x;
+    }
+
     public virtual void OnScaling(float scale)
     {
+        SceneOffset.transform.localScale = new Vector3(s * scale, s * scale, 1);
     }
 }
