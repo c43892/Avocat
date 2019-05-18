@@ -197,6 +197,15 @@ public class BattleStage : MonoBehaviour
         return avatar;
     }
 
+    // 获取指定位置 Avatar
+    public MapAvatar GetAvatarAt(int x, int y)
+    {
+        if (x < 0 || y < 0 || x >= Avatars.GetLength(0) || y >= Avatars.GetLength(1))
+            return null;
+
+        return Avatars[x, y];
+    }
+
     // 根据道具获取 MapItem
     public MapItem GetMapItemByItem(BattleMapItem item)
     {

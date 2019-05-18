@@ -43,15 +43,13 @@ public class InBattleOps : StageOpsLayer
 
             if (curSelWarrior != null && curSelWarrior.Map != null)
             {
-                curSelWarrior.GetPosInMap(out int x, out int y);
-                BattleStage.Avatars[x, y].Color = MapAvatar.ColorDefault;
+                BattleStage.GetAvatarByWarrior(curSelWarrior).Color = MapAvatar.ColorDefault;
             }
 
             curSelWarrior = value;
             if (curSelWarrior != null)
             {
-                curSelWarrior.GetPosInMap(out int x, out int y);
-                BattleStage.Avatars[x, y].Color = MapAvatar.ColorSelected;
+                BattleStage.GetAvatarByWarrior(curSelWarrior).Color = MapAvatar.ColorSelected;
                 curSelWarrior.MovingPath.Clear();
             }
 
@@ -102,7 +100,7 @@ public class InBattleOps : StageOpsLayer
         WorldPos2ScenePos(x, y, out float gx, out float gy);
 
         // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
+        var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         var warrior = avatar?.Warrior;
         var item = Room.Battle.Map.GetItemAt((int)gx, (int)gy);
         switch (status)
@@ -211,7 +209,7 @@ public class InBattleOps : StageOpsLayer
         WorldPos2ScenePos(x, y, out float gx, out float gy);
 
         // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
+        var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         var warrior = avatar?.Warrior;
         if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
         {

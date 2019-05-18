@@ -54,6 +54,7 @@ namespace Avocat
 
         public BattleMapItem GetItemAt(int x, int y)
         {
+            if (x < 0 || y < 0 || x >= Width || y >= Height) return null;
             return items[x, y];
         }
 
@@ -70,6 +71,7 @@ namespace Avocat
 
         public Warrior GetWarriorAt(int x, int y)
         {
+            if (x < 0 || y < 0 || x >= Width || y >= Height) return null;
             return warriors[x, y];
         }
 
