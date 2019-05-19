@@ -40,7 +40,7 @@ namespace Avocat
                 ["POW"] = 64,
                 ["ARM"] = 17,
                 ["RES"] = 32,
-                ["AttackRange"] = new int[] { 1, 2 },
+                ["AttackRange"] = new int[] { 2 },
                 ["CardType"] = "PT", // 药水卡
             };
 
@@ -54,7 +54,7 @@ namespace Avocat
                 ["POW"] = 83,
                 ["ARM"] = 22,
                 ["RES"] = 20,
-                ["AttackRange"] = new int[] { 1, 2 },
+                ["AttackRange"] = new int[] { 2 },
                 ["CardType"] = "ES", // 盾卡
             };
 
@@ -82,7 +82,7 @@ namespace Avocat
                 ["POW"] = 71,
                 ["ARM"] = 20,
                 ["RES"] = 20,
-                ["ArcherAttackRange"] = new int[] { 1, 2, 3 },
+                ["ArcherAttackRange"] = new int[] { 3 },
                 ["LancerAttackRange"] = new int[] { 1 },
                 ["State"] = "Lancer",
                 ["CardType"] = "EN", // 能量卡
@@ -91,7 +91,7 @@ namespace Avocat
             // 快速援护
             dAttrs[typeof(FastAssistance)] = new Dictionary<string, object>
             {
-                ["EnergyCost"] = 50 // 能量消耗
+                ["EnergyCost"] = 15 // 能量消耗
             };
 
             // 蝶舞
@@ -132,7 +132,7 @@ namespace Avocat
             dAttrs[typeof(CannonEMP)] = new Dictionary<string, object>
             {
                 ["AttackingType"] = "physic",
-                ["AttackRange"] = new int[] { 1 }
+                ["AttackRange"] = new int[] { 2,3,4,5 }
             };
 
             // 时光倒流
