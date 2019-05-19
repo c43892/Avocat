@@ -54,7 +54,7 @@ public class PreparingOps : StageOpsLayer
         // 显示指针，并隐藏准备拖拽的对象
         currentSelAvatar = avatar;
         PointerIndicator.SetActive(true);
-        PointerIndicator.GetComponentInChildren<TextMesh>().text = avatar.Warrior.Name;
+        PointerIndicator.GetComponentInChildren<TextMesh>().text = avatar.Warrior.DisplayName;
         currentSelAvatar.gameObject.SetActive(false);
     }
 

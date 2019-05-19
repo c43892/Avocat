@@ -1,0 +1,244 @@
+
+EMP-616型炮台3.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bullet
+  rotate: false
+  xy: 1726, 1384
+  size: 43, 59
+  orig: 43, 59
+  offset: 0, 0
+  index: -1
+firebolt-a
+  rotate: false
+  xy: 804, 289
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+firebolt-b
+  rotate: false
+  xy: 1608, 1374
+  size: 116, 69
+  orig: 116, 69
+  offset: 0, 0
+  index: -1
+firebolt01
+  rotate: false
+  xy: 1206, 701
+  size: 104, 68
+  orig: 104, 68
+  offset: 0, 0
+  index: -1
+firebolt02
+  rotate: false
+  xy: 1339, 773
+  size: 101, 69
+  orig: 101, 69
+  offset: 0, 0
+  index: -1
+firebolt03
+  rotate: false
+  xy: 804, 317
+  size: 106, 68
+  orig: 106, 68
+  offset: 0, 0
+  index: -1
+firebolt04
+  rotate: false
+  xy: 1811, 1578
+  size: 110, 68
+  orig: 110, 68
+  offset: 0, 0
+  index: -1
+侧管1
+  rotate: false
+  xy: 1811, 1531
+  size: 51, 45
+  orig: 51, 45
+  offset: 0, 0
+  index: -1
+侧管2
+  rotate: true
+  xy: 2010, 1976
+  size: 72, 18
+  orig: 72, 18
+  offset: 0, 0
+  index: -1
+图层 2
+  rotate: false
+  xy: 1608, 1445
+  size: 201, 201
+  orig: 201, 201
+  offset: 0, 0
+  index: -1
+底座
+  rotate: false
+  xy: 969, 390
+  size: 101, 50
+  orig: 101, 50
+  offset: 0, 0
+  index: -1
+底管
+  rotate: false
+  xy: 1923, 1610
+  size: 26, 36
+  orig: 26, 36
+  offset: 0, 0
+  index: -1
+炮口
+  rotate: false
+  xy: 1608, 1317
+  size: 50, 55
+  orig: 50, 55
+  offset: 0, 0
+  index: -1
+炮台
+  rotate: false
+  xy: 1206, 771
+  size: 131, 71
+  orig: 131, 71
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_00
+  rotate: false
+  xy: 0, 1648
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_01
+  rotate: false
+  xy: 0, 1246
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_02
+  rotate: false
+  xy: 402, 1648
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_03
+  rotate: false
+  xy: 0, 844
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_04
+  rotate: false
+  xy: 402, 1246
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_05
+  rotate: false
+  xy: 804, 1648
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_06
+  rotate: false
+  xy: 0, 442
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_07
+  rotate: false
+  xy: 402, 844
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_08
+  rotate: false
+  xy: 804, 1246
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_09
+  rotate: false
+  xy: 1206, 1648
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_10
+  rotate: false
+  xy: 0, 40
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_11
+  rotate: false
+  xy: 402, 442
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_12
+  rotate: false
+  xy: 804, 844
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_13
+  rotate: false
+  xy: 1206, 1246
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_14
+  rotate: false
+  xy: 1608, 1648
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_15
+  rotate: false
+  xy: 402, 40
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_16
+  rotate: false
+  xy: 804, 442
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+炮台轰击/Turret Explosion_17
+  rotate: false
+  xy: 1206, 844
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+阴影
+  rotate: false
+  xy: 804, 387
+  size: 163, 53
+  orig: 163, 53
+  offset: 0, 0
+  index: -1
+顶灯
+  rotate: false
+  xy: 0, 0
+  size: 38, 38
+  orig: 38, 38
+  offset: 0, 0
+  index: -1

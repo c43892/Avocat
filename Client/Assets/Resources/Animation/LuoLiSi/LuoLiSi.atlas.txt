@@ -1,0 +1,572 @@
+
+洛里斯2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Sparks/Sparks_02
+  rotate: false
+  xy: 402, 1745
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_03
+  rotate: false
+  xy: 0, 941
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_04
+  rotate: false
+  xy: 402, 1443
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_05
+  rotate: false
+  xy: 704, 1745
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_06
+  rotate: false
+  xy: 0, 639
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_07
+  rotate: false
+  xy: 704, 1443
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_08
+  rotate: false
+  xy: 1006, 1745
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_09
+  rotate: false
+  xy: 0, 337
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_10
+  rotate: false
+  xy: 1006, 1443
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_11
+  rotate: false
+  xy: 1308, 1745
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_12
+  rotate: false
+  xy: 0, 35
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_13
+  rotate: false
+  xy: 1308, 1443
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_14
+  rotate: false
+  xy: 1610, 1745
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_15
+  rotate: false
+  xy: 1610, 1443
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_16
+  rotate: false
+  xy: 402, 1141
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_17
+  rotate: false
+  xy: 704, 1141
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_18
+  rotate: false
+  xy: 1006, 1141
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_19
+  rotate: false
+  xy: 1308, 1141
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_20
+  rotate: false
+  xy: 1610, 1141
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_21
+  rotate: false
+  xy: 302, 839
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_22
+  rotate: false
+  xy: 302, 537
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_23
+  rotate: false
+  xy: 604, 839
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_24
+  rotate: false
+  xy: 302, 235
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_25
+  rotate: false
+  xy: 604, 537
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_26
+  rotate: false
+  xy: 906, 839
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_27
+  rotate: false
+  xy: 604, 235
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_28
+  rotate: false
+  xy: 906, 537
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_29
+  rotate: false
+  xy: 1208, 839
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_30
+  rotate: false
+  xy: 906, 235
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_31
+  rotate: false
+  xy: 1208, 537
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_32
+  rotate: false
+  xy: 1510, 839
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_33
+  rotate: false
+  xy: 1208, 235
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_34
+  rotate: false
+  xy: 1510, 537
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_35
+  rotate: false
+  xy: 1510, 235
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+上身
+  rotate: false
+  xy: 302, 1189
+  size: 42, 52
+  orig: 42, 52
+  offset: 0, 0
+  index: -1
+前发
+  rotate: false
+  xy: 44, 9
+  size: 34, 24
+  orig: 34, 24
+  offset: 0, 0
+  index: -1
+受伤爆炸效果1
+  rotate: false
+  xy: 0, 1645
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+受伤爆炸效果2
+  rotate: false
+  xy: 0, 1243
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+受击
+  rotate: true
+  xy: 1812, 1038
+  size: 101, 86
+  orig: 101, 86
+  offset: 0, 0
+  index: -1
+右大腿
+  rotate: false
+  xy: 1967, 1905
+  size: 25, 37
+  orig: 25, 37
+  offset: 0, 0
+  index: -1
+右大臂
+  rotate: true
+  xy: 2019, 1973
+  size: 21, 29
+  orig: 21, 29
+  offset: 0, 0
+  index: -1
+右小腿
+  rotate: false
+  xy: 1812, 893
+  size: 26, 40
+  orig: 26, 40
+  offset: 0, 0
+  index: -1
+右小臂
+  rotate: false
+  xy: 302, 1150
+  size: 23, 37
+  orig: 23, 37
+  offset: 0, 0
+  index: -1
+右手
+  rotate: false
+  xy: 1994, 1920
+  size: 20, 22
+  orig: 20, 22
+  offset: 0, 0
+  index: -1
+右肩甲 前片
+  rotate: false
+  xy: 2019, 1945
+  size: 28, 26
+  orig: 28, 26
+  offset: 0, 0
+  index: -1
+右肩甲 后片
+  rotate: true
+  xy: 385, 1220
+  size: 21, 15
+  orig: 21, 15
+  offset: 0, 0
+  index: -1
+右脚
+  rotate: false
+  xy: 327, 1173
+  size: 17, 14
+  orig: 17, 14
+  offset: 0, 0
+  index: -1
+后发
+  rotate: true
+  xy: 1967, 1884
+  size: 19, 24
+  orig: 19, 24
+  offset: 0, 0
+  index: -1
+围裙 1
+  rotate: true
+  xy: 0, 0
+  size: 33, 42
+  orig: 33, 42
+  offset: 0, 0
+  index: -1
+围裙 2
+  rotate: true
+  xy: 2019, 1996
+  size: 49, 29
+  orig: 49, 29
+  offset: 0, 0
+  index: -1
+头巾 1
+  rotate: false
+  xy: 346, 1218
+  size: 37, 23
+  orig: 37, 23
+  offset: 0, 0
+  index: -1
+头巾 2
+  rotate: false
+  xy: 611, 156
+  size: 21, 33
+  orig: 21, 33
+  offset: 0, 0
+  index: -1
+左大腿
+  rotate: false
+  xy: 1912, 1730
+  size: 26, 37
+  orig: 26, 37
+  offset: 0, 0
+  index: -1
+左大臂
+  rotate: false
+  xy: 639, 205
+  size: 23, 28
+  orig: 23, 28
+  offset: 0, 0
+  index: -1
+左小腿
+  rotate: false
+  xy: 611, 191
+  size: 26, 42
+  orig: 26, 42
+  offset: 0, 0
+  index: -1
+左小臂
+  rotate: false
+  xy: 508, 90
+  size: 26, 30
+  orig: 26, 30
+  offset: 0, 0
+  index: -1
+左手
+  rotate: false
+  xy: 1840, 911
+  size: 23, 22
+  orig: 23, 22
+  offset: 0, 0
+  index: -1
+左肩甲
+  rotate: false
+  xy: 1912, 1704
+  size: 21, 24
+  orig: 21, 24
+  offset: 0, 0
+  index: -1
+左脚
+  rotate: true
+  xy: 1940, 1746
+  size: 21, 12
+  orig: 21, 12
+  offset: 0, 0
+  index: -1
+底座
+  rotate: true
+  xy: 1967, 1944
+  size: 101, 50
+  orig: 101, 50
+  offset: 0, 0
+  index: -1
+待机
+  rotate: false
+  xy: 508, 147
+  size: 101, 86
+  orig: 101, 86
+  offset: 0, 0
+  index: -1
+攻击
+  rotate: true
+  xy: 1812, 935
+  size: 101, 86
+  orig: 101, 86
+  offset: 0, 0
+  index: -1
+武器
+  rotate: false
+  xy: 1912, 1769
+  size: 41, 111
+  orig: 41, 111
+  offset: 0, 0
+  index: -1
+腰带
+  rotate: false
+  xy: 560, 133
+  size: 43, 12
+  orig: 43, 12
+  offset: 0, 0
+  index: -1
+腰绳
+  rotate: false
+  xy: 508, 122
+  size: 50, 23
+  orig: 50, 23
+  offset: 0, 0
+  index: -1
+腰饰
+  rotate: false
+  xy: 1812, 863
+  size: 23, 28
+  orig: 23, 28
+  offset: 0, 0
+  index: -1
+边框
+  rotate: false
+  xy: 302, 29
+  size: 204, 204
+  orig: 204, 204
+  offset: 0, 0
+  index: -1
+阴影
+  rotate: true
+  xy: 1912, 1882
+  size: 163, 53
+  orig: 163, 53
+  offset: 0, 0
+  index: -1
+颈部
+  rotate: false
+  xy: 346, 1193
+  size: 19, 23
+  orig: 19, 23
+  offset: 0, 0
+  index: -1
+
+洛里斯22.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Sparks/Sparks_36
+  rotate: false
+  xy: 0, 604
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_37
+  rotate: false
+  xy: 0, 302
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_38
+  rotate: false
+  xy: 302, 604
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_39
+  rotate: false
+  xy: 0, 0
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_40
+  rotate: false
+  xy: 302, 302
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_41
+  rotate: false
+  xy: 604, 604
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_42
+  rotate: false
+  xy: 302, 0
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_43
+  rotate: false
+  xy: 604, 302
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_44
+  rotate: false
+  xy: 906, 604
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_45
+  rotate: false
+  xy: 604, 0
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+Sparks/Sparks_46
+  rotate: false
+  xy: 906, 302
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1

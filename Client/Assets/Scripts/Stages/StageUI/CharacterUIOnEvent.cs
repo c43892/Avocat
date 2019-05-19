@@ -14,7 +14,8 @@ static class CharacterUIOnEvent
     public static void SetupUIHandler(this BattleStage BattleStage, BattleRoomClient room) {
         var bt = BattleStage.Battle as BattlePVE;
         var aniPlayer = BattleStage.GetComponent<MapAniPlayer>();
-        var characterui = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI;
+        var stageUI = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
+        var characterui = stageUI.CharacterInfoUI;
         bt.OnAddHP += (warrior, dhp) =>
         {
             aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
@@ -40,16 +41,16 @@ static class CharacterUIOnEvent
             // 如果英雄完成回合则w动作显示技能框
             if (isActionDone)
             {
-                BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkill(warrior);
-                BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
+                stageUI.SkillButtonUI.UpdateSkill(warrior);
+                stageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
             }
         };
 
         // 回合结束清除左上角信息栏显示
         bt.OnActionDone += (int team) =>
         {
-            BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.gameObject.SetActive(false);
-            BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().obstacleUI.gameObject.SetActive(false);
+            stageUI.CharacterInfoUI.gameObject.SetActive(false);
+            stageUI.obstacleUI.gameObject.SetActive(false);
         };
 
         // 角色死亡清除信息栏显示

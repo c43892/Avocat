@@ -11,7 +11,7 @@ namespace Avocat
     /// </summary>
     public interface ITransformable
     {
-        string State { set; }
+        string State { set; get; }
     }
 
     /// <summary>
@@ -23,7 +23,6 @@ namespace Avocat
             :base (map)
         {
         }
-        public string EnglishName;
         public WarriorAI AI { get; set; } // AI 类型
         public bool IsBoss { get; set; } = false; // 是否是 boss
 

@@ -31,11 +31,11 @@ public class CharacterInfoUI : MonoBehaviour
         if (warrior is Hero)
         {
             ChampPhoto.SetActive(true);
-            ChampPhoto.GetComponent<Image>().sprite = Resources.Load("UI/ChampPhoto/" + warrior.EnglishName, typeof(Sprite)) as Sprite;
+            ChampPhoto.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/ChampPhoto/" + warrior.Name) as Sprite;
         }
         else {
             EnemyPhoto.SetActive(true);
-            EnemyPhoto.GetComponent<Image>().sprite = Resources.Load("UI/ChampPhoto/" + warrior.EnglishName, typeof(Sprite)) as Sprite;
+            EnemyPhoto.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/ChampPhoto/" + warrior.Name) as Sprite;
         }
     }
 
@@ -44,7 +44,7 @@ public class CharacterInfoUI : MonoBehaviour
         if (warrior is Hero)
         {
             ChampType.SetActive(true);
-            ChampType.GetComponent<Image>().sprite = Resources.Load("UI/CardType/" + (warrior as Hero).CardType, typeof(Sprite)) as Sprite;
+            ChampType.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/CardType/" + (warrior as Hero).CardType) as Sprite;
         }
         else {
             ChampType.SetActive(false);
@@ -99,7 +99,7 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void ShowWarriorName(Warrior warrior)
     {
-        ChampName.GetComponent<Text>().text = warrior.Name;
+        ChampName.GetComponent<Text>().text = warrior.DisplayName;
     }
 
     public void UpdateSkillPicture(Warrior warrior)
@@ -108,18 +108,18 @@ public class CharacterInfoUI : MonoBehaviour
         ActiveSkill.SetActive(false);
         var AllPassiveSkills = (warrior as BattleMapItem).Buffs;
         if (warrior.GetDefaultActiveSkill() != null) {
-            ActiveSkill.GetComponent<Image>().sprite = Resources.Load("UI/Skill/" + warrior.GetDefaultActiveSkill().Name, typeof(Sprite)) as Sprite;
+            ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().Name) as Sprite;
             ActiveSkill.SetActive(true);
         }
         FC.For(AllPassiveSkills.Count, (i) =>
         {
             if (AllPassiveSkills[i] is PatternSkill)
             {
-                ActiveSkill.GetComponent<Image>().sprite = Resources.Load("UI/Skill/" + AllPassiveSkills[i].Name, typeof(Sprite)) as Sprite;
+                ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].Name) as Sprite;
                 ActiveSkill.SetActive(true);
             }
             else if (AllPassiveSkills[i] is PassiveSkill) {
-                PassiveSkill.GetComponent<Image>().sprite = Resources.Load("UI/Skill/" + AllPassiveSkills[i].Name, typeof(Sprite)) as Sprite;
+                PassiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].Name) as Sprite;
                 PassiveSkill.SetActive(true);
             }
         });
@@ -141,7 +141,7 @@ public class CharacterInfoUI : MonoBehaviour
                     if (!isBUFFPicTaken[j])
                     {
                         BUFFPic[j].SetActive(true);
-                        BUFFPic[j].GetComponent<Image>().sprite = Resources.Load("UI/BUFFs/" + warrior.Buffs[i].Name, typeof(Sprite)) as Sprite;                      
+                        BUFFPic[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/BUFFs/" + warrior.Buffs[i].Name) as Sprite;                      
                         isBUFFPicTaken[j] = true;
                         break;
                     }

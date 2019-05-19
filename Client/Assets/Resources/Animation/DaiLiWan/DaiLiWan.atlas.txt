@@ -1,0 +1,745 @@
+
+呆立万10.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+healing Sparks01
+  rotate: false
+  xy: 0, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks02
+  rotate: false
+  xy: 1604, 1848
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks03
+  rotate: false
+  xy: 0, 42
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks04
+  rotate: false
+  xy: 202, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks05
+  rotate: false
+  xy: 1604, 1646
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks06
+  rotate: false
+  xy: 1806, 1848
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks07
+  rotate: false
+  xy: 202, 42
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks08
+  rotate: false
+  xy: 404, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks09
+  rotate: false
+  xy: 1604, 1444
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks10
+  rotate: false
+  xy: 1806, 1646
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks11
+  rotate: false
+  xy: 404, 42
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks12
+  rotate: false
+  xy: 606, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks13
+  rotate: false
+  xy: 1604, 1242
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks14
+  rotate: false
+  xy: 1806, 1444
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks15
+  rotate: false
+  xy: 606, 42
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks16
+  rotate: false
+  xy: 808, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks17
+  rotate: false
+  xy: 1604, 1040
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks18
+  rotate: false
+  xy: 1806, 1242
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks19
+  rotate: false
+  xy: 808, 42
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks20
+  rotate: false
+  xy: 1010, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks21
+  rotate: false
+  xy: 1604, 838
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks22
+  rotate: false
+  xy: 1806, 1040
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks23
+  rotate: false
+  xy: 1010, 42
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+healing Sparks24
+  rotate: false
+  xy: 1212, 244
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+上身
+  rotate: false
+  xy: 0, 0
+  size: 37, 40
+  orig: 37, 40
+  offset: 0, 0
+  index: -1
+前发 1
+  rotate: false
+  xy: 1336, 193
+  size: 37, 49
+  orig: 37, 49
+  offset: 0, 0
+  index: -1
+前发 2
+  rotate: true
+  xy: 1414, 255
+  size: 19, 46
+  orig: 19, 46
+  offset: 0, 0
+  index: -1
+前发 3
+  rotate: true
+  xy: 1502, 394
+  size: 50, 80
+  orig: 50, 80
+  offset: 0, 0
+  index: -1
+前发 4
+  rotate: false
+  xy: 1806, 858
+  size: 41, 55
+  orig: 41, 55
+  offset: 0, 0
+  index: -1
+发饰 1
+  rotate: false
+  xy: 1375, 222
+  size: 25, 20
+  orig: 25, 20
+  offset: 0, 0
+  index: -1
+发饰 2
+  rotate: true
+  xy: 1584, 405
+  size: 39, 17
+  orig: 39, 17
+  offset: 0, 0
+  index: -1
+发饰 3
+  rotate: false
+  xy: 2008, 1957
+  size: 34, 24
+  orig: 34, 24
+  offset: 0, 0
+  index: -1
+受击
+  rotate: false
+  xy: 1414, 366
+  size: 86, 78
+  orig: 86, 78
+  offset: 0, 0
+  index: -1
+口器
+  rotate: false
+  xy: 1849, 875
+  size: 10, 13
+  orig: 10, 13
+  offset: 0, 0
+  index: -1
+右大腿
+  rotate: false
+  xy: 39, 6
+  size: 25, 34
+  orig: 25, 34
+  offset: 0, 0
+  index: -1
+右大臂
+  rotate: true
+  xy: 1543, 375
+  size: 17, 24
+  orig: 17, 24
+  offset: 0, 0
+  index: -1
+右小腿
+  rotate: true
+  xy: 1502, 369
+  size: 23, 39
+  orig: 23, 39
+  offset: 0, 0
+  index: -1
+右小臂
+  rotate: false
+  xy: 1932, 957
+  size: 22, 26
+  orig: 22, 26
+  offset: 0, 0
+  index: -1
+右手
+  rotate: true
+  xy: 1647, 553
+  size: 18, 21
+  orig: 18, 21
+  offset: 0, 0
+  index: -1
+右翅1
+  rotate: false
+  xy: 1604, 721
+  size: 115, 115
+  orig: 115, 115
+  offset: 0, 0
+  index: -1
+右翅2
+  rotate: false
+  xy: 1806, 915
+  size: 78, 68
+  orig: 78, 68
+  offset: 0, 0
+  index: -1
+右肩遮罩
+  rotate: false
+  xy: 1280, 111
+  size: 9, 9
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+右脚
+  rotate: false
+  xy: 1718, 675
+  size: 15, 11
+  orig: 15, 11
+  offset: 0, 0
+  index: -1
+右脚1-1
+  rotate: false
+  xy: 1670, 586
+  size: 10, 15
+  orig: 10, 15
+  offset: 0, 0
+  index: -1
+右脚1-2
+  rotate: false
+  xy: 1932, 942
+  size: 10, 13
+  orig: 10, 13
+  offset: 0, 0
+  index: -1
+右脚1-3
+  rotate: true
+  xy: 1971, 991
+  size: 8, 28
+  orig: 8, 28
+  offset: 0, 0
+  index: -1
+右脚2-1
+  rotate: false
+  xy: 1745, 701
+  size: 8, 18
+  orig: 8, 18
+  offset: 0, 0
+  index: -1
+右脚2-2
+  rotate: false
+  xy: 1956, 970
+  size: 7, 13
+  orig: 7, 13
+  offset: 0, 0
+  index: -1
+右脚2-3
+  rotate: false
+  xy: 1320, 136
+  size: 7, 32
+  orig: 7, 32
+  offset: 0, 0
+  index: -1
+右脚3-1
+  rotate: false
+  xy: 1921, 918
+  size: 7, 15
+  orig: 7, 15
+  offset: 0, 0
+  index: -1
+右脚3-2
+  rotate: false
+  xy: 1375, 208
+  size: 6, 12
+  orig: 6, 12
+  offset: 0, 0
+  index: -1
+右脚3-3
+  rotate: true
+  xy: 1806, 843
+  size: 13, 39
+  orig: 13, 39
+  offset: 0, 0
+  index: -1
+后发
+  rotate: false
+  xy: 1262, 170
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+头花
+  rotate: false
+  xy: 1262, 133
+  size: 56, 35
+  orig: 56, 35
+  offset: 0, 0
+  index: -1
+头部
+  rotate: true
+  xy: 1212, 61
+  size: 59, 42
+  orig: 59, 42
+  offset: 0, 0
+  index: -1
+屁屁
+  rotate: false
+  xy: 1604, 551
+  size: 41, 20
+  orig: 41, 20
+  offset: 0, 0
+  index: -1
+左大腿
+  rotate: false
+  xy: 1718, 688
+  size: 25, 31
+  orig: 25, 31
+  offset: 0, 0
+  index: -1
+左大臂
+  rotate: false
+  xy: 1463, 293
+  size: 20, 24
+  orig: 20, 24
+  offset: 0, 0
+  index: -1
+左小腿
+  rotate: true
+  xy: 1336, 171
+  size: 20, 28
+  orig: 20, 28
+  offset: 0, 0
+  index: -1
+左小臂
+  rotate: false
+  xy: 1256, 96
+  size: 22, 24
+  orig: 22, 24
+  offset: 0, 0
+  index: -1
+左手
+  rotate: false
+  xy: 1604, 528
+  size: 19, 21
+  orig: 19, 21
+  offset: 0, 0
+  index: -1
+左翅1
+  rotate: false
+  xy: 1212, 122
+  size: 48, 120
+  orig: 48, 120
+  offset: 0, 0
+  index: -1
+左翅2
+  rotate: false
+  xy: 2008, 1983
+  size: 39, 65
+  orig: 39, 65
+  offset: 0, 0
+  index: -1
+左脚
+  rotate: false
+  xy: 66, 24
+  size: 19, 16
+  orig: 19, 16
+  offset: 0, 0
+  index: -1
+左脚1-1
+  rotate: false
+  xy: 1256, 81
+  size: 6, 13
+  orig: 6, 13
+  offset: 0, 0
+  index: -1
+左脚1-2
+  rotate: false
+  xy: 1302, 122
+  size: 11, 9
+  orig: 11, 9
+  offset: 0, 0
+  index: -1
+左脚1-3
+  rotate: false
+  xy: 1790, 725
+  size: 7, 23
+  orig: 7, 23
+  offset: 0, 0
+  index: -1
+左脚2-1
+  rotate: true
+  xy: 1584, 396
+  size: 7, 17
+  orig: 7, 17
+  offset: 0, 0
+  index: -1
+左脚2-2
+  rotate: false
+  xy: 1402, 234
+  size: 10, 8
+  orig: 10, 8
+  offset: 0, 0
+  index: -1
+左脚2-3
+  rotate: true
+  xy: 1414, 246
+  size: 7, 32
+  orig: 7, 32
+  offset: 0, 0
+  index: -1
+左脚3-1
+  rotate: false
+  xy: 1366, 177
+  size: 6, 14
+  orig: 6, 14
+  offset: 0, 0
+  index: -1
+左脚3-2
+  rotate: false
+  xy: 1463, 283
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+左脚3-3
+  rotate: false
+  xy: 1670, 603
+  size: 19, 36
+  orig: 19, 36
+  offset: 0, 0
+  index: -1
+待机
+  rotate: false
+  xy: 1604, 641
+  size: 86, 78
+  orig: 86, 78
+  offset: 0, 0
+  index: -1
+护裆
+  rotate: false
+  xy: 1463, 319
+  size: 20, 45
+  orig: 20, 45
+  offset: 0, 0
+  index: -1
+披肩 1
+  rotate: false
+  xy: 1414, 276
+  size: 47, 88
+  orig: 47, 88
+  offset: 0, 0
+  index: -1
+披肩 2
+  rotate: false
+  xy: 1604, 573
+  size: 64, 66
+  orig: 64, 66
+  offset: 0, 0
+  index: -1
+攻击
+  rotate: true
+  xy: 1721, 750
+  size: 86, 78
+  orig: 86, 78
+  offset: 0, 0
+  index: -1
+腰部
+  rotate: false
+  xy: 1886, 917
+  size: 33, 16
+  orig: 33, 16
+  offset: 0, 0
+  index: -1
+腰饰 1
+  rotate: true
+  xy: 1212, 45
+  size: 14, 41
+  orig: 14, 41
+  offset: 0, 0
+  index: -1
+腰饰 2
+  rotate: false
+  xy: 1849, 890
+  size: 30, 23
+  orig: 30, 23
+  offset: 0, 0
+  index: -1
+腰饰 3
+  rotate: true
+  xy: 1262, 122
+  size: 9, 38
+  orig: 9, 38
+  offset: 0, 0
+  index: -1
+腰饰 4
+  rotate: false
+  xy: 1485, 344
+  size: 13, 20
+  orig: 13, 20
+  offset: 0, 0
+  index: -1
+腹部
+  rotate: false
+  xy: 1886, 935
+  size: 44, 48
+  orig: 44, 48
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_01
+  rotate: false
+  xy: 0, 1248
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_03
+  rotate: false
+  xy: 0, 446
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_06
+  rotate: false
+  xy: 802, 1248
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_08
+  rotate: false
+  xy: 802, 446
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+触角1
+  rotate: false
+  xy: 1692, 642
+  size: 24, 77
+  orig: 24, 77
+  offset: 0, 0
+  index: -1
+触角2
+  rotate: true
+  xy: 1721, 721
+  size: 27, 67
+  orig: 27, 67
+  offset: 0, 0
+  index: -1
+身体
+  rotate: true
+  xy: 1971, 1001
+  size: 37, 29
+  orig: 37, 29
+  offset: 0, 0
+  index: -1
+阴影
+  rotate: false
+  xy: 1806, 985
+  size: 163, 53
+  orig: 163, 53
+  offset: 0, 0
+  index: -1
+颈部
+  rotate: false
+  xy: 2008, 1940
+  size: 14, 15
+  orig: 14, 15
+  offset: 0, 0
+  index: -1
+
+呆立万102.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+蝶粉时间短/合成 1_10
+  rotate: false
+  xy: 0, 802
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_11
+  rotate: false
+  xy: 0, 0
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_12
+  rotate: false
+  xy: 802, 802
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_14
+  rotate: false
+  xy: 802, 0
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+
+呆立万103.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+蝶粉时间短/合成 1_16
+  rotate: false
+  xy: 0, 802
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_27
+  rotate: false
+  xy: 0, 0
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_28
+  rotate: false
+  xy: 802, 802
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_29
+  rotate: false
+  xy: 802, 0
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+
+呆立万104.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+蝶粉时间短/合成 1_30
+  rotate: false
+  xy: 0, 0
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1
+蝶粉时间短/合成 1_31
+  rotate: false
+  xy: 802, 0
+  size: 800, 800
+  orig: 800, 800
+  offset: 0, 0
+  index: -1

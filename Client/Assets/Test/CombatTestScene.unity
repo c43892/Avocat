@@ -1408,6 +1408,92 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303378296}
   m_CullTransparentMesh: 0
+--- !u!1 &304676498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 990587743, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5360679074138491635}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &304676500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304676498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonDataAsset: {fileID: 0}
+  initialSkinName: 
+  initialFlipX: 0
+  initialFlipY: 0
+  separatorSlotNames: []
+  zSpacing: 0
+  useClipping: 1
+  immutableTriangles: 0
+  pmaVertexColors: 1
+  clearStateOnDisable: 0
+  tintBlack: 0
+  singleSubmesh: 0
+  addNormals: 0
+  calculateTangents: 0
+  maskInteraction: 0
+  maskMaterials:
+    materialsMaskDisabled: []
+    materialsInsideMask: []
+    materialsOutsideMask: []
+  disableRenderingOnOverride: 1
+  _animationName: 
+  loop: 0
+  timeScale: 1
+--- !u!23 &304676502
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304676498}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 27ed777f1db7e0c48a58d93322aa3c5a, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
+--- !u!33 &304676503
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304676498}
+  m_Mesh: {fileID: 0}
 --- !u!1 &311127009
 GameObject:
   m_ObjectHideFlags: 0
@@ -8294,5 +8380,6 @@ PrefabInstance:
       propertyPath: BattleStageUIRoot
       value: 
       objectReference: {fileID: 793381593}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1218762518, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}

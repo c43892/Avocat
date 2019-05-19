@@ -1,0 +1,181 @@
+
+隆脊山豚2音乐.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+下颌
+  rotate: true
+  xy: 460, 444
+  size: 64, 43
+  orig: 64, 43
+  offset: 0, 0
+  index: -1
+前牙
+  rotate: false
+  xy: 445, 373
+  size: 12, 13
+  orig: 12, 13
+  offset: 0, 0
+  index: -1
+右前腿1
+  rotate: true
+  xy: 351, 287
+  size: 39, 53
+  orig: 39, 53
+  offset: 0, 0
+  index: -1
+右前腿2
+  rotate: true
+  xy: 232, 242
+  size: 20, 32
+  orig: 20, 32
+  offset: 0, 0
+  index: -1
+右前腿3
+  rotate: false
+  xy: 199, 104
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+右后腿1
+  rotate: true
+  xy: 460, 403
+  size: 39, 47
+  orig: 39, 47
+  offset: 0, 0
+  index: -1
+右后腿2
+  rotate: true
+  xy: 275, 270
+  size: 20, 36
+  orig: 20, 36
+  offset: 0, 0
+  index: -1
+右后腿3
+  rotate: false
+  xy: 199, 124
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+右耳
+  rotate: false
+  xy: 199, 206
+  size: 29, 33
+  orig: 29, 33
+  offset: 0, 0
+  index: -1
+尾巴
+  rotate: false
+  xy: 232, 264
+  size: 41, 26
+  orig: 41, 26
+  offset: 0, 0
+  index: -1
+左前腿1
+  rotate: false
+  xy: 406, 289
+  size: 30, 37
+  orig: 30, 37
+  offset: 0, 0
+  index: -1
+左前腿2
+  rotate: false
+  xy: 199, 241
+  size: 31, 47
+  orig: 31, 47
+  offset: 0, 0
+  index: -1
+左前腿3
+  rotate: false
+  xy: 199, 88
+  size: 13, 14
+  orig: 13, 14
+  offset: 0, 0
+  index: -1
+左后腿1
+  rotate: false
+  xy: 199, 172
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+左后腿2
+  rotate: true
+  xy: 313, 275
+  size: 15, 23
+  orig: 15, 23
+  offset: 0, 0
+  index: -1
+左后腿3
+  rotate: false
+  xy: 445, 388
+  size: 13, 15
+  orig: 13, 15
+  offset: 0, 0
+  index: -1
+左牙
+  rotate: true
+  xy: 166, 0
+  size: 54, 30
+  orig: 54, 30
+  offset: 0, 0
+  index: -1
+左耳
+  rotate: false
+  xy: 199, 144
+  size: 20, 26
+  orig: 20, 26
+  offset: 0, 0
+  index: -1
+撞击1
+  rotate: true
+  xy: 0, 56
+  size: 232, 197
+  orig: 232, 197
+  offset: 0, 0
+  index: -1
+撞击2
+  rotate: false
+  xy: 0, 290
+  size: 230, 218
+  orig: 230, 218
+  offset: 0, 0
+  index: -1
+睁眼
+  rotate: false
+  xy: 232, 401
+  size: 117, 107
+  orig: 117, 107
+  offset: 0, 0
+  index: -1
+躯干
+  rotate: false
+  xy: 351, 405
+  size: 107, 103
+  orig: 107, 103
+  offset: 0, 0
+  index: -1
+闭眼
+  rotate: false
+  xy: 232, 292
+  size: 117, 107
+  orig: 117, 107
+  offset: 0, 0
+  index: -1
+阴影
+  rotate: false
+  xy: 0, 0
+  size: 164, 54
+  orig: 164, 54
+  offset: 0, 0
+  index: -1
+颈部
+  rotate: false
+  xy: 351, 328
+  size: 92, 75
+  orig: 92, 75
+  offset: 0, 0
+  index: -1

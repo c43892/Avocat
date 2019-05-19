@@ -65,7 +65,7 @@ public class UseMapItemOps : StageOpsLayer
         // 显示指针，并隐藏准备拖拽的对象
         currentSelItem = item;
         PointerIndicator.SetActive(true);
-        PointerIndicator.GetComponentInChildren<TextMesh>().text = item.Item.Name;
+        PointerIndicator.GetComponentInChildren<TextMesh>().text = item.Item.DisplayName;
         currentSelItem.gameObject.SetActive(false);
     }
 

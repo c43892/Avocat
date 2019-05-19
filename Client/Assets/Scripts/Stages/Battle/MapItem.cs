@@ -16,7 +16,7 @@ public class MapItem : MonoBehaviour
 
     public void RefreshAttrs()
     {
-        NameText.text = Item.Name;
+        NameText.text = Item.DisplayName;
         Color = ColorDefault;
     }
 

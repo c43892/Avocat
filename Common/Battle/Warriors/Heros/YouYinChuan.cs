@@ -16,8 +16,8 @@ namespace Avocat
         public YouYinChuan(Battle bt)
             : base(bt)
         {
-            Name = "游川隐";
-            EnglishName = "YouChuanYin";
+            DisplayName = "游川隐";
+            Name = "YouChuanYin";
             PatternSkill = new FlashAttack();
             SetupBuffAndSkills(null /* Configuration.Config(new TimeBack()) */, Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
         }

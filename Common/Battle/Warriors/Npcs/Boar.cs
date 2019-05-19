@@ -16,8 +16,8 @@ namespace Avocat
         public Boar(BattleMap map)
             : base(map)
         {
-            Name = "野猪";
-            EnglishName = "YeZhu";
+            DisplayName = "野猪";
+            Name = "YeZhu";
            
             AI = new WarriorAI(this).Build("NormalNpcMonster"); // AI
             Battle.AddBuff(new CounterAttack(), this); // 反击 buff

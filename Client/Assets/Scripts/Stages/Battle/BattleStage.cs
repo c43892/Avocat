@@ -164,7 +164,7 @@ public class BattleStage : MonoBehaviour
         avatar.Warrior = warrior;
         avatar.BattleStage = this;
         avatar.transform.SetParent(MapRoot);
-
+        avatar.SetAnimation(warrior);
         avatar.gameObject.SetActive(true);
         avatar.RefreshAttrs();
         SetAvatarPosition(avatar, x, y);

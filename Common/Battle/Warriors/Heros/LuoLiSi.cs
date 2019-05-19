@@ -16,8 +16,8 @@ namespace Avocat
         public LuoLiSi(Battle bt)
             : base(bt)
         {
-            Name = "洛里斯";
-            EnglishName = "LuoLiSi";
+            DisplayName = "洛里斯";
+            Name = "LuoLiSi";
             SetupBuffAndSkills(Configuration.Config(new DeployEMPConnon()), new ArtisanSpirit());
         }
     }

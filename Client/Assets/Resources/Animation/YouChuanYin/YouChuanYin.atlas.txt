@@ -1,0 +1,566 @@
+
+蓝色游船因12.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Slash Right/Slash_00
+  rotate: true
+  xy: 1912, 1748
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_01
+  rotate: false
+  xy: 1610, 1324
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_02
+  rotate: true
+  xy: 1912, 1446
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_03
+  rotate: false
+  xy: 1610, 1202
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_04
+  rotate: true
+  xy: 1912, 1144
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_05
+  rotate: false
+  xy: 1610, 1080
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_06
+  rotate: false
+  xy: 302, 1022
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_07
+  rotate: false
+  xy: 302, 900
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_08
+  rotate: false
+  xy: 604, 1022
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_09
+  rotate: false
+  xy: 302, 778
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+Slash Right/Slash_10
+  rotate: false
+  xy: 604, 900
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+swing
+  rotate: false
+  xy: 906, 938
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+上身
+  rotate: false
+  xy: 445, 712
+  size: 42, 64
+  orig: 42, 64
+  offset: 0, 0
+  index: -1
+刀 1 出鞘
+  rotate: true
+  xy: 0, 17
+  size: 19, 113
+  orig: 19, 113
+  offset: 0, 0
+  index: -1
+刀 2
+  rotate: false
+  xy: 1912, 1083
+  size: 101, 59
+  orig: 101, 59
+  offset: 0, 0
+  index: -1
+刀 2 出鞘
+  rotate: false
+  xy: 2034, 1939
+  size: 13, 109
+  orig: 13, 109
+  offset: 0, 0
+  index: -1
+刀1
+  rotate: false
+  xy: 604, 797
+  size: 75, 101
+  orig: 75, 101
+  offset: 0, 0
+  index: -1
+刀1 刀鞘
+  rotate: false
+  xy: 381, 697
+  size: 62, 79
+  orig: 62, 79
+  offset: 0, 0
+  index: -1
+刀2 刀鞘
+  rotate: false
+  xy: 1072, 1096
+  size: 79, 46
+  orig: 79, 46
+  offset: 0, 0
+  index: -1
+受伤爆炸效果1
+  rotate: false
+  xy: 0, 1648
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+受伤爆炸效果2
+  rotate: false
+  xy: 0, 1246
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+受击
+  rotate: false
+  xy: 302, 1162
+  size: 70, 82
+  orig: 70, 82
+  offset: 0, 0
+  index: -1
+右大腿
+  rotate: true
+  xy: 906, 909
+  size: 27, 39
+  orig: 27, 39
+  offset: 0, 0
+  index: -1
+右大臂
+  rotate: false
+  xy: 489, 747
+  size: 20, 29
+  orig: 20, 29
+  offset: 0, 0
+  index: -1
+右小腿
+  rotate: true
+  xy: 1153, 1096
+  size: 21, 25
+  orig: 21, 25
+  offset: 0, 0
+  index: -1
+右小臂
+  rotate: false
+  xy: 331, 560
+  size: 27, 28
+  orig: 27, 28
+  offset: 0, 0
+  index: -1
+右手
+  rotate: false
+  xy: 1024, 1027
+  size: 23, 20
+  orig: 23, 20
+  offset: 0, 0
+  index: -1
+右手 袖口
+  rotate: false
+  xy: 681, 823
+  size: 56, 75
+  orig: 56, 75
+  offset: 0, 0
+  index: -1
+右肩铠
+  rotate: false
+  xy: 374, 1185
+  size: 26, 22
+  orig: 26, 22
+  offset: 0, 0
+  index: -1
+右脚
+  rotate: false
+  xy: 331, 540
+  size: 19, 18
+  orig: 19, 18
+  offset: 0, 0
+  index: -1
+右领 前
+  rotate: true
+  xy: 1050, 1065
+  size: 21, 18
+  orig: 21, 18
+  offset: 0, 0
+  index: -1
+后脑勺
+  rotate: true
+  xy: 374, 1209
+  size: 35, 26
+  orig: 35, 26
+  offset: 0, 0
+  index: -1
+图层 198
+  rotate: true
+  xy: 739, 831
+  size: 8, 18
+  orig: 8, 18
+  offset: 0, 0
+  index: -1
+图层 222
+  rotate: false
+  xy: 2015, 1122
+  size: 9, 20
+  orig: 9, 20
+  offset: 0, 0
+  index: -1
+图层 223
+  rotate: true
+  xy: 604, 778
+  size: 17, 32
+  orig: 17, 32
+  offset: 0, 0
+  index: -1
+图层 224
+  rotate: true
+  xy: 681, 798
+  size: 23, 45
+  orig: 23, 45
+  offset: 0, 0
+  index: -1
+图层 225
+  rotate: true
+  xy: 381, 675
+  size: 20, 61
+  orig: 20, 61
+  offset: 0, 0
+  index: -1
+图层 226
+  rotate: false
+  xy: 0, 0
+  size: 22, 15
+  orig: 22, 15
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_00
+  rotate: false
+  xy: 402, 1748
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_01
+  rotate: false
+  xy: 0, 944
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_02
+  rotate: false
+  xy: 402, 1446
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_03
+  rotate: false
+  xy: 704, 1748
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_04
+  rotate: false
+  xy: 0, 642
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_05
+  rotate: false
+  xy: 704, 1446
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_06
+  rotate: false
+  xy: 1006, 1748
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_07
+  rotate: false
+  xy: 0, 340
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_08
+  rotate: false
+  xy: 1006, 1446
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_09
+  rotate: false
+  xy: 1308, 1748
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_10
+  rotate: false
+  xy: 0, 38
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_11
+  rotate: false
+  xy: 1308, 1446
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_12
+  rotate: false
+  xy: 1610, 1748
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_13
+  rotate: false
+  xy: 1610, 1446
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_14
+  rotate: false
+  xy: 402, 1144
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_15
+  rotate: false
+  xy: 704, 1144
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_16
+  rotate: false
+  xy: 1006, 1144
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+多角度攻击/多角度攻击_17
+  rotate: false
+  xy: 1308, 1144
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+左大腿
+  rotate: false
+  xy: 1024, 1049
+  size: 24, 37
+  orig: 24, 37
+  offset: 0, 0
+  index: -1
+左大臂
+  rotate: false
+  xy: 302, 508
+  size: 27, 80
+  orig: 27, 80
+  offset: 0, 0
+  index: -1
+左小腿
+  rotate: true
+  xy: 374, 1163
+  size: 20, 26
+  orig: 20, 26
+  offset: 0, 0
+  index: -1
+左小臂
+  rotate: false
+  xy: 770, 873
+  size: 22, 25
+  orig: 22, 25
+  offset: 0, 0
+  index: -1
+左手 1
+  rotate: false
+  xy: 1196, 1122
+  size: 24, 20
+  orig: 24, 20
+  offset: 0, 0
+  index: -1
+左手 2
+  rotate: false
+  xy: 302, 449
+  size: 18, 20
+  orig: 18, 20
+  offset: 0, 0
+  index: -1
+左脚
+  rotate: false
+  xy: 302, 1144
+  size: 23, 16
+  orig: 23, 16
+  offset: 0, 0
+  index: -1
+左袖内衬
+  rotate: false
+  xy: 739, 841
+  size: 29, 57
+  orig: 29, 57
+  offset: 0, 0
+  index: -1
+左袖后片
+  rotate: false
+  xy: 978, 1021
+  size: 44, 65
+  orig: 44, 65
+  offset: 0, 0
+  index: -1
+待机
+  rotate: false
+  xy: 906, 1004
+  size: 70, 82
+  orig: 70, 82
+  offset: 0, 0
+  index: -1
+护腰 1
+  rotate: false
+  xy: 302, 471
+  size: 21, 35
+  orig: 21, 35
+  offset: 0, 0
+  index: -1
+护腰 2
+  rotate: true
+  xy: 115, 17
+  size: 19, 32
+  orig: 19, 32
+  offset: 0, 0
+  index: -1
+护腰 3
+  rotate: false
+  xy: 2034, 1903
+  size: 14, 34
+  orig: 14, 34
+  offset: 0, 0
+  index: -1
+攻击
+  rotate: false
+  xy: 302, 590
+  size: 70, 82
+  orig: 70, 82
+  offset: 0, 0
+  index: -1
+腰带
+  rotate: false
+  xy: 1153, 1119
+  size: 41, 23
+  orig: 41, 23
+  offset: 0, 0
+  index: -1
+腰饰 1
+  rotate: true
+  xy: 947, 912
+  size: 24, 23
+  orig: 24, 23
+  offset: 0, 0
+  index: -1
+腰饰 2
+  rotate: true
+  xy: 348, 1144
+  size: 16, 8
+  orig: 16, 8
+  offset: 0, 0
+  index: -1
+腰饰 3
+  rotate: false
+  xy: 39, 0
+  size: 6, 15
+  orig: 6, 15
+  offset: 0, 0
+  index: -1
+腰饰 4
+  rotate: true
+  xy: 978, 1011
+  size: 8, 20
+  orig: 8, 20
+  offset: 0, 0
+  index: -1
+腰饰 5
+  rotate: true
+  xy: 445, 702
+  size: 8, 20
+  orig: 8, 20
+  offset: 0, 0
+  index: -1
+装饰
+  rotate: true
+  xy: 327, 1144
+  size: 16, 19
+  orig: 16, 19
+  offset: 0, 0
+  index: -1
+阴影
+  rotate: false
+  xy: 906, 1088
+  size: 164, 54
+  orig: 164, 54
+  offset: 0, 0
+  index: -1
+颈部
+  rotate: false
+  xy: 24, 0
+  size: 13, 15
+  orig: 13, 15
+  offset: 0, 0
+  index: -1
+马尾
+  rotate: false
+  xy: 302, 674
+  size: 77, 102
+  orig: 77, 102
+  offset: 0, 0
+  index: -1

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Swift;
 using Avocat;
+using Spine.Unity;
 
 public class MapAvatar : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class MapAvatar : MonoBehaviour
             if (this != null) // may has been destroyed.
                 RefreshAttrs2(hp, atk, es, actionDone);
         };
+
+
     }
 
     // 刷新属性值到指定值
@@ -45,7 +48,7 @@ public class MapAvatar : MonoBehaviour
     // 刷新属性值
     public void RefreshAttrs()
     {
-        NameText.text = Warrior.Name;
+        NameText.text = Warrior.DisplayName;
         RefreshAttrs2(Warrior.HP, Warrior.BasicAttackValue, Warrior.ES, Warrior.ActionDone);
     }
 
@@ -89,5 +92,51 @@ public class MapAvatar : MonoBehaviour
         {
             transform.Find("Name").Find("Name").GetComponent<TextMesh>().color = value;
         }
+    }
+
+    void SetAni(Warrior warrior, string path)
+    {
+        var atlasName = path + warrior.Name + ".atlas";
+        var skeletonName = path + warrior.Name;
+        var atlas = Resources.Load<TextAsset>(atlasName);
+        var skeletonJson = Resources.Load<TextAsset>(skeletonName);
+        var atlasdata = ScriptableObject.CreateInstance<SpineAtlasAsset>();
+
+        // 提取出atlas文件中所有的materials
+        string atlasStr = atlas.ToString();
+        string[] atlasLines = atlasStr.Split('\n');
+        List<string> _lsPng = new List<string>();
+        for (int i = 0; i < atlasLines.Length - 1; i++)
+        {
+            if (atlasLines[i].Length == 0)
+                _lsPng.Add(atlasLines[i + 1]);
+        }
+        Material[] maters = new Material[_lsPng.Count];
+        for (int i = 0; i < _lsPng.Count; i++)
+        {
+            maters[i] = new Material(Shader.Find("Spine/Skeleton"));
+            maters[i].mainTexture = Resources.Load<Texture2D>(path + _lsPng[i].Substring(0, _lsPng[i].Length - 4));
+        }
+
+        // 设置skeletonAnimation相关参数
+        atlasdata.materials = maters;
+        var runtimeAtlasAsset = SpineAtlasAsset.CreateRuntimeInstance(atlas, atlasdata.materials, true);
+        var runtimeSkeletonDataAsset = SkeletonDataAsset.CreateRuntimeInstance(skeletonJson, runtimeAtlasAsset, true);
+        var skeletonAnimation = GetComponent<SkeletonAnimation>();
+        skeletonAnimation.skeletonDataAsset = runtimeSkeletonDataAsset;
+        skeletonAnimation.Initialize(true);
+        skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+    }
+
+    public void SetAnimation(Warrior warrior) {
+        string path;
+        if (warrior is ITransformable)
+        {
+            path = "Animation/" + warrior.Name + "/" + (warrior as ITransformable).State + "/";
+        }
+        else {
+            path = "Animation/" + warrior.Name + "/";
+        }
+        SetAni(warrior, path);
     }
 }

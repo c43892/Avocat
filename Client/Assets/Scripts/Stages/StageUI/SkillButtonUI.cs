@@ -49,7 +49,7 @@ public class SkillButtonUI : MonoBehaviour
             FC.For(warrior.PatternSkill.CardsPattern.Length, (i) =>
             {
                 skillCards[i].SetActive(true);
-                skillCards[i].GetComponent<Image>().sprite = Resources.Load("UI/CardType/" + warrior.PatternSkill.CardsPattern[i], typeof(Sprite)) as Sprite;
+                skillCards[i].GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/CardType/" + warrior.PatternSkill.CardsPattern[i]) as Sprite;
             });
         }
     }

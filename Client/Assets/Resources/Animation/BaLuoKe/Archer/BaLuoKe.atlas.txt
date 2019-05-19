@@ -1,0 +1,902 @@
+
+巴洛克远程音乐4.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Ray/Ray Right_00
+  rotate: false
+  xy: 724, 924
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_01
+  rotate: false
+  xy: 724, 822
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_02
+  rotate: false
+  xy: 1226, 924
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_03
+  rotate: false
+  xy: 724, 720
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_04
+  rotate: false
+  xy: 1226, 822
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_05
+  rotate: false
+  xy: 1226, 720
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_06
+  rotate: true
+  xy: 402, 202
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_07
+  rotate: true
+  xy: 504, 202
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_08
+  rotate: true
+  xy: 606, 202
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_09
+  rotate: false
+  xy: 724, 618
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+Ray/Ray Right_10
+  rotate: false
+  xy: 1226, 618
+  size: 500, 100
+  orig: 500, 100
+  offset: 0, 0
+  index: -1
+barrow01
+  rotate: false
+  xy: 1728, 628
+  size: 50, 71
+  orig: 50, 71
+  offset: 0, 0
+  index: -1
+bdash03
+  rotate: false
+  xy: 1728, 701
+  size: 51, 323
+  orig: 51, 323
+  offset: 0, 0
+  index: -1
+bhurt0
+  rotate: true
+  xy: 1933, 575
+  size: 63, 79
+  orig: 63, 79
+  offset: 0, 0
+  index: -1
+bhurt1
+  rotate: false
+  xy: 1739, 508
+  size: 63, 79
+  orig: 63, 79
+  offset: 0, 0
+  index: -1
+bhurt2
+  rotate: false
+  xy: 1804, 508
+  size: 63, 79
+  orig: 63, 79
+  offset: 0, 0
+  index: -1
+bhurt3
+  rotate: true
+  xy: 1739, 443
+  size: 63, 79
+  orig: 63, 79
+  offset: 0, 0
+  index: -1
+bhurt4
+  rotate: false
+  xy: 1820, 427
+  size: 63, 79
+  orig: 63, 79
+  offset: 0, 0
+  index: -1
+b上身
+  rotate: true
+  xy: 385, 0
+  size: 38, 53
+  orig: 38, 53
+  offset: 0, 0
+  index: -1
+b受伤爆炸效果1
+  rotate: false
+  xy: 0, 624
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+b受伤爆炸效果2
+  rotate: false
+  xy: 0, 222
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+b受击
+  rotate: false
+  xy: 1908, 792
+  size: 79, 96
+  orig: 79, 96
+  offset: 0, 0
+  index: -1
+b右大腿
+  rotate: false
+  xy: 2021, 465
+  size: 27, 40
+  orig: 27, 40
+  offset: 0, 0
+  index: -1
+b右大臂
+  rotate: false
+  xy: 665, 1
+  size: 24, 37
+  orig: 24, 37
+  offset: 0, 0
+  index: -1
+b右小腿
+  rotate: false
+  xy: 730, 10
+  size: 20, 33
+  orig: 20, 33
+  offset: 0, 0
+  index: -1
+b右小臂
+  rotate: false
+  xy: 828, 93
+  size: 21, 22
+  orig: 21, 22
+  offset: 0, 0
+  index: -1
+b右手
+  rotate: true
+  xy: 283, 13
+  size: 18, 19
+  orig: 18, 19
+  offset: 0, 0
+  index: -1
+b右脚
+  rotate: true
+  xy: 694, 184
+  size: 16, 12
+  orig: 16, 12
+  offset: 0, 0
+  index: -1
+b左大腿
+  rotate: true
+  xy: 77, 1
+  size: 24, 41
+  orig: 24, 41
+  offset: 0, 0
+  index: -1
+b左大臂
+  rotate: true
+  xy: 214, 8
+  size: 23, 33
+  orig: 23, 33
+  offset: 0, 0
+  index: -1
+b左小腿
+  rotate: true
+  xy: 784, 72
+  size: 18, 29
+  orig: 18, 29
+  offset: 0, 0
+  index: -1
+b左小臂
+  rotate: false
+  xy: 725, 45
+  size: 24, 28
+  orig: 24, 28
+  offset: 0, 0
+  index: -1
+b左手
+  rotate: false
+  xy: 816, 308
+  size: 17, 20
+  orig: 17, 20
+  offset: 0, 0
+  index: -1
+b左护臂后
+  rotate: false
+  xy: 816, 271
+  size: 15, 13
+  orig: 15, 13
+  offset: 0, 0
+  index: -1
+b左脚
+  rotate: true
+  xy: 708, 644
+  size: 19, 10
+  orig: 19, 10
+  offset: 0, 0
+  index: -1
+b弓
+  rotate: true
+  xy: 1781, 670
+  size: 38, 150
+  orig: 38, 150
+  offset: 0, 0
+  index: -1
+b弓弦 3
+  rotate: true
+  xy: 0, 27
+  size: 4, 132
+  orig: 4, 132
+  offset: 0, 0
+  index: -1
+b待机
+  rotate: false
+  xy: 304, 8
+  size: 79, 96
+  orig: 79, 96
+  offset: 0, 0
+  index: -1
+b护脖
+  rotate: true
+  xy: 158, 0
+  size: 31, 18
+  orig: 31, 18
+  offset: 0, 0
+  index: -1
+b护腰
+  rotate: false
+  xy: 1869, 508
+  size: 43, 20
+  orig: 43, 20
+  offset: 0, 0
+  index: -1
+b护裆
+  rotate: false
+  xy: 2014, 580
+  size: 34, 58
+  orig: 34, 58
+  offset: 0, 0
+  index: -1
+b攻击
+  rotate: true
+  xy: 1780, 589
+  size: 79, 96
+  orig: 79, 96
+  offset: 0, 0
+  index: -1
+b箭
+  rotate: true
+  xy: 1989, 803
+  size: 85, 13
+  orig: 85, 13
+  offset: 0, 0
+  index: -1
+b箭筒
+  rotate: false
+  xy: 807, 423
+  size: 19, 83
+  orig: 19, 83
+  offset: 0, 0
+  index: -1
+b铠甲右片
+  rotate: false
+  xy: 752, 16
+  size: 20, 28
+  orig: 20, 28
+  offset: 0, 0
+  index: -1
+b铠甲左片
+  rotate: false
+  xy: 2032, 508
+  size: 15, 28
+  orig: 15, 28
+  offset: 0, 0
+  index: -1
+portal-bg
+  rotate: false
+  xy: 0, 87
+  size: 133, 133
+  orig: 133, 133
+  offset: 0, 0
+  index: -1
+portal-shade
+  rotate: false
+  xy: 1781, 891
+  size: 133, 133
+  orig: 133, 133
+  offset: 0, 0
+  index: -1
+portal-streaks1
+  rotate: false
+  xy: 135, 87
+  size: 133, 133
+  orig: 133, 133
+  offset: 0, 0
+  index: -1
+portsl-streaks2
+  rotate: false
+  xy: 1781, 764
+  size: 125, 125
+  orig: 125, 125
+  offset: 0, 0
+  index: -1
+上衣下摆
+  rotate: true
+  xy: 807, 377
+  size: 44, 18
+  orig: 44, 18
+  offset: 0, 0
+  index: -1
+上衣扣子 1
+  rotate: false
+  xy: 708, 0
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+上身
+  rotate: false
+  xy: 1869, 530
+  size: 43, 57
+  orig: 43, 57
+  offset: 0, 0
+  index: -1
+书 合起 
+  rotate: false
+  xy: 1739, 591
+  size: 39, 35
+  orig: 39, 35
+  offset: 0, 0
+  index: -1
+书 打开
+  rotate: false
+  xy: 694, 75
+  size: 45, 40
+  orig: 45, 40
+  offset: 0, 0
+  index: -1
+书远近程_00
+  rotate: true
+  xy: 0, 33
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_01
+  rotate: false
+  xy: 708, 225
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_02
+  rotate: true
+  xy: 1077, 564
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_03
+  rotate: true
+  xy: 1229, 564
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_04
+  rotate: true
+  xy: 1381, 564
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_05
+  rotate: true
+  xy: 1533, 564
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_06
+  rotate: true
+  xy: 1077, 510
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_07
+  rotate: true
+  xy: 1229, 510
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_08
+  rotate: true
+  xy: 1381, 510
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_09
+  rotate: true
+  xy: 1533, 510
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_10
+  rotate: false
+  xy: 762, 225
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_11
+  rotate: true
+  xy: 390, 148
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_12
+  rotate: true
+  xy: 542, 148
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_13
+  rotate: true
+  xy: 390, 94
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_14
+  rotate: true
+  xy: 542, 94
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_15
+  rotate: true
+  xy: 1781, 710
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_16
+  rotate: true
+  xy: 152, 33
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_17
+  rotate: false
+  xy: 1685, 466
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_18
+  rotate: false
+  xy: 1933, 640
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_19
+  rotate: false
+  xy: 1987, 640
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_20
+  rotate: true
+  xy: 385, 40
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_21
+  rotate: true
+  xy: 537, 40
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_22
+  rotate: true
+  xy: 708, 171
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+书远近程_23
+  rotate: true
+  xy: 694, 117
+  size: 52, 150
+  orig: 52, 150
+  offset: 0, 0
+  index: -1
+前发 1
+  rotate: false
+  xy: 628, 4
+  size: 35, 34
+  orig: 35, 34
+  offset: 0, 0
+  index: -1
+前发 10
+  rotate: false
+  xy: 846, 137
+  size: 12, 32
+  orig: 12, 32
+  offset: 0, 0
+  index: -1
+前发 2
+  rotate: true
+  xy: 30, 1
+  size: 24, 45
+  orig: 24, 45
+  offset: 0, 0
+  index: -1
+前发 3
+  rotate: true
+  xy: 1987, 507
+  size: 29, 43
+  orig: 29, 43
+  offset: 0, 0
+  index: -1
+前发 4
+  rotate: true
+  xy: 484, 10
+  size: 28, 51
+  orig: 28, 51
+  offset: 0, 0
+  index: -1
+前发 5
+  rotate: true
+  xy: 2004, 859
+  size: 29, 44
+  orig: 29, 44
+  offset: 0, 0
+  index: -1
+前发 6
+  rotate: false
+  xy: 2004, 803
+  size: 42, 54
+  orig: 42, 54
+  offset: 0, 0
+  index: -1
+前发 7
+  rotate: false
+  xy: 440, 0
+  size: 42, 38
+  orig: 42, 38
+  offset: 0, 0
+  index: -1
+前发 8
+  rotate: true
+  xy: 2014, 538
+  size: 40, 34
+  orig: 40, 34
+  offset: 0, 0
+  index: -1
+前发 9
+  rotate: false
+  xy: 741, 76
+  size: 41, 15
+  orig: 41, 15
+  offset: 0, 0
+  index: -1
+受击
+  rotate: true
+  xy: 1914, 507
+  size: 66, 71
+  orig: 66, 71
+  offset: 0, 0
+  index: -1
+右大腿
+  rotate: true
+  xy: 689, 45
+  size: 28, 34
+  orig: 28, 34
+  offset: 0, 0
+  index: -1
+右大臂
+  rotate: true
+  xy: 2021, 445
+  size: 18, 27
+  orig: 18, 27
+  offset: 0, 0
+  index: -1
+右小腿
+  rotate: true
+  xy: 178, 7
+  size: 24, 34
+  orig: 24, 34
+  offset: 0, 0
+  index: -1
+右小臂
+  rotate: true
+  xy: 249, 7
+  size: 24, 32
+  orig: 24, 32
+  offset: 0, 0
+  index: -1
+右手 1
+  rotate: true
+  xy: 1908, 771
+  size: 19, 23
+  orig: 19, 23
+  offset: 0, 0
+  index: -1
+右手 2
+  rotate: false
+  xy: 846, 117
+  size: 21, 18
+  orig: 21, 18
+  offset: 0, 0
+  index: -1
+右脚
+  rotate: true
+  xy: 708, 684
+  size: 18, 14
+  orig: 18, 14
+  offset: 0, 0
+  index: -1
+后发 1
+  rotate: true
+  xy: 270, 87
+  size: 17, 31
+  orig: 17, 31
+  offset: 0, 0
+  index: -1
+后发 2
+  rotate: false
+  xy: 2031, 899
+  size: 17, 29
+  orig: 17, 29
+  offset: 0, 0
+  index: -1
+后发 3
+  rotate: false
+  xy: 1878, 589
+  size: 53, 79
+  orig: 53, 79
+  offset: 0, 0
+  index: -1
+图层 1 拷贝
+  rotate: false
+  xy: 1916, 890
+  size: 113, 38
+  orig: 113, 38
+  offset: 0, 0
+  index: -1
+坎肩
+  rotate: false
+  xy: 1987, 538
+  size: 23, 35
+  orig: 23, 35
+  offset: 0, 0
+  index: -1
+坎肩扣子
+  rotate: false
+  xy: 716, 0
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+屁屁
+  rotate: false
+  xy: 741, 93
+  size: 42, 22
+  orig: 42, 22
+  offset: 0, 0
+  index: -1
+左大腿
+  rotate: true
+  xy: 785, 92
+  size: 23, 41
+  orig: 23, 41
+  offset: 0, 0
+  index: -1
+左大臂
+  rotate: false
+  xy: 751, 46
+  size: 22, 28
+  orig: 22, 28
+  offset: 0, 0
+  index: -1
+左小腿
+  rotate: false
+  xy: 708, 8
+  size: 20, 35
+  orig: 20, 35
+  offset: 0, 0
+  index: -1
+左小臂
+  rotate: true
+  xy: 0, 0
+  size: 25, 28
+  orig: 25, 28
+  offset: 0, 0
+  index: -1
+左手 1
+  rotate: false
+  xy: 816, 286
+  size: 17, 20
+  orig: 17, 20
+  offset: 0, 0
+  index: -1
+左手 2
+  rotate: false
+  xy: 851, 94
+  size: 20, 21
+  orig: 20, 21
+  offset: 0, 0
+  index: -1
+左脚
+  rotate: true
+  xy: 120, 4
+  size: 21, 11
+  orig: 21, 11
+  offset: 0, 0
+  index: -1
+巴-洛克-书
+  rotate: true
+  xy: 585, 3
+  size: 35, 41
+  orig: 35, 41
+  offset: 0, 0
+  index: -1
+巴-洛克-剑+
+  rotate: true
+  xy: 537, 6
+  size: 32, 46
+  orig: 32, 46
+  offset: 0, 0
+  index: -1
+待机
+  rotate: false
+  xy: 1885, 434
+  size: 66, 71
+  orig: 66, 71
+  offset: 0, 0
+  index: -1
+披风 1
+  rotate: false
+  xy: 955, 513
+  size: 120, 103
+  orig: 120, 103
+  offset: 0, 0
+  index: -1
+披风 2
+  rotate: false
+  xy: 1916, 930
+  size: 132, 94
+  orig: 132, 94
+  offset: 0, 0
+  index: -1
+披风 3
+  rotate: true
+  xy: 708, 377
+  size: 129, 97
+  orig: 129, 97
+  offset: 0, 0
+  index: -1
+披风 4
+  rotate: false
+  xy: 831, 514
+  size: 122, 102
+  orig: 122, 102
+  offset: 0, 0
+  index: -1
+披风 5
+  rotate: false
+  xy: 708, 508
+  size: 121, 108
+  orig: 121, 108
+  offset: 0, 0
+  index: -1
+披风 6
+  rotate: false
+  xy: 270, 106
+  size: 118, 114
+  orig: 118, 114
+  offset: 0, 0
+  index: -1
+挂穗 1
+  rotate: true
+  xy: 134, 0
+  size: 31, 22
+  orig: 31, 22
+  offset: 0, 0
+  index: -1
+挂穗 2
+  rotate: true
+  xy: 1908, 764
+  size: 5, 15
+  orig: 5, 15
+  offset: 0, 0
+  index: -1
+攻击
+  rotate: false
+  xy: 1953, 434
+  size: 66, 71
+  orig: 66, 71
+  offset: 0, 0
+  index: -1
+法阵
+  rotate: false
+  xy: 402, 704
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+腰部
+  rotate: true
+  xy: 691, 0
+  size: 43, 15
+  orig: 43, 15
+  offset: 0, 0
+  index: -1
+衣领
+  rotate: true
+  xy: 816, 353
+  size: 22, 15
+  orig: 22, 15
+  offset: 0, 0
+  index: -1
+领花
+  rotate: true
+  xy: 816, 330
+  size: 21, 18
+  orig: 21, 18
+  offset: 0, 0
+  index: -1
+颈部
+  rotate: false
+  xy: 708, 665
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1

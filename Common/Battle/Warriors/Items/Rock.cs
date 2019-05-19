@@ -17,8 +17,8 @@ namespace Avocat
         public Rock(BattleMap map)
             : base(map)
         {
-            Name = "岩石";
-            EnglishName = "Rock";
+            DisplayName = "岩石";
+            Name = "Rock";
         }
 
         public int EffectRoundNum { get; set; }

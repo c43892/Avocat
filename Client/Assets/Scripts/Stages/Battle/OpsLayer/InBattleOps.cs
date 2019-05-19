@@ -114,7 +114,7 @@ public class InBattleOps : StageOpsLayer
                 if (warrior != null)
                 {
                     // 显示人物信息栏
-                    BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>().CharacterInfoUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
+                    StageUI.CharacterInfoUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
 
                     if (warrior.Team == Room.PlayerMe)
                     {

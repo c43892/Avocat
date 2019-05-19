@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Name: DaiLiWan_Atlas
+  m_EditorClassIdentifier: 
+  atlasFile: {fileID: 4900000, guid: 83c23e68b46397c48a2c3e1867e94ae1, type: 3}
+  materials:
+  - {fileID: 2100000, guid: fba1c29f750922c43914b0ed51305fee, type: 2}
+  - {fileID: 2100000, guid: ebd1423a772be804cab83b8c5b2450e8, type: 2}
+  - {fileID: 2100000, guid: e29585d0d3d084d4985b2925afbf62b4, type: 2}
+  - {fileID: 2100000, guid: 175ddc8f6a5a3f846a8eeebd55c24301, type: 2}

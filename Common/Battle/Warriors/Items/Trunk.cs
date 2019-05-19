@@ -17,8 +17,8 @@ namespace Avocat
         public Trunk(BattleMap map)
             : base(map)
         {
-            Name = "树干";
-            EnglishName = "Trunk";
+            DisplayName = "树干";
+            Name = "Trunk";
         }
         
         public int EffectRoundNum { get; set; }

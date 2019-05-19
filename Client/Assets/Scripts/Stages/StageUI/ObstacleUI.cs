@@ -12,7 +12,7 @@ public class ObstacleUI : MonoBehaviour
 
     public void UpdateObstacleInfo(BattleMapItem item) {
         gameObject.SetActive(true);
-        ObstaclePhoto.GetComponent<Image>().sprite = Resources.Load("UI/Obstacle/" + item.EnglishName, typeof(Sprite)) as Sprite;
-        ObstacleName.text = item.Name;
+        ObstaclePhoto.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Obstacle/" + item.Name) as Sprite;
+        ObstacleName.text = item.DisplayName;
     }
 }
