@@ -94,7 +94,7 @@ public class MapAvatar : MonoBehaviour
         }
     }
 
-    void SetAni(Warrior warrior, string path)
+    void SetIdleAni(Warrior warrior, string path)
     {
         var atlasName = path + warrior.Name + ".atlas";
         var skeletonName = path + warrior.Name;
@@ -128,7 +128,7 @@ public class MapAvatar : MonoBehaviour
         skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
     }
 
-    public void SetAnimation(Warrior warrior) {
+    public void SetIdleAnimation(Warrior warrior) {
         string path;
         if (warrior is ITransformable)
         {
@@ -137,6 +137,6 @@ public class MapAvatar : MonoBehaviour
         else {
             path = "Animation/" + warrior.Name + "/";
         }
-        SetAni(warrior, path);
+        SetIdleAni(warrior, path);
     }
 }

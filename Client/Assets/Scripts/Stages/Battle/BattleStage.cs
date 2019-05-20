@@ -14,6 +14,9 @@ public class BattleStage : MonoBehaviour
     // 显示操作指针
     public GameObject PointerIndicator;
 
+
+    // 战斗场景UI
+    public GameObject BattleScene;
     // 场景 UI 根节点
     public GameObject BattleStageUIRoot;
     
@@ -164,7 +167,8 @@ public class BattleStage : MonoBehaviour
         avatar.Warrior = warrior;
         avatar.BattleStage = this;
         avatar.transform.SetParent(MapRoot);
-        avatar.SetAnimation(warrior);
+        avatar.gameObject.name = warrior.Name;
+        avatar.SetIdleAnimation(warrior);
         avatar.gameObject.SetActive(true);
         avatar.RefreshAttrs();
         SetAvatarPosition(avatar, x, y);

@@ -50,6 +50,8 @@ static class BattleStageOnEvents
             var doAttackerRefresh = attackerAvatar.DelayRefreshAttrs();
             var doTargetRefresh = attackerAvatar.DelayRefreshAttrs();
 
+            var BattleScene = BattleStage.BattleScene.GetComponent<BattleScene>();
+
             aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
         };
 

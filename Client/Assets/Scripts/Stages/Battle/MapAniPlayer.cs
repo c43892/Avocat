@@ -159,20 +159,23 @@ public class MapAniPlayer : MonoBehaviour
     public MapAniPlayer MakeAttacking2(MonoBehaviour attacker, MonoBehaviour target) => Add(MakeAttacking2Impl(attacker, target));
     IEnumerator MakeAttacking2Impl(MonoBehaviour attacker, MonoBehaviour target)
     {
-        var fx = attacker.transform.localPosition.x;
-        var fy = attacker.transform.localPosition.y;
-        var tx = target.transform.localPosition.x;
-        var ty = target.transform.localPosition.y;
+        
+        //var fx = attacker.transform.localPosition.x;
+        //var fy = attacker.transform.localPosition.y;
+        //var tx = target.transform.localPosition.x;
+        //var ty = target.transform.localPosition.y;
 
-        yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { fx, fy, tx, ty });
-        yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { tx, ty, fx, fy });
+        //yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { fx, fy, tx, ty });
+        //yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { tx, ty, fx, fy });
+        yield return BattleStage.BattleScene.GetComponent<BattleScene>().SetBattleAnimation(attacker as MapAvatar, target as MapAvatar);
     }
 
     // 角色死亡
     public MapAniPlayer MakeDying(MapAvatar avatar) => Add(MakeDyingImpl(avatar));
     IEnumerator MakeDyingImpl(MapAvatar avatar)
-    {
-        yield return null;
+    {       
+        BattleStage.BattleScene.GetComponent<BattleScene>().WarriorDying(avatar);
+        yield return new WaitForSeconds(0.8f);
     }
 
     #endregion

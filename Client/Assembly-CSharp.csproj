@@ -154,6 +154,7 @@
     <Compile Include="Assets\Scripts\GameCore.cs" />
     <Compile Include="Assets\Scripts\GameDriver.cs" />
     <Compile Include="Assets\Scripts\Network\ServerPort.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\BattleScene.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\BattleStage.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\BattleStageOnEvents.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\MapAniPlayer.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\UseMapItemOps.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\PoniterIndicator.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\SpriteText.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleCardArea\BattleCardArea.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleCardArea\BattleCardUI.cs" />

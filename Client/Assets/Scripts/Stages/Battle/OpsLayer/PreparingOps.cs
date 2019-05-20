@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Swift;
+using Spine.Unity;
 
 /// <summary>
 /// 准备阶段操作：移动英雄位置
@@ -55,6 +56,7 @@ public class PreparingOps : StageOpsLayer
         currentSelAvatar = avatar;
         PointerIndicator.SetActive(true);
         PointerIndicator.GetComponentInChildren<TextMesh>().text = avatar.Warrior.DisplayName;
+        PointerIndicator.GetComponent<PoniterIndicator>().SetIdleAnimation(currentSelAvatar);
         currentSelAvatar.gameObject.SetActive(false);
     }
 
