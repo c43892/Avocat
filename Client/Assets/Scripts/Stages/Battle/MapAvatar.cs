@@ -96,32 +96,8 @@ public class MapAvatar : MonoBehaviour
 
     void SetIdleAni(Warrior warrior, string path)
     {
-        var atlasName = path + warrior.Name + ".atlas";
-        var skeletonName = path + warrior.Name;
-        var atlas = Resources.Load<TextAsset>(atlasName);
-        var skeletonJson = Resources.Load<TextAsset>(skeletonName);
-        var atlasdata = ScriptableObject.CreateInstance<SpineAtlasAsset>();
-
-        // 提取出atlas文件中所有的materials
-        string atlasStr = atlas.ToString();
-        string[] atlasLines = atlasStr.Split('\n');
-        List<string> _lsPng = new List<string>();
-        for (int i = 0; i < atlasLines.Length - 1; i++)
-        {
-            if (atlasLines[i].Length == 0)
-                _lsPng.Add(atlasLines[i + 1]);
-        }
-        Material[] maters = new Material[_lsPng.Count];
-        for (int i = 0; i < _lsPng.Count; i++)
-        {
-            maters[i] = new Material(Shader.Find("Spine/Skeleton"));
-            maters[i].mainTexture = Resources.Load<Texture2D>(path + _lsPng[i].Substring(0, _lsPng[i].Length - 4));
-        }
-
-        // 设置skeletonAnimation相关参数
-        atlasdata.materials = maters;
-        var runtimeAtlasAsset = SpineAtlasAsset.CreateRuntimeInstance(atlas, atlasdata.materials, true);
-        var runtimeSkeletonDataAsset = SkeletonDataAsset.CreateRuntimeInstance(skeletonJson, runtimeAtlasAsset, true);
+        var skeletonName = path + warrior.Name + "_SkeletonData";
+        var runtimeSkeletonDataAsset = Resources.Load<SkeletonDataAsset>(skeletonName);
         var skeletonAnimation = GetComponent<SkeletonAnimation>();
         skeletonAnimation.skeletonDataAsset = runtimeSkeletonDataAsset;
         skeletonAnimation.Initialize(true);

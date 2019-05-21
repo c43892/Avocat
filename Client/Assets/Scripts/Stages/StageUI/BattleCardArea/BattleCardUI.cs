@@ -41,7 +41,6 @@ public class BattleCardUI : MonoBehaviour, IPointerDownHandler, IDragHandler, ID
     // 处理卡牌拖动交换事件
     public static event Action<int, int, int, int> OnCardExchanged = null;
 
-    Vector2 originalPos = Vector2.zero;
     public BattleCard Card
     {
         get
@@ -65,6 +64,8 @@ public class BattleCardUI : MonoBehaviour, IPointerDownHandler, IDragHandler, ID
         }
     } BattleCard card;
 
+    public Transform DraggingImg { get => transform.GetChild(1); }
+    Vector2 originalPos = Vector2.zero;
     Vector2 draggingStartPos = Vector2.zero;
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -74,13 +75,13 @@ public class BattleCardUI : MonoBehaviour, IPointerDownHandler, IDragHandler, ID
     public void OnBeginDrag(PointerEventData eventData)
     {
         CardInDragging = this;
-        originalPos = transform.GetChild(1).localPosition;
+        originalPos = DraggingImg.position;
         CardInDragging.transform.SetSiblingIndex(-1);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.GetChild(1).localPosition = originalPos + (eventData.position - draggingStartPos);
+        DraggingImg.position = originalPos + (eventData.position - draggingStartPos);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -91,7 +92,7 @@ public class BattleCardUI : MonoBehaviour, IPointerDownHandler, IDragHandler, ID
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.GetChild(1).localPosition = originalPos;
+        DraggingImg.position = originalPos;
         CardInDragging = null;
     }
 }

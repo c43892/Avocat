@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
-  m_Name: "\u6E38\u5DDD\u9690_SkeletonData"
+  m_Name: BaLuoKe_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: dddb18c95b6968444bb6417e4e81133a, type: 2}
-  scale: 0.01
-  skeletonJSON: {fileID: 4900000, guid: 84914606572e3a54c8a614384fe42970, type: 3}
+  - {fileID: 11400000, guid: 82d751cd5c6d14a4b8973efc1d216022, type: 2}
+  scale: 0.005
+  skeletonJSON: {fileID: 4900000, guid: 01da1adb346159c4f8654aee7a884bae, type: 3}
   skeletonDataModifiers: []
   fromAnimation: []
   toAnimation: []
