@@ -20,7 +20,7 @@ public class PreparingOps : StageOpsLayer
     {
         WorldPos2ScenePos(x, y, out float gx, out float gy);
 
-        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
+        var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         if (currentSelAvatar == null && avatar != null && avatar.Warrior.Team == Room.PlayerMe)
         {
             // 选中要移动的角色
@@ -46,7 +46,7 @@ public class PreparingOps : StageOpsLayer
         }
 
         WorldPos2ScenePos(x, y, out float gx, out float gy);
-        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
+        var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         if (avatar == null || avatar.Warrior.Team != Room.PlayerMe)
         {
             base.OnStartDragging(x, y);
