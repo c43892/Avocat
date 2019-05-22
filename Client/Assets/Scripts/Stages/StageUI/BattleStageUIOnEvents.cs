@@ -86,5 +86,11 @@ static class BattleStageUIOnEvents
 
         InBattleOps.OnCurrentWarriorChanged += () => aniPlayer.Op(() => BattleStageUI.CardArea.RefreshEnergy(bt.Energy, bt.MaxEnergy));
         InBattleOps.OnCurrentWarriorChanged += () => aniPlayer.Op(() => BattleStageUI.RefreshItemUsage(bt.CardUsage));
+
+        BattleStageUI.BattleStage.Battle.OnPlayerPrepared += (int num) =>
+        {
+            var CardAreaTransform = BattleStageUI.CardArea.transform;
+            CardAreaTransform.parent.gameObject.SetActive(true);
+        };
     }
 }

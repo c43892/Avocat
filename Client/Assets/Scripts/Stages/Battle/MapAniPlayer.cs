@@ -7,6 +7,7 @@ using Swift;
 using Avocat;
 using UnityEngine;
 using System.Collections;
+using Spine.Unity;
 
 /// <summary>
 /// 缓存所有待播放的地图动画，并逐一播放
@@ -178,5 +179,35 @@ public class MapAniPlayer : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
     }
 
+    public MapAniPlayer FireSkill(ActiveSkill skill) => Add(FireSkillAni(skill));
+    IEnumerator FireSkillAni(ActiveSkill skill)
+    {
+        var avatar = BattleStage.GetAvatarByWarrior(skill.Warrior);
+        var MapAvatar = avatar.gameObject.transform.Find("_MapWarrior");
+        var skeletonAnimation = MapAvatar.GetComponent<SkeletonAnimation>();
+        skeletonAnimation.AnimationState.SetAnimation(0, "skill", false);
+        yield return new WaitForSeconds(2.0f);
+
+        // 如果是变身技能需要重新载入Idle动画
+        if (skill.Warrior is ITransformable)
+        {
+            avatar.SetIdleAnimation(skill.Warrior);
+        }
+        else
+        {
+            skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        }
+    }
+
+    public MapAniPlayer FireSkillAt(ActiveSkill skill, int x, int y) => Add(FireSkillAniAt(skill,x,y));
+    IEnumerator FireSkillAniAt(ActiveSkill skill, int x, int y)
+    {
+        var avatar = BattleStage.GetAvatarByWarrior(skill.Warrior);
+        var MapAvatar = avatar.gameObject.transform.Find("_MapWarrior");
+        var skeletonAnimation = MapAvatar.GetComponent<SkeletonAnimation>();
+        skeletonAnimation.AnimationState.SetAnimation(0, "skill", false);
+        yield return new WaitForSeconds(2.0f);
+        skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+    }
     #endregion
 }

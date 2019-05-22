@@ -81,7 +81,7 @@ public class PosSelOps : StageOpsLayer
                 RemoveShowRange();
                 BattleStage.InBattleOps.RemoveShowAttackRange();
                 onSelPos((int)gx, (int)gy);
-                BattleStage.StartSkillStage(false);
+                BattleStage.StartSkillStage(false);              
             }
             else
             {

@@ -10,7 +10,7 @@ public class PoniterIndicator : MonoBehaviour
     public SkeletonAnimation skeletonAnimation;
     public void SetIdleAnimation(MapAvatar avater) {
         GameObject MapWarrior = avater.gameObject;
-        skeletonAnimation.skeletonDataAsset = MapWarrior.GetComponent<SkeletonAnimation>().skeletonDataAsset;
+        skeletonAnimation.skeletonDataAsset = MapWarrior.transform.Find("_MapWarrior").GetComponent<SkeletonAnimation>().skeletonDataAsset;
         skeletonAnimation.Initialize(true);
         skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
     }

@@ -154,7 +154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &990587744
 Transform:
   m_ObjectHideFlags: 0
@@ -1806,6 +1806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PointerIndicator: {fileID: 1416850157433791606}
+  BattleScene: {fileID: 0}
   BattleStageUIRoot: {fileID: 0}
   MapGround: {fileID: 5360679074138491638}
   MapTile: {fileID: 1439316297}

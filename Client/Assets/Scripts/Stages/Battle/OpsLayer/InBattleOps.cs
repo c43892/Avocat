@@ -43,13 +43,13 @@ public class InBattleOps : StageOpsLayer
 
             if (curSelWarrior != null && curSelWarrior.Map != null)
             {
-                BattleStage.GetAvatarByWarrior(curSelWarrior).Color = MapAvatar.ColorDefault;
+                BattleStage.GetAvatarByWarrior(curSelWarrior).IsShowClickFrame = false;
             }
 
             curSelWarrior = value;
             if (curSelWarrior != null)
             {
-                BattleStage.GetAvatarByWarrior(curSelWarrior).Color = MapAvatar.ColorSelected;
+                BattleStage.GetAvatarByWarrior(curSelWarrior).IsShowClickFrame = true;
                 curSelWarrior.MovingPath.Clear();
             }
 

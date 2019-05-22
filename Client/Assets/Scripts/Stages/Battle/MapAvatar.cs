@@ -93,14 +93,27 @@ public class MapAvatar : MonoBehaviour
             transform.Find("Name").Find("Name").GetComponent<TextMesh>().color = value;
         }
     }
+    public bool IsShowClickFrame
+    {
+        get
+        {
+            return transform.Find("ClickFrame").gameObject.activeSelf ? true :false;
+        }
+        set {
+            transform.Find("ClickFrame").gameObject.SetActive(value);
+        }
+    }
 
     void SetIdleAni(Warrior warrior, string path)
     {
         var skeletonName = path + warrior.Name + "_SkeletonData";
         var runtimeSkeletonDataAsset = Resources.Load<SkeletonDataAsset>(skeletonName);
-        var skeletonAnimation = GetComponent<SkeletonAnimation>();
+        var skeletonAnimation = gameObject.transform.Find("_MapWarrior").GetComponent<SkeletonAnimation>();
         skeletonAnimation.skeletonDataAsset = runtimeSkeletonDataAsset;
         skeletonAnimation.Initialize(true);
+        if (warrior.Team != 1) {
+            skeletonAnimation.skeleton.scaleX = -1;
+        }
         skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
     }
 

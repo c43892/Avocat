@@ -46,12 +46,8 @@ static class BattleStageOnEvents
         {
             var attackerAvatar = BattleStage.GetAvatarByWarrior(attacker);
             var targetAvatar = BattleStage.GetAvatarByWarrior(target);
-
             var doAttackerRefresh = attackerAvatar.DelayRefreshAttrs();
             var doTargetRefresh = attackerAvatar.DelayRefreshAttrs();
-
-            var BattleScene = BattleStage.BattleScene.GetComponent<BattleScene>();
-
             aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
         };
 
@@ -182,6 +178,16 @@ static class BattleStageOnEvents
         bt.OnTimeBackTriggered += (BattleReplay replay) =>
         {
             aniPlayer.Op(() => BattleStage.OnTimeBackTriggered(replay));
+        };
+
+        bt.BeforeFireSkill += (ActiveSkill skill) =>
+        {
+            aniPlayer.FireSkill(skill);
+        };
+
+        bt.BeforeFireSkillAt += (ActiveSkill skill, int x, int y) =>
+        {
+            aniPlayer.FireSkillAt(skill, x, y);
         };
     }
 }

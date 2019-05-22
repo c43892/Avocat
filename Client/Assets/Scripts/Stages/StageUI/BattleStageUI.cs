@@ -80,6 +80,8 @@ public class BattleStageUI : MonoBehaviour
                     BattleStage.InBattleOps.ClearPath();
                     Room.DoMoveOnPath(warrior);
                 }
+                BattleStage.PosSelOps.RemoveShowRange();
+                BattleStage.InBattleOps.RemoveShowAttackRange();
                 Room.FireActiveSkillAt(skill, selX, selY);
             });
         }
@@ -87,11 +89,12 @@ public class BattleStageUI : MonoBehaviour
         {
             if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
             {
-                BattleStage.PosSelOps.RemoveShowRange();
-                BattleStage.InBattleOps.RemoveShowAttackRange();
+
                 BattleStage.InBattleOps.ClearPath();
                 Room.DoMoveOnPath(warrior);
             }
+            BattleStage.PosSelOps.RemoveShowRange();
+            BattleStage.InBattleOps.RemoveShowAttackRange();
             Room.FireActiveSkill(skill);
         }
     }
