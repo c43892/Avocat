@@ -97,7 +97,7 @@ public class InBattleOps : StageOpsLayer
 
     public override void OnClicked(float x, float y)
     {
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
 
         // 获取当前点击目标
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
@@ -206,7 +206,7 @@ public class InBattleOps : StageOpsLayer
     public List<MapTile> pathInSel = new List<MapTile>();
     public override void OnStartDragging(float x, float y)
     {
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
 
         // 获取当前点击目标
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
@@ -243,7 +243,7 @@ public class InBattleOps : StageOpsLayer
             return;
         }
 
-        WorldPos2ScenePos(tx, ty, out float gtx, out float gty);
+        WorldPos2MapPos(tx, ty, out float gtx, out float gty);
         var tile = BattleStage.Tiles[(int)gtx, (int)gty];
         var tailTile = pathInSel[pathInSel.Count - 1];
         if (tile == tailTile)

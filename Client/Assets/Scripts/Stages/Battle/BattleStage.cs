@@ -5,6 +5,7 @@ using Swift;
 using Avocat;
 using System;
 using UnityEngine.UI;
+using Swift.Math;
 
 /// <summary>
 /// 战斗场景
@@ -13,7 +14,6 @@ public class BattleStage : MonoBehaviour
 {
     // 显示操作指针
     public GameObject PointerIndicator;
-
 
     // 战斗场景UI
     public GameObject BattleScene;
@@ -32,8 +32,10 @@ public class BattleStage : MonoBehaviour
     public MapAvatar MapAvatar;
     public MapItem MapItem;
 
-    public Transform MapRoot; // 地图显示元素根，挂接所有模型光效等
     public Transform SceneOffset; // 处理场景缩放与平移
+    public Transform MapRoot; // 地图显示元素根，挂接所有模型光效等
+    public Transform SceneBg; // 场景背景图
+    public Vector2 SceneBgSize; // 背景图尺寸
 
     public BattleRoomClient Room { get; private set; }
     public Battle Battle { get { return Room?.Battle; } }
@@ -74,7 +76,12 @@ public class BattleStage : MonoBehaviour
         OnTimeBackTriggered = onTimeBackTriggered;
 
         // 将场景中心移动到屏幕中心
-        SceneOffset.transform.localPosition = new Vector3(-Map.Width / 2, Map.Height / 2, 0);
+        MapRoot.transform.localPosition = new Vector3(-Map.Width / 2, Map.Height / 2, 0);
+
+        // 将底部响应操作的层铺满整个屏幕
+        var sws = SceneWorldSize;
+        MapGround.transform.localPosition = new Vector3(-sws.x / 2, sws.y / 2, 0);
+        MapGround.transform.localScale = new Vector3(sws.x, sws.y, 1);
     }
 
     void ClearMap()
@@ -322,5 +329,80 @@ public class BattleStage : MonoBehaviour
         MapGround.OnEndDragging += (float fx, float fy, float cx, float cy) => CurrentOpLayer.OnEndDragging(fx, fy, cx, cy);
         MapGround.OnStartScaling += () => CurrentOpLayer.OnStartScaling();
         MapGround.OnScaling += (float scale, float cx, float cy) => CurrentOpLayer.OnScaling(scale, cx, cy);
+
+        // 地图缩放移动等
+        StageOpsLayer.DefaultStartDraggingHandler += StartDraggingMap;
+        StageOpsLayer.DefaultDraggingHandler += DraggingMap;
+        StageOpsLayer.DefaultStartScaling += StartScaling;
+        StageOpsLayer.DefaultScaling += Scaling;
     }
+
+    #region 地图平移缩放
+
+    float fromScale;
+    Vector3 fromPos;
+
+    void StartDraggingMap(float x, float y)
+    {
+        fromPos = SceneOffset.localPosition;
+    }
+
+    // 屏幕显示范围对应的世界坐标范围
+    Vector2 SceneWorldSize
+    {
+        get
+        {
+            var min = Camera.main.ViewportToWorldPoint(Vector3.zero);
+            var max = Camera.main.ViewportToWorldPoint(Vector3.one);
+            return max - min;
+        }
+    }
+
+    void DraggingMap(float fx, float fy, float tx, float ty)
+    {
+        var offset = new Vector2(tx - fx, ty - fy);
+        SceneOffset.localPosition = new Vector3(fromPos.x + offset.x, fromPos.y + offset.y, fromPos.z);
+        AdjustScalingAndOffset();
+    }
+
+    void StartScaling()
+    {
+        fromScale = SceneOffset.localScale.x;
+    }
+
+    void Scaling(float scale, float cx, float cy)
+    {
+        CurrentOpLayer.WorldPos2MapPos(cx, cy, out float scx, out float scy);
+        SceneOffset.localScale = new Vector3(fromScale * scale, fromScale * scale, 1);
+        CurrentOpLayer.MapPos2WorldPos(scx, scy, out float cx2, out float cy2);
+        SceneOffset.localPosition += new Vector3(cx - cx2, cy - cy2, 0);
+        AdjustScalingAndOffset();
+    }
+
+    void AdjustScalingAndOffset()
+    {
+        // 限制缩放范围
+        var s = SceneOffset.localScale.x;
+        if (s > 2) s = 2;
+        if (s < SceneWorldSize.x / SceneBgSize.x) s = SceneWorldSize.x / SceneBgSize.x;
+        if (s < SceneWorldSize.y / SceneBgSize.y) s = SceneWorldSize.y / SceneBgSize.y;
+        SceneOffset.localScale = new Vector3(s, s, 1);
+
+        // 限制移动范围
+        var x = SceneOffset.localPosition.x;
+        var y = SceneOffset.localPosition.y;
+        var bgs = SceneBgSize * s;
+
+        var left = (SceneWorldSize.x - bgs.x) / 2;
+        var right = -left;
+        x = x.Clamp(left, right);
+
+        var top = (SceneWorldSize.y - bgs.y) / 2;
+        var bottom = -top;
+        y = y.Clamp(top, bottom);
+        SceneOffset.localPosition =
+            new Vector3(x, y, fromPos.z);
+    }
+
+    #endregion
 }

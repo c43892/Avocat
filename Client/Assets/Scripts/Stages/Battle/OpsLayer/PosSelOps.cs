@@ -68,7 +68,7 @@ public class PosSelOps : StageOpsLayer
     // 返回选择的位置
     public override void OnClicked(float x, float y)
     {
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
 
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)gx, (int)gy];

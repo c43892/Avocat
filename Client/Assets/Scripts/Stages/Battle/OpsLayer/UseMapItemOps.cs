@@ -18,7 +18,7 @@ public class UseMapItemOps : StageOpsLayer
 
     public override void OnClicked(float x, float y)
     {
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
         var avatar = BattleStage.Avatars[(int)gx, (int)gy];
 
         // 如果已经由选择道具，再次选择地方角色，则对其使用道具
@@ -57,7 +57,7 @@ public class UseMapItemOps : StageOpsLayer
             currentSelItem = null;
         }
 
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
         var item = BattleStage.Items[(int)gx, (int)gy];
         if (item == null)
             return;
@@ -75,14 +75,14 @@ public class UseMapItemOps : StageOpsLayer
             return;
 
         // 移动指针
-        WorldPos2ScenePos(tx, ty, out float tgx, out float tgy);
+        WorldPos2MapPos(tx, ty, out float tgx, out float tgy);
         var rootPos = MapRoot.transform.localPosition;
         PointerIndicator.transform.localPosition = new Vector2(rootPos.x + tgx, rootPos.y - tgy);
     }
 
     public override void OnEndDragging(float fx, float fy, float tx, float ty)
     {
-        WorldPos2ScenePos(tx, ty, out float tgx, out float tgy);
+        WorldPos2MapPos(tx, ty, out float tgx, out float tgy);
         var target = BattleStage.Avatars[(int)tgx, (int)tgy];
         if (currentSelItem != null && target != null && target.Warrior.Team != Room.PlayerMe)
             Room.UseItem2(currentSelItem.Item as UsableItem, target.Warrior); // 执行操作

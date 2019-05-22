@@ -18,7 +18,7 @@ public class PreparingOps : StageOpsLayer
 
     public override void OnClicked(float x, float y)
     {
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
 
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         if (currentSelAvatar == null && avatar != null && avatar.Warrior.Team == Room.PlayerMe)
@@ -45,7 +45,7 @@ public class PreparingOps : StageOpsLayer
             currentSelAvatar = null;
         }
 
-        WorldPos2ScenePos(x, y, out float gx, out float gy);
+        WorldPos2MapPos(x, y, out float gx, out float gy);
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         if (avatar == null || avatar.Warrior.Team != Room.PlayerMe)
         {
@@ -75,14 +75,14 @@ public class PreparingOps : StageOpsLayer
 
 
         // 移动指针
-        WorldPos2ScenePos(tx, ty, out float gtx, out float gty);
+        WorldPos2MapPos(tx, ty, out float gtx, out float gty);
         PointerIndicator.transform.localPosition = new Vector2(gtx, -gty)+offset;
     }
 
     public override void OnEndDragging(float fx, float fy, float tx, float ty)
     {
-        WorldPos2ScenePos(fx, fy, out float gfx, out float gfy);
-        WorldPos2ScenePos(tx, ty, out float gtx, out float gty);
+        WorldPos2MapPos(fx, fy, out float gfx, out float gfy);
+        WorldPos2MapPos(tx, ty, out float gtx, out float gty);
 
         if (currentSelAvatar == null)
             return;

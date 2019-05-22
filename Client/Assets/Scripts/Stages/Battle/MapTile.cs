@@ -19,7 +19,7 @@ public class MapTile : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    public static readonly Color ColorDefault = Color.white;
+    public static readonly Color ColorDefault = new Color(1, 1, 1, 0.25f);
     public static readonly Color ColorSelected = Color.green;
     public static readonly Color ColorSelectedHead = Color.blue;
 
