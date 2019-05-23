@@ -36,7 +36,8 @@ public class PreparingOps : StageOpsLayer
         }
 
     }
-    Vector2 offset;
+
+    Vector2 dragPointerOffset;
     public override void OnStartDragging(float x, float y)
     {
         if (currentSelAvatar != null)
@@ -56,12 +57,9 @@ public class PreparingOps : StageOpsLayer
         // 显示指针，并隐藏准备拖拽的对象
         currentSelAvatar = avatar;
         PointerIndicator.SetActive(true);
-       // PointerIndicator.GetComponentInChildren<TextMesh>().text = avatar.Warrior.DisplayName;
         PointerIndicator.GetComponent<PoniterIndicator>().SetIdleAnimation(currentSelAvatar);
-       // WorldPos2ScenePos(x, y, out float gtx, out float gty);
-       // PointerIndicator.transform.localPosition = new Vector2(gtx, -gty);
         PointerIndicator.transform.position = currentSelAvatar.transform.position;
-        offset = new Vector2(PointerIndicator.transform.position.x-x,PointerIndicator.transform.position.y -y);
+        dragPointerOffset = new Vector2(PointerIndicator.transform.position.x - x,PointerIndicator.transform.position.y - y);
         currentSelAvatar.gameObject.SetActive(false);
     }
 
@@ -73,10 +71,8 @@ public class PreparingOps : StageOpsLayer
             return;
         }
 
-
         // 移动指针
-        WorldPos2MapPos(tx, ty, out float gtx, out float gty);
-        PointerIndicator.transform.localPosition = new Vector2(gtx, -gty)+offset;
+        PointerIndicator.transform.position = new Vector2(tx, ty) + dragPointerOffset;
     }
 
     public override void OnEndDragging(float fx, float fy, float tx, float ty)
