@@ -72,7 +72,10 @@ public class PreparingOps : StageOpsLayer
         }
 
         // 移动指针
-        PointerIndicator.transform.position = new Vector2(tx, ty) + dragPointerOffset;
+        var worldPos = new Vector2(tx, ty) + dragPointerOffset;
+        //var localPos = PointerIndicator.transform.parent.worldToLocalMatrix.MultiplyPoint(worldPos);
+        //PointerIndicator.transform.localPosition = localPos;
+         PointerIndicator.transform.position = worldPos;
     }
 
     public override void OnEndDragging(float fx, float fy, float tx, float ty)

@@ -15,6 +15,11 @@ public class MapAvatar : MonoBehaviour
     public TextMesh HpText;
     public TextMesh PowerText;
     public TextMesh ShieldText;
+    public GameObject Life;
+    public GameObject Shield;
+    public GameObject FriendSkillDec;
+    public GameObject EnemySkillDec;
+    public GameObject AttackHint;
 
     // 对应的角色
     public Warrior Warrior { get; set; }
@@ -38,11 +43,16 @@ public class MapAvatar : MonoBehaviour
     // 刷新属性值到指定值
     public void RefreshAttrs2(int hp, int basicAttackValue, int es, bool actionDone)
     {
-        HpText.text = hp.ToString();
-        PowerText.text = basicAttackValue.ToString();
-        ShieldText.text = es.ToString();
-        ShieldText.transform.parent.gameObject.SetActive(es > 0);
+      //HpText.text = hp.ToString();
+       //owerText.text = basicAttackValue.ToString();
+       //hieldText.text = es.ToString();
+      //ShieldText.transform.parent.gameObject.SetActive(es > 0);
         Color = actionDone ? ColorActionDone : ColorDefault;
+        Life.transform.localScale = new Vector3(hp / (float)Warrior.MaxHP,1,1);
+        if (Warrior.MaxES != 0)
+            Shield.transform.localScale = new Vector3(es / (float)Warrior.MaxES, 1, 1);
+        else
+            Shield.transform.gameObject.SetActive(false);
     }
 
     // 刷新属性值

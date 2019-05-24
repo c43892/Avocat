@@ -8,7 +8,7 @@ public class MapItem : MonoBehaviour
 {
     public BattleStage BattleStage { get; set; }
     public Vector2 CenterOffset = new Vector2(0.5f, 0.5f);
-
+    public SpriteRenderer sprite;
     public TextMesh NameText;
 
     // 对应的角色
@@ -16,8 +16,10 @@ public class MapItem : MonoBehaviour
 
     public void RefreshAttrs()
     {
-        NameText.text = Item.DisplayName;
-        Color = ColorDefault;
+      //  NameText.text = Item.DisplayName;
+      //  Color = ColorDefault;
+        sprite.sprite = Resources.Load<Sprite>("UI/MapItem/" + Item.Name);
+        sprite.sortingOrder = 3;
     }
 
     public int X

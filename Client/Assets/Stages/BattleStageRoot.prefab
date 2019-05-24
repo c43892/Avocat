@@ -304,6 +304,8 @@ MonoBehaviour:
   HpText: {fileID: 1280697294}
   PowerText: {fileID: 735316337}
   ShieldText: {fileID: 1280763056}
+  Life: {fileID: 0}
+  Shield: {fileID: 0}
 --- !u!1 &997066160
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,7 +752,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
 --- !u!102 &1423965784
 TextMesh:
   serializedVersion: 3

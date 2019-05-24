@@ -43,11 +43,11 @@ public class PosSelOps : StageOpsLayer
             }
         });
 
-        FC.For(0, Range.Count, i =>
-        {
-            Range[i].GetComponent<SpriteRenderer>().color = Color.yellow;
-            Range[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
-        });
+        //FC.For(0, Range.Count, i =>
+        //{
+        //  //  Range[i].GetComponent<SpriteRenderer>().color = Color.yellow;
+        //    Range[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
+        //});
     }
 
     // 检查是否在范围内

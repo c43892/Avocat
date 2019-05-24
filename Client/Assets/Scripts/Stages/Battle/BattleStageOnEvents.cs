@@ -92,6 +92,7 @@ static class BattleStageOnEvents
             {
                 var op = BattleStage.CurrentOpLayer as InBattleOps;
                 op.RemoveShowAttackRange();
+                op.RemoveMovingPathRange();
                 op.ClearPath();
             });
 

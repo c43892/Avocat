@@ -60,6 +60,7 @@ public class InBattleOps : StageOpsLayer
     }
     Warrior curSelWarrior;
     List<MapTile> pathATKRange = new List<MapTile>();
+    List<MapTile> pathMovingRange = new List<MapTile>();
 
     // 显示攻击范围
     public void ShowAttackRange(float x, float y, Warrior worrior)
@@ -77,20 +78,37 @@ public class InBattleOps : StageOpsLayer
                 {
                     var tile = BattleStage.CreateMapTile(tx, ty);
                     pathATKRange.Add(tile);
+                    var avatar = BattleStage.GetAvatarAt(tx, ty);
+                    if (avatar != null && avatar.Warrior.Team != worrior.Team) {
+                        avatar.AttackHint.SetActive(true);
+                    }
                 }
             });
         });
 
-        FC.For(0, pathATKRange.Count, i =>
-        {
-            pathATKRange[i].GetComponent<SpriteRenderer>().color = Color.red;
-        });
+        //FC.For(0, pathATKRange.Count, i =>
+        //{
+        //  //  pathATKRange[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("UI/AttackRange");
+        //    pathATKRange[i].GetComponent<SpriteRenderer>().color = Color.red;
+        //});
     }
 
     // 清除攻击范围显示
     public void RemoveShowAttackRange()
     {
+        FC.For(pathATKRange.Count, (i) =>
+        {
+            var avatar = BattleStage.GetAvatarAt(pathATKRange[i].X, pathATKRange[i].Y);
+            if (avatar != null && avatar.AttackHint.activeSelf)
+                avatar.AttackHint.SetActive(false);
+        });
         BattleStage.RemoveTile(pathATKRange);
+    }
+
+    // 清除可移动范围显示
+    public void RemoveMovingPathRange()
+    {
+        BattleStage.RemoveTile(pathMovingRange);
     }
 
     BattleStageUI StageUI { get => BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>(); }
@@ -127,6 +145,7 @@ public class InBattleOps : StageOpsLayer
                         {
                             status = "selectingAttackTarget";
                             ShowAttackRange(gx, gy, CurrentSelWarrior);
+                            ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
                         }
                     }
                 }
@@ -140,6 +159,7 @@ public class InBattleOps : StageOpsLayer
 
                 // 再次点击时清除攻击范围显示
                 RemoveShowAttackRange();
+                RemoveMovingPathRange();
                 if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
                 {
                     // 点空地
@@ -179,7 +199,11 @@ public class InBattleOps : StageOpsLayer
                     StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
 
                     if (CurrentSelWarrior != null && !warrior.ActionDone)
+                    {
                         ShowAttackRange(gx, gy, CurrentSelWarrior);
+                        ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
+                    }
+                   
                 }
                 else if (CurrentSelWarrior != null)
                 {
@@ -258,8 +282,10 @@ public class InBattleOps : StageOpsLayer
             tailTile.Card = null;
             if (pathInSel.Count > 1) // 头节点不变色显示
             {
-                pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
-                pathInSel[pathInSel.Count - 1].SetDir(0, 0);
+                // pathInSel[pathInSel.Count - 1].Color = MapTile.ColorSelectedHead;
+                var headTile = pathInSel[pathInSel.Count - 1];
+                var tileBeforeHeadTile = pathInSel[pathInSel.Count - 2];
+                headTile.SetHeadDir(headTile.X - tileBeforeHeadTile.X, headTile.Y - tileBeforeHeadTile.Y);
             }
         }
         else if (!pathInSel.Contains(tile)) // 指向队列中的中间某一块，则忽略该块
@@ -275,14 +301,15 @@ public class InBattleOps : StageOpsLayer
                 if (pathInSel.Count > 1) // 头节点不变色显示
                 {
                     var cd = pathInSel[pathInSel.Count - 1];
-                    cd.Color = MapTile.ColorSelected;
+                    cd.Color = MapTile.ColorDefault;
                     cd.SetDir(tile.X - tailTile.X, tile.Y - tailTile.Y);
+                    cd.JudgeCorner(secondTailTile, tailTile, tile);
                     cd.Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 2]; // 第一个路径节点并不对应战斗卡牌
                 }
-
-                tile.Color = MapTile.ColorSelectedHead;
+                tile.SetHeadDir(tile.X - tailTile.X, tile.Y - tailTile.Y);
+               // tile.Color = MapTile.ColorSelectedHead;
                 tile.Card = (Room.Battle as BattlePVE).AvailableCards[pathInSel.Count - 1];
-                tile.SetDir(0, 0);
+               // tile.SetDir(0, 0);
                 AddPath(tile);
             }
         }
@@ -374,5 +401,21 @@ public class InBattleOps : StageOpsLayer
         var en = bt.Energy + energy;
         StageUI.CardArea.RefreshEnergy(en, bt.MaxEnergy);
         StageUI.SkillButtonUI.UpdateSkillState(en,CurrentSelWarrior);
+    }
+
+    // 显示可移动的范围
+    public void ShowMovePathRange(float x, float y, int availableCardNum) {
+        int minX = (x - availableCardNum) < 0 ? 0 : (int)(x - availableCardNum);
+        int maxX = (x + availableCardNum) >= BattleStage.Map.Width ? BattleStage.Map.Width : (int)(x + availableCardNum + 1);
+        int minY = (y - availableCardNum) < 0 ? 0 : (int)(y - availableCardNum);
+        int maxY = (y + availableCardNum) >= BattleStage.Map.Height ? BattleStage.Map.Height : (int)(y + availableCardNum + 1);
+        FC.For2(minX, maxX, minY, maxY, (tx, ty) =>
+        {
+            if (MU.ManhattanDist((int)x, (int)y, tx, ty) <= availableCardNum && BattleStage.GetAvatarAt(tx,ty)==null)
+            {
+                var tile = BattleStage.CreateMovingMapTile(tx, ty);
+                pathMovingRange.Add(tile);
+            }
+        });
     }
 }

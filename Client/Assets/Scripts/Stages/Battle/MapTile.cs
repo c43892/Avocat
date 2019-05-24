@@ -11,8 +11,8 @@ using Avocat;
 public class MapTile : MonoBehaviour
 {
     SpriteRenderer sr;
-    public TextMesh CardSR;
-    public TextMesh DirSR;
+    public SpriteRenderer CardSR;
+    public SpriteRenderer DirSR;
 
     private void Start()
     {
@@ -27,17 +27,65 @@ public class MapTile : MonoBehaviour
     {
         var angle = 0;
         if (dx == 0 && dy == 0)
-            DirSR.gameObject.SetActive(false);
-        else if (dx == 0 && dy > 0)
-            angle = 90;
-        else if (dx == 0 && dy < 0)
-            angle = -90;
-        else if (dx < 0 && dy == 0)
+        {
+            //DirSR.gameObject.SetActive(false);
             angle = 180;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/End");
+        }
 
-        DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+        else if (dx == 0 && dy > 0)
+        {
+            angle = 0;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Straight");
+        }
+
+        else if (dx == 0 && dy < 0)
+        {
+            angle = 0;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Straight");
+        }
+
+        else if (dx < 0 && dy == 0)
+        {
+            angle = 90;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Straight");
+        }
+        else if (dx > 0 && dy == 0)
+        {
+            angle = 90;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Straight");
+        }
+            DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
     }
 
+    // 设定头节点的图案样式
+    public void SetHeadDir(int dx, int dy)
+    {
+        var angle = 0;
+        if (dx == 0 && dy > 0)
+        {
+            angle = -90;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/End");
+        }
+
+        else if (dx == 0 && dy < 0)
+        {
+            angle = 90;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/End");
+        }
+
+        else if (dx < 0 && dy == 0)
+        {
+            angle = 0;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/End");
+        }
+        else if (dx > 0 && dy == 0)
+        {
+            angle = 180;
+            DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/End");
+        }
+        DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+    }
     public Color Color
     {
         get
@@ -88,15 +136,52 @@ public class MapTile : MonoBehaviour
             }
             else
             {
-                DirSR.GetComponent<MeshRenderer>().sortingLayerID = sr.sortingLayerID;
-                DirSR.GetComponent<MeshRenderer>().sortingOrder = sr.sortingOrder + 1;
+                DirSR.sortingLayerID = sr.sortingLayerID;
+                DirSR.sortingOrder = sr.sortingOrder + 1;
                 DirSR.gameObject.SetActive(true);
 
                 CardSR.gameObject.SetActive(true);
-                CardSR.GetComponent<MeshRenderer>().sortingLayerID = sr.sortingLayerID;
-                CardSR.GetComponent<MeshRenderer>().sortingOrder = sr.sortingOrder + 2;
-                CardSR.text = card.Name;
+                CardSR.sortingLayerID = sr.sortingLayerID;
+                CardSR.sortingOrder = sr.sortingOrder + 2;
+                CardSR.sprite = Resources.Load<Sprite>("UI/CardType/" + card.Name);
             }
         }
     } BattleCard card = null;
+
+
+    public void JudgeCorner(MapTile secondTailTile, MapTile tailTile, MapTile newTile)
+    {
+        if (secondTailTile != null && tailTile != null && newTile != null)
+        {
+            var x1 = newTile.X - tailTile.X;
+            var x2 = tailTile.X - secondTailTile.X;
+            var y1 = newTile.Y - tailTile.Y;
+            var y2 = tailTile.Y - secondTailTile.Y;
+            var angle = 0;
+            if ((y2 < 0 && x2 == 0) && (x1 > 0 && y1 == 0) || (y2 == 0 && x2 < 0) && (x1 == 0 && y1 > 0)) // "LeftUp"
+            {
+                tailTile.DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Corner");
+                angle = 180;
+                tailTile.DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+            }
+            else if ((x1 > 0 && y1 == 0) && (x2 == 0 && y2 > 0) || (x1 == 0 && y1 < 0) && (x2 < 0 && y2 == 0)) // "LeftDown"
+            {
+                tailTile.DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Corner");
+                angle = 90;
+                tailTile.DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+            }
+            else if ((x1 == 0 && y1 < 0) && (x2 > 0 && y2 == 0) || (x1 < 0 && y1 == 0) && (x2 == 0 && y2 > 0)) // "RightDown"
+            {
+                tailTile.DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Corner");
+                angle = 0;
+                tailTile.DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+            }
+            else if ((x1 < 0 && y1 == 0) && (x2 == 0 && y2 < 0) || (x1 ==0 && y1 > 0) && (x2 >0 && y2 == 0)) // "RightUp"
+            {
+                tailTile.DirSR.sprite = Resources.Load<Sprite>("UI/PathIcon/Corner");
+                angle = -90;
+                tailTile.DirSR.transform.localRotation = Quaternion.Euler(0, 0, angle);
+            }
+        }
+    }
 }

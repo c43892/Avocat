@@ -93,17 +93,33 @@ public class BattleStage : MonoBehaviour
             DestroyImmediate(MapRoot.GetChild(0).gameObject);
     }
 
-    // 创建maptile用于显示攻击范围
+    // 创建maptile用于显示攻击和技能范围
     public MapTile CreateMapTile(float x, float y)
     {
         var tile = Instantiate(MapTile);
-        tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("TestRes/BattleMap/MapTile");
+        tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("UI/AttackRange");
+        tile.GetComponent<SpriteRenderer>().color = Color.red;
         tile.transform.SetParent(MapRoot);
         tile.X = (int)x;
         tile.Y = (int)y;
         tile.transform.localScale = Vector3.one;
-        tile.gameObject.name = "Range";
+        tile.gameObject.name = "AttackRange";
         tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        tile.gameObject.SetActive(true);
+        return tile;
+    }
+
+    // 创建maptile用于显示可移动范围
+    public MapTile CreateMovingMapTile(float x, float y)
+    {
+        var tile = Instantiate(MapTile);
+        tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("UI/Moving");
+        tile.transform.SetParent(MapRoot);
+        tile.X = (int)x;
+        tile.Y = (int)y;
+        tile.transform.localScale = Vector3.one;
+        tile.gameObject.name = "MovingRange";
+        tile.GetComponent<SpriteRenderer>().sortingOrder = 1;
         tile.gameObject.SetActive(true);
         return tile;
     }
@@ -318,6 +334,7 @@ public class BattleStage : MonoBehaviour
     public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
     {
         PosSelOps.ShowRange(cx, cy, skill, onSelPos);
+        InBattleOps.RemoveShowAttackRange();
     }
 
     // 挂接地图操作逻辑
