@@ -22,7 +22,7 @@ namespace Avocat
         public override void Fire()
         {
             var target = Map.FindNearestTarget(Warrior);
-            BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack");
+            BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack","SkillAttack");
         }
 
         public int A { get; set; }

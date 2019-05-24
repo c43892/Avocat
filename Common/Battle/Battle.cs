@@ -317,6 +317,7 @@ namespace Avocat
             if (!attackFlags.Contains("ExtraAttack"))
                 SetActionFlag(attacker, true);
 
+
             OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
 
             // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾

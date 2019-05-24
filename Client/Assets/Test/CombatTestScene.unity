@@ -9195,6 +9195,32 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleStageRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e9375b06efd42e248ba9f2820c28849f,
+        type: 3}
+    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+        type: 3}
+      propertyPath: m_DrawMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5360679074043673760, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9375,32 +9401,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: e9375b06efd42e248ba9f2820c28849f,
-        type: 3}
-    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3632919425141873765, guid: 226ec60d53abffe458fa1e17b31d4c8e,
-        type: 3}
-      propertyPath: m_DrawMode
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8476973894661369754, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}

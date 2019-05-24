@@ -168,7 +168,14 @@ public class MapAniPlayer : MonoBehaviour
 
         //yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { fx, fy, tx, ty });
         //yield return MakeMovingOnPathImpl(attacker.transform, 20, new float[] { tx, ty, fx, fy });
-        yield return BattleStage.BattleScene.GetComponent<BattleScene>().SetBattleAnimation(attacker as MapAvatar, target as MapAvatar);
+        yield return BattleStage.BattleScene.GetComponent<BattleScene>().SetAttackAnimation(attacker as MapAvatar, target as MapAvatar);
+    }
+
+    // 技能攻击动画
+    public MapAniPlayer SkillAttacking(MonoBehaviour attacker, MonoBehaviour target) => Add(SkillAttackingImpl(attacker, target));
+    IEnumerator SkillAttackingImpl(MonoBehaviour attacker, MonoBehaviour target)
+    {
+        yield return BattleStage.BattleScene.GetComponent<BattleScene>().SetSkillAttackAnimation(attacker as MapAvatar, target as MapAvatar);
     }
 
     // 角色死亡

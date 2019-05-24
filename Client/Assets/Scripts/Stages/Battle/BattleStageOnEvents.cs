@@ -48,7 +48,14 @@ static class BattleStageOnEvents
             var targetAvatar = BattleStage.GetAvatarByWarrior(target);
             var doAttackerRefresh = attackerAvatar.DelayRefreshAttrs();
             var doTargetRefresh = attackerAvatar.DelayRefreshAttrs();
-            aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
+            if (flags.Contains("SkillAttack"))
+            {
+                aniPlayer.SkillAttacking(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
+            }
+            else {
+                aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
+            }
+            
         };
 
         // 角色移动
