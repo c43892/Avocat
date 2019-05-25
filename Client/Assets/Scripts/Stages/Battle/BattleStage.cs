@@ -379,7 +379,7 @@ public class BattleStage : MonoBehaviour
     {
         var offset = new Vector2(tx - fx, ty - fy);
         SceneOffset.localPosition = new Vector3(fromPos.x + offset.x, fromPos.y + offset.y, fromPos.z);
-        AdjustScalingAndOffset();
+        AdjustOffset();
     }
 
     void StartScaling()
@@ -389,20 +389,25 @@ public class BattleStage : MonoBehaviour
 
     void Scaling(float scale, float cx, float cy)
     {
+        var s = fromScale * scale;
+        if (s > 2) return;
+        var sx = SceneWorldSize.x / SceneBgSize.x;
+        var sy = SceneWorldSize.y / SceneBgSize.y;
+        var sMin = sx > sy ? sx : sy;
+        if (s < sMin) return;
+
         CurrentOpLayer.WorldPos2MapPos(cx, cy, out float scx, out float scy);
         SceneOffset.localScale = new Vector3(fromScale * scale, fromScale * scale, 1);
         CurrentOpLayer.MapPos2WorldPos(scx, scy, out float cx2, out float cy2);
         SceneOffset.localPosition += new Vector3(cx - cx2, cy - cy2, 0);
-        AdjustScalingAndOffset();
+        AdjustOffset();
     }
 
-    void AdjustScalingAndOffset()
+    void AdjustOffset()
     {
         // 限制缩放范围
         var s = SceneOffset.localScale.x;
-        if (s > 2) s = 2;
-        if (s < SceneWorldSize.x / SceneBgSize.x) s = SceneWorldSize.x / SceneBgSize.x;
-        if (s < SceneWorldSize.y / SceneBgSize.y) s = SceneWorldSize.y / SceneBgSize.y;
+        
         SceneOffset.localScale = new Vector3(s, s, 1);
 
         // 限制移动范围
