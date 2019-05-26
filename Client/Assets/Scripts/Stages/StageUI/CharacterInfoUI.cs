@@ -104,23 +104,25 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void UpdateSkillPicture(Warrior warrior)
     {
-        PassiveSkill.SetActive(false);
-        ActiveSkill.SetActive(false);
+        var PassiveSkillFrame = PassiveSkill.transform.parent.gameObject;
+        var ActiveSkillFrame = ActiveSkill.transform.parent.gameObject;
+        PassiveSkillFrame.SetActive(false);
+        ActiveSkillFrame.SetActive(false);
         var AllPassiveSkills = (warrior as BattleMapItem).Buffs;
         if (warrior.GetDefaultActiveSkill() != null) {
             ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().Name) as Sprite;
-            ActiveSkill.SetActive(true);
+            ActiveSkillFrame.SetActive(true);
         }
         FC.For(AllPassiveSkills.Count, (i) =>
         {
             if (AllPassiveSkills[i] is PatternSkill)
             {
                 ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].Name) as Sprite;
-                ActiveSkill.SetActive(true);
+                ActiveSkillFrame.SetActive(true);
             }
             else if (AllPassiveSkills[i] is PassiveSkill) {
                 PassiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].Name) as Sprite;
-                PassiveSkill.SetActive(true);
+                PassiveSkillFrame.SetActive(true);
             }
         });
     }
