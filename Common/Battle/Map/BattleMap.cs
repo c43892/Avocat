@@ -69,6 +69,11 @@ namespace Avocat
         // 所有角色
         Warrior[,] warriors;
 
+        //public T GetAt<T>(int x, int y) where T : BattleMapItem
+        //{
+        //    return item[x, y] as T;
+        //}
+
         public Warrior GetWarriorAt(int x, int y)
         {
             if (x < 0 || y < 0 || x >= Width || y >= Height) return null;
@@ -170,6 +175,20 @@ namespace Avocat
             px = tx;
             py = ty;
         }
+
+        //void ForeachItems(Action<int, int, BattleMapItem> act, Func<bool> continueCondition = null)
+        //{
+
+        //}
+
+        //void ForeachWarriors(Action<int, int, Warrior> act, Func<bool> continueCondition = null)
+        //{
+        //    ForeachItems((x, y, item) =>
+        //    {
+        //        if (item is Warrior)
+        //            act(x, y, item as Warrior);
+        //    }, continueCondition);
+        //}
 
         // 迭代所有非空战斗角色
         public void ForeachWarriors(Action<int, int, Warrior> act, Func<bool> continueCondition = null)

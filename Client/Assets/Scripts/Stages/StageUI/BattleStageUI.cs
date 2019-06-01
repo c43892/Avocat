@@ -116,6 +116,9 @@ public class BattleStageUI : MonoBehaviour
     {
         var raycaster = Camera.main.transform.root.GetComponentInChildren<GraphicRaycaster>();
         var evnSystem = Camera.main.transform.root.GetComponentInChildren<EventSystem>();
+        if (evnSystem == null)
+            return false;
+
         var eventData = new PointerEventData(evnSystem)
         {
             pressPosition = Input.mousePosition,

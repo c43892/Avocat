@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MapEditor\Scripts\EditMap.cs" />
+    <Compile Include="Assets\MapEditor\Scripts\MapCreator.cs" />
+    <Compile Include="Assets\MapEditor\Scripts\OperationOnMap.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleRoomClient.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\AI\AIExt.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\AI\RobotPlayer.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="Assets\Spine\Runtime\spine-unity\SkeletonUtility\SkeletonUtilityBone.cs" />
     <Compile Include="Assets\Spine\Runtime\spine-unity\SkeletonUtility\SkeletonUtilityConstraint.cs" />
     <Compile Include="Assets\Spine\Runtime\spine-unity\SpineAttributes.cs" />
+    <Compile Include="Assets\test.cs" />
     <Compile Include="Assets\Test\BattleMessageLooper.cs" />
     <Compile Include="Assets\Test\CombatTestDriver.cs" />
     <Compile Include="Assets\Test\CombatTestUIOnEvent.cs" />
