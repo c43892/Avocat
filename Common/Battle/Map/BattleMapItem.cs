@@ -28,7 +28,7 @@ namespace Avocat
         // 获取对象在地图中位置
         public virtual void GetPosInMap(out int x, out int y)
         {
-            Map.FindXY(this, out x, out y);
+            Map.FindXYAt(this, out x, out y);
         }
 
         public List<Buff> Buffs { get; } = new List<Buff>();

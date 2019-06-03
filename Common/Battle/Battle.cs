@@ -61,7 +61,7 @@ namespace Avocat
             for (var i = 0; i < warrior.Buffs.Count; i++)
                 warrior.Buffs[i].OnDetached();
 
-            Map.RemoveWarrior(warrior);
+            Map.Remove(warrior);
 
             OnWarriorRemoved?.Invoke(warrior);
             AfterWarriorRemoved?.Invoke(warrior);
@@ -78,8 +78,8 @@ namespace Avocat
 
             Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
 
-            Map.SetWarriorAt(fx, fy, null);
-            Map.SetWarriorAt(tx, ty, warrior);
+            Map.SetAt(fx, fy, null);
+            Map.SetAt(tx, ty, warrior);
         }
 
         // 交换英雄位置
@@ -92,11 +92,12 @@ namespace Avocat
                 return;
 
             BeforeExchangeWarroirsPosition?.Invoke(fx, fy, tx, ty);
-
-            var tmp = Map.GetWarriorAt(fx, fy);
-            Map.SetWarriorAt(fx, fy, Map.GetWarriorAt(tx, ty));
-            Map.SetWarriorAt(tx, ty, tmp);
-
+            if (map.IsWarrior(fx, fy) && map.IsWarrior(tx, ty))
+            {
+                var tmp = Map.GetAt<Warrior>(fx, fy);
+                Map.SetAt(fx, fy, Map.GetAt<Warrior>(tx, ty));
+                Map.SetAt(tx, ty, tmp);
+            }
             OnWarriorPositionExchanged?.Invoke(fx, fy, tx, ty);
             AfterExchangeWarroirsPosition?.Invoke(fx, fy, tx, ty);
         }
@@ -126,14 +127,17 @@ namespace Avocat
             var team2Survived = false;
             FC.For2(Map.Width, Map.Height, (x, y) =>
             {
-                var warrior = Map.GetWarriorAt(x, y);
-                if (warrior != null && !warrior.IsDead)
+                if (map.IsWarrior(x, y))
                 {
-                    if (warrior.Team == 1)
-                        team1Survived = true;
-                    else
-                        team2Survived = true;
-                }
+                    var warrior = Map.GetAt<Warrior>(x, y);
+                    if (warrior != null && !warrior.IsDead)
+                    {
+                        if (warrior.Team == 1)
+                            team1Survived = true;
+                        else
+                            team2Survived = true;
+                    }
+                }                 
             }, () => !team1Survived || !team2Survived);
 
             if (team1Survived && !team2Survived)
@@ -407,7 +411,7 @@ namespace Avocat
         {
             BeforeAddWarrior?.Invoke(x, y, warrior);
 
-            Map.SetWarriorAt(x, y, warrior);
+            Map.SetAt(x, y, warrior);
 
             if (warrior.AI != null)
                 ResetWarriorAI(warrior);
@@ -424,7 +428,7 @@ namespace Avocat
         {
             BeforeAddItem?.Invoke(x, y, item);
 
-            Map.SetItemAt(x, y, item);
+            Map.SetAt(x, y, item);
 
             OnAddItem?.Invoke(x, y, item);
             AfterAddItem?.Invoke(x, y, item);
@@ -585,7 +589,7 @@ namespace Avocat
             if (warrior.IsDead)
             {
                 OnWarriorDying?.Invoke(warrior);
-                RemoveWarrior(warrior);
+                Map.Remove(warrior);
             }
         }
 

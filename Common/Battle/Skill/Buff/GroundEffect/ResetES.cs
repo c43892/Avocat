@@ -16,7 +16,7 @@ namespace Avocat
         {
             Battle.BeforeStartNextRound += (int player) =>
             {
-                Map.ForeachWarriors((i, j, warrior) =>
+                Map.ForeachWarrior((i, j, warrior) =>
                 {
                     if (warrior.Team != player)
                         return;

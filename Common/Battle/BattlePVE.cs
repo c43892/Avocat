@@ -62,7 +62,7 @@ namespace Avocat
                 AvailableCards.AddRange(cards);
 
             var moveRange = AvailableCards.Count;
-            Map.ForeachWarriors((x, y, warrior) =>
+            Map.ForeachWarrior((x, y, warrior) =>
             {
                 if (warrior.Team == PlayerIndex)
                     warrior.MoveRange = moveRange;

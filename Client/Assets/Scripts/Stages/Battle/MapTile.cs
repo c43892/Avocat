@@ -13,6 +13,13 @@ public class MapTile : MonoBehaviour
     SpriteRenderer sr;
     public SpriteRenderer CardSR;
     public SpriteRenderer DirSR;
+    public enum MapMaterialtype
+    {
+        Grass,
+        Water,
+        Mountain,
+    }
+    public MapMaterialtype materialType;
 
     private void Start()
     {

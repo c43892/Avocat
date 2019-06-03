@@ -120,7 +120,11 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         var warrior = avatar?.Warrior;
-        var item = Room.Battle.Map.GetItemAt((int)gx, (int)gy);
+        BattleMapItem item = null;
+        if (Room.Battle.Map.IsItem((int)gx, (int)gy))
+        {
+            item = Room.Battle.Map.GetAt<BattleMapItem>((int)gx, (int)gy);
+        }
         switch (status)
         {
             case "selectingWarrior":

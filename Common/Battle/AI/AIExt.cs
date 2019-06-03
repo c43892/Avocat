@@ -222,7 +222,7 @@ namespace Avocat
             var targets = new Dictionary<Warrior, KeyValuePair<int, int>>(); // 潜在可以攻击到的目标，及对应的站位
             var map = warrior.Map;
             warrior.GetPosInMap(out int fx, out int fy);
-            map.ForeachWarriors((tx, ty, target) =>
+            map.ForeachWarrior((tx, ty, target) =>
             {
                 if (warrior.Team == target.Team) // 过滤掉队友
                     return;
@@ -254,7 +254,7 @@ namespace Avocat
         {
             Warrior weakestTarget = null;
             var map = warrior.Map;
-            map.ForeachWarriors((tx, ty, target) =>
+            map.ForeachWarrior((tx, ty, target) =>
             {
                 if (warrior.Team == target.Team) // 过滤掉队友
                     return;
@@ -279,7 +279,7 @@ namespace Avocat
             warrior.GetPosInMap(out int fx, out int fy);
             var nearestX = 0;
             var nearestY = 0;
-            map.ForeachWarriors((tx, ty, target) =>
+            map.ForeachWarrior((tx, ty, target) =>
             {
                 if (warrior.Team != target.Team || warrior == target) // 过滤掉敌人和自己
                     return;
@@ -393,10 +393,12 @@ namespace Avocat
             {
                 if (!MU.InRect(x, y, 0, 0, map.Width, map.Height))
                     return;
-
-                var t = map.GetWarriorAt(x, y);
-                if (t != null && t.Team == warrior.Team)
-                    teammates.Add(t);
+                if (map.IsWarrior(x, y))
+                {
+                    var t = map.GetAt<Warrior>(x, y);
+                    if (t != null && t.Team == warrior.Team)
+                        teammates.Add(t);
+                }              
             });
 
             return teammates.ToArray();
@@ -408,7 +410,7 @@ namespace Avocat
             var map = target.Map;
             target.GetPosInMap(out int cx, out int cy);
             var enemies = new List<Warrior>();
-            map.ForeachWarriors((x, y, e) =>
+            map.ForeachWarrior((x, y, e) =>
             {
                 if (e.InAttackRange(cx, cy))
                     enemies.Add(e);

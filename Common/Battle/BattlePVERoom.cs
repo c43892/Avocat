@@ -42,9 +42,12 @@ namespace Avocat
             {
                 var warriorID = data.ReadInt();
                 var skillName = data.ReadString();
-                var warrior = Battle.Map.GetWarriorByID(warriorID);
-                var skill = warrior.GetActiveSkillByName(skillName);
-                Battle.FireSkill(skill);
+                if (Battle.Map.IsWarrior(warriorID))
+                {
+                    var warrior = Battle.Map.GetByID<Warrior>(warriorID);
+                    var skill = warrior.GetActiveSkillByName(skillName);
+                    Battle.FireSkill(skill);
+                }                
             });
 
             bmp.HandleMsg("FireActiveSkillAt", (player, data) =>
@@ -53,18 +56,24 @@ namespace Avocat
                 var skillName = data.ReadString();
                 var x = data.ReadInt();
                 var y = data.ReadInt();
-                var warrior = Battle.Map.GetWarriorByID(warriorID);
-                var skill = warrior.GetActiveSkillByName(skillName);
-                Battle.FireSkillAt(skill, x, y);
+                if (Battle.Map.IsWarrior(warriorID))
+                {
+                    var warrior = Battle.Map.GetByID<Warrior>(warriorID);
+                    var skill = warrior.GetActiveSkillByName(skillName);
+                    Battle.FireSkillAt(skill, x, y);
+                }                 
             });
 
             bmp.HandleMsg("UseItem2", (player, data) =>
             {
                 var itemID = data.ReadInt();
                 var targetID = data.ReadInt();
-                var item = Battle.Map.GetItemByID(itemID);
-                var target = Battle.Map.GetWarriorByID(targetID);
-                Battle.UseItem2(item as UsableItem, target);
+                if (Battle.Map.IsWarrior(targetID) && Battle.Map.IsWarrior(itemID))
+                {
+                    var item = Battle.Map.GetByID<BattleMapItem>(itemID);
+                    var target = Battle.Map.GetByID<Warrior>(targetID);
+                    Battle.UseItem2(item as UsableItem, target);
+                }                
             });
         }
     }

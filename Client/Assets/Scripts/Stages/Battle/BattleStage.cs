@@ -160,11 +160,14 @@ public class BattleStage : MonoBehaviour
         Items = new MapItem[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
-            var item = Map.GetItemAt(x, y);
-            if (item == null)
-                return;
+            if (Map.IsItem(x, y))
+            {
+                var item = Map.GetAt<BattleMapItem>(x, y);
+                if (item == null)
+                    return;
 
-            CreateMapItem(x, y, item);
+                CreateMapItem(x, y, item);
+            }           
         });
     }
 
@@ -175,11 +178,14 @@ public class BattleStage : MonoBehaviour
         Avatars = new MapAvatar[Map.Width, Map.Height];
         FC.For2(Map.Width, Map.Height, (x, y) =>
         {
-            var warrior = Map.GetWarriorAt(x, y);
-            if (warrior == null)
-                return;
+            if (Map.IsWarrior(x, y))
+            {
+                var warrior = Map.GetAt<Warrior>(x, y);
+                if (warrior == null)
+                    return;
 
-            CreateWarriorAvatar(x, y, warrior);
+                CreateWarriorAvatar(x, y, warrior);
+            }   
         });
     }
 

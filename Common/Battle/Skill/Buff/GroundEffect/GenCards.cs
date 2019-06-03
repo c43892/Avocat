@@ -48,7 +48,7 @@ namespace Avocat
                 var twoRandomCards = GenNextCards(2);
                 // 每个英雄一张
                 var cardsByHeros = new List<BattleCard>();
-                Battle.Map.ForeachWarriors(Player, (x, y, warrior) =>
+                Battle.Map.ForeachWarrior(Player, (x, y, warrior) =>
                 {
                     if (!(warrior is Hero))
                         return;

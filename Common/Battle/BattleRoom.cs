@@ -61,23 +61,27 @@ namespace Avocat
             {
                 var id = data.ReadInt();
                 var pathXYArr = data.ReadIntArr();
+                if (Battle.Map.IsWarrior(id))
+                {
+                    var warrior = Battle.Map.GetByID<Warrior>(id);
+                    warrior.MovingPath.Clear();
+                    warrior.MovingPath.AddRange(pathXYArr);
 
-                var warrior = Battle.Map.GetWarriorByID(id);
-                warrior.MovingPath.Clear();
-                warrior.MovingPath.AddRange(pathXYArr);
-
-                Battle.MoveOnPath(warrior);
+                    Battle.MoveOnPath(warrior);
+                }   
             });
 
             bmp.HandleMsg("Attack", (player, data) =>
             {
                 var attackerID = data.ReadInt();
                 var targetID = data.ReadInt();
+                if (Battle.Map.IsWarrior(attackerID) && Battle.Map.IsWarrior(targetID))
+                {
+                    var attacker = Battle.Map.GetByID<Warrior>(attackerID);
+                    var target = Battle.Map.GetByID<Warrior>(targetID);
 
-                var attacker = Battle.Map.GetWarriorByID(attackerID);
-                var target = Battle.Map.GetWarriorByID(targetID);
-
-                Battle.Attack(attacker, target);
+                    Battle.Attack(attacker, target);
+                }               
             });
 
             bmp.HandleMsg("ActionDone", (player, data) =>

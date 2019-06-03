@@ -18,13 +18,17 @@ namespace Avocat
             {
                 for (var j = 0; j < Map.Height; j++)
                 {
-                    var warrior = Map.GetWarriorAt(i, j);
-                    if (warrior?.Team != player)
-                        continue;
+                    if (Map.IsWarrior(i, j))
+                    {
+                        var warrior = Map.GetAt<Warrior>(i, j);
+                        if (warrior?.Team != player)
+                            continue;
 
-                    // 重置行动标记
-                    Battle.ResetActionFlag(warrior);
-                }
+                        // 重置行动标记
+                        Battle.ResetActionFlag(warrior);
+                    }
+                    }
+                      
             }
         }
 
