@@ -589,7 +589,7 @@ namespace Avocat
             if (warrior.IsDead)
             {
                 OnWarriorDying?.Invoke(warrior);
-                Map.Remove(warrior);
+                RemoveWarrior(warrior);
             }
         }
 

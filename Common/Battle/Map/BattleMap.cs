@@ -30,7 +30,7 @@ namespace Avocat
             Height = h;
             grids = new int[w, h];
             items = new BattleMapItem[w, h];
-            warriors = new Warrior[w, h];
+          //  warriors = new Warrior[w, h];
             BuildPathFinder();
         }
 
