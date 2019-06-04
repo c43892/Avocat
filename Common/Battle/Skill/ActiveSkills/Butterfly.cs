@@ -26,7 +26,7 @@ namespace Avocat
             {
                 for (var y = 0; y < map.Height; y++)
                 {
-                    var warrior = map.GetWarriorAt(x, y);
+                    var warrior = map.GetAt<Warrior>(x, y);
                     if (warrior == null || warrior.Team != Warrior.Team)
                         continue;
 

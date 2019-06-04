@@ -12,7 +12,7 @@ namespace Avocat
     /// 岩石
     /// 使目标眩晕
     /// </summary>
-    public class Rock : UsableItem
+    public class Rock : ItemOnMap
     {
         public Rock(BattleMap map)
             : base(map)

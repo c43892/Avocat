@@ -62,7 +62,7 @@ namespace Avocat
                 var id = data.ReadInt();
                 var pathXYArr = data.ReadIntArr();
 
-                var warrior = Battle.Map.GetWarriorByID(id);
+                var warrior = Battle.Map.GetByID<Warrior>(id);
                 warrior.MovingPath.Clear();
                 warrior.MovingPath.AddRange(pathXYArr);
 
@@ -74,8 +74,8 @@ namespace Avocat
                 var attackerID = data.ReadInt();
                 var targetID = data.ReadInt();
 
-                var attacker = Battle.Map.GetWarriorByID(attackerID);
-                var target = Battle.Map.GetWarriorByID(targetID);
+                var attacker = Battle.Map.GetByID<Warrior>(attackerID);
+                var target = Battle.Map.GetByID<Warrior>(targetID);
 
                 Battle.Attack(attacker, target);
             });
@@ -87,9 +87,9 @@ namespace Avocat
         }
 
         // 搜索可达路径
-        public List<int> FindPath(int fx, int fy, int tx, int ty, int radius)
+        public List<int> FindPath(int fx, int fy, int tx, int ty, int radius, TileType tileMask)
         {
-            return Battle.Map.FindPath(fx, fy, tx, ty, radius);
+            return Battle.Map.FindPath(fx, fy, tx, ty, radius, tileMask);
         }
     }
 }

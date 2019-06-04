@@ -153,19 +153,12 @@ public class BattleStage : MonoBehaviour
         });
     }
 
-    // 构建地图道具层
+    // 构建地图上的对象
     public MapItem[,] Items { get; private set; }
     void BuildMapItems()
     {
         Items = new MapItem[Map.Width, Map.Height];
-        FC.For2(Map.Width, Map.Height, (x, y) =>
-        {
-            var item = Map.GetItemAt(x, y);
-            if (item == null)
-                return;
-
-            CreateMapItem(x, y, item);
-        });
+        Map.ForeachObjs<Avocat.ItemOnMap>((x, y, item) => CreateMapItem(x, y, item));
     }
 
     // 构建地图上的角色
@@ -173,14 +166,7 @@ public class BattleStage : MonoBehaviour
     void BuildAvatars()
     {
         Avatars = new MapAvatar[Map.Width, Map.Height];
-        FC.For2(Map.Width, Map.Height, (x, y) =>
-        {
-            var warrior = Map.GetWarriorAt(x, y);
-            if (warrior == null)
-                return;
-
-            CreateWarriorAvatar(x, y, warrior);
-        });
+        Map.ForeachObjs<Warrior>((x, y, target) => CreateWarriorAvatar(x, y, target));
     }
 
     // 创建角色对应的显示对象
@@ -198,7 +184,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 创建道具对应的显示对象
-    public void CreateMapItem(int x, int y, BattleMapItem item)
+    public void CreateMapItem(int x, int y, BattleMapObj item)
     {
         var mapItem = Instantiate(MapItem);
         mapItem.Item = item;
@@ -234,7 +220,7 @@ public class BattleStage : MonoBehaviour
     }
 
     // 根据道具获取 MapItem
-    public MapItem GetMapItemByItem(BattleMapItem item)
+    public MapItem GetMapItemByItem(BattleMapObj item)
     {
         MapItem mapItem = null;
         ForeachItem((x, y, a) =>

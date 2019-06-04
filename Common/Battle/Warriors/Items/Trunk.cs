@@ -12,7 +12,7 @@ namespace Avocat
     /// 树干
     /// 使目标获得创伤效果
     /// </summary>
-    public class Trunk : UsableItem
+    public class Trunk : ItemOnMap
     {
         public Trunk(BattleMap map)
             : base(map)

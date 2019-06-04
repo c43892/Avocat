@@ -120,7 +120,7 @@ public class BattleRoomClient
     }
 
     // 对目标使用道具
-    public void UseItem2(UsableItem item, Warrior target)
+    public void UseItem2(Avocat.ItemOnMap item, Warrior target)
     {
         BMS.Send("UseItem2", (data) =>
         {

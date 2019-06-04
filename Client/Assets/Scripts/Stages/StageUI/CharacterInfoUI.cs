@@ -108,7 +108,7 @@ public class CharacterInfoUI : MonoBehaviour
         var ActiveSkillFrame = ActiveSkill.transform.parent.gameObject;
         PassiveSkillFrame.SetActive(false);
         ActiveSkillFrame.SetActive(false);
-        var AllPassiveSkills = (warrior as BattleMapItem).Buffs;
+        var AllPassiveSkills = (warrior as BattleMapObj).Buffs;
         if (warrior.GetDefaultActiveSkill() != null) {
             ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().Name) as Sprite;
             ActiveSkillFrame.SetActive(true);

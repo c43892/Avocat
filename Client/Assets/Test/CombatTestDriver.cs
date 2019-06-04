@@ -53,7 +53,7 @@ public class CombatTestDriver : GameDriver
     // 开始游戏，可能是新游戏，也可能是播放录像
     public void StartGame()
     {
-        var map = new BattleMap(10, 6); // test map
+        var map = new BattleMap(10, 6, (x, y) => TileType.Grass); // test map
         var s = DateTime.Now.ToLocalTime().ToString();
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:"+ s, Name = "战斗测试:"+ s }); // test battle
 

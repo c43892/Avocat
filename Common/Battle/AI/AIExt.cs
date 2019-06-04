@@ -132,7 +132,7 @@ namespace Avocat
             warrior.GetPosInMap(out int fx, out int fy);
             var path = warrior.MovingPath;
             path.Clear();
-            path.AddRange(warrior.Map.FindPath(fx, fy, tx, ty, warrior.MoveRange));
+            path.AddRange(warrior.Map.FindPath(fx, fy, tx, ty, warrior.MoveRange, warrior.StandableTiles));
 
             // 限制移动距离
             while (path.Count > warrior.MoveRange * 2)
@@ -194,7 +194,7 @@ namespace Avocat
                 CheckoutAttackingPosition(warrior, target, (x, y) => { tx = x; ty = y; });
 
                 warrior.GetPosInMap(out int fx, out int fy);
-                var path = map.FindPath(fx, fy, tx, ty, warrior.MoveRange);
+                var path = map.FindPath(fx, fy, tx, ty, warrior.MoveRange, warrior.StandableTiles);
                 if (path.Count > 0)
                 {
                     warrior.MovingPath.Clear();
@@ -222,7 +222,7 @@ namespace Avocat
             var targets = new Dictionary<Warrior, KeyValuePair<int, int>>(); // 潜在可以攻击到的目标，及对应的站位
             var map = warrior.Map;
             warrior.GetPosInMap(out int fx, out int fy);
-            map.ForeachWarriors((tx, ty, target) =>
+            map.ForeachObjs<Warrior>((tx, ty, target) =>
             {
                 if (warrior.Team == target.Team) // 过滤掉队友
                     return;
@@ -233,7 +233,7 @@ namespace Avocat
                 if (warrior.MoveRange > 0)
                 {
                     // 向目标寻路，如果无法达到，返回的路径表示朝向目标最近的方向的移动路径
-                    var path2Target = map.FindPath(fx, fy, tx, ty, warrior.MoveRange);
+                    var path2Target = map.FindPath(fx, fy, tx, ty, warrior.MoveRange, warrior.StandableTiles);
                     if (path2Target.Count > 0)
                     {
                         dstX = path2Target[path2Target.Count - 2];
@@ -254,7 +254,7 @@ namespace Avocat
         {
             Warrior weakestTarget = null;
             var map = warrior.Map;
-            map.ForeachWarriors((tx, ty, target) =>
+            map.ForeachObjs<Warrior>((tx, ty, target) =>
             {
                 if (warrior.Team == target.Team) // 过滤掉队友
                     return;
@@ -279,7 +279,7 @@ namespace Avocat
             warrior.GetPosInMap(out int fx, out int fy);
             var nearestX = 0;
             var nearestY = 0;
-            map.ForeachWarriors((tx, ty, target) =>
+            map.ForeachObjs<Warrior>((tx, ty, target) =>
             {
                 if (warrior.Team != target.Team || warrior == target) // 过滤掉敌人和自己
                     return;
@@ -394,7 +394,7 @@ namespace Avocat
                 if (!MU.InRect(x, y, 0, 0, map.Width, map.Height))
                     return;
 
-                var t = map.GetWarriorAt(x, y);
+                var t = map.GetAt<Warrior>(x, y);
                 if (t != null && t.Team == warrior.Team)
                     teammates.Add(t);
             });
@@ -408,7 +408,7 @@ namespace Avocat
             var map = target.Map;
             target.GetPosInMap(out int cx, out int cy);
             var enemies = new List<Warrior>();
-            map.ForeachWarriors((x, y, e) =>
+            map.ForeachObjs<Warrior>((x, y, e) =>
             {
                 if (e.InAttackRange(cx, cy))
                     enemies.Add(e);

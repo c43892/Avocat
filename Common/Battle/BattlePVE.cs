@@ -62,7 +62,7 @@ namespace Avocat
                 AvailableCards.AddRange(cards);
 
             var moveRange = AvailableCards.Count;
-            Map.ForeachWarriors((x, y, warrior) =>
+            Map.ForeachObjs<Warrior>((x, y, warrior) =>
             {
                 if (warrior.Team == PlayerIndex)
                     warrior.MoveRange = moveRange;
@@ -243,10 +243,10 @@ namespace Avocat
         }
 
         // 使用道具
-        public event Action<UsableItem, Warrior> BeforeUseItem2 = null;
-        public event Action<UsableItem, Warrior> AfterUseItem2 = null;
-        public event Action<UsableItem, Warrior> OnUseItem2 = null;
-        public virtual void UseItem2(UsableItem item, Warrior target)
+        public event Action<ItemOnMap, Warrior> BeforeUseItem2 = null;
+        public event Action<ItemOnMap, Warrior> AfterUseItem2 = null;
+        public event Action<ItemOnMap, Warrior> OnUseItem2 = null;
+        public virtual void UseItem2(ItemOnMap item, Warrior target)
         {
             if (CardUsage < MaxCardUsage)
                 return;

@@ -22,7 +22,7 @@ public class EditMap : MonoBehaviour
         JudgeMapStatus();
         if (!IsMapCreated)
         {
-            Map = new BattleMap(10, 6);
+            Map = new BattleMap(10, 6, (x, y) => TileType.Grass);
             Tiles = new MapTile[Map.Width, Map.Height];
             FC.For2(Map.Width, Map.Height, (x, y) =>
             {

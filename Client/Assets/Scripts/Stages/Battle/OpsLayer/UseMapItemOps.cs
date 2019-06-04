@@ -24,7 +24,7 @@ public class UseMapItemOps : StageOpsLayer
         // 如果已经由选择道具，再次选择地方角色，则对其使用道具
         if (currentSelItem != null && avatar != null && avatar.Warrior.Team != Room.PlayerMe)
         {
-            Room.UseItem2(currentSelItem.Item as UsableItem, avatar.Warrior);
+            Room.UseItem2(currentSelItem.Item as Avocat.ItemOnMap, avatar.Warrior);
             currentSelItem.Color = MapItem.ColorDefault;
             currentSelItem = null;
             return;
@@ -85,7 +85,7 @@ public class UseMapItemOps : StageOpsLayer
         WorldPos2MapPos(tx, ty, out float tgx, out float tgy);
         var target = BattleStage.Avatars[(int)tgx, (int)tgy];
         if (currentSelItem != null && target != null && target.Warrior.Team != Room.PlayerMe)
-            Room.UseItem2(currentSelItem.Item as UsableItem, target.Warrior); // 执行操作
+            Room.UseItem2(currentSelItem.Item as Avocat.ItemOnMap, target.Warrior); // 执行操作
 
         // 隐藏指针
         PointerIndicator.SetActive(false);

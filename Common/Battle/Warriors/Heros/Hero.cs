@@ -15,7 +15,9 @@ namespace Avocat
         public Hero(Battle bt)
             : base(bt.Map)
         {
+            StandableTiles = TileType.All;
         }
+
         protected void SetupBuffAndSkills(ActiveSkill a, params Buff[] bs)
         {
             if (a != null)

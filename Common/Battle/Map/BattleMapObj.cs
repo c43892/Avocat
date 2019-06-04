@@ -9,7 +9,7 @@ namespace Avocat
     /// <summary>
     /// 道具
     /// </summary>
-    public class BattleMapItem
+    public class BattleMapObj
     {
         public string DisplayName { get; set; }
         public string Name { get; set; }
@@ -18,7 +18,7 @@ namespace Avocat
         public int IDInMap { get; private set; }
         public bool IsObstacle { get; set; } // 是否是障碍，占据地块
 
-        public BattleMapItem(BattleMap map)
+        public BattleMapObj(BattleMap map)
         {
             Map = map;
             IDInMap = map.ItemIDInMap;

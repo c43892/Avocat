@@ -128,7 +128,7 @@ static class BattleStageOnEvents
         };
 
         // 使用道具
-        (room.Battle as BattlePVE).OnUseItem2 += (UsableItem item, Warrior target) =>
+        (room.Battle as BattlePVE).OnUseItem2 += (Avocat.ItemOnMap item, Warrior target) =>
         {
             var mapItem = BattleStage.GetMapItemByItem(item);
             var avatar = BattleStage.GetAvatarByWarrior(target);

@@ -120,7 +120,7 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         var warrior = avatar?.Warrior;
-        var item = Room.Battle.Map.GetItemAt((int)gx, (int)gy);
+        var item = Room.Battle.Map.GetAt<ItemOnMap>((int)gx, (int)gy);
         switch (status)
         {
             case "selectingWarrior":
@@ -296,7 +296,7 @@ public class InBattleOps : StageOpsLayer
 
             // 拖拽到相邻块则加入路径
             var dist = MU.ManhattanDist(tailTile.X, tailTile.Y, tile.X, tile.Y);
-            if (dist == 1 && !Room.Battle.Map.BlockedAt(tile.X, tile.Y))
+            if (dist == 1 && !Room.Battle.Map.BlockedAt(tile.X, tile.Y, CurrentSelWarrior.StandableTiles))
             {
                 if (pathInSel.Count > 1) // 头节点不变色显示
                 {

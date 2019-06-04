@@ -11,6 +11,7 @@ namespace Avocat
         public Npc(BattleMap map)
             : base(map)
         {
+            StandableTiles = TileType.All;
         }
     }
 }

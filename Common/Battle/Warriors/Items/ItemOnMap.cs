@@ -10,9 +10,9 @@ namespace Avocat
     /// <summary>
     /// 地表物件，可以被英雄使用，有一定类似技能的效果
     /// </summary>
-    public abstract class UsableItem : BattleMapItem
+    public abstract class ItemOnMap : BattleMapObj
     {
-        public UsableItem(BattleMap map)
+        public ItemOnMap(BattleMap map)
             : base(map)
         {
         }

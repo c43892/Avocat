@@ -17,7 +17,7 @@ namespace Avocat
     /// <summary>
     /// 战斗角色
     /// </summary>
-    public class Warrior : BattleMapItem
+    public class Warrior : BattleMapObj
     {
         public Warrior(BattleMap map)
             :base (map)
@@ -77,6 +77,7 @@ namespace Avocat
         public int MaxES { get; set; } // 最大护盾
         public int ES { get; set; } // 护盾
 
+        public TileType StandableTiles; // 可以站立的地块类型
         public int[] AttackRange { get; set; } // 最大攻击距离
         public int MoveRange { get; set; } // 最大移动距离
 

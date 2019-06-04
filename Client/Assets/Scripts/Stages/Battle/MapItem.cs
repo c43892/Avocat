@@ -12,7 +12,7 @@ public class MapItem : MonoBehaviour
     public TextMesh NameText;
 
     // 对应的角色
-    public BattleMapItem Item { get; set; }
+    public BattleMapObj Item { get; set; }
 
     public void RefreshAttrs()
     {

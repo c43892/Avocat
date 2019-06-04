@@ -61,7 +61,7 @@ namespace Avocat
             for (var i = 0; i < warrior.Buffs.Count; i++)
                 warrior.Buffs[i].OnDetached();
 
-            Map.RemoveWarrior(warrior);
+            Map.RemoveObj(warrior);
 
             OnWarriorRemoved?.Invoke(warrior);
             AfterWarriorRemoved?.Invoke(warrior);
@@ -76,10 +76,10 @@ namespace Avocat
             if (fx == tx && fy == ty)
                 return;
 
-            Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
+            Debug.Assert(!map.BlockedAt(tx, ty, warrior.StandableTiles), "target position has been blocked: " + tx + ", " + ty);
 
-            Map.SetWarriorAt(fx, fy, null);
-            Map.SetWarriorAt(tx, ty, warrior);
+            Map.SetObjAt(fx, fy, null);
+            Map.SetObjAt(tx, ty, warrior);
         }
 
         // 交换英雄位置
@@ -93,9 +93,9 @@ namespace Avocat
 
             BeforeExchangeWarroirsPosition?.Invoke(fx, fy, tx, ty);
 
-            var tmp = Map.GetWarriorAt(fx, fy);
-            Map.SetWarriorAt(fx, fy, Map.GetWarriorAt(tx, ty));
-            Map.SetWarriorAt(tx, ty, tmp);
+            var tmp = Map.GetAt<Warrior>(fx, fy);
+            Map.SetObjAt(fx, fy, Map.GetAt<Warrior>(tx, ty));
+            Map.SetObjAt(tx, ty, tmp);
 
             OnWarriorPositionExchanged?.Invoke(fx, fy, tx, ty);
             AfterExchangeWarroirsPosition?.Invoke(fx, fy, tx, ty);
@@ -126,7 +126,7 @@ namespace Avocat
             var team2Survived = false;
             FC.For2(Map.Width, Map.Height, (x, y) =>
             {
-                var warrior = Map.GetWarriorAt(x, y);
+                var warrior = Map.GetAt<Warrior>(x, y);
                 if (warrior != null && !warrior.IsDead)
                 {
                     if (warrior.Team == 1)
@@ -221,7 +221,7 @@ namespace Avocat
                 movedPath.Add(tx);
                 movedPath.Add(ty);
 
-                Debug.Assert(!map.BlockedAt(tx, ty), "target position has been blocked: " + tx + ", " + ty);
+                Debug.Assert(!map.BlockedAt(tx, ty, warrior.StandableTiles), "target position has been blocked: " + tx + ", " + ty);
 
                 MoveWarroirs(warrior, tx, ty);
 
@@ -407,7 +407,7 @@ namespace Avocat
         {
             BeforeAddWarrior?.Invoke(x, y, warrior);
 
-            Map.SetWarriorAt(x, y, warrior);
+            Map.SetObjAt(x, y, warrior);
 
             if (warrior.AI != null)
                 ResetWarriorAI(warrior);
@@ -417,14 +417,14 @@ namespace Avocat
         }
 
         // 添加道具到地图
-        public event Action<int, int, BattleMapItem> BeforeAddItem = null;
-        public event Action<int, int, BattleMapItem> AfterAddItem = null;
-        public event Action<int, int, BattleMapItem> OnAddItem = null;
-        public void AddItemAt(int x, int y, BattleMapItem item)
+        public event Action<int, int, BattleMapObj> BeforeAddItem = null;
+        public event Action<int, int, BattleMapObj> AfterAddItem = null;
+        public event Action<int, int, BattleMapObj> OnAddItem = null;
+        public void AddItemAt(int x, int y, BattleMapObj item)
         {
             BeforeAddItem?.Invoke(x, y, item);
 
-            Map.SetItemAt(x, y, item);
+            Map.SetObjAt(x, y, item);
 
             OnAddItem?.Invoke(x, y, item);
             AfterAddItem?.Invoke(x, y, item);
