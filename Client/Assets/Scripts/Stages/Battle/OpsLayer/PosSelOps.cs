@@ -36,10 +36,14 @@ public class PosSelOps : StageOpsLayer
             if (x < 0 || x >= map.Width || y < 0 || y >= map.Height)
                 return;
 
+            var obj = map.GetAt<BattleMapObj>(x, y);
             if (MU.ManhattanDist(x, y, cx, cy) == iRange.Range)
             {
-                var tile = BattleStage.CreateMapTile(x, y);
-                Range.Add(tile);
+                if (obj == null || (obj != null && obj is Hero))
+                {
+                    var tile = BattleStage.CreateMapTile(x, y);
+                    Range.Add(tile);
+                }
             }
         });
 
@@ -73,7 +77,7 @@ public class PosSelOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.Avatars[(int)gx, (int)gy];
         var warrior = avatar == null ? null : avatar.Warrior;
-        if (warrior == null)
+        if (warrior == null || warrior.MovingPath.Count>0)
         {
             // 点空地
             if (CheckRange((int)gx, (int)gy, Range))

@@ -42,6 +42,7 @@ namespace Avocat
         public int POWInc { get; set; } // 法攻加成
         public int POWMore { get; set; } // 法攻加成
         public PatternSkill PatternSkill { get; set; } // 有无pattern技能
+        public bool IsSkillReleased { get; set; }
 
         // 基本攻击力
         public int BasicAttackValue
@@ -92,7 +93,7 @@ namespace Avocat
         public bool Moved {
             get
             {
-                return moved || ActionDone;
+                return moved;
             }
             set
             {

@@ -95,6 +95,15 @@ public class BattleRoomClient
         });
     }
 
+    // 自动排序卡牌
+    public void SortingBattleCards(Warrior warrior)
+    {
+        BMS.Send("SortingBattleCards", (data) =>
+        {
+            data.Write(warrior.IDInMap);
+        });
+    }
+
     // 释放主动技能
     public void FireActiveSkill(ActiveSkill skill)
     {

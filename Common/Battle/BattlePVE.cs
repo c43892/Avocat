@@ -178,6 +178,92 @@ namespace Avocat
             AfterAddBattleCard?.Invoke(card);
         }
 
+        // 根据英雄技能组合自动排序卡牌
+        public event Action<Warrior , List<BattleCard>> BeforeSortBattleCard = null;
+        public event Action<Warrior, List<BattleCard>> AfterSortBattleCard = null;
+        public event Action<Warrior, List<BattleCard>> OnSortBattleCard = null;
+        public void SortBattleCard(Warrior warrior)
+        {
+            BeforeSortBattleCard?.Invoke(warrior,AvailableCards);
+
+            AutoSortCards(warrior);
+
+            OnSortBattleCard?.Invoke(warrior, AvailableCards);
+            AfterSortBattleCard?.Invoke(warrior, AvailableCards);
+        }
+
+        public void AutoSortCards(Warrior warrior)
+        {
+            if (warrior.PatternSkill == null)
+                return;
+
+            BattleCard [] AfterSortingCards = new BattleCard[AvailableCards.Count];
+            var skillOrder = warrior.PatternSkill.CardsPattern;
+            bool[] visited = new bool[AvailableCards.Count];
+            int currentIndex =0;
+            int countNumber = 0;
+            int[] StoreIndex = new int[AvailableCards.Count];
+
+            while (countNumber < AvailableCards.Count)
+            {
+                for (int i = 0; i < skillOrder.Length; i++)
+                {
+                    for (int j = 0; j < AvailableCards.Count; j++)
+                    {
+                        if (!visited[j] && AvailableCards[j].Name.Equals(skillOrder[i]))
+                        {
+                            visited[j] = true;
+                            StoreIndex[currentIndex] = j; // 记录下排序后当前位置的卡牌原来的index
+                            currentIndex++;
+                            break;
+                        }
+                    }
+                    countNumber++;
+                }
+
+                // 判断是否应该将StoreIndex储存的卡牌更新到排序后的卡组
+                if (currentIndex % skillOrder.Length == 0)
+                {
+                    FC.For(currentIndex - skillOrder.Length, currentIndex, (i) =>
+                    {
+                        var j = StoreIndex[i];
+                        AfterSortingCards[i] = AvailableCards[j];
+                    });
+                }
+                else
+                {
+                    var remainder = currentIndex % skillOrder.Length;
+
+                    FC.For(currentIndex - remainder, currentIndex, (i) =>
+                    {
+                        visited[StoreIndex[i]] = false;
+                    });
+                    currentIndex = currentIndex - remainder;
+                    break;
+                }
+                   
+            }
+
+            // 将不符合组合条件的剩余卡牌放入排序后的卡组
+            for (int i = currentIndex; i < AfterSortingCards.Length; i++)
+            {
+                for (int j = 0; j < AvailableCards.Count; j++)
+                {
+                    if (!visited[j])
+                    {
+                        visited[j] = true;
+                        AfterSortingCards[i] = AvailableCards[j];
+                        break;
+                    }
+                }
+            }
+
+            FC.For(AvailableCards.Count, (i) =>
+            {
+                AvailableCards[i] = AfterSortingCards[i];
+            });
+        }
+
         #region 角色操作包装
 
         // 玩家加能量
@@ -214,7 +300,8 @@ namespace Avocat
         {
             if (Energy < skill.EnergyCost)
                 return;
-
+            if (skill.Warrior.IsSkillReleased)
+                return;
             BeforeFireSkill?.Invoke(skill);
 
             AddEN(-skill.EnergyCost);
@@ -231,6 +318,9 @@ namespace Avocat
         public virtual void FireSkillAt(ActiveSkill skill, int x, int y)
         {
             if (Energy < skill.EnergyCost)
+                return;
+
+            if (skill.Warrior.IsSkillReleased)
                 return;
 
             BeforeFireSkillAt?.Invoke(skill, x, y);

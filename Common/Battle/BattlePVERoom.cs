@@ -66,6 +66,13 @@ namespace Avocat
                 var target = Battle.Map.GetByID<Warrior>(targetID);
                 Battle.UseItem2(item as ItemOnMap, target);
             });
+
+            bmp.HandleMsg("SortingBattleCards", (player, data) =>
+            {
+                var warriorID = data.ReadInt();
+                var warrior = Battle.Map.GetByID<Warrior>(warriorID);
+                Battle.SortBattleCard(warrior);
+            });
         }
     }
 }

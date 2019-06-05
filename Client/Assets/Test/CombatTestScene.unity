@@ -120,6 +120,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &65928147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2804018243663415809, guid: 847398f81b81006429f0b3d0608fc533,
+    type: 3}
+  m_PrefabInstance: {fileID: 2804018241735410421}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &97665706 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 997066160, guid: 226ec60d53abffe458fa1e17b31d4c8e,
@@ -3280,7 +3286,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 2804018241735410421}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 65928147}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50919c48495a8a04885c20fcaff73999, type: 3}
@@ -4266,6 +4272,10 @@ PrefabInstance:
       propertyPath: BattleStageUIRoot
       value: 
       objectReference: {fileID: 793381593}
+    - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: cardArea
+      value: 
+      objectReference: {fileID: 65928147}
     - target: {fileID: 990587743, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
       propertyPath: m_IsActive
       value: 0

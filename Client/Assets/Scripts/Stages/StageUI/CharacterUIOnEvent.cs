@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 
 static class CharacterUIOnEvent 
@@ -20,6 +21,22 @@ static class CharacterUIOnEvent
         {
             aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
         };
+
+        bt.BeforeAttack += (warrior,target,skill, flags) =>
+        {
+            aniPlayer.Op(() => characterui.UpdateWarriorInfo(target));
+            //if (target is Hero)
+            //{
+            //    aniPlayer.Op(() => stageUI.SkillButtonUI.UpdateSkill(target));
+            //    aniPlayer.Op(() => stageUI.SkillButtonUI.skill.GetComponent<Button>().enabled = false);
+            //}          
+        };
+
+        //bt.AfterAttack += (warrior, target, skill, flags) =>
+        //{
+        //    if (target is Hero)
+        //        aniPlayer.Op(() => stageUI.SkillButtonUI.skill.GetComponent<Button>().enabled = true);
+        //};
 
         bt.OnAddES += (warrior, des) =>
         {

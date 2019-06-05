@@ -59,6 +59,13 @@ public class SkillButtonUI : MonoBehaviour
     {
         if (warrior == null)
             return;
+
+        if (warrior.IsSkillReleased)
+        {
+            skill.GetComponent<Button>().interactable = false;
+            return;
+        }
+
         if (!warrior.ActionDone)
         {
             if (en >= int.Parse(energy.text))

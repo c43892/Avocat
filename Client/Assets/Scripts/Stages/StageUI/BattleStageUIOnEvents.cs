@@ -80,6 +80,15 @@ static class BattleStageUIOnEvents
             });
         };
 
+        // 自动排序卡牌时刷新UI
+        bt.OnSortBattleCard += (warrior,availableCards) =>
+        {
+            aniPlayer.Op(() =>
+            {
+                BattleStageUI.CardArea.RefreshCardsAvailable(availableCards);
+            });
+        };
+
         bt.OnAddEN += (den) => aniPlayer.Op(() => BattleStageUI.CardArea.RefreshEnergy(bt.Energy, bt.MaxEnergy));
         bt.OnAddEN += (den) => aniPlayer.Op(() => BattleStageUI.SkillButtonUI.UpdateSkillState(bt.Energy, (BattleStageUI.BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior));
         bt.OnAddCardDissambleValue += (dv) => aniPlayer.Op(() => BattleStageUI.RefreshItemUsage(bt.CardUsage));

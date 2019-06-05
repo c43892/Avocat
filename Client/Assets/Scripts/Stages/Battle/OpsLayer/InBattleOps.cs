@@ -38,7 +38,7 @@ public class InBattleOps : StageOpsLayer
         private set
         {
             ClearPath();
-            if (curSelWarrior == value || (value != null && value.ActionDone))
+            if (curSelWarrior == value)
                 return;
 
             if (curSelWarrior != null && curSelWarrior.Map != null)
@@ -136,6 +136,15 @@ public class InBattleOps : StageOpsLayer
 
                     if (warrior.Team == Room.PlayerMe)
                     {
+
+                        // 根据英雄切换卡牌顺序
+                        Room.SortingBattleCards(warrior);
+                       // BattleStage.cardArea.GetComponent<BattleCardArea>().RefreshCardsAvailable();
+                        //var card = (BattleStage.Battle as BattlePVE).AvailableCards;
+                        //FC.For(card.Count, (i) =>
+                        //{
+                        //    Debug.Log(card[i].Name);
+                        //});
                         // 刷新技能
                         StageUI.SkillButtonUI.UpdateSkill(warrior);
                         StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
@@ -160,7 +169,7 @@ public class InBattleOps : StageOpsLayer
                 // 再次点击时清除攻击范围显示
                 RemoveShowAttackRange();
                 RemoveMovingPathRange();
-                if (warrior == null || CurrentSelWarrior == null || CurrentSelWarrior.ActionDone)
+                if (warrior == null)
                 {
                     // 点空地
                     if (CurrentSelWarrior.MovingPath.Count >= 2
@@ -198,7 +207,10 @@ public class InBattleOps : StageOpsLayer
                     StageUI.SkillButtonUI.UpdateSkill(warrior);
                     StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
 
-                    if (CurrentSelWarrior != null && !warrior.ActionDone)
+                    // 根据英雄切换卡牌顺序
+                    Room.SortingBattleCards(warrior);
+
+                    if (CurrentSelWarrior != null)
                     {
                         ShowAttackRange(gx, gy, CurrentSelWarrior);
                         ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
@@ -212,9 +224,11 @@ public class InBattleOps : StageOpsLayer
                     StageUI.SkillButtonUI.UpdateItemUsage();
 
                     // 点对方角色，指定攻击指令
-                    if (CurrentSelWarrior.MovingPath.Count > 0)
-                        Room.DoMoveOnPath(CurrentSelWarrior);
-                    DoAttack(CurrentSelWarrior, warrior);
+                    
+                        if (CurrentSelWarrior.MovingPath.Count > 0)
+                            Room.DoMoveOnPath(CurrentSelWarrior);
+                        if (!CurrentSelWarrior.ActionDone)
+                            DoAttack(CurrentSelWarrior, warrior);
 
                     // 判断是否该刷新技能图片
                     BattleStage.Battle.SetActionFlag(CurrentSelWarrior, CurrentSelWarrior.ActionDone);

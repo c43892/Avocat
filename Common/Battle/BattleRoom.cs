@@ -77,13 +77,16 @@ namespace Avocat
                 var attacker = Battle.Map.GetByID<Warrior>(attackerID);
                 var target = Battle.Map.GetByID<Warrior>(targetID);
 
-                Battle.Attack(attacker, target);
+                if(attacker is Hero)
+                    Battle.Attack(attacker, target);
             });
 
             bmp.HandleMsg("ActionDone", (player, data) =>
             {
                 Battle.ActionDone(player);
             });
+
+
         }
 
         // 搜索可达路径

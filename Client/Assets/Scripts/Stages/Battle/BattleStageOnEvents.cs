@@ -92,6 +92,18 @@ static class BattleStageOnEvents
             });
         };
 
+        // 每回合重置英雄释放技能的标记
+        room.Battle.OnNextRoundStarted += (int team) =>
+        {
+            BattleStage.ForeachAvatar((x, y, avatar) =>
+            {
+                if (avatar.Warrior.Team != team)
+                    return;
+
+                avatar.Warrior.IsSkillReleased = false;
+            });
+        };
+
         // 回合结束
         room.Battle.OnActionDone += (int team) =>
         {
@@ -196,6 +208,16 @@ static class BattleStageOnEvents
         bt.BeforeFireSkillAt += (ActiveSkill skill, int x, int y) =>
         {
             aniPlayer.FireSkillAt(skill, x, y);
+        };
+
+        bt.AfterFireSkill += (ActiveSkill skill) =>
+        {
+            skill.Warrior.IsSkillReleased = true;
+        };
+
+        bt.AfterFireSkillAt += (ActiveSkill skill, int x, int y) =>
+        {
+            skill.Warrior.IsSkillReleased = true;
         };
     }
 }
