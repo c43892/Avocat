@@ -220,6 +220,15 @@ public class BattleStage : MonoBehaviour
         return Avatars[x, y];
     }
 
+    // 获取指定位置 MapTile
+    public MapTile GetMapTileAt(int x, int y)
+    {
+        if (x < 0 || y < 0 || x >= Avatars.GetLength(0) || y >= Avatars.GetLength(1))
+            return null;
+
+        return Tiles[x, y];
+    }
+
     // 根据道具获取 MapItem
     public MapItem GetMapItemByItem(BattleMapObj item)
     {
@@ -255,6 +264,18 @@ public class BattleStage : MonoBehaviour
                 return;
 
             act(x, y, item);
+        }, continueCondition);
+    }
+
+    public void ForeachMapTile(Action<int, int, MapTile> act, Func<bool> continueCondition = null)
+    {
+        FC.For2(Map.Width, Map.Height, (x, y) =>
+        {
+            var tile = Tiles[x, y];
+            if (tile == null)
+                return;
+
+            act(x, y, tile);
         }, continueCondition);
     }
 

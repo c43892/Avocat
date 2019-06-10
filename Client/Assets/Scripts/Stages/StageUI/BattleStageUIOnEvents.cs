@@ -101,5 +101,13 @@ static class BattleStageUIOnEvents
             var CardAreaTransform = BattleStageUI.CardArea.transform;
             CardAreaTransform.parent.gameObject.SetActive(true);
         };
+
+        BattleStageUI.BattleStage.Battle.OnPlayerPrepared += (int num) =>
+        {
+            BattleStageUI.BattleStage.ForeachAvatar((x, y, avatar) =>
+            {
+                avatar.IsShowClickFrame = false;
+            });
+        };
     }
 }

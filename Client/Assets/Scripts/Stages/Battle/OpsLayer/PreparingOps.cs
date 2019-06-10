@@ -16,10 +16,10 @@ public class PreparingOps : StageOpsLayer
     {
     }
 
+    public MapTile CurrentTile { get; set; }
     public override void OnClicked(float x, float y)
     {
         WorldPos2MapPos(x, y, out float gx, out float gy);
-
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         if (currentSelAvatar == null && avatar != null && avatar.Warrior.Team == Room.PlayerMe)
         {
@@ -34,7 +34,6 @@ public class PreparingOps : StageOpsLayer
             Room.DoExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)gx, (int)gy);
             currentSelAvatar = null;
         }
-
     }
 
     Vector2 dragPointerOffset;
@@ -90,6 +89,7 @@ public class PreparingOps : StageOpsLayer
         Room.DoExchangeWarroirsPosition((int)gfx, (int)gfy, (int)gtx, (int)gty);
         PointerIndicator.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);
+        currentSelAvatar.IsShowClickFrame = false;
         currentSelAvatar = null;
     }
 }

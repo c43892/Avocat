@@ -43,13 +43,13 @@ public class InBattleOps : StageOpsLayer
 
             if (curSelWarrior != null && curSelWarrior.Map != null)
             {
-                BattleStage.GetAvatarByWarrior(curSelWarrior).IsShowClickFrame = false;
+              //  BattleStage.GetAvatarByWarrior(curSelWarrior).IsShowClickFrame = false;
             }
 
             curSelWarrior = value;
             if (curSelWarrior != null)
             {
-                BattleStage.GetAvatarByWarrior(curSelWarrior).IsShowClickFrame = true;
+              //  BattleStage.GetAvatarByWarrior(curSelWarrior).IsShowClickFrame = true;
                 curSelWarrior.MovingPath.Clear();
             }
 
@@ -85,12 +85,6 @@ public class InBattleOps : StageOpsLayer
                 }
             });
         });
-
-        //FC.For(0, pathATKRange.Count, i =>
-        //{
-        //  //  pathATKRange[i].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("UI/AttackRange");
-        //    pathATKRange[i].GetComponent<SpriteRenderer>().color = Color.red;
-        //});
     }
 
     // 清除攻击范围显示
@@ -112,6 +106,9 @@ public class InBattleOps : StageOpsLayer
     }
 
     BattleStageUI StageUI { get => BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>(); }
+   // public ItemOnMap CurrentItem { get; set; }
+   // public MapAvatar CurrentAvatar { get; set; }
+    public MapTile CurrentTile { get; set; }
 
     public override void OnClicked(float x, float y)
     {
@@ -121,6 +118,13 @@ public class InBattleOps : StageOpsLayer
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         var warrior = avatar?.Warrior;
         var item = Room.Battle.Map.GetAt<ItemOnMap>((int)gx, (int)gy);
+        var mapTile = BattleStage.GetMapTileAt((int)gx, (int)gy);
+        if (CurrentTile != null)
+            CurrentTile.IsShowClickFrame = false;
+        if(mapTile != null)
+            mapTile.IsShowClickFrame = true;
+        CurrentTile = mapTile;
+
         switch (status)
         {
             case "selectingWarrior":
@@ -129,42 +133,51 @@ public class InBattleOps : StageOpsLayer
                 StageUI.CharacterInfoUI.gameObject.SetActive(false);
                 StageUI.obstacleUI.gameObject.SetActive(false);
                 StageUI.SkillButtonUI.UpdateItemUsage();
+                //if (CurrentItem != null)
+                //    CurrentItem.MapItem.IsShowClickFrame = false;
+                //if (CurrentAvatar != null)
+                //    CurrentAvatar.IsShowClickFrame = false;
+                //if (CurrentTile != null)
+                //    CurrentTile.IsShowClickFrame = false;
+
                 if (warrior != null)
                 {
                     // 显示人物信息栏
                     StageUI.CharacterInfoUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
-
+                   // avatar.IsShowClickFrame = true;
+                  //  CurrentAvatar = avatar;
                     if (warrior.Team == Room.PlayerMe)
                     {
 
                         // 根据英雄切换卡牌顺序
                         Room.SortingBattleCards(warrior);
-                       // BattleStage.cardArea.GetComponent<BattleCardArea>().RefreshCardsAvailable();
-                        //var card = (BattleStage.Battle as BattlePVE).AvailableCards;
-                        //FC.For(card.Count, (i) =>
-                        //{
-                        //    Debug.Log(card[i].Name);
-                        //});
+
                         // 刷新技能
                         StageUI.SkillButtonUI.UpdateSkill(warrior);
                         StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
+
                         // 选中己方角色，等待攻击指令
                         CurrentSelWarrior = warrior;
                         if (CurrentSelWarrior != null)
                         {
                             status = "selectingAttackTarget";
                             ShowAttackRange(gx, gy, CurrentSelWarrior);
-                            ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
+                            //  ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
                         }
                     }
                 }
                 else if (item != null) // 显示障碍物信息栏
+                {
                     StageUI.obstacleUI.UpdateObstacleInfo(item);
+                  //  item.MapItem.IsShowClickFrame = true;
+                  //  CurrentItem = item;
+                }              
                 break;
             case "selectingAttackTarget":
 
                 // 显示地形改造按钮
                 StageUI.SkillButtonUI.UpdateItemUsage();
+               // CurrentAvatar.IsShowClickFrame = false;
 
                 // 再次点击时清除攻击范围显示
                 RemoveShowAttackRange();
@@ -186,9 +199,13 @@ public class InBattleOps : StageOpsLayer
                     }
                     else 
                     {
-                        if (item != null) // 点障碍物
+                        if (item != null)// 点障碍物
+                        {
                             StageUI.obstacleUI.UpdateObstacleInfo(item);
-
+                          //  item.MapItem.IsShowClickFrame = true;
+                          //  CurrentItem = item;
+                        }
+ 
                         // 否则恢复初始状态
                         CurrentSelWarrior = null;
                         status = "selectingWarrior";
@@ -201,11 +218,13 @@ public class InBattleOps : StageOpsLayer
                 {
                     // 点己方角色，切换操作对象
                     CurrentSelWarrior = warrior;
+                  //  CurrentAvatar = avatar;
 
                     // 显示人物信息栏
                     StageUI.CharacterInfoUI.UpdateWarriorInfo(warrior);
                     StageUI.SkillButtonUI.UpdateSkill(warrior);
                     StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
+                  //  CurrentAvatar.IsShowClickFrame = true;
 
                     // 根据英雄切换卡牌顺序
                     Room.SortingBattleCards(warrior);
@@ -213,29 +232,30 @@ public class InBattleOps : StageOpsLayer
                     if (CurrentSelWarrior != null)
                     {
                         ShowAttackRange(gx, gy, CurrentSelWarrior);
-                        ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
+                      //  ShowMovePathRange(gx, gy, (Room.Battle as BattlePVE).AvailableCards.Count);
                     }
                    
                 }
                 else if (CurrentSelWarrior != null)
                 {
                     // 显示敌军信息栏
+                 //   CurrentAvatar = avatar;
                     StageUI.CharacterInfoUI.UpdateWarriorInfo(warrior);
                     StageUI.SkillButtonUI.UpdateItemUsage();
+                  //  CurrentAvatar.IsShowClickFrame = true;
 
                     // 点对方角色，指定攻击指令
-                    
-                        if (CurrentSelWarrior.MovingPath.Count > 0)
-                            Room.DoMoveOnPath(CurrentSelWarrior);
-                        if (!CurrentSelWarrior.ActionDone)
-                            DoAttack(CurrentSelWarrior, warrior);
+
+                    if (CurrentSelWarrior.MovingPath.Count > 0)
+                        Room.DoMoveOnPath(CurrentSelWarrior);
+                    if (!CurrentSelWarrior.ActionDone)
+                        DoAttack(CurrentSelWarrior, warrior);
 
                     // 判断是否该刷新技能图片
                     BattleStage.Battle.SetActionFlag(CurrentSelWarrior, CurrentSelWarrior.ActionDone);
                     CurrentSelWarrior = null;
                     status = "selectingWarrior";
                 }
-
                 break;
         }
     }

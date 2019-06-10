@@ -122,7 +122,19 @@ public class MapTile : MonoBehaviour
             y = value;
             transform.localPosition = new Vector3(x, y);
         }
-    } int y;    
+    } int y;
+
+    public bool IsShowClickFrame
+    {
+        get
+        {
+            return transform.Find("ClickFrame").gameObject.activeSelf ? true : false;
+        }
+        set
+        {
+            transform.Find("ClickFrame").gameObject.SetActive(value);
+        }
+    }
 
     public BattleCard Card
     {

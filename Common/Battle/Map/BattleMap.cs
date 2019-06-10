@@ -64,7 +64,7 @@ namespace Avocat
         }
 
         // 所有地图上的占位对象
-        readonly BattleMapObj[,] objs;
+        public readonly BattleMapObj[,] objs;
 
         // 获取指定位置的对象
         public T GetAt<T>(int x, int y) where T : BattleMapObj
