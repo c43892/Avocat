@@ -21,9 +21,10 @@ public class OperationOnMap : MonoBehaviour
         GameObject ob = Selection.activeGameObject;
         if (ob != null && ob.name.Equals("EditMaptile(Clone)"))
         {
-            var material = ob.transform.Find("Material");
-            var name = material.Find("Name").GetComponent<TextMesh>();
-            name.text = MapCreator.materialType.ToString();
+            var material = ob.transform.Find("Material").GetComponent<SpriteRenderer>();
+            material.sprite = Resources.Load<Sprite>("UI/MapTile/" + MapCreator.materialType.ToString());
+          //  var name = material.Find("Name").GetComponent<TextMesh>();
+           // name.text = MapCreator.materialType.ToString();
         }
         e.Use();
     }   

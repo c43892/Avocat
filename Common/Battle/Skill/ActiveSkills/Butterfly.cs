@@ -14,6 +14,8 @@ namespace Avocat
     public class Butterfly : ActiveSkill
     {
         public override string Name { get => "Butterfly"; }
+        public override string DisplayName { get => "蝶舞"; }
+        public override string SkillDescription { get; set; } = "治疗所有友方单位 50% 最大生命值";
 
         // 能量消耗
         public override int EnergyCost { get; set; }

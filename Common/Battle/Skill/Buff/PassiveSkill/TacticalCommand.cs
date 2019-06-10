@@ -15,6 +15,8 @@ namespace Avocat
     {
         Func<string> GetCardType { get; set; }
         public override string Name { get; } = "TacticalCommand";
+        public override string DisplayName { get; } = "战术指挥";
+        public override string SkillDescription { get; set; } = "行动阶段前，生成一张指令卡";
         public TacticalCommand(Func<string> getCardType)
         {
             GetCardType = getCardType;

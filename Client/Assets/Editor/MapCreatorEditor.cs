@@ -43,14 +43,14 @@ public class MapCreatorEditor : Editor
             MapCreator.materialType = MapCreator.MapMaterialtype.Grass;
         }
 
-        if (GUILayout.Button("Water"))
+        if (GUILayout.Button("Rock"))
         {
-            MapCreator.materialType = MapCreator.MapMaterialtype.Water;
+            MapCreator.materialType = MapCreator.MapMaterialtype.Rock;
         }
 
-        if (GUILayout.Button("Mountain"))
+        if (GUILayout.Button("Soil"))
         {
-            MapCreator.materialType = MapCreator.MapMaterialtype.Mountain;
+            MapCreator.materialType = MapCreator.MapMaterialtype.Soil;
         }
 
         // 显示当前选择的材质

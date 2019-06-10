@@ -31,7 +31,7 @@ public class EditMap : MonoBehaviour
                 tile.transform.SetParent(MapRoot);
                 tile.X = x;
                 tile.Y = y;
-                tile.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                tile.transform.Find("Material").GetComponent<SpriteRenderer>().sortingOrder = y + 2;
                 tile.gameObject.SetActive(true);
                 Tiles[x, y] = tile;
                 MapTilesList.Add(tile);

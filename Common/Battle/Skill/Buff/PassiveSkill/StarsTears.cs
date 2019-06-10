@@ -14,6 +14,8 @@ namespace Avocat
     public class StarsTears : PassiveSkill
     {
         public override string Name { get;} = "StarsTears";
+        public override string DisplayName { get; } = "星之泪";
+        public override string SkillDescription { get; set; } = "行动阶段前，每当友方单位受到治疗时，为受到治疗的友方单位提供护盾";
         void OnAfterAddHp(Warrior warrior, int dhp)
         {
             if (warrior.Team != Warrior.Team || warrior == Warrior || dhp <= 0)

@@ -23,6 +23,14 @@ public class CharacterInfoUI : MonoBehaviour
     public GameObject ActiveSkill;
     public GameObject BUFFInFo;
     public GameObject[] BUFFPic;
+    public GameObject SkillPanel;
+    public GameObject ActiveSkillPanel;
+    public GameObject ActiveSkillTrigger;
+    public GameObject PassiveSkillPanel;
+    public GameObject PassiveSkillTrigger;
+    public GameObject[] PatternSkillTriggerPics;
+    public Text ActiveSkillDescription;
+    public Text PassiveSkillDescription;
 
     public void ShowWarriorPhoto(Warrior warrior)
     {
@@ -83,6 +91,7 @@ public class CharacterInfoUI : MonoBehaviour
         ShowRESValue(warrior);
         UpDateShield(warrior);
         UpDateLife(warrior);
+        UpdateSkillPanelInfo(warrior);
     }
 
     public void UpDateLife(Warrior warrior)
@@ -150,6 +159,80 @@ public class CharacterInfoUI : MonoBehaviour
                 }
             }
         });
+    }
+
+    public void UpdateSkillPanelInfo(Warrior warrior)
+    {
+        if (warrior is Hero)
+        {
+            var activeSkill = warrior.GetDefaultActiveSkill();
+            var activeSkillName = ActiveSkillPanel.transform.Find("SkillName").gameObject.GetComponent<Text>();
+            var activeSkillIcon = ActiveSkillPanel.transform.Find("SkillIcon").gameObject.GetComponent<Image>();
+            var passiveSkillName = PassiveSkillPanel.transform.Find("SkillName").gameObject.GetComponent<Text>();
+            var passiveSkillIcon = PassiveSkillPanel.transform.Find("SkillIcon").gameObject.GetComponent<Image>();
+            var energyTrigger = ActiveSkillTrigger.transform.Find("EnergyTrigger").gameObject.GetComponent<Text>();
+            var patternTrigger = ActiveSkillTrigger.transform.Find("PatternTrigger").gameObject;
+
+            if (warrior.GetDefaultActiveSkill() != null) // 如果是activeskill
+            {
+                patternTrigger.SetActive(false);
+                energyTrigger.gameObject.SetActive(true);
+                activeSkillName.text = activeSkill.DisplayName;
+                energyTrigger.text = activeSkill.EnergyCost.ToString() + " 能量";
+                activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().Name) as Sprite;
+                ActiveSkillDescription.text = activeSkill.SkillDescription;
+            }
+            else // 如果是patternskill
+            {
+                var AllPassiveSkills = (warrior as BattleMapObj).Buffs;               
+                FC.For(AllPassiveSkills.Count, (i) =>
+                {
+                    if (AllPassiveSkills[i] is PatternSkill)
+                    {
+                        var patternSkill = AllPassiveSkills[i];
+                        patternTrigger.SetActive(true);
+                        energyTrigger.gameObject.SetActive(false);
+                        activeSkillName.text = patternSkill.DisplayName;
+                        activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].Name) as Sprite;
+                        ActiveSkillDescription.text = patternSkill.SkillDescription;
+
+                        FC.For(PatternSkillTriggerPics.Length, (j) =>
+                        {
+                            PatternSkillTriggerPics[j].SetActive(false);
+                        });
+
+                        // 将SkillPanel提示栏的图片更换为pattern技能的出招顺序
+                        FC.For(warrior.PatternSkill.CardsPattern.Length, (j) =>
+                        {
+                            PatternSkillTriggerPics[j].SetActive(true);
+                            PatternSkillTriggerPics[j].GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/CardType/" + warrior.PatternSkill.CardsPattern[j]) as Sprite;
+                        });
+                    }
+                });
+            }
+
+            // 设置被动技能的信息栏
+            var Buffs = (warrior as BattleMapObj).Buffs;
+            FC.For(Buffs.Count, (i) =>
+            {
+                if (Buffs[i] is PassiveSkill)
+                {
+                    passiveSkillName.text = Buffs[i].DisplayName;
+                    passiveSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + Buffs[i].Name) as Sprite;
+                    PassiveSkillDescription.text = Buffs[i].SkillDescription;
+                }
+            });
+        }
+    }
+
+    public void HideSkillPanel()
+    {
+        SkillPanel.SetActive(false);
+    }
+
+    public void ShowSkillPanel()
+    {
+        SkillPanel.SetActive(true);
     }
 }
 

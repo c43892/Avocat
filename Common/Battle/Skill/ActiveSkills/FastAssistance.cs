@@ -15,6 +15,8 @@ namespace Avocat
     public class FastAssistance : ActiveSkill
     {
         public override string Name { get => "FastAssistance"; }
+        public override string DisplayName { get => "快速援护"; }
+        public override string SkillDescription { get; set; } = "切换巴洛克形态";
 
         // 能量消耗
         public override int EnergyCost { get; set; }

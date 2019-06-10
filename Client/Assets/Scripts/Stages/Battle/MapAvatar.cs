@@ -48,6 +48,7 @@ public class MapAvatar : MonoBehaviour
        //hieldText.text = es.ToString();
       //ShieldText.transform.parent.gameObject.SetActive(es > 0);
         Color = actionDone ? ColorActionDone : ColorDefault;
+        ShowActionDoneMask(Warrior);
         Life.transform.localScale = new Vector3(hp / (float)Warrior.MaxHP,1,1);
         if (Warrior.MaxES != 0)
             Shield.transform.localScale = new Vector3(es / (float)Warrior.MaxES, 1, 1);
@@ -137,5 +138,17 @@ public class MapAvatar : MonoBehaviour
             path = "Animation/" + warrior.Name + "/";
         }
         SetIdleAni(warrior, path);
+    }
+
+    public void ShowActionDoneMask(Warrior warrior)
+    {
+        if (warrior is Hero)
+        {
+            var mask = transform.Find("Mask").gameObject;
+            if (warrior.ActionDone)
+                mask.SetActive(true);
+            else
+                mask.SetActive(false);
+        }
     }
 }

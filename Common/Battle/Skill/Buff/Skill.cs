@@ -21,7 +21,9 @@ namespace Avocat
     public abstract class Skill
     {
         public virtual string Name { get; } // 每个技能必须唯一
+        public virtual string DisplayName { get;}
         public virtual Warrior Warrior { get; set; } // 技能在哪个角色身上
+        public virtual string SkillDescription { get; set; }
     }
 
     /// <summary>

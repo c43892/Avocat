@@ -13,8 +13,8 @@ public class MapCreator : MonoBehaviour
     public enum MapMaterialtype
     {
         Grass,
-        Water,
-        Mountain,
+        Rock,
+        Soil,
     }
     public static MapMaterialtype materialType;
 }

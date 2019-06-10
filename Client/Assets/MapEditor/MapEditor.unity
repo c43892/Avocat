@@ -522,7 +522,7 @@ GameObject:
   m_Component:
   - component: {fileID: 203791244}
   - component: {fileID: 203791245}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Material
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +538,7 @@ Transform:
   m_GameObject: {fileID: 203791243}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0.56, z: 0}
-  m_LocalScale: {x: 2, y: -2, z: 1}
+  m_LocalScale: {x: 0.7, y: -0.7, z: 1}
   m_Children:
   - {fileID: 1626438359}
   m_Father: {fileID: 1566369249}
@@ -586,7 +586,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.42, y: 1.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -1980,6 +1980,18 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1439316296, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1439316296, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1439316296, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: m_Color.b
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 997066162, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
@@ -3895,7 +3907,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

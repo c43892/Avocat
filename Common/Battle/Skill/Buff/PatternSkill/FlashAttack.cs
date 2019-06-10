@@ -14,6 +14,7 @@ namespace Avocat
     public class FlashAttack : PatternSkill, ISkillWithAXY
     {
         public override string Name => "FlashAttack";
+        public override string DisplayName => "一闪";
 
         // 触发模式
         public override string[] CardsPattern { get; protected set; } = new string[] { "ATK", "ES" };
@@ -24,6 +25,8 @@ namespace Avocat
             var target = Map.FindNearestTarget(Warrior);
             BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack","SkillAttack");
         }
+
+        public override string SkillDescription { get { return "这是一闪的技能描述这是一闪的技能描述这是一闪的技能描述这是一闪的技能描述"; } }
 
         public int A { get; set; }
         public int X { get; set; }

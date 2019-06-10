@@ -16,6 +16,9 @@ namespace Avocat
         // 效果持续几回合
         public int EffectRoundNum { get; set; }
         public override string Name { get; } = "Kendo";
+        public override string DisplayName { get; } = "剑道";
+        public override string SkillDescription { get; set; } = "攻击时施加创伤效果，使目标不可被治疗";
+
         void OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Warrior)

@@ -15,6 +15,9 @@ namespace Avocat
     {
         public int ES2Add { get; set; }
         public override string Name { get; } = "ArtisanSpirit";
+        public override string DisplayName { get; } = "匠心";
+        public override string SkillDescription { get; set; } = "行动阶段前，为团队提供能量";
+
         void AddEN(int player)
         {
             if (player != Warrior.Team)
