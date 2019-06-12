@@ -55,7 +55,8 @@ public class BattleStage : MonoBehaviour
     public PreparingOps PreparingOps { get; private set; }  // 准备阶段
     public InBattleOps InBattleOps { get; private set; } // 战斗内一般阶段
     public UseMapItemOps UseMapItemOps { get; private set; }  // 战斗内地形改造阶段
-    public PosSelOps PosSelOps { get; private set; }
+    public PosSelOps PosSelOps { get; private set; } // 释放技能阶段
+    public SkillPreviewOps SkillPreviewOps;
 
     public Action<BattleReplay> OnTimeBackTriggered { get; private set; }
 
@@ -74,6 +75,8 @@ public class BattleStage : MonoBehaviour
         InBattleOps = new InBattleOps(this); // 战斗内一般阶段
         UseMapItemOps = new UseMapItemOps(this); // 战斗内地形改造阶段
         PosSelOps = new PosSelOps(this); //  战斗内释放技能阶段
+        SkillPreviewOps = new SkillPreviewOps(this);
+
         OnTimeBackTriggered = onTimeBackTriggered;
 
         // 将场景中心移动到屏幕中心

@@ -168,6 +168,7 @@
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\InBattleOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PosSelOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\PreparingOps.cs" />
+    <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\SkillPreviewOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\StageOpsLayer.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\OpsLayer\UseMapItemOps.cs" />
     <Compile Include="Assets\Scripts\Stages\Battle\PoniterIndicator.cs" />
@@ -178,9 +179,11 @@
     <Compile Include="Assets\Scripts\Stages\StageUI\BattleStageUIOnEvents.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\CharacterInfoUI.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\CharacterUIOnEvent.cs" />
+    <Compile Include="Assets\Scripts\Stages\StageUI\LongPressButton.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\ObstacleUI.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\SettingUI.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\SkillButtonUI.cs" />
+    <Compile Include="Assets\Scripts\Stages\StageUI\SkillPreviewUI.cs" />
     <Compile Include="Assets\Scripts\Stages\StageUI\WinConditionUI.cs" />
     <Compile Include="Assets\Spine\Runtime\spine-csharp\Animation.cs" />
     <Compile Include="Assets\Spine\Runtime\spine-csharp\AnimationState.cs" />
