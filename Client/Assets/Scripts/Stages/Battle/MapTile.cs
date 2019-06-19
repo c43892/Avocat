@@ -13,6 +13,7 @@ public class MapTile : MonoBehaviour
     SpriteRenderer sr;
     public SpriteRenderer CardSR;
     public SpriteRenderer DirSR;
+    public MapData MapData;
 
     private void Start()
     {

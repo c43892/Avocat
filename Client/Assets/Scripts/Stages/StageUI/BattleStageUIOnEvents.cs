@@ -109,5 +109,13 @@ static class BattleStageUIOnEvents
                 avatar.IsShowClickFrame = false;
             });
         };
+
+        BattleStageUI.BattleStage.Battle.OnPlayerPrepared += (int num) =>
+        {
+            BattleStageUI.BattleStage.ForeachMapTile((x, y, mapTile) =>
+            {
+                mapTile.transform.Find("RespawnPlace").gameObject.SetActive(false);
+            });
+        };
     }
 }

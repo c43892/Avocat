@@ -13,6 +13,7 @@ public class CombatTestDriver : GameDriver
     public GameObject StartingUI;
     public GameObject GameOverUI;
     public BattleStageUI BattleStageUI;
+    public MapReader MapReader;
 
     BattleRoomClient Room { get { return BattleStage.Room; } }
     Battle Battle { get { return Room?.Battle; } }
@@ -57,20 +58,39 @@ public class CombatTestDriver : GameDriver
         var s = DateTime.Now.ToLocalTime().ToString();
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:"+ s, Name = "战斗测试:"+ s }); // test battle
 
+        // 载入地图
+        MapReader.ReloadMapInfo();
+        //   MapReader.onSetWarrior = (x, y, warrior) => { bt.AddWarriorAt(x, y, warrior);};
         // npcs
-        bt.AddWarriorAt(5, 1, Configuration.Config(new Boar(map) { Team = 2 }));
-        bt.AddWarriorAt(5, 3, Configuration.Config(new Boar(map) { Team = 2 }));
-        bt.AddWarriorAt(5, 5, Configuration.Config(new Boar(map) { Team = 2 }));
+        //bt.AddWarriorAt(5, 1, Configuration.Config(new Boar(map) { Team = 2 }));
+        //bt.AddWarriorAt(5, 3, Configuration.Config(new Boar(map) { Team = 2 }));
+        //bt.AddWarriorAt(5, 5, Configuration.Config(new Boar(map) { Team = 2 }));
+
+        //// heros
+        //bt.AddWarriorAt(2, 1, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
+        //bt.AddWarriorAt(2, 2, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
+        //bt.AddWarriorAt(2, 3, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
+        //bt.AddWarriorAt(2, 4, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
+        var data1 = MapReader.GetRandomPlaceForEnemy();
+        bt.AddWarriorAt(data1.X, data1.Y, Configuration.Config(new Boar(map) { Team = 2 }));
+        var data2 = MapReader.GetRandomPlaceForEnemy();
+        bt.AddWarriorAt(data2.X, data2.Y, Configuration.Config(new Boar(map) { Team = 2 }));
+        var data3 = MapReader.GetRandomPlaceForEnemy();
+        bt.AddWarriorAt(data3.X, data3.Y, Configuration.Config(new Boar(map) { Team = 2 }));
 
         // heros
-        bt.AddWarriorAt(2, 1, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
-        bt.AddWarriorAt(2, 2, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
-        bt.AddWarriorAt(2, 3, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
-        bt.AddWarriorAt(2, 4, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
+        var data4 = MapReader.GetRandomPlaceForChamp();
+        bt.AddWarriorAt(data4.X, data4.Y, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
+        var data5 = MapReader.GetRandomPlaceForChamp();
+        bt.AddWarriorAt(data5.X, data5.Y, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
+        var data6 = MapReader.GetRandomPlaceForChamp();
+        bt.AddWarriorAt(data6.X, data6.Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
+        var data7 = MapReader.GetRandomPlaceForChamp();
+        bt.AddWarriorAt(data7.X, data7.Y, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
 
         // items
-        bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
-        bt.AddItemAt(7, 4, Configuration.Config(new Rock(map)));
+      //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
+      //  bt.AddItemAt(7, 4, Configuration.Config(new Rock(map)));
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };
@@ -157,4 +177,6 @@ public class CombatTestDriver : GameDriver
         StartingUI.transform.Find("Replays").gameObject.SetActive(false);
         StartingUI.transform.Find("PlayReplays").gameObject.SetActive(true);
     }
+
+    
 }

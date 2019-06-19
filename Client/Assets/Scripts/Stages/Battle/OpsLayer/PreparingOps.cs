@@ -30,7 +30,13 @@ public class PreparingOps : StageOpsLayer
         else if (currentSelAvatar != null)
         {
             // 交换角色位置
+            var mapTile = BattleStage.GetMapTileAt((int)gx, (int)gy);
             currentSelAvatar.IsShowClickFrame = false;
+            if (mapTile != null && mapTile.MapData.RespawnForChamp == false)
+            {
+                currentSelAvatar = null;
+                return;
+            }
             Room.DoExchangeWarroirsPosition(currentSelAvatar.X, currentSelAvatar.Y, (int)gx, (int)gy);
             currentSelAvatar = null;
         }
@@ -81,15 +87,18 @@ public class PreparingOps : StageOpsLayer
     {
         WorldPos2MapPos(fx, fy, out float gfx, out float gfy);
         WorldPos2MapPos(tx, ty, out float gtx, out float gty);
-
+        var mapTile = BattleStage.GetMapTileAt((int)gtx, (int)gty);
         if (currentSelAvatar == null)
             return;
-
+        
         // 隐藏指针，执行交换操作，并显示被拖拽对象
-        Room.DoExchangeWarroirsPosition((int)gfx, (int)gfy, (int)gtx, (int)gty);
         PointerIndicator.SetActive(false);
         currentSelAvatar.gameObject.SetActive(true);
         currentSelAvatar.IsShowClickFrame = false;
         currentSelAvatar = null;
+
+        if (mapTile != null && mapTile.MapData.RespawnForChamp == false)
+            return;
+        Room.DoExchangeWarroirsPosition((int)gfx, (int)gfy, (int)gtx, (int)gty);
     }
 }

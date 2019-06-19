@@ -24,6 +24,9 @@ public class BattleStage : MonoBehaviour
     // 底层地图操作处理
     public MapGroundLayer MapGround;
 
+    // 地图信息
+    public MapReader MapReader;
+
     // 相关显示参数
     public int MapTileWidth { get; set; }
     public int MapTileHeight { get; set; }
@@ -108,7 +111,7 @@ public class BattleStage : MonoBehaviour
         tile.Y = (int)y;
         tile.transform.localScale = Vector3.one;
         tile.gameObject.name = "AttackRange";
-        tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        tile.GetComponent<SpriteRenderer>().sortingOrder = (int)y + 3;
         tile.gameObject.SetActive(true);
         return tile;
     }
@@ -150,9 +153,9 @@ public class BattleStage : MonoBehaviour
             tile.transform.SetParent(MapRoot);
             tile.X = x;
             tile.Y = y;
-            tile.GetComponent<SpriteRenderer>().sortingOrder = 1;
+            MapReader.ReadMapInfo(tile);
+            tile.GetComponent<SpriteRenderer>().sortingOrder = y + 2;
             tile.gameObject.SetActive(true);
-
             Tiles[x, y] = tile;
         });
     }

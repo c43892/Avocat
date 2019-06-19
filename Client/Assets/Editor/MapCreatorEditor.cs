@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.EventSystems;
+using Avocat;
+using LitJson;
 
 [CustomEditor(typeof(MapCreator))]
 public class MapCreatorEditor : Editor
@@ -25,7 +27,7 @@ public class MapCreatorEditor : Editor
         EditorGUILayout.PrefixLabel("Create Map");
         if (GUILayout.Button("Create Map"))
         {
-            MapCreator.EditMap.BuildMapGrids();
+            MapCreator.BuildMapGrids();
         }
 
         // 销毁地图选项
@@ -33,29 +35,72 @@ public class MapCreatorEditor : Editor
         EditorGUILayout.PrefixLabel("Destroy Map");       
         if (GUILayout.Button("Destroy Map"))
         {
-            MapCreator.EditMap.DestroyMap();
+            MapCreator.DestroyMap();
+            MapCreator.MapInfo.Clear();
         }
 
         // 选择地图材质
         EditorGUILayout.Space();
         EditorGUILayout.PrefixLabel("Material of MapTile");
         if (GUILayout.Button("Grass")) {
-            MapCreator.materialType = MapCreator.MapMaterialtype.Grass;
+            MapCreator.TileType = TileType.Grass;
         }
 
         if (GUILayout.Button("Rock"))
         {
-            MapCreator.materialType = MapCreator.MapMaterialtype.Rock;
+            MapCreator.TileType = TileType.Rock;
         }
 
         if (GUILayout.Button("Soil"))
         {
-            MapCreator.materialType = MapCreator.MapMaterialtype.Soil;
+            MapCreator.TileType = TileType.Soil;
+        }
+        if (GUILayout.Button("None"))
+        {
+            MapCreator.TileType = TileType.None;
         }
 
         // 显示当前选择的材质
         EditorGUILayout.Space();
         EditorGUILayout.PrefixLabel("Current Material");
-        EditorGUILayout.TextField(MapCreator.materialType.ToString());
+        EditorGUILayout.TextField(MapCreator.TileType.ToString());
+
+        EditorGUILayout.Space();
+        //EditorGUILayout.PrefixLabel("Create RespawnGrid");
+        if (GUILayout.Button("Create RespawnGrid"))
+        {
+            MapCreator.ShowRespawnGrid();
+        }
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Destroy RespawnGrid"))
+        {
+            MapCreator.HideRespawnGrid();
+        }
+
+
+        EditorGUILayout.Space();
+        EditorGUILayout.PrefixLabel("Choose RespawnType");
+        if (GUILayout.Button("Hero"))
+        {
+            MapCreator.respawnType = MapCreator.RespawnType.Hero;
+        }
+        if (GUILayout.Button("Enemy"))
+        {
+            MapCreator.respawnType = MapCreator.RespawnType.Enemy;
+        }
+        if (GUILayout.Button("None"))
+        {
+            MapCreator.respawnType = MapCreator.RespawnType.None;
+        }
+        EditorGUILayout.PrefixLabel("Current Respawn Type");
+        EditorGUILayout.TextField(MapCreator.respawnType.ToString());
+
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Save Map"))
+        {
+            MapCreator.SaveToJson();
+        }
+
+        
     }
 }

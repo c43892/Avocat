@@ -19,7 +19,7 @@ namespace Avocat
         Lava = 0x02,
         Grass = 0x04,
         Rock = 0x08,
-        Soli = 0x10,
+        Soil = 0x10,
         Hill = 0x20,
 
         All = 0xFFFF,

@@ -277,6 +277,10 @@ public class InBattleOps : StageOpsLayer
 
         RemoveShowAttackRange();
 
+        // 隐藏点击框
+        if (CurrentTile != null)
+            CurrentTile.IsShowClickFrame = false;
+
         // 隐藏信息栏
         StageUI.CharacterInfoUI.gameObject.SetActive(false);
         StageUI.obstacleUI.gameObject.SetActive(false);

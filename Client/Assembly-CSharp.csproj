@@ -64,6 +64,9 @@
   <ItemGroup>
     <Compile Include="Assets\MapEditor\Scripts\EditMap.cs" />
     <Compile Include="Assets\MapEditor\Scripts\MapCreator.cs" />
+    <Compile Include="Assets\MapEditor\Scripts\MapData.cs" />
+    <Compile Include="Assets\MapEditor\Scripts\MapDataCollection.cs" />
+    <Compile Include="Assets\MapEditor\Scripts\MapReader.cs" />
     <Compile Include="Assets\MapEditor\Scripts\OperationOnMap.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleRoomClient.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\AI\AIExt.cs" />
@@ -278,7 +281,6 @@
     <Compile Include="Assets\Spine\Runtime\spine-unity\SkeletonUtility\SkeletonUtilityBone.cs" />
     <Compile Include="Assets\Spine\Runtime\spine-unity\SkeletonUtility\SkeletonUtilityConstraint.cs" />
     <Compile Include="Assets\Spine\Runtime\spine-unity\SpineAttributes.cs" />
-    <Compile Include="Assets\test.cs" />
     <Compile Include="Assets\Test\BattleMessageLooper.cs" />
     <Compile Include="Assets\Test\CombatTestDriver.cs" />
     <Compile Include="Assets\Test\CombatTestUIOnEvent.cs" />
@@ -549,6 +551,9 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>G:/unityVersion/2019.1.2f1/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>D:/Avocat_Game/Avocat/Client/Assets/LitJson.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>D:/Avocat_Game/Avocat/Client/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll</HintPath>

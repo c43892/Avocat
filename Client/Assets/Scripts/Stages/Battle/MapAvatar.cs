@@ -126,6 +126,7 @@ public class MapAvatar : MonoBehaviour
             skeletonAnimation.skeleton.scaleX = -1;
         }
         skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+        gameObject.transform.Find("_MapWarrior").GetComponent<MeshRenderer>().sortingOrder = BattleStage.Map.Height + 2 ;
     }
 
     public void SetIdleAnimation(Warrior warrior) {

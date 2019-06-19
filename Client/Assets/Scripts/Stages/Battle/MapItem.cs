@@ -19,7 +19,7 @@ public class MapItem : MonoBehaviour
       //  NameText.text = Item.DisplayName;
       //  Color = ColorDefault;
         sprite.sprite = Resources.Load<Sprite>("UI/MapItem/" + Item.Name);
-        sprite.sortingOrder = 3;
+        sprite.sortingOrder = BattleStage.Map.Height +2;
     }
 
     public int X
