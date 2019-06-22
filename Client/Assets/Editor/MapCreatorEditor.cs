@@ -5,20 +5,33 @@ using UnityEditor;
 using UnityEngine.EventSystems;
 using Avocat;
 using LitJson;
+using UnityEditor.SceneManagement;
+using System.IO;
 
 [CustomEditor(typeof(MapCreator))]
 public class MapCreatorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        base.DrawDefaultInspector();
-        //var style = new GUIStyle(GUI.skin.button);
+       // base.DrawDefaultInspector();
         MapCreator MapCreator = (MapCreator)target;
-        //style.normal.textColor = Color.red;
-        //style.active.textColor = Color.green;        
-        //EditorGUILayout.BeginVertical();
+        GUIStyle guiStyle = new GUIStyle();
+        guiStyle.fontSize = 20;
+        guiStyle.alignment = TextAnchor.MiddleCenter;
+
+
+        // 锁定当前的inspector
+        ActiveEditorTracker.sharedTracker.isLocked = true;
+
+        // 标题
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("MapEditor", guiStyle);
+        GUILayout.EndHorizontal();
 
         // 选择地图背景
+        EditorGUILayout.Space();
         EditorGUILayout.PrefixLabel("BackGround");
         MapCreator.BackGround.sprite = (Sprite)EditorGUILayout.ObjectField(MapCreator.BackGround.sprite, typeof(Sprite), allowSceneObjects: true);
 
@@ -44,20 +57,24 @@ public class MapCreatorEditor : Editor
         EditorGUILayout.PrefixLabel("Material of MapTile");
         if (GUILayout.Button("Grass")) {
             MapCreator.TileType = TileType.Grass;
+            Selection.activeGameObject = null;
         }
 
         if (GUILayout.Button("Rock"))
         {
             MapCreator.TileType = TileType.Rock;
+            Selection.activeGameObject = null;
         }
 
         if (GUILayout.Button("Soil"))
         {
             MapCreator.TileType = TileType.Soil;
+            Selection.activeGameObject = null;
         }
         if (GUILayout.Button("None"))
         {
             MapCreator.TileType = TileType.None;
+            Selection.activeGameObject = null;
         }
 
         // 显示当前选择的材质
@@ -66,31 +83,34 @@ public class MapCreatorEditor : Editor
         EditorGUILayout.TextField(MapCreator.TileType.ToString());
 
         EditorGUILayout.Space();
-        //EditorGUILayout.PrefixLabel("Create RespawnGrid");
-        if (GUILayout.Button("Create RespawnGrid"))
+        if (GUILayout.Button("Show RespawnGrid"))
         {
             MapCreator.ShowRespawnGrid();
+            Selection.activeGameObject = null;
         }
         EditorGUILayout.Space();
-        if (GUILayout.Button("Destroy RespawnGrid"))
+        if (GUILayout.Button("Hide RespawnGrid"))
         {
             MapCreator.HideRespawnGrid();
+            Selection.activeGameObject = null;
         }
-
 
         EditorGUILayout.Space();
         EditorGUILayout.PrefixLabel("Choose RespawnType");
         if (GUILayout.Button("Hero"))
         {
             MapCreator.respawnType = MapCreator.RespawnType.Hero;
+            Selection.activeGameObject = null;
         }
         if (GUILayout.Button("Enemy"))
         {
             MapCreator.respawnType = MapCreator.RespawnType.Enemy;
+            Selection.activeGameObject = null;
         }
         if (GUILayout.Button("None"))
         {
             MapCreator.respawnType = MapCreator.RespawnType.None;
+            Selection.activeGameObject = null;
         }
         EditorGUILayout.PrefixLabel("Current Respawn Type");
         EditorGUILayout.TextField(MapCreator.respawnType.ToString());
@@ -98,9 +118,17 @@ public class MapCreatorEditor : Editor
         EditorGUILayout.Space();
         if (GUILayout.Button("Save Map"))
         {
-            MapCreator.SaveToJson();
+           SaveDataWindow window = (SaveDataWindow)EditorWindow.GetWindow(typeof(SaveDataWindow), false, "Store the name of Map");
+           window.minSize = new Vector2(200, 100);
+           window.Show();
         }
 
-        
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Go Back To Game"))
+        {
+            var filePath = Path.Combine(Application.dataPath, "Test", "CombatTestScene.unity");
+            EditorSceneManager.OpenScene(filePath);
+            Selection.activeGameObject = GameObject.Find("MapReader");
+        }
     }
 }

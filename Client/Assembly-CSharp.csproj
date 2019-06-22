@@ -68,6 +68,7 @@
     <Compile Include="Assets\MapEditor\Scripts\MapDataCollection.cs" />
     <Compile Include="Assets\MapEditor\Scripts\MapReader.cs" />
     <Compile Include="Assets\MapEditor\Scripts\OperationOnMap.cs" />
+    <Compile Include="Assets\MapEditor\Scripts\SaveDataWindow.cs" />
     <Compile Include="Assets\Scripts\Battle\BattleRoomClient.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\AI\AIExt.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\AI\RobotPlayer.cs" />

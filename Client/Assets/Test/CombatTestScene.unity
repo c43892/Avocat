@@ -4741,6 +4741,51 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: BattleStage
+      value: 
+      objectReference: {fileID: 2077963860}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: CardArea
+      value: 
+      objectReference: {fileID: 1998522614}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: ActioDoneBtn
+      value: 
+      objectReference: {fileID: 2017415454}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: ButtonUI
+      value: 
+      objectReference: {fileID: 2136265970}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: Enerygy
+      value: 
+      objectReference: {fileID: 1320852072}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: obstacleUI
+      value: 
+      objectReference: {fileID: 1397136437}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: ItemUsage
+      value: 
+      objectReference: {fileID: 740075566}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: SkillButtonUI
+      value: 
+      objectReference: {fileID: 2136265970}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: CharacterInfoUI
+      value: 
+      objectReference: {fileID: 210317407}
     - target: {fileID: 1387013936339068727, guid: f87b7ac3c444b9049a7d146227ab6fcd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4846,51 +4891,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: BattleStage
-      value: 
-      objectReference: {fileID: 2077963860}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: CardArea
-      value: 
-      objectReference: {fileID: 1998522614}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: ActioDoneBtn
-      value: 
-      objectReference: {fileID: 2017415454}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: ButtonUI
-      value: 
-      objectReference: {fileID: 2136265970}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: Enerygy
-      value: 
-      objectReference: {fileID: 1320852072}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: obstacleUI
-      value: 
-      objectReference: {fileID: 1397136437}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: ItemUsage
-      value: 
-      objectReference: {fileID: 740075566}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: SkillButtonUI
-      value: 
-      objectReference: {fileID: 2136265970}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: CharacterInfoUI
-      value: 
-      objectReference: {fileID: 210317407}
     - target: {fileID: 6963320533779218357, guid: f87b7ac3c444b9049a7d146227ab6fcd,
         type: 3}
       propertyPath: m_IsActive
@@ -4974,11 +4974,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SkillButtonUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 1985072625938121151, guid: c915bbc7fd1e2cc46978c471bfb92cb1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1985072626722979168, guid: c915bbc7fd1e2cc46978c471bfb92cb1,
         type: 3}
@@ -5110,6 +5105,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 963811592}
+    - target: {fileID: 1985072625938121151, guid: c915bbc7fd1e2cc46978c471bfb92cb1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1985072626216393187, guid: c915bbc7fd1e2cc46978c471bfb92cb1,
         type: 3}
       propertyPath: m_Layer

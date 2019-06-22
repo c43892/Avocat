@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Swift.Math;
 using LitJson;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class MapCreator : MonoBehaviour
 {
@@ -17,11 +18,18 @@ public class MapCreator : MonoBehaviour
     public MapTile MapTile;
     public Transform MapRoot;
     public MapTile[,] Tiles { get; private set; }
+    [HideInInspector]
     public List<MapTile> MapTilesList = new List<MapTile>();
     public bool IsMapCreated { get; set; }
+
+    // 储存地图信息
+    [HideInInspector]
     public List<MapData> MapInfo = new List<MapData>();
+    [HideInInspector]
     public MapDataCollection MapList = new MapDataCollection();
+    [HideInInspector]
     public int MapNumber;
+    [HideInInspector]
     public bool ChooseRespawn;
     public RespawnType respawnType { get; set; }
 
@@ -36,7 +44,7 @@ public class MapCreator : MonoBehaviour
         Enemy,
         None
     }
-
+  
     public void BuildMapGrids()
     {
         JudgeMapStatus();
@@ -61,9 +69,6 @@ public class MapCreator : MonoBehaviour
                 // MapData没有new之前就传递是值传递
                 tile.GetComponent<MapTile>().MapData = new MapData(x, y, TileType.None, y + 2);
                 var mapData = tile.GetComponent<MapTile>().MapData;
-                //mapData.X = x;
-                //mapData.Y = y;
-                //mapData.SortingOrder = y + 2;
                 MapInfo.Add(mapData);
             });
             IsMapCreated = true;
@@ -102,7 +107,7 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    public void SaveToJson()
+    public void SaveToJson(string name)
     {
         JsonData MapType;
         if (MapInfo.Count == 0 )
@@ -111,8 +116,7 @@ public class MapCreator : MonoBehaviour
         {
             MapList.MapData = MapInfo;
             MapType = JsonMapper.ToJson(MapList);
-          //  Debug.Log(MapType.ToString());
-            var fileName = Path.Combine(Application.dataPath,"Map", "MapInfo.json");
+            var fileName = Path.Combine(Application.dataPath,"Map", name+ ".json");
             if (File.Exists(fileName))
                 File.Delete(fileName);
             File.WriteAllText(fileName, MapType.ToString());
@@ -137,4 +141,5 @@ public class MapCreator : MonoBehaviour
             Maptile[i].transform.Find("RespawnPlace").gameObject.SetActive(false);
         });
     }
+
 }

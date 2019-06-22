@@ -15,20 +15,28 @@ public class MapReader : MonoBehaviour
     public List<MapData> Map = new List<MapData>();
     public List<MapData> RespawnForChamp = new List<MapData>();
     public List<MapData> RespawnForEnemy = new List<MapData>();
-    bool[] OccupiedForChamp;
-    int NumOfChampRespawn;
-    bool[] OccupiedForEnemy;
-    int NumOfEnemyRespawn;
-    public Action<int, int,Warrior>  onSetWarrior = null;
+    public int ArrayIndex = 0;
+    public List<string> MapInfo = new List<string>();
 
+    // 将Json转换成地图信息
     public void ReloadMapInfo()
     {
-        var fileName = Path.Combine(Application.dataPath, "Map", "MapInfo.json");
-        var MapInfo = File.ReadAllText(fileName);
-        MapDataCollection MapData = JsonMapper.ToObject<MapDataCollection>(MapInfo);
+        var fileName = Path.Combine(Application.dataPath, "Map", MapInfo[ArrayIndex]);
+        var MapInformation = File.ReadAllText(fileName);
+        MapDataCollection MapData = JsonMapper.ToObject<MapDataCollection>(MapInformation);
         Map = MapData.MapData;
-        GetRespawnForChamp();
-        GetRespawnForEnemy();
+
+        // 将英雄和怪物出生点储存
+        FC.For(0, Map.Count, (i) =>
+        {
+            if(Map[i].RespawnForChamp == true)
+                RespawnForChamp.Add(Map[i]);
+            if (Map[i].RespawnForEnemy == true)
+                RespawnForEnemy.Add(Map[i]);
+        });
+        
+        GetRandomRespawnPlace(RespawnForChamp);
+        GetRandomRespawnPlace(RespawnForEnemy);
     }
 
     public void FindMapTileInMapRoot()
@@ -40,27 +48,25 @@ public class MapReader : MonoBehaviour
         }
     }
 
+    // 将MapData的数据传给tile
     public void ReadMapInfo(MapTile tile)
     {
         for (int i = 0; i < Map.Count; i++)
         {
             if (tile.X == Map[i].X && tile.Y == Map[i].Y)
             {
+                tile.MapData.Type = Map[i].Type;
                 var material = tile.transform.Find("Material").GetComponent<SpriteRenderer>();
                 if (Map[i].Type != TileType.None)
-                {
-                    material.sprite = Resources.Load<Sprite>("UI/MapTile/" + Map[i].Type.ToString());
-                    tile.MapData.Type = Map[i].Type;
-                }
-                    
+                    material.sprite = Resources.Load<Sprite>("UI/MapTile/" + Map[i].Type.ToString());                   
                 material.sortingOrder =Map[i].SortingOrder;
+
                 if (Map[i].RespawnForChamp == true || Map[i].RespawnForEnemy == true)
                 {
                     if (Map[i].RespawnForChamp == true)
                         tile.MapData.RespawnForChamp = true;
                     else
                         tile.MapData.RespawnForEnemy = true;
-
                     tile.transform.Find("RespawnPlace").gameObject.SetActive(true);
                     var Mesh = tile.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
                     Mesh.sortingOrder = Map[i].SortingOrder+1;
@@ -70,67 +76,29 @@ public class MapReader : MonoBehaviour
         }
     }
 
-    public void GetRespawnForChamp()
+    // 随机打乱出生顺序
+    public void GetRandomRespawnPlace(List<MapData> RespawnList)
     {
-        if (Map.Count == 0)
-            return;
-        FC.For(Map.Count, (i) =>
+        FC.For(RespawnList.Count, (i) =>
         {
-            if (Map[i].RespawnForChamp == true)
-                RespawnForChamp.Add(Map[i]);
+            int RandomNum = UnityEngine.Random.Range(0, RespawnList.Count);
+            var temp = RespawnList[RandomNum];
+            RespawnList[RandomNum] = RespawnList[i];
+            RespawnList[i] = temp;
         });
-        OccupiedForChamp = new bool[RespawnForChamp.Count];
-        NumOfChampRespawn = RespawnForChamp.Count;
     }
 
-    public void GetRespawnForEnemy()
+    public  void GetDirs(string dirPath, ref List<string> dirs)
     {
-        if (Map.Count == 0)
-            return;
-        FC.For(Map.Count, (i) =>
+        MapInfo.Clear();
+        foreach (string path in Directory.GetFiles(dirPath))
         {
-            if (Map[i].RespawnForEnemy == true)
-                RespawnForEnemy.Add(Map[i]);
-        });
-        OccupiedForEnemy = new bool[RespawnForEnemy.Count];
-        NumOfEnemyRespawn = RespawnForEnemy.Count;
-    }
-
-    public MapData GetRandomPlaceForChamp()
-    {
-        int num = -1;
-        var MaxRange = RespawnForChamp.Count;
-        bool FindNumber = false;
-        while (!FindNumber || NumOfChampRespawn == 0)
-        {
-            num = UnityEngine.Random.Range(0, MaxRange);
-            if (!OccupiedForChamp[num])
+            // 获取所有文件夹中包含后缀为 .json 的路径
+            if (System.IO.Path.GetExtension(path) == ".json")
             {
-                OccupiedForChamp[num] = true;
-                NumOfChampRespawn--;
-                FindNumber = true;
+                var Path = path.Substring(path.IndexOf("Map")).Substring(4);
+                dirs.Add(Path);
             }
         }
-        Debug.Assert(num != -1, "The number of champions are more than respawn places");
-        return RespawnForChamp[num];
-    }
-
-    public MapData GetRandomPlaceForEnemy()
-    {
-        int num = -1;
-        var MaxRange = RespawnForEnemy.Count;
-        bool FindNumber = false;
-        while (!FindNumber)
-        {
-            num = UnityEngine.Random.Range(0, MaxRange);
-            if (!OccupiedForEnemy[num])
-            {
-                OccupiedForEnemy[num] = true;
-                NumOfEnemyRespawn--;
-                FindNumber = true;
-            }
-        }
-        Debug.Assert(num != -1, "The number of enemies are more than respawn places");
-        return RespawnForEnemy[num];
     }
 }

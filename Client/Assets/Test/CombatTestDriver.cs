@@ -71,22 +71,18 @@ public class CombatTestDriver : GameDriver
         //bt.AddWarriorAt(2, 2, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
         //bt.AddWarriorAt(2, 3, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
         //bt.AddWarriorAt(2, 4, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
-        var data1 = MapReader.GetRandomPlaceForEnemy();
-        bt.AddWarriorAt(data1.X, data1.Y, Configuration.Config(new Boar(map) { Team = 2 }));
-        var data2 = MapReader.GetRandomPlaceForEnemy();
-        bt.AddWarriorAt(data2.X, data2.Y, Configuration.Config(new Boar(map) { Team = 2 }));
-        var data3 = MapReader.GetRandomPlaceForEnemy();
-        bt.AddWarriorAt(data3.X, data3.Y, Configuration.Config(new Boar(map) { Team = 2 }));
+
+        // npcs
+        FC.For(3, (i) =>
+        {
+            bt.AddWarriorAt(MapReader.RespawnForEnemy[i].X, MapReader.RespawnForEnemy[i].Y, Configuration.Config(new Boar(map) { Team = 2 }));
+        });
 
         // heros
-        var data4 = MapReader.GetRandomPlaceForChamp();
-        bt.AddWarriorAt(data4.X, data4.Y, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
-        var data5 = MapReader.GetRandomPlaceForChamp();
-        bt.AddWarriorAt(data5.X, data5.Y, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
-        var data6 = MapReader.GetRandomPlaceForChamp();
-        bt.AddWarriorAt(data6.X, data6.Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
-        var data7 = MapReader.GetRandomPlaceForChamp();
-        bt.AddWarriorAt(data7.X, data7.Y, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
+        bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
+        bt.AddWarriorAt(MapReader.RespawnForChamp[1].X, MapReader.RespawnForChamp[1].Y, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
+        bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
+        bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
 
         // items
       //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
