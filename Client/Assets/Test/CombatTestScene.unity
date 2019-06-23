@@ -1566,54 +1566,6 @@ Transform:
   m_Father: {fileID: 1185388014}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &538190650
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 538190652}
-  - component: {fileID: 538190651}
-  m_Layer: 0
-  m_Name: MapReader
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &538190651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538190650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5f2efbe964807f499d31cdb3b967be3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MapRoot: {fileID: 260587704}
-  children: []
-  Map: []
-  RespawnForChamp: []
-  RespawnForEnemy: []
---- !u!4 &538190652
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538190650}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1473.3673, y: 322.177, z: -592.45}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &679040387
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,7 +2555,7 @@ MonoBehaviour:
   StartingUI: {fileID: 679040387}
   GameOverUI: {fileID: 108068121}
   BattleStageUI: {fileID: 963811592}
-  MapReader: {fileID: 538190651}
+  MapReader: {fileID: 1700634537}
 --- !u!114 &1185388016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4158,6 +4110,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1700634536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1700634538}
+  - component: {fileID: 1700634537}
+  m_Layer: 0
+  m_Name: MapReader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1700634537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700634536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f2efbe964807f499d31cdb3b967be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MapRoot: {fileID: 260587704}
+  MapTile: []
+  Map: []
+  RespawnForChamp: []
+  RespawnForEnemy: []
+  ArrayIndex: 1
+  MapInfo:
+  - 123.json
+  - 1234.json
+--- !u!4 &1700634538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700634536}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0065128803, y: -1.148211, z: -1.7114344}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1777034336
 GameObject:
   m_ObjectHideFlags: 0
@@ -5562,7 +5566,7 @@ PrefabInstance:
     - target: {fileID: 2077963860, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
       propertyPath: MapReader
       value: 
-      objectReference: {fileID: 538190651}
+      objectReference: {fileID: 1700634537}
     - target: {fileID: 4371585951256762753, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalScale.x

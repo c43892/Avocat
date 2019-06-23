@@ -5249,133 +5249,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackGround: {fileID: 983671554}
-  TileType: 4
+  TileType: 8
   MapTile: {fileID: 1566369251}
   MapRoot: {fileID: 166125739}
   MapTilesList: []
+  StoredMap:
+  - 123.json
+  - 1234.json
+  - 5566.json
+  MapIndex: 0
+  MapTileTransform: []
+  isNewMap: 1
   MapInfo: []
   MapList:
-    MapData:
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 1
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 1
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 1
-    - RespawnForChamp: 0
-      RespawnForEnemy: 1
-    - RespawnForChamp: 0
-      RespawnForEnemy: 1
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 1
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 1
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
-    - RespawnForChamp: 0
-      RespawnForEnemy: 0
+    MapData: []
   MapNumber: 0
   ChooseRespawn: 0
 --- !u!1 &2110240706

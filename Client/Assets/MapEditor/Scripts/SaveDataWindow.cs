@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class SaveDataWindow : EditorWindow
 {
-    string FileName = "";
+   public string FileName = "";
     
     void OnGUI()
     {

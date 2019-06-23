@@ -11,7 +11,7 @@ using System;
 public class MapReader : MonoBehaviour
 {
     public GameObject MapRoot;
-    public List<Transform> children = new List<Transform>();
+    public List<Transform> MapTile = new List<Transform>();
     public List<MapData> Map = new List<MapData>();
     public List<MapData> RespawnForChamp = new List<MapData>();
     public List<MapData> RespawnForEnemy = new List<MapData>();
@@ -39,13 +39,17 @@ public class MapReader : MonoBehaviour
         GetRandomRespawnPlace(RespawnForEnemy);
     }
 
-    public void FindMapTileInMapRoot()
+    public bool IsMapTileInMapRoot()
     {
         foreach (Transform child in MapRoot.transform)
         {
             if (child.CompareTag("MapTile"))
-                children.Add(child.transform);
+                MapTile.Add(child.transform);
         }
+        if (MapTile.Count == 0)
+            return false;
+        else
+            return true;
     }
 
     // 将MapData的数据传给tile
@@ -88,9 +92,9 @@ public class MapReader : MonoBehaviour
         });
     }
 
-    public  void GetDirs(string dirPath, ref List<string> dirs)
+    public static void GetDirs(string dirPath, ref List<string> dirs)
     {
-        MapInfo.Clear();
+        dirs.Clear();
         foreach (string path in Directory.GetFiles(dirPath))
         {
             // 获取所有文件夹中包含后缀为 .json 的路径

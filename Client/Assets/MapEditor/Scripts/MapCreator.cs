@@ -21,6 +21,10 @@ public class MapCreator : MonoBehaviour
     [HideInInspector]
     public List<MapTile> MapTilesList = new List<MapTile>();
     public bool IsMapCreated { get; set; }
+    public List<string> StoredMap = new List<string>();
+    public int MapIndex;
+    public List<Transform> MapTileTransform = new List<Transform>();
+    public bool isNewMap;
 
     // 储存地图信息
     [HideInInspector]
@@ -72,6 +76,7 @@ public class MapCreator : MonoBehaviour
                 MapInfo.Add(mapData);
             });
             IsMapCreated = true;
+            isNewMap = true;
         }
         else
         {
@@ -90,9 +95,7 @@ public class MapCreator : MonoBehaviour
             IsMapCreated = false;
         }
         else
-        {
-            Debug.Log("Map doesn't exist!");
-        }
+            return;
     }
 
     public void JudgeMapStatus()
@@ -140,6 +143,47 @@ public class MapCreator : MonoBehaviour
         {
             Maptile[i].transform.Find("RespawnPlace").gameObject.SetActive(false);
         });
+    }
+
+    public void ReloadMap()
+    {
+        if (StoredMap.Count == 0)
+            return;
+        else
+        {
+            var mapName = StoredMap[MapIndex];
+            var fileName = Path.Combine(Application.dataPath, "Map", mapName);
+            var MapInformation = File.ReadAllText(fileName);
+            MapDataCollection MapData = JsonMapper.ToObject<MapDataCollection>(MapInformation);
+            var MapDatas = MapData.MapData;
+            DestroyMap();
+            BuildMapGrids();
+            foreach (MapTile data in MapTilesList)
+            {
+                for (int i = 0; i < MapDatas.Count; i++)
+                {
+                    if (data.X == MapDatas[i].X && data.Y == MapDatas[i].Y)
+                    {
+                        data.MapData.Type = MapDatas[i].Type;
+                        if (data.MapData.Type != TileType.None)
+                        {
+                            var material = data.transform.Find("Material").GetComponent<SpriteRenderer>();
+                            material.sprite = Resources.Load<Sprite>("UI/MapTile/" + data.MapData.Type.ToString());
+                        }
+                        data.MapData.SortingOrder = MapDatas[i].SortingOrder;
+                        var Mesh = data.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
+                        data.MapData.RespawnForChamp = MapDatas[i].RespawnForChamp;
+                        if (data.MapData.RespawnForChamp == true)
+                            Mesh.color = Color.red;
+                        data.MapData.RespawnForEnemy = MapDatas[i].RespawnForEnemy;
+                        if (data.MapData.RespawnForEnemy == true)
+                            Mesh.color = Color.blue;
+                    }
+                }
+            }
+            ShowRespawnGrid();
+            isNewMap = false;
+        }   
     }
 
 }
