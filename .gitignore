@@ -46,3 +46,5 @@ v15
 /Common/Battle/Skill/Buff/PatternSkill/*.meta
 /Common/UserPlayer/*.meta
 /Common/Config/*.meta
+
+/Client/Assembly-CSharp*
