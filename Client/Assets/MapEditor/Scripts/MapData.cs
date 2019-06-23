@@ -11,7 +11,7 @@ public class MapData
     public int X { get; set; }
     public int Y { get; set; }
     public TileType Type{ get; set; }
-    public int SortingOrder { get; set; }
+    public int MaterialSortingOrder { get; set; }
     public bool RespawnForChamp;
     public bool RespawnForEnemy;
 
@@ -24,6 +24,6 @@ public class MapData
         this.X = X;
         this.Y = Y;
         this.Type = Type;
-        this.SortingOrder = SortingOrder;
+        this.MaterialSortingOrder = SortingOrder;
     }
 }

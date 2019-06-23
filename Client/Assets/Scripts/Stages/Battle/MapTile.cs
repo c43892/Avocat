@@ -150,12 +150,12 @@ public class MapTile : MonoBehaviour
             else
             {
                 DirSR.sortingLayerID = sr.sortingLayerID;
-                DirSR.sortingOrder = sr.sortingOrder + 1;
+                DirSR.sortingOrder = sr.sortingOrder + 2;
                 DirSR.gameObject.SetActive(true);
 
                 CardSR.gameObject.SetActive(true);
                 CardSR.sortingLayerID = sr.sortingLayerID;
-                CardSR.sortingOrder = sr.sortingOrder + 2;
+                CardSR.sortingOrder = sr.sortingOrder + 3;
                 CardSR.sprite = Resources.Load<Sprite>("UI/CardType/" + card.Name);
             }
         }

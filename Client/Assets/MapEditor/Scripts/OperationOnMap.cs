@@ -17,9 +17,12 @@ public class OperationOnMap : MonoBehaviour
 
     void OnScene(SceneView scene)
     {
-        GameObject ob = Selection.activeGameObject;
-        Event e = Event.current;
+        if (this == null)
+            return;      
         
+
+        // 如果点击鼠标右键则清除当前地块
+        Event e = Event.current;       
         if (e.button == 1 && e.isMouse)
         {
             Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
@@ -47,47 +50,54 @@ public class OperationOnMap : MonoBehaviour
             }  
         }
 
-        if (ob != null && ob.name.Equals("EditMaptile(Clone)"))
+        GameObject ob = Selection.activeGameObject;
+        if (ob != null)
         {
-            var respawnPlace = ob.transform.Find("RespawnPlace").gameObject;
-            var mapTile = ob.GetComponent<MapTile>();
+            // 如果点到MapTile内部则向上寻找父物体
+            if (Selection.activeGameObject.tag == "Material" || Selection.activeGameObject.tag == "RespawnPlace")
+                ob = Selection.activeGameObject.transform.parent.gameObject;
 
-            // 编辑地图材质地块
-            if (!respawnPlace.activeSelf)
+            if (ob.name.Equals("EditMaptile(Clone)"))
             {
-                var material = ob.transform.Find("Material").GetComponent<SpriteRenderer>();
-                if (MapCreator.TileType != TileType.None)
-                    material.sprite = Resources.Load<Sprite>("UI/MapTile/" + MapCreator.TileType.ToString());
-                else
-                    material.sprite = null;
-                mapTile.MapData.Type = MapCreator.TileType;
-            }
-            else // 编辑出生点
-            {
-                var Mesh = ob.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
+                var respawnPlace = ob.transform.Find("RespawnPlace").gameObject;
+                var mapTile = ob.GetComponent<MapTile>();
 
-                // 英雄出生点标记为红色
-                if (MapCreator.respawnType == MapCreator.RespawnType.Hero) 
+                // 编辑地图材质地块
+                if (!respawnPlace.activeSelf)
                 {
-                    Mesh.color = Color.red;
-                    mapTile.MapData.RespawnForChamp = true;
-                    mapTile.MapData.RespawnForEnemy = false;
+                    var material = ob.transform.Find("Material").GetComponent<SpriteRenderer>();
+                    if (MapCreator.TileType != TileType.None)
+                        material.sprite = Resources.Load<Sprite>("UI/MapTile/" + MapCreator.TileType.ToString());
+                    else
+                        material.sprite = null;
+                    mapTile.MapData.Type = MapCreator.TileType;
                 }
-                else if (MapCreator.respawnType == MapCreator.RespawnType.Enemy) // 敌人出生点标记为蓝色
+                else // 编辑出生点
                 {
-                    Mesh.color = Color.blue;
-                    mapTile.MapData.RespawnForEnemy = true;
-                    mapTile.MapData.RespawnForChamp = false;
-                }
-                else //不是出生点恢复原色
-                {
-                    Mesh.color = new Color32(255, 255, 255, 86);
-                    mapTile.MapData.RespawnForChamp = false;
-                    mapTile.MapData.RespawnForEnemy = false;
+                    var Mesh = ob.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
+
+                    // 英雄出生点标记为红色
+                    if (MapCreator.respawnType == MapCreator.RespawnType.Hero)
+                    {
+                        Mesh.color = Color.red;
+                        mapTile.MapData.RespawnForChamp = true;
+                        mapTile.MapData.RespawnForEnemy = false;
+                    }
+                    else if (MapCreator.respawnType == MapCreator.RespawnType.Enemy) // 敌人出生点标记为蓝色
+                    {
+                        Mesh.color = Color.blue;
+                        mapTile.MapData.RespawnForEnemy = true;
+                        mapTile.MapData.RespawnForChamp = false;
+                    }
+                    else //不是出生点恢复原色
+                    {
+                        Mesh.color = new Color32(255, 255, 255, 86);
+                        mapTile.MapData.RespawnForChamp = false;
+                        mapTile.MapData.RespawnForEnemy = false;
+                    }
                 }
             }
         }
-        // e.Use();
     }
 
     public void WorldPos2MapPos(float x, float y, out float tx, out float ty)

@@ -59,12 +59,16 @@ public class MapReader : MonoBehaviour
         {
             if (tile.X == Map[i].X && tile.Y == Map[i].Y)
             {
+                // 设置地块逻辑和表现
                 tile.MapData.Type = Map[i].Type;
                 var material = tile.transform.Find("Material").GetComponent<SpriteRenderer>();
                 if (Map[i].Type != TileType.None)
-                    material.sprite = Resources.Load<Sprite>("UI/MapTile/" + Map[i].Type.ToString());                   
-                material.sortingOrder =Map[i].SortingOrder;
+                    material.sprite = Resources.Load<Sprite>("UI/MapTile/" + Map[i].Type.ToString());
 
+                // 设置地块渲染位置
+                material.sortingOrder =Map[i].MaterialSortingOrder; 
+
+                // 设置出生点逻辑和表现
                 if (Map[i].RespawnForChamp == true || Map[i].RespawnForEnemy == true)
                 {
                     if (Map[i].RespawnForChamp == true)
@@ -72,8 +76,10 @@ public class MapReader : MonoBehaviour
                     else
                         tile.MapData.RespawnForEnemy = true;
                     tile.transform.Find("RespawnPlace").gameObject.SetActive(true);
+
+                    // 让出生点位置渲染在地块上面
                     var Mesh = tile.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
-                    Mesh.sortingOrder = Map[i].SortingOrder+1;
+                    Mesh.sortingOrder = Map[i].MaterialSortingOrder+1;
                 }
                 return;
             }
@@ -92,6 +98,7 @@ public class MapReader : MonoBehaviour
         });
     }
 
+    // 寻找所有Map文件
     public static void GetDirs(string dirPath, ref List<string> dirs)
     {
         dirs.Clear();
@@ -102,6 +109,19 @@ public class MapReader : MonoBehaviour
             {
                 var Path = path.Substring(path.IndexOf("Map")).Substring(4);
                 dirs.Add(Path);
+            }
+        }
+    }
+
+    // 找出最近保存的文件index
+    public void FindCurrentMapIndex()
+    {
+        for (int i = 0; i < MapInfo.Count; i++)
+        {
+            if (MapInfo[i].Equals(MapCreator.currentFileName + ".json"))
+            {
+                ArrayIndex = i;
+                return;
             }
         }
     }

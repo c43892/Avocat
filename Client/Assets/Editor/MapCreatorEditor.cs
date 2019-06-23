@@ -13,12 +13,11 @@ public class MapCreatorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        base.DrawDefaultInspector();
+      //  base.DrawDefaultInspector();
         MapCreator MapCreator = (MapCreator)target;
         GUIStyle guiStyle = new GUIStyle();
         guiStyle.fontSize = 20;
         guiStyle.alignment = TextAnchor.MiddleCenter;
-
 
         // 锁定当前的inspector
         ActiveEditorTracker.sharedTracker.isLocked = true;
@@ -64,7 +63,6 @@ public class MapCreatorEditor : Editor
         if (GUILayout.Button("Destroy Map"))
         {
             MapCreator.DestroyMap();
-            MapCreator.MapInfo.Clear();
         }
 
         // 选择地图材质
@@ -86,6 +84,7 @@ public class MapCreatorEditor : Editor
             MapCreator.TileType = TileType.Soil;
             Selection.activeGameObject = null;
         }
+
         if (GUILayout.Button("None"))
         {
             MapCreator.TileType = TileType.None;
@@ -131,21 +130,21 @@ public class MapCreatorEditor : Editor
         EditorGUILayout.PrefixLabel("Current Respawn Type");
         EditorGUILayout.TextField(MapCreator.respawnType.ToString());
 
-
         // 储存文件
         EditorGUILayout.Space();
         if (GUILayout.Button("Save Map"))
         {
-           SaveDataWindow window = (SaveDataWindow)EditorWindow.GetWindow(typeof(SaveDataWindow), false, "Store the name of Map");
-           window.minSize = new Vector2(200, 100);
+            SaveDataWindow window = (SaveDataWindow)EditorWindow.GetWindow(typeof(SaveDataWindow), false, "Store the name of Map");
+            window.minSize = new Vector2(200, 100);
+
+            // 如果不是新的地图则预显示该地图原有的名字
             if (MapCreator.isNewMap == false && MapCreator.StoredMap.Count != 0)
             {
                 var name = MapCreator.StoredMap[MapCreator.MapIndex];
-                window.FileName = name.Substring(0,name.Length - 5);
-            }    
-           window.Show();
+                window.FileName = name.Substring(0, name.Length - 5);
+            }
+            window.Show();
         }
-
 
         // 返回游戏界面
         EditorGUILayout.Space();

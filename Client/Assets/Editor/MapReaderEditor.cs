@@ -20,6 +20,7 @@ public class MapReaderEditor : Editor
         EditorGUILayout.Space();
         var fileName = Path.Combine(Application.dataPath, "Map");
         MapReader.GetDirs(fileName, ref MapReader.MapInfo);
+        MapReader.FindCurrentMapIndex();
         GUIContent arrayLabel = new GUIContent("Choose the Map");
         MapReader.ArrayIndex = EditorGUILayout.Popup(arrayLabel,MapReader.ArrayIndex, MapReader.MapInfo.ToArray());
 
@@ -29,7 +30,9 @@ public class MapReaderEditor : Editor
         {
             var filePath = Path.Combine(Application.dataPath, "MapEditor", "MapEditor.unity");
             EditorSceneManager.OpenScene(filePath);
-            Selection.activeGameObject = GameObject.Find("Editor");
+            var editor = GameObject.Find("Editor");
+            editor.GetComponent<MapCreator>().MapIndex = MapReader.ArrayIndex;
+            Selection.activeGameObject = editor;
         }
     }
 }
