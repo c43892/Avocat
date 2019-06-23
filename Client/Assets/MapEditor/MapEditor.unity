@@ -1676,6 +1676,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleStageRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 2123030218, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123030218, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1753070277, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1913,14 +1921,6 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2123030218, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2123030218, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 1303443928328014164, guid: 226ec60d53abffe458fa1e17b31d4c8e,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -1953,6 +1953,12 @@ PrefabInstance:
     - {fileID: 1423965784, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
     - {fileID: 1423965785, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 226ec60d53abffe458fa1e17b31d4c8e, type: 3}
+--- !u!1 &760083225 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2123030217, guid: 226ec60d53abffe458fa1e17b31d4c8e,
+    type: 3}
+  m_PrefabInstance: {fileID: 760083224}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &799632520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2593694192591062159, guid: ef6e1d8e45cee9645ae1729fb244f7a7,
@@ -3188,6 +3194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapCreator: {fileID: 2090149337}
+  MapRoot: {fileID: 760083225}
 --- !u!4 &1397943349
 Transform:
   m_ObjectHideFlags: 0
@@ -3456,6 +3463,51 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: BattleStage
+      value: 
+      objectReference: {fileID: 1248077386}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: CardArea
+      value: 
+      objectReference: {fileID: 1987406504}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: ActioDoneBtn
+      value: 
+      objectReference: {fileID: 1954055615}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: ButtonUI
+      value: 
+      objectReference: {fileID: 1588490561}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: Enerygy
+      value: 
+      objectReference: {fileID: 113642027}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: obstacleUI
+      value: 
+      objectReference: {fileID: 400946837}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: ItemUsage
+      value: 
+      objectReference: {fileID: 390876794}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: SkillButtonUI
+      value: 
+      objectReference: {fileID: 1588490561}
+    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
+        type: 3}
+      propertyPath: CharacterInfoUI
+      value: 
+      objectReference: {fileID: 1649089649}
     - target: {fileID: 1387013936339068727, guid: f87b7ac3c444b9049a7d146227ab6fcd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3561,51 +3613,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: BattleStage
-      value: 
-      objectReference: {fileID: 1248077386}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: CardArea
-      value: 
-      objectReference: {fileID: 1987406504}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: ActioDoneBtn
-      value: 
-      objectReference: {fileID: 1954055615}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: ButtonUI
-      value: 
-      objectReference: {fileID: 1588490561}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: Enerygy
-      value: 
-      objectReference: {fileID: 113642027}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: obstacleUI
-      value: 
-      objectReference: {fileID: 400946837}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: ItemUsage
-      value: 
-      objectReference: {fileID: 390876794}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: SkillButtonUI
-      value: 
-      objectReference: {fileID: 1588490561}
-    - target: {fileID: 1387013936339068728, guid: f87b7ac3c444b9049a7d146227ab6fcd,
-        type: 3}
-      propertyPath: CharacterInfoUI
-      value: 
-      objectReference: {fileID: 1649089649}
     - target: {fileID: 6963320533779218357, guid: f87b7ac3c444b9049a7d146227ab6fcd,
         type: 3}
       propertyPath: m_IsActive

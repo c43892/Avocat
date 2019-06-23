@@ -8,6 +8,8 @@ using Avocat;
 public class OperationOnMap : MonoBehaviour
 {
     public MapCreator MapCreator;
+    public GameObject MapRoot;
+
     private void OnEnable()
     {
         SceneView.duringSceneGui += OnScene;
@@ -16,6 +18,35 @@ public class OperationOnMap : MonoBehaviour
     void OnScene(SceneView scene)
     {
         GameObject ob = Selection.activeGameObject;
+        Event e = Event.current;
+        
+        if (e.button == 1 && e.isMouse)
+        {
+            Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+            Vector3 mousePosition = mouseRay.GetPoint(0f);
+            WorldPos2MapPos(mousePosition.x, mousePosition.y, out float gx, out float gy);
+            var tile = MapCreator.MapTilesList.Find(t => t.X == (int)gx && t.Y == (int)gy);
+            if (tile != null)
+            {
+                var respawn = tile.transform.Find("RespawnPlace").gameObject;
+                var mat = tile.transform.Find("Material").GetComponent<SpriteRenderer>();
+                var Mesh = tile.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
+                if (!respawn.activeSelf)
+                {
+                    mat.sprite = null;
+                    tile.MapData.Type = TileType.None;
+                    Selection.activeGameObject = null;
+                }
+                else
+                {
+                    Mesh.color = new Color32(255, 255, 255, 86);
+                    tile.MapData.RespawnForChamp = false;
+                    tile.MapData.RespawnForEnemy = false;
+                    Selection.activeGameObject = null;
+                }
+            }  
+        }
+
         if (ob != null && ob.name.Equals("EditMaptile(Clone)"))
         {
             var respawnPlace = ob.transform.Find("RespawnPlace").gameObject;
@@ -57,5 +88,12 @@ public class OperationOnMap : MonoBehaviour
             }
         }
         // e.Use();
+    }
+
+    public void WorldPos2MapPos(float x, float y, out float tx, out float ty)
+    {
+        var p = MapRoot.transform.worldToLocalMatrix.MultiplyPoint(new Vector2(x, y));
+        tx = p.x;
+        ty = p.y;
     }
 }

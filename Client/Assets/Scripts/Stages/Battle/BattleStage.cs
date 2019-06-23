@@ -154,7 +154,7 @@ public class BattleStage : MonoBehaviour
             tile.X = x;
             tile.Y = y;
             MapReader.ReadMapInfo(tile);
-            tile.GetComponent<SpriteRenderer>().sortingOrder = y + 2;
+            tile.GetComponent<SpriteRenderer>().sortingOrder = y + 1;
             tile.gameObject.SetActive(true);
             Tiles[x, y] = tile;
         });
