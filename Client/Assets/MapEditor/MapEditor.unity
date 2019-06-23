@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 203791245}
   m_Layer: 2
   m_Name: Material
-  m_TagString: Untagged
+  m_TagString: Material
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4817,7 +4817,7 @@ GameObject:
   - component: {fileID: 1863741340}
   m_Layer: 2
   m_Name: RespawnPlace
-  m_TagString: Untagged
+  m_TagString: RespawnPlace
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5249,22 +5249,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackGround: {fileID: 983671554}
-  TileType: 8
   MapTile: {fileID: 1566369251}
   MapRoot: {fileID: 166125739}
   MapTilesList: []
   StoredMap:
-  - 123.json
-  - 1234.json
-  - 5566.json
+  - 000.json
+  - 11111.json
+  - 222.json
+  - 666.json
+  - 888.json
+  - 999.json
+  - qweasd.json
+  - rrtt.json
   MapIndex: 0
-  MapTileTransform: []
   isNewMap: 1
   MapInfo: []
   MapList:
     MapData: []
-  MapNumber: 0
-  ChooseRespawn: 0
+  TileType: 4
 --- !u!1 &2110240706
 GameObject:
   m_ObjectHideFlags: 0
