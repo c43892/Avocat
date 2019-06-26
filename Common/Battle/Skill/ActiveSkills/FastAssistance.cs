@@ -10,16 +10,24 @@ namespace Avocat
 {
     /// <summary>
     /// 巴洛克
-    /// 快速援护，切换巴洛克形态
+    /// 快速援护
     /// </summary>
-    public class FastAssistance : ActiveSkill
+    public abstract class FastAssistance : ActiveSkill
     {
         public override string Name { get => "FastAssistance"; }
         public override string DisplayName { get => "快速援护"; }
-        public override string SkillDescription { get; set; } = "切换巴洛克形态";
 
         // 能量消耗
         public override int EnergyCost { get; set; }
+    }
+
+    /// <summary>
+    /// 巴洛克
+    /// 快速援护，切换巴洛克形态
+    /// </summary>
+    public class FastAssistance1 : FastAssistance
+    {
+        public override string SkillDescription { get; set; } = "切换巴洛克形态";
 
         // 主动释放
         public override void Fire()
@@ -27,6 +35,26 @@ namespace Avocat
             var owner = Owner as BaLuoKe;
             Debug.Assert(owner != null, "only BaLuoKe can use this skill");
             Battle.Transform(Owner, owner.State == "Lancer" ? "Archer" : "Lancer");
+        }
+    }
+
+    /// <summary>
+    /// 巴洛克
+    /// 巴洛克始终处于近战状态，技能效果变为加满护盾
+    /// </summary>
+    public class FastAssistance2 : FastAssistance
+    {
+        public override string SkillDescription { get; set; } = "加满护盾";
+
+        // 主动释放
+        public override void Fire()
+        {
+            var owner = Owner as BaLuoKe;
+            Debug.Assert(owner != null, "only BaLuoKe can use this skill");
+            Debug.Assert(owner.State == "Archer", "BaLuoKe should in Archer state");
+
+            // 加满护盾
+            Battle.AddES(owner, owner.MaxES);
         }
     }
 }

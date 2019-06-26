@@ -77,6 +77,7 @@ public class CombatTestDriver : GameDriver
 
         // heros
 
+        // 黛丽万
         var dlw = Configuration.Config(new DaiLiWan(bt) { Team = 1 });
         dlw.AddRune(new ButterflyRune1());
         dlw.AddRune(new ButterflyRune2());
@@ -85,6 +86,7 @@ public class CombatTestDriver : GameDriver
         dlw.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, dlw);
 
+        // 洛里斯
         var lls = Configuration.Config(new LuoLiSi(bt) { Team = 1 });
         lls.AddRune(new DeployEMPCannonRune1());
         lls.AddRune(new DeployEMPCannonRune2());
@@ -92,9 +94,15 @@ public class CombatTestDriver : GameDriver
         lls.AddRune(new ArtisanSpiritRune1());
         lls.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[1].X, MapReader.RespawnForChamp[1].Y, lls);
-        
-        bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
-        bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
+
+        // 巴洛克
+        var blk = Configuration.Config(new BaLuoKe(bt) { Team = 1 });
+        blk.AddRune(new FastAssistanceRune1());
+        blk.RunAllRune2PrepareBattle();
+        bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, blk);
+
+        // 游隐川
+        bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
 
         // items
         //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
