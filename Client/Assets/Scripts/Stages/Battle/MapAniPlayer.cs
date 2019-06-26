@@ -189,16 +189,16 @@ public class MapAniPlayer : MonoBehaviour
     public MapAniPlayer FireSkill(ActiveSkill skill) => Add(FireSkillAni(skill));
     IEnumerator FireSkillAni(ActiveSkill skill)
     {
-        var avatar = BattleStage.GetAvatarByWarrior(skill.Warrior);
+        var avatar = BattleStage.GetAvatarByWarrior(skill.Owner);
         var MapAvatar = avatar.gameObject.transform.Find("_MapWarrior");
         var skeletonAnimation = MapAvatar.GetComponent<SkeletonAnimation>();
         skeletonAnimation.AnimationState.SetAnimation(0, "skill", false);
         yield return new WaitForSeconds(2.0f);
 
         // 如果是变身技能需要重新载入Idle动画
-        if (skill.Warrior is ITransformable)
+        if (skill.Owner is ITransformable)
         {
-            avatar.SetIdleAnimation(skill.Warrior);
+            avatar.SetIdleAnimation(skill.Owner);
         }
         else
         {
@@ -209,7 +209,7 @@ public class MapAniPlayer : MonoBehaviour
     public MapAniPlayer FireSkillAt(ActiveSkill skill, int x, int y) => Add(FireSkillAniAt(skill,x,y));
     IEnumerator FireSkillAniAt(ActiveSkill skill, int x, int y)
     {
-        var avatar = BattleStage.GetAvatarByWarrior(skill.Warrior);
+        var avatar = BattleStage.GetAvatarByWarrior(skill.Owner);
         var MapAvatar = avatar.gameObject.transform.Find("_MapWarrior");
         var skeletonAnimation = MapAvatar.GetComponent<SkeletonAnimation>();
         skeletonAnimation.AnimationState.SetAnimation(0, "skill", false);

@@ -17,7 +17,7 @@ namespace Avocat
 
         void AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
-            if (target != Warrior || flags.Contains("SuppressCounterAttack"))
+            if (target != Owner || flags.Contains("SuppressCounterAttack"))
                 return;
 
             attacker.GetPosInMap(out int x, out int y);

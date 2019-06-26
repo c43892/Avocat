@@ -20,7 +20,7 @@ namespace Avocat
 
         void AddEN(int player)
         {
-            if (player != Warrior.Team)
+            if (player != Owner.Team)
                 return;
 
             var bt = Battle as BattlePVE;

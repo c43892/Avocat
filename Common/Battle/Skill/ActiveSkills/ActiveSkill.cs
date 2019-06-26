@@ -12,7 +12,7 @@ namespace Avocat
     /// </summary>
     public abstract class ActiveSkill : Skill
     {
-        public virtual Battle Battle { get => Warrior.Battle; } // 所属战斗对象
+        public virtual Battle Battle { get => Owner.Battle; } // 所属战斗对象
         public virtual BattleMap Map { get { return Battle?.Map; } }
         // 能量消耗
         public abstract int EnergyCost { get; set; }

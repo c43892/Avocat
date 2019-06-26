@@ -107,7 +107,7 @@ public class BattleRoomClient
     // 释放主动技能
     public void FireActiveSkill(ActiveSkill skill)
     {
-        var warrior = skill.Warrior;
+        var warrior = skill.Owner;
         BMS.Send("FireActiveSkill", (data) =>
         {
             data.Write(warrior.IDInMap);
@@ -118,7 +118,7 @@ public class BattleRoomClient
     // 释放主动技能，带目标
     public void FireActiveSkillAt(ActiveSkill skill, int x, int y)
     {
-        var warrior = skill.Warrior;
+        var warrior = skill.Owner;
         BMS.Send("FireActiveSkillAt", (data) =>
         {
             data.Write(warrior.IDInMap);

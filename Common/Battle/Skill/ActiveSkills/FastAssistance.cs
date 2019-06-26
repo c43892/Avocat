@@ -24,9 +24,9 @@ namespace Avocat
         // 主动释放
         public override void Fire()
         {
-            var owner = Warrior as BaLuoKe;
+            var owner = Owner as BaLuoKe;
             Debug.Assert(owner != null, "only BaLuoKe can use this skill");
-            Battle.Transform(Warrior, owner.State == "Lancer" ? "Archer" : "Lancer");
+            Battle.Transform(Owner, owner.State == "Lancer" ? "Archer" : "Lancer");
         }
     }
 }

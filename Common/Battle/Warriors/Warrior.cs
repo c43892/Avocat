@@ -125,7 +125,7 @@ namespace Avocat
         {
             var name = skill.Name;
             Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed. Use ReplaceActiveSkill to replace it.");
-            skill.Warrior = this;
+            skill.Owner = this;
             activeSkills[name] = skill;
 
             if (asDefaultActiveSkill)
@@ -147,6 +147,18 @@ namespace Avocat
             return activeSkills.ContainsKey(name) ? activeSkills[name] : null;
         }
 
+        // 获取主动技能
+        public T GetActiveSkill<T>() where T : ActiveSkill
+        {
+            foreach (var s in activeSkills.Values)
+            {
+                if (s is T)
+                    return s as T;
+            }
+
+            return null;
+        }
+
         // 获取默认主动技能
         public ActiveSkill GetDefaultActiveSkill()
         {
@@ -156,14 +168,14 @@ namespace Avocat
         // 移除主动技能
         public void RemoveActiveSkill(ActiveSkill skill)
         {
-            Debug.Assert(skill.Warrior == this, "skill named: " + skill.Name + " doest not exist.");
+            Debug.Assert(skill.Owner == this, "skill named: " + skill.Name + " doest not exist.");
             RemoveActiveSkill(skill.Name);
         }
 
         // 移除主动技能
         public void RemoveActiveSkill(string name)
         {
-            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Warrior == this, "skill named: " + name + " doest not exist.");
+            Debug.Assert(activeSkills.ContainsKey(name) && activeSkills[name].Owner == this, "skill named: " + name + " doest not exist.");
             activeSkills.Remove(name);
             if (defaultSkillName == name)
                 defaultSkillName = null;

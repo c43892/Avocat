@@ -12,6 +12,17 @@ namespace Avocat
     {
         public override string Name { get => "Butterfly"; }
         public override string DisplayName { get => "蝶舞"; }
+
+        // 是否在释放蝶舞之后，添加一张药水卡，这个开关会被符文打开
+        public bool AddOnePTCard { get; set; } = false;
+        public override void Fire()
+        {
+            if (!AddOnePTCard)
+                return;
+
+            var bt = Battle as BattlePVE;
+            bt.AddBattleCard(new BattleCardPotion());
+        }
     }
 
     /// <summary>
@@ -35,7 +46,7 @@ namespace Avocat
                 for (var y = 0; y < map.Height; y++)
                 {
                     var warrior = map.GetAt<Warrior>(x, y);
-                    if (warrior == null || warrior.Team != Warrior.Team)
+                    if (warrior == null || warrior.Team != Owner.Team)
                         continue;
 
                     if (target != null)
@@ -51,6 +62,8 @@ namespace Avocat
 
             if (target != null)
                 Battle.AddHP(target, target.MaxHP / 2);
+
+            base.Fire();
         }
     }
 
@@ -74,12 +87,14 @@ namespace Avocat
                 for (var y = 0; y < map.Height; y++)
                 {
                     var warrior = map.GetAt<Warrior>(x, y);
-                    if (warrior == null || warrior.Team != Warrior.Team)
+                    if (warrior == null || warrior.Team != Owner.Team)
                         continue;
 
                     Battle.AddHP(warrior, warrior.MaxHP / 2);
                 }
             }
+
+            base.Fire();
         }
     }
 }

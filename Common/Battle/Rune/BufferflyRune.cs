@@ -26,4 +26,24 @@ namespace Avocat
             h.ReplaceActiveSkill(new ButterflySingle());
         }
     }
+
+    /// <summary>
+    /// 天之河
+    /// 释放蝶舞后，立即获得一张回复指令卡
+    /// </summary>
+    public class ButterflyRune2 : Rune
+    {
+        public ButterflyRune2()
+        {
+            DisplayName = "天之河";
+        }
+
+        public override void OnPreparingBattle(Hero hero)
+        {
+            var h = hero as DaiLiWan;
+            Debug.Assert(h != null, "only available for DaiLiWan");
+
+            h.GetActiveSkill<Butterfly>().AddOnePTCard = true;
+        }
+    }
 }

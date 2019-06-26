@@ -19,17 +19,20 @@ namespace Avocat
 
         void OnAfterAddHp(Warrior warrior, int dhp)
         {
-            if (warrior.Team != Warrior.Team || warrior == Warrior || dhp <= 0)
+            if (warrior.Team != Owner.Team || warrior == Owner || dhp <= 0)
                 return;
 
             var bt = Battle as BattlePVE;
             var des = Calculation.StarTearsEffect(warrior);
             bt.AddES(warrior, des);
+
+            if (WithAddtionalEffectOnSelf)
+                bt.AddES(Owner, des / 2);
         }
 
         void OnAfterDead(Warrior warrior)
         {
-            if (!TriggerOnDie || warrior != Warrior) // 自己死亡时处理逻辑
+            if (!TriggerOnDie || warrior != Owner) // 自己死亡时处理逻辑
                 return;
 
             var bt = Battle as BattlePVE;
@@ -40,6 +43,9 @@ namespace Avocat
 
         // 死亡时是否对全体成员触发一次效果，这个开关会被符文打开
         public bool TriggerOnDie { get; set; } = false;
+
+        // 是否对自身产生额外护盾效果，这个开关会被符文打开
+        public bool WithAddtionalEffectOnSelf { get; set; } = false;
 
         public override void OnAttached()
         {

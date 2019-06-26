@@ -20,7 +20,7 @@ namespace Avocat
         public override bool isBattleBUFF { get; set; } = true;
         void OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
         {
-            if (warrior != Warrior || dhp <= 0)
+            if (warrior != Owner || dhp <= 0)
                 return;
 
             changeDhp(0);

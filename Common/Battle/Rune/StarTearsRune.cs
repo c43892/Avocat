@@ -27,4 +27,25 @@ namespace Avocat
             buff.TriggerOnDie = true;
         }
     }
+
+    /// <summary>
+    /// 星之子
+    /// 黛丽万死亡时触发一次星之泪效果
+    /// </summary>
+    public class StarTeasRune2 : Rune
+    {
+        public StarTeasRune2()
+        {
+            DisplayName = "星之子";
+        }
+
+        public override void OnPreparingBattle(Hero hero)
+        {
+            var h = hero as DaiLiWan;
+            Debug.Assert(h != null, "only available for DaiLiWan");
+
+            var buff = h.GetBuff<StarsTears>();
+            buff.WithAddtionalEffectOnSelf = true;
+        }
+    }
 }

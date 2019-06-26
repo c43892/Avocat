@@ -212,12 +212,12 @@ static class BattleStageOnEvents
 
         bt.AfterFireSkill += (ActiveSkill skill) =>
         {
-            skill.Warrior.IsSkillReleased = true;
+            skill.Owner.IsSkillReleased = true;
         };
 
         bt.AfterFireSkillAt += (ActiveSkill skill, int x, int y) =>
         {
-            skill.Warrior.IsSkillReleased = true;
+            skill.Owner.IsSkillReleased = true;
         };
     }
 }

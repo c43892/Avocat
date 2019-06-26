@@ -458,7 +458,7 @@ namespace Avocat
             {
                 Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
                 target.Buffs.Add(buff);
-                buff.Warrior = target;
+                buff.Owner = target;
             }
             else
             {
@@ -481,7 +481,7 @@ namespace Avocat
         public event Action<Buff, Warrior> OnBuffRemoved = null;
         public virtual void RemoveBuff(Buff buff)
         {
-            var target = buff.Warrior;
+            var target = buff.Owner;
 
             BeforeBuffRemoved?.Invoke(buff, target);
 
@@ -497,7 +497,7 @@ namespace Avocat
             }
 
             buff.OnDetached();
-            buff.Warrior = null;
+            buff.Owner = null;
             buff.Battle = null;
 
             OnBuffRemoved?.Invoke(buff, target);

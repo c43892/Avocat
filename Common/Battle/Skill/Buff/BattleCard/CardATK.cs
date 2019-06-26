@@ -23,13 +23,13 @@ namespace Avocat
         public override bool isBattleBUFF { get; set; } = true;
         public override void OnAttached()
         { 
-            Battle.AddATK(Warrior, ATK);
+            Battle.AddATK(Owner, ATK);
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            Warrior.Battle.AddATK(Warrior, -ATK);
+            Owner.Battle.AddATK(Owner, -ATK);
             base.OnDetached();
         }
     }

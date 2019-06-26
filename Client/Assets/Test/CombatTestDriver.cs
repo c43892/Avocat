@@ -73,15 +73,15 @@ public class CombatTestDriver : GameDriver
         //bt.AddWarriorAt(2, 4, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
 
         // npcs
-        FC.For(3, (i) =>
-        {
-            bt.AddWarriorAt(MapReader.RespawnForEnemy[i].X, MapReader.RespawnForEnemy[i].Y, Configuration.Config(new Boar(map) { Team = 2 }));
-        });
+        FC.For(3, (i) => bt.AddWarriorAt(MapReader.RespawnForEnemy[i].X, MapReader.RespawnForEnemy[i].Y, Configuration.Config(new Boar(map) { Team = 2 })));
 
         // heros
 
         var dlw = Configuration.Config(new DaiLiWan(bt) { Team = 1 });
         dlw.AddRune(new ButterflyRune1());
+        dlw.AddRune(new ButterflyRune2());
+        dlw.AddRune(new StarTeasRune1());
+        dlw.AddRune(new StarTeasRune2());
         dlw.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, dlw);
 

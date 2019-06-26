@@ -22,7 +22,7 @@ namespace Avocat
     {
         public virtual string Name { get; } // 每组技能必须唯一，可能存在比如 蝶舞 和 蝶舞AOE 两个技能共享一个 Name
         public virtual string DisplayName { get;}
-        public virtual Warrior Warrior { get; set; } // 技能在哪个角色身上
+        public virtual Warrior Owner { get; set; } // 技能在哪个角色身上
         public virtual string SkillDescription { get; set; }
     }
 
@@ -59,7 +59,7 @@ namespace Avocat
 
         void CountDown(int player)
         {
-            if (player != Warrior.Team)
+            if (player != Owner.Team)
                 return;
 
             Num--;

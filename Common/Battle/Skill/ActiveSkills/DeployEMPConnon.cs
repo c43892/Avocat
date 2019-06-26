@@ -29,7 +29,7 @@ namespace Avocat
         // 主动释放
         public override void FireAt(int x, int y)
         {
-            var connon = Configuration.Config(new CannonEMP(Map) { Team = Warrior.Team, ATK = Warrior.ATK, MaxHP = Warrior.HP, HP = Warrior.HP });
+            var connon = Configuration.Config(new CannonEMP(Map) { Team = Owner.Team, ATK = Owner.ATK, MaxHP = Owner.HP, HP = Owner.HP });
             Battle.AddWarriorAt(x, y, connon);
         }
     }

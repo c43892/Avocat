@@ -21,7 +21,7 @@ namespace Avocat
 
         void OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
-            if (attacker != Warrior)
+            if (attacker != Owner)
                 return;
 
             Battle.AddBuff(new Untreatable(EffectRoundNum), target);

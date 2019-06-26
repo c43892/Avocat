@@ -22,8 +22,8 @@ namespace Avocat
         // 寻找附近目标攻击
         public override void Fire()
         {
-            var target = Map.FindNearestTarget(Warrior);
-            BT.Attack(Warrior, target, this, "ExtraAttack", "SuppressCounterAttack","SkillAttack");
+            var target = Map.FindNearestTarget(Owner);
+            BT.Attack(Owner, target, this, "ExtraAttack", "SuppressCounterAttack","SkillAttack");
         }
 
         public override string SkillDescription { get { return "这是一闪的技能描述这是一闪的技能描述这是一闪的技能描述这是一闪的技能描述"; } }

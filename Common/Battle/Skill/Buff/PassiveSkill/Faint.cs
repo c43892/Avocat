@@ -21,7 +21,7 @@ namespace Avocat
         public override bool isBattleBUFF { get; set; } = true;
         void UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
         {
-            if (warrior != Warrior)
+            if (warrior != Owner)
                 return;
 
             resetActionFlags(false, false);
@@ -29,7 +29,7 @@ namespace Avocat
 
         void CancelAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
-            if (attacker != Warrior)
+            if (attacker != Owner)
                 return;
 
             if (!flags.Contains("CancelAttack"))

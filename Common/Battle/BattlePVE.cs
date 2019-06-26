@@ -300,7 +300,7 @@ namespace Avocat
         {
             if (Energy < skill.EnergyCost)
                 return;
-            if (skill.Warrior.IsSkillReleased)
+            if (skill.Owner.IsSkillReleased)
                 return;
             BeforeFireSkill?.Invoke(skill);
 
@@ -320,7 +320,7 @@ namespace Avocat
             if (Energy < skill.EnergyCost)
                 return;
 
-            if (skill.Warrior.IsSkillReleased)
+            if (skill.Owner.IsSkillReleased)
                 return;
 
             BeforeFireSkillAt?.Invoke(skill, x, y);
