@@ -57,6 +57,7 @@ namespace Avocat
         public override void OnDetached()
         {
             Battle.AfterAddHP -= OnAfterAddHp;
+            Battle.AfterWarriorDead -= OnAfterDead;
             base.OnDetached();
         }
     }

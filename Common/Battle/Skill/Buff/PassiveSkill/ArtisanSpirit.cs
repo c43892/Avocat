@@ -18,13 +18,16 @@ namespace Avocat
         public override string DisplayName { get; } = "匠心";
         public override string SkillDescription { get; set; } = "行动阶段前，为团队提供能量";
 
+        // 效果翻倍系数
+        public int EffectFactor { get; set; } = 1;
+
         void AddEN(int player)
         {
             if (player != Owner.Team)
                 return;
 
             var bt = Battle as BattlePVE;
-            bt.AddEN(ES2Add);
+            bt.AddEN(ES2Add * EffectFactor);
         }
 
         public override void OnAttached()

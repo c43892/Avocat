@@ -18,7 +18,7 @@ namespace Avocat
         {
             DisplayName = "洛里斯";
             Name = "LuoLiSi";
-            SetupBuffAndSkills(Configuration.Config(new DeployEMPConnon()), new ArtisanSpirit());
+            AddSkill(new DeployEMPCannon(), new ArtisanSpirit());
         }
     }
 }

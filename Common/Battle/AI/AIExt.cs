@@ -19,8 +19,8 @@ namespace Avocat
             var dist2Target = new Dictionary<WarriorAI, int>();
             foreach (var ai in ais)
             {
-                ai.Warrior.GetPosInMap(out int fx, out int fy);
-                var target = ai.Warrior.Map.FindNearestTarget(ai.Warrior);
+                ai.Owner.GetPosInMap(out int fx, out int fy);
+                var target = ai.Owner.Map.FindNearestTarget(ai.Owner);
                 if (target != null)
                 {
                     target.GetPosInMap(out int tx, out int ty);
@@ -35,19 +35,19 @@ namespace Avocat
                     return -1;
                 else if (dist2Target[a] > dist2Target[b])
                     return 1;
-                else if (a.Warrior.BasicAttackValue > b.Warrior.BasicAttackValue)
+                else if (a.Owner.BasicAttackValue > b.Owner.BasicAttackValue)
                     return -1;
-                else if (a.Warrior.BasicAttackValue < b.Warrior.BasicAttackValue)
+                else if (a.Owner.BasicAttackValue < b.Owner.BasicAttackValue)
                     return 1;
-                else if (a.Warrior.HP < b.Warrior.HP)
+                else if (a.Owner.HP < b.Owner.HP)
                     return 1;
-                else if (a.Warrior.HP > b.Warrior.HP)
+                else if (a.Owner.HP > b.Owner.HP)
                     return -1;
-                else if (a.Warrior.HP < b.Warrior.HP)
+                else if (a.Owner.HP < b.Owner.HP)
                     return 1;
-                else if (a.Warrior.GetEstimatedDefence() > b.Warrior.GetEstimatedDefence())
+                else if (a.Owner.GetEstimatedDefence() > b.Owner.GetEstimatedDefence())
                     return -1;
-                else if (a.Warrior.GetEstimatedDefence() < b.Warrior.GetEstimatedDefence())
+                else if (a.Owner.GetEstimatedDefence() < b.Owner.GetEstimatedDefence())
                     return -1;
                 else
                     return 0;
@@ -89,8 +89,16 @@ namespace Avocat
                     break;
                 case "EMPConnon":
                     ai.ActLast = () => {
+                        NormalNpcMonster(ai); // 每次损失 40% 最大血量
+                        AddHpRoundly(ai, (warrior) => -(warrior.MaxHP * 4 / 10).Clamp(1, warrior.HP));
+                    };
+                    break;
+                case "FastEMPConnon": // 加速炮台
+                    ai.ActLast = () => {
                         NormalNpcMonster(ai);
-                        AddHpRoundly(ai, (warrior) => -((int)(warrior.MaxHP * 0.4f)).Clamp(1, warrior.HP));
+                        ai.Owner.ActionDone = false; // 额外一次攻击，每次损失 50% 最大血量
+                        NormalNpcMonster(ai);
+                        AddHpRoundly(ai, (warrior) => -(warrior.MaxHP / 2).Clamp(1, warrior.HP));
                     };
                     break;
                 case "Dumb":
@@ -115,7 +123,7 @@ namespace Avocat
         static void Forward2NearestTargetAndAttack(WarriorAI ai)
         {
             // 先寻找最近目标
-            var warrior = ai.Warrior;
+            var warrior = ai.Owner;
             var target = warrior.Map.FindNearestTarget(warrior);
             if (warrior.ActionDone || target == null)
                 return;
@@ -126,7 +134,7 @@ namespace Avocat
         // 走向指定目标
         static void Forward2Target(WarriorAI ai, Warrior target)
         {
-            var warrior = ai.Warrior;
+            var warrior = ai.Owner;
             var bt = warrior.Map.Battle;
             target.GetPosInMap(out int tx, out int ty);
             warrior.GetPosInMap(out int fx, out int fy);
@@ -145,7 +153,7 @@ namespace Avocat
         // 走向指定目标，并攻击之
         static void ForwardAndAttack(WarriorAI ai, Warrior target)
         {
-            var warrior = ai.Warrior;
+            var warrior = ai.Owner;
             var bt = warrior.Map.Battle;
 
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
@@ -162,7 +170,7 @@ namespace Avocat
         // 普通怪物 npc 战斗逻辑
         static void NormalNpcMonster(WarriorAI ai)
         {
-            var warrior = ai.Warrior;
+            var warrior = ai.Owner;
             var bt = warrior.Map.Battle;
             var map = warrior.Map;
 
@@ -208,7 +216,7 @@ namespace Avocat
         // 每回合加血
         static void AddHpRoundly(WarriorAI ai, Func<Warrior, int> calcDhp)
         {
-            var warrior = ai.Warrior;
+            var warrior = ai.Owner;
             var bt = warrior.Battle;
             var dhp = calcDhp(warrior);
             bt.AddHP(warrior, dhp);

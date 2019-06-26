@@ -128,17 +128,22 @@ namespace Avocat
             };
 
             // 放置 EMP 炮台的技能
-            dAttrs[typeof(DeployEMPConnon)] = new Dictionary<string, object>
+            dAttrs[typeof(DeployEMPCannon)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 30,
                 ["Range"] = 2
             };
 
             // EMP 炮台
-            dAttrs[typeof(CannonEMP)] = new Dictionary<string, object>
+            dAttrs[typeof(EMPCannon)] = new Dictionary<string, object>
             {
                 ["AttackingType"] = "physic",
                 ["AttackRange"] = new int[] { 2,3,4,5 }
+            };
+
+            dAttrs[typeof(GainENOnEMPDestroyed)] = new Dictionary<string, object>
+            {
+                ["ES2Add"] = 5
             };
 
             // 时光倒流

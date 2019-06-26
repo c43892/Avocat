@@ -18,13 +18,15 @@ namespace Avocat
             StandableTiles = TileType.All;
         }
 
-        protected void SetupBuffAndSkills(ActiveSkill a, params Buff[] bs)
+        public void AddSkill(params Skill[] ss)
         {
-            if (a != null)
-                AddActiveSkill(Configuration.Config(a));
-
-            foreach (var b in bs)
-                Battle.AddBuff(Configuration.Config(b), this);
+            foreach (var s in ss)
+            {
+                if (s is ActiveSkill)
+                    AddActiveSkill(Configuration.Config(s as ActiveSkill));
+                else if (s is Buff)
+                    Battle.AddBuff(Configuration.Config(s as Buff), this);
+            }
         }
 
         // 刷什么类型的卡

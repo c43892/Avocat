@@ -19,7 +19,7 @@ namespace Avocat
             DisplayName = "游川隐";
             Name = "YouChuanYin";
             PatternSkill = new FlashAttack();
-            SetupBuffAndSkills(null /* Configuration.Config(new TimeBack()) */, Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
+            AddSkill(null /* Configuration.Config(new TimeBack()) */, Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
         }
     }
 }

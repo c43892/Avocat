@@ -12,14 +12,14 @@ namespace Avocat
     /// 洛里斯
     /// EMP 炮台
     /// </summary>
-    public class CannonEMP : Npc
+    public class EMPCannon : Npc
     {
-        public CannonEMP(BattleMap map)
+        public EMPCannon(BattleMap map, bool fastCannon)
             : base(map)
         {
             DisplayName = "EMP 炮";
             Name = "EMPCannon";
-            AI = new WarriorAI(this).Build("EMPConnon");
+            AI = new WarriorAI(this).Build(fastCannon ? "FastEMPConnon" : "EMPConnon");
         }
     }
 }

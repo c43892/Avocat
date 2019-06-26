@@ -89,17 +89,7 @@ namespace Avocat
             return FC.IndexOf(AttackRange, dist) >= 0;
         }
 
-        // 本回合是否已经移动过
-        public bool Moved {
-            get
-            {
-                return moved;
-            }
-            set
-            {
-                moved = value;
-            }
-        } bool moved = false; 
+        public bool Moved { get; set; } // 本回合是否已经移动过
         public bool ActionDone { get; set; } // 角色在本回合的行动已经结束
 
         public bool IsDead { get { return HP <= 0; } }

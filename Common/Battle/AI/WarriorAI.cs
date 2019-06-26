@@ -13,10 +13,10 @@ namespace Avocat
     /// </summary>
     public class WarriorAI
     {
-        public Warrior Warrior { get; protected set; }
+        public Warrior Owner { get; protected set; }
         public WarriorAI(Warrior warrior)
         {
-            Warrior = warrior;
+            Owner = warrior;
         }
 
         public Action ActFirst;
