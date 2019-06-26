@@ -114,6 +114,8 @@ namespace Avocat
             Map.FindXY(this, out x, out y);
         }
 
+        #region 技能相关
+
         // 所有主动技能
         string defaultSkillName = null;
         Dictionary<string, ActiveSkill> activeSkills = new Dictionary<string, ActiveSkill>();
@@ -122,12 +124,21 @@ namespace Avocat
         public void AddActiveSkill(ActiveSkill skill, bool asDefaultActiveSkill = true)
         {
             var name = skill.Name;
-            Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed.");
+            Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed. Use ReplaceActiveSkill to replace it.");
             skill.Warrior = this;
             activeSkills[name] = skill;
 
             if (asDefaultActiveSkill)
                 defaultSkillName = name;
+        }
+
+        // 替换同名主动技能
+        public ActiveSkill ReplaceActiveSkill(ActiveSkill skill)
+        {
+            var s = activeSkills[skill.Name];
+            activeSkills.Remove(skill.Name);
+            AddActiveSkill(skill, defaultSkillName == skill.Name);
+            return s;
         }
 
         // 获取主动技能
@@ -164,5 +175,7 @@ namespace Avocat
             var n = Buffs.IndexOf((buff) => buff.Name == name);
             return n < 0 ? null : Buffs[n];
         }
+
+        #endregion
     }
 }

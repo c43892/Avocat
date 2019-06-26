@@ -79,14 +79,19 @@ public class CombatTestDriver : GameDriver
         });
 
         // heros
-        bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
+
+        var dlw = Configuration.Config(new DaiLiWan(bt) { Team = 1 });
+        dlw.AddRune(new ButterflyRune1());
+        dlw.RunAllRune2PrepareBattle();
+        bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, dlw);
+
         bt.AddWarriorAt(MapReader.RespawnForChamp[1].X, MapReader.RespawnForChamp[1].Y, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
         bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
         bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
 
         // items
-      //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
-      //  bt.AddItemAt(7, 4, Configuration.Config(new Rock(map)));
+        //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
+        //  bt.AddItemAt(7, 4, Configuration.Config(new Rock(map)));
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };

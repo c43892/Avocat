@@ -94,10 +94,16 @@ namespace Avocat
                 ["EnergyCost"] = 15 // 能量消耗
             };
 
-            // 蝶舞
+            // 蝶舞AOE
             dAttrs[typeof(Butterfly)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 50
+            };
+
+            // 蝶舞
+            dAttrs[typeof(Butterfly)] = new Dictionary<string, object>
+            {
+                ["EnergyCost"] = 20
             };
 
             // 匠心
