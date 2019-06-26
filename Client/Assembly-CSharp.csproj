@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Replay\BattleReplay.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Rune\BufferflyRune.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Rune\Rune.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Rune\StarTearsRune.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\ActiveSkill.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\Butterfly.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\DeployEMPConnon.cs" />

@@ -8,14 +8,18 @@ using System.Threading.Tasks;
 
 namespace Avocat
 {
+    public abstract class Butterfly : ActiveSkill
+    {
+        public override string Name { get => "Butterfly"; }
+        public override string DisplayName { get => "蝶舞"; }
+    }
+
     /// <summary>
     /// 黛丽万
     /// 蝶舞，治疗单个友方单位 50% 最大生命值
     /// </summary>
-    public class Butterfly : ActiveSkill
+    public class ButterflySingle : Butterfly
     {
-        public override string Name { get => "Butterfly"; }
-        public override string DisplayName { get => "蝶舞"; }
         public override string SkillDescription { get; set; } = "治疗单个友方单位 50% 最大生命值";
 
         // 能量消耗
@@ -54,10 +58,8 @@ namespace Avocat
     /// 黛丽万
     /// 蝶舞，治疗所有友方单位 50% 最大生命值
     /// </summary>
-    public class ButterflyAOE : ActiveSkill
+    public class ButterflyAOE : Butterfly
     {
-        public override string Name { get => "Butterfly"; }
-        public override string DisplayName { get => "蝶舞"; }
         public override string SkillDescription { get; set; } = "治疗所有友方单位 50% 最大生命值";
 
         // 能量消耗

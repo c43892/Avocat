@@ -176,6 +176,26 @@ namespace Avocat
             return n < 0 ? null : Buffs[n];
         }
 
+        // 获取指定类型的 buff 或被动技能
+        public T GetBuff<T>() where T : Buff
+        {
+            var n = Buffs.IndexOf((buff) => buff is T);
+            return n < 0 ? null : Buffs[n] as T;
+        }
+
         #endregion
+
+        // 获取包括自己在内的同队队友
+        public Warrior[] GetTeamMembers(bool includingSelf = false)
+        {
+            var members = new List<Warrior>();
+            Battle.Map.ForeachObjs<Warrior>((x, y, w) =>
+            {
+                if (includingSelf || w != this)
+                    members.Add(w);
+            });
+
+            return members.ToArray();
+        }
     }
 }

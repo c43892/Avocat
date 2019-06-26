@@ -26,9 +26,9 @@ namespace Avocat
         }
 
         // 星之泪效果公式
-        public static int StarTearsEffect(int dhp)
+        public static int StarTearsEffect(Warrior attacker)
         {
-            return dhp <= 0 ? 0 : 20 + dhp * 3 / 10;
+            return 20 + attacker.POW * 3 / 10;
         }
     }
 }

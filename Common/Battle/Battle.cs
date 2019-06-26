@@ -574,7 +574,9 @@ namespace Avocat
         public event Action<Warrior, int, Action<int>> BeforeAddHP = null;
         public event Action<Warrior, int> AfterAddHP = null;
         public event Action<Warrior, int> OnAddHP = null;
+        public event Action<Warrior> BeforeWarriorDying = null; // 角色死亡
         public event Action<Warrior> OnWarriorDying = null; // 角色死亡
+        public event Action<Warrior> AfterWarriorDead = null; // 角色死亡
         public void AddHP(Warrior warrior, int dhp)
         {
             BeforeAddHP?.Invoke(warrior, dhp, (int _dhp) => dhp = _dhp);
@@ -586,7 +588,9 @@ namespace Avocat
 
             if (warrior.IsDead)
             {
+                BeforeWarriorDying?.Invoke(warrior);
                 OnWarriorDying?.Invoke(warrior);
+                AfterWarriorDead?.Invoke(warrior);
                 RemoveWarrior(warrior);
             }
         }

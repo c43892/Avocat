@@ -17,6 +17,7 @@ v15
 /Client/obj
 /Client/Assets/Scripts/Common
 /Client/Assets/Scripts/Common.meta
+/Client/Assets/Map
 
 /Common/*.meta
 /Common/Swift/*.meta
@@ -44,7 +45,10 @@ v15
 /Common/Battle/Skill/Buff/BattleCard/*.meta
 /Common/Battle/Skill/Buff/GroundEffect/*.meta
 /Common/Battle/Skill/Buff/PatternSkill/*.meta
+/Common/Battle/Rune/*.meta
 /Common/UserPlayer/*.meta
 /Common/Config/*.meta
+/Doc/~*.*
+/tmp
 
 /Client/Assembly-CSharp*

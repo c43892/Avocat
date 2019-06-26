@@ -95,13 +95,13 @@ namespace Avocat
             };
 
             // 蝶舞AOE
-            dAttrs[typeof(Butterfly)] = new Dictionary<string, object>
+            dAttrs[typeof(ButterflySingle)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 50
             };
 
             // 蝶舞
-            dAttrs[typeof(Butterfly)] = new Dictionary<string, object>
+            dAttrs[typeof(ButterflySingle)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 20
             };

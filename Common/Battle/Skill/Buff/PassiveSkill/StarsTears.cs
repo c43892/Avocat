@@ -16,19 +16,35 @@ namespace Avocat
         public override string Name { get;} = "StarsTears";
         public override string DisplayName { get; } = "星之泪";
         public override string SkillDescription { get; set; } = "行动阶段前，每当友方单位受到治疗时，为受到治疗的友方单位提供护盾";
+
         void OnAfterAddHp(Warrior warrior, int dhp)
         {
             if (warrior.Team != Warrior.Team || warrior == Warrior || dhp <= 0)
                 return;
 
             var bt = Battle as BattlePVE;
-            var des = Calculation.StarTearsEffect(dhp);
-            bt.AddES(warrior, (int)des);
+            var des = Calculation.StarTearsEffect(warrior);
+            bt.AddES(warrior, des);
         }
+
+        void OnAfterDead(Warrior warrior)
+        {
+            if (!TriggerOnDie || warrior != Warrior) // 自己死亡时处理逻辑
+                return;
+
+            var bt = Battle as BattlePVE;
+            var des = Calculation.StarTearsEffect(warrior);
+            foreach (var m in warrior.GetTeamMembers())
+                bt.AddES(m, des);
+        }
+
+        // 死亡时是否对全体成员触发一次效果，这个开关会被符文打开
+        public bool TriggerOnDie { get; set; } = false;
 
         public override void OnAttached()
         {
             Battle.AfterAddHP += OnAfterAddHp;
+            Battle.AfterWarriorDead += OnAfterDead;
             base.OnAttached();
         }
 
