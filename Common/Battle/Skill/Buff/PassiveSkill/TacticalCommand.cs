@@ -7,41 +7,99 @@ using System.Threading.Tasks;
 
 namespace Avocat
 {
+    public interface ITacticalCommandImpl
+    {
+        void OnBeforeStartNextRound(int team);
+        string SkillDescription { get; }
+        Func<BaLuoKe> GetOwner { set; }
+    }
+
     /// <summary>
-    /// 巴洛克
-    /// 战术指挥，行动阶段前，生成一张指令卡
+    /// 巴洛克，战术指挥
     /// </summary>
     public class TacticalCommand : PassiveSkill
     {
-        Func<string> GetCardType { get; set; }
         public override string Name { get; } = "TacticalCommand";
         public override string DisplayName { get; } = "战术指挥";
-        public override string SkillDescription { get; set; } = "行动阶段前，生成一张指令卡";
-        public TacticalCommand(Func<string> getCardType)
-        {
-            GetCardType = getCardType;
-        }
+        public override string SkillDescription { get => Impl.SkillDescription; }
 
-        void AddBattleCard(int player)
+        public ITacticalCommandImpl Impl
         {
-            if (player != Owner.Team)
-                return;
+            get
+            {
+                return impl;
+            }
+            set
+            {
+                impl = value;
+                if (impl != null)
+                    impl.GetOwner = () => Owner as BaLuoKe;
+            }
+        } ITacticalCommandImpl impl;
 
-            var bt = Battle as BattlePVE;
-            var card = BattleCard.Create(GetCardType());
-            bt.AddBattleCard(card);
+        void OnBeforeStartNextRound(int team)
+        {
+            Impl.OnBeforeStartNextRound(team);
         }
 
         public override void OnAttached()
         {
-            Battle.BeforeStartNextRound += AddBattleCard;
+            Battle.BeforeStartNextRound += OnBeforeStartNextRound;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            Battle.BeforeStartNextRound -= AddBattleCard;
+            Battle.BeforeStartNextRound -= OnBeforeStartNextRound;
             base.OnDetached();
+        }
+    }
+
+    /// <summary>
+    /// 巴洛克
+    /// 战术指挥，行动阶段前，生成一张指令卡
+    /// </summary>
+    public class TacticalCommandImpl1 : ITacticalCommandImpl
+    {
+        public Func<BaLuoKe> GetOwner { get; set; }
+        public string SkillDescription { get; set; } = "行动阶段前，生成一张指令卡";
+
+        public Func<string> GetCardType { get; set; }
+        public TacticalCommandImpl1(Func<string> getCardType)
+        {
+            GetCardType = getCardType;
+        }
+
+        public void OnBeforeStartNextRound(int team)
+        {
+            var owner = GetOwner();
+            if (team != owner.Team)
+                return;
+
+            var bt = owner.Battle as BattlePVE;
+            bt.AddBattleCard(BattleCard.Create(GetCardType()));
+        }
+    }
+
+    /// <summary>
+    /// 巴洛克
+    /// 战术指挥，行动阶段前，全体魔力和攻击力提升一层
+    /// </summary>
+    public class TacticalCommandImpl2 : ITacticalCommandImpl
+    {
+        public Func<BaLuoKe> GetOwner { get; set; }
+        public string SkillDescription { get; set; } = "行动阶段前，赋予全体友方单位攻击提升与魔力提升各一层";
+
+        public void OnBeforeStartNextRound(int team)
+        {
+            var owner = GetOwner();
+            if (team != owner.Team)
+                return;
+
+            //var bt = Battle as BattlePVE;
+            //var cardType = GetCardType();
+            //if (cardType != null)
+            //    bt.AddBattleCard(BattleCard.Create(cardType));
         }
     }
 }

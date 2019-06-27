@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Rune\FastAssistanceRune.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Rune\Rune.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Rune\StarTearsRune.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Rune\TacticalCommandRune.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\ActiveSkill.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\Butterfly.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\DeployEMPCannon.cs" />

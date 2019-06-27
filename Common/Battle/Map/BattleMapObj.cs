@@ -32,6 +32,5 @@ namespace Avocat
         }
 
         public List<Buff> Buffs { get; } = new List<Buff>();
-
     }
 }
