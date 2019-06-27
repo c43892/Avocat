@@ -117,12 +117,12 @@ public class CharacterInfoUI : MonoBehaviour
         var ActiveSkillFrame = ActiveSkill.transform.parent.gameObject;
         PassiveSkillFrame.SetActive(false);
         ActiveSkillFrame.SetActive(false);
-        var AllPassiveSkills = (warrior as BattleMapObj).Buffs;
+        var AllPassiveSkills = warrior.Buffs;
         if (warrior.GetDefaultActiveSkill() != null) {
             ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().Name) as Sprite;
             ActiveSkillFrame.SetActive(true);
         }
-        FC.For(AllPassiveSkills.Count, (i) =>
+        FC.For(AllPassiveSkills.Length, (i) =>
         {
             if (AllPassiveSkills[i] is PatternSkill)
             {
@@ -143,7 +143,7 @@ public class CharacterInfoUI : MonoBehaviour
         {
             BUFFPic[w].SetActive(false);
         });
-        FC.For(warrior.Buffs.Count, (i) =>
+        FC.For(warrior.Buffs.Length, (i) =>
         {
             if (warrior.Buffs[i].isBattleBUFF)
             {
@@ -184,8 +184,8 @@ public class CharacterInfoUI : MonoBehaviour
             }
             else // 如果是patternskill
             {
-                var AllPassiveSkills = (warrior as BattleMapObj).Buffs;               
-                FC.For(AllPassiveSkills.Count, (i) =>
+                var AllPassiveSkills = warrior.Buffs;               
+                FC.For(AllPassiveSkills.Length, (i) =>
                 {
                     if (AllPassiveSkills[i] is PatternSkill)
                     {
@@ -212,8 +212,8 @@ public class CharacterInfoUI : MonoBehaviour
             }
 
             // 设置被动技能的信息栏
-            var Buffs = (warrior as BattleMapObj).Buffs;
-            FC.For(Buffs.Count, (i) =>
+            var Buffs = warrior.Buffs;
+            FC.For(Buffs.Length, (i) =>
             {
                 if (Buffs[i] is PassiveSkill)
                 {

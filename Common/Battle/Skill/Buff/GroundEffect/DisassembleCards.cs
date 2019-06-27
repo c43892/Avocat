@@ -12,6 +12,7 @@ namespace Avocat
     /// </summary>
     public class DisassembleCards : Buff
     {
+        public override string Name { get => "DisassembleCards"; }
         public BattlePVE BattlePVE { get => this.Battle as BattlePVE; }
         public List<BattleCard> AvailableCards { get; private set; }
         int Player { get; set; }

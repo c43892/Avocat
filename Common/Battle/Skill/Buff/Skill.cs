@@ -20,7 +20,7 @@ namespace Avocat
     /// </summary>
     public abstract class Skill
     {
-        public virtual string Name { get; } // 每组技能必须唯一，可能存在比如 蝶舞 和 蝶舞AOE 两个技能共享一个 Name
+        public abstract string Name { get; } // 每组技能必须唯一，可能存在比如 蝶舞 和 蝶舞AOE 两个技能共享一个 Name
         public virtual string DisplayName { get;}
         public virtual Warrior Owner { get; set; } // 技能在哪个角色身上
         public virtual string SkillDescription { get; set; }
@@ -57,9 +57,9 @@ namespace Avocat
             Num = (Num + addtionalNum).Clamp(0, MaxNum);
         }
 
-        void CountDown(int player)
+        void CountDown(int team)
         {
-            if (player != Owner.Team)
+            if (team != Owner.Team)
                 return;
 
             Num--;
@@ -67,14 +67,20 @@ namespace Avocat
                 Battle.RemoveBuff(this);
         }
 
+        bool attached = false; // 因为此类 buff 的 attach 效果可能只是叠加现有层数，需要特别处理
         public override void OnAttached()
         {
+            if (attached)
+                return;
+
+            attached = true;
             Battle.BeforeActionDone += CountDown;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
+            attached = false;
             Battle.BeforeActionDone -= CountDown;
             base.OnDetached();
         }

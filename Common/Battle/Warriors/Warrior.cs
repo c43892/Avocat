@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Swift;
 
@@ -23,6 +24,7 @@ namespace Avocat
             :base (map)
         {
         }
+
         public WarriorAI AI { get; set; } // AI 类型
         public bool IsBoss { get; set; } = false; // 是否是 boss
 
@@ -171,18 +173,44 @@ namespace Avocat
                 defaultSkillName = null;
         }
 
-        // 获取指定名称的 buff 或被动技能
-        public Buff GetBuffByName(string name)
+        #endregion
+
+        #region buff 相关
+
+        Dictionary<string, Buff> buffs = new Dictionary<string, Buff>();
+
+        public Buff[] Buffs { get => buffs.Values.ToArray(); }
+        public Buff GetBuffByName(string name) => buffs.ContainsKey(name) ? buffs[name] : null;
+        public void AddBuff(ref Buff buff)
         {
-            var n = Buffs.IndexOf((buff) => buff.Name == name);
-            return n < 0 ? null : Buffs[n];
+            var b = GetBuffByName(buff.Name);
+            if (b == null)
+            {
+                buffs[buff.Name] = buff;
+                buff.Owner = this;
+            }
+            else
+            {
+                Debug.Assert(b == null || buff is BuffCountDown, "buff " + buff.Name + " already attached to target " + Name);
+                (b as BuffCountDown).Expand((buff as BuffCountDown).Num);
+                buff = b;
+            }
+        }
+
+        public void RemoveBuff(Buff buff)
+        {
+            Debug.Assert(buffs.ContainsKey(buff.Name) && buffs[buff.Name] == buff, "buff " + buff.Name + " has not been attached to target " + Name);
+            buffs.Remove(buff.Name);
         }
 
         // 获取指定类型的 buff 或被动技能
         public T GetBuff<T>() where T : Buff
         {
-            var n = Buffs.IndexOf((buff) => buff is T);
-            return n < 0 ? null : Buffs[n] as T;
+            foreach (var buff in buffs.Values)
+                if (buff is T)
+                    return buff as T;
+
+            return null;
         }
 
         #endregion

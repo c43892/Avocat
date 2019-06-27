@@ -12,6 +12,8 @@ namespace Avocat
     /// </summary>
     public class ResetES : Buff
     {
+        public override string Name { get => "ResetES"; }
+
         public override void OnAttached()
         {
             Battle.BeforeStartNextRound += (int player) =>

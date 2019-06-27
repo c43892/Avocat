@@ -19,6 +19,13 @@ namespace Avocat
 
         // 能量消耗
         public override int EnergyCost { get; set; }
+
+        // 基础效果：增加一层魔力，额外行动一次
+        public void BaseEffect()
+        {
+            Owner.Battle.AddBuff(new POWInc(1), Owner);
+            Owner.ActionDone = false;
+        }
     }
 
     /// <summary>
@@ -35,6 +42,7 @@ namespace Avocat
             var owner = Owner as BaLuoKe;
             Debug.Assert(owner != null, "only BaLuoKe can use this skill");
             Battle.Transform(Owner, owner.State == "Lancer" ? "Archer" : "Lancer");
+            BaseEffect();
         }
     }
 
@@ -55,6 +63,7 @@ namespace Avocat
 
             // 加满护盾
             Battle.AddES(owner, owner.MaxES);
+            BaseEffect();
         }
     }
 }
