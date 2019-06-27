@@ -64,10 +64,10 @@ namespace Avocat
         public Func<BaLuoKe> GetOwner { get; set; }
         public string SkillDescription { get; set; } = "行动阶段前，生成一张指令卡";
 
-        public Func<string> GetCardType { get; set; }
-        public TacticalCommandImpl1(Func<string> getCardType)
+        public Func<string[]> GetCardTypes { get; set; }
+        public TacticalCommandImpl1(Func<string[]> getCardTypes)
         {
-            GetCardType = getCardType;
+            GetCardTypes = getCardTypes;
         }
 
         public void OnBeforeStartNextRound(int team)
@@ -77,7 +77,8 @@ namespace Avocat
                 return;
 
             var bt = owner.Battle as BattlePVE;
-            bt.AddBattleCard(BattleCard.Create(GetCardType()));
+            foreach (var c in GetCardTypes())
+                bt.AddBattleCard(BattleCard.Create(c));
         }
     }
 
@@ -88,7 +89,7 @@ namespace Avocat
     public class TacticalCommandImpl2 : ITacticalCommandImpl
     {
         public Func<BaLuoKe> GetOwner { get; set; }
-        public string SkillDescription { get; set; } = "行动阶段前，赋予全体友方单位攻击提升与魔力提升各一层";
+        public string SkillDescription { get; set; } = "行动阶段前，不再提供指令卡，赋予全体友方单位攻击提升与魔力提升各一层";
 
         public void OnBeforeStartNextRound(int team)
         {
@@ -96,10 +97,10 @@ namespace Avocat
             if (team != owner.Team)
                 return;
 
-            //var bt = Battle as BattlePVE;
-            //var cardType = GetCardType();
-            //if (cardType != null)
-            //    bt.AddBattleCard(BattleCard.Create(cardType));
+            var bt = owner.Battle as BattlePVE;
+            var teammates = owner.GetTeamMembers();
+            foreach (var m in teammates)
+                bt.AddBuff(new POWInc(1));
         }
     }
 }
