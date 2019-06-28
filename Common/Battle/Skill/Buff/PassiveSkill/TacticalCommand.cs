@@ -100,7 +100,10 @@ namespace Avocat
             var bt = owner.Battle as BattlePVE;
             var teammates = owner.GetTeamMembers();
             foreach (var m in teammates)
-                bt.AddBuff(new POWInc(1));
+            {
+                bt.AddBuff(new POWInc(1), owner);
+                bt.AddBuff(new ATKInc(1), owner);
+            }
         }
     }
 }

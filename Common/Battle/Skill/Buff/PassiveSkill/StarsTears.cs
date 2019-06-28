@@ -19,7 +19,7 @@ namespace Avocat
 
         void OnAfterAddHp(Warrior warrior, int dhp)
         {
-            if (warrior.Team != Owner.Team || warrior == Owner)
+            if (warrior.Team != Owner.Team || warrior == Owner || dhp < 0)
                 return;
 
             var bt = Battle as BattlePVE;

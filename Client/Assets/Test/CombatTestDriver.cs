@@ -99,6 +99,7 @@ public class CombatTestDriver : GameDriver
         var blk = Configuration.Config(new BaLuoKe(bt) { Team = 1 });
         blk.AddRune(new FastAssistanceRune1());
         blk.AddRune(new TacticalCommandRune1());
+        blk.AddRune(new TacticalCommandRune3());
         blk.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, blk);
 

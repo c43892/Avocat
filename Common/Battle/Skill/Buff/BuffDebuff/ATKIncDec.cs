@@ -7,47 +7,47 @@ using System.Threading.Tasks;
 namespace Avocat
 {
     /// <summary>
-    /// 魔能提升
+    /// 攻击提升
     /// </summary>
-    public class POWInc : BuffCountDown
+    public class ATKInc : BuffCountDown
     {
-        public POWInc(int num) : base(num) { }
+        public ATKInc(int num) : base(num) { }
 
-        public override string Name { get => "POWInc"; }
+        public override string Name { get => "ATKInc"; }
 
         public override void OnAttached()
         {
-            Owner.Battle.RemoveBuffByName(Owner, "POWDec"); // 互斥 buff
-            Owner.POWInc += 15;
+            Owner.Battle.RemoveBuffByName(Owner, "ATKDec"); // 互斥 buff
+            Owner.ATKInc += 15;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            Owner.POWInc -= 15;
+            Owner.ATKInc -= 15;
             base.OnDetached();
         }
     }
 
     /// <summary>
-    /// 魔能下降
+    /// 攻击下降
     /// </summary>
-    public class POWDec : BuffCountDown
+    public class ATKDec : BuffCountDown
     {
-        public POWDec(int num) : base(num) { }
+        public ATKDec(int num) : base(num) { }
 
-        public override string Name { get => "POWDec"; }
+        public override string Name { get => "ATKDec"; }
 
         public override void OnAttached()
         {
-            Owner.Battle.RemoveBuffByName(Owner, "POWInc"); // 互斥 buff
-            Owner.POWInc -= 15;
+            Owner.Battle.RemoveBuffByName(Owner, "ATKInc"); // 互斥 buff
+            Owner.ATKInc -= 15;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            Owner.POWInc += 15;
+            Owner.ATKInc += 15;
             base.OnDetached();
         }
     }
