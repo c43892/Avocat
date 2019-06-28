@@ -11,15 +11,14 @@ namespace Avocat
     /// 游川隐
     /// 剑道，一闪
     /// </summary>
-    public class YouYinChuan : Hero
+    public class YouChuanYin : Hero
     {
-        public YouYinChuan(Battle bt)
+        public YouChuanYin(Battle bt)
             : base(bt)
         {
             DisplayName = "游川隐";
             Name = "YouChuanYin";
-            PatternSkill = new FlashAttack();
-            AddSkill(null /* Configuration.Config(new TimeBack()) */, Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
+            AddSkill(Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
         }
     }
 }

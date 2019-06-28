@@ -11,7 +11,7 @@ namespace Avocat
     /// 巨型炮台
     /// 炮台拥有翻倍的属性；洛里斯同时只能拥有1个炮台
     /// </summary>
-    public class DeployEMPCannonRune1 : Rune
+    public class LuoLiSiRune1 : Rune
     {
         public override string DisplayName { get => "巨型炮台"; }
         public override void OnPreparingBattle(Hero hero)
@@ -29,7 +29,7 @@ namespace Avocat
     /// 加速炮台
     /// 炮台每回合能够进行1次额外的轰击；炮台在每次轰击后损失50%最大生命值
     /// </summary>
-    public class DeployEMPCannonRune2 : Rune
+    public class LuoLiSiRune2 : Rune
     {
         public override string DisplayName { get => "加速炮台"; }
         public override void OnPreparingBattle(Hero hero)
@@ -42,10 +42,27 @@ namespace Avocat
     }
 
     /// <summary>
+    /// 匠心独运
+    /// 由匠心产生的能量翻倍
+    /// </summary>
+    public class LuoLiSiRune3 : Rune
+    {
+        public override string DisplayName { get => "匠心独运"; }
+        public override void OnPreparingBattle(Hero hero)
+        {
+            var h = hero as LuoLiSi;
+            Debug.Assert(h != null, "only available for LuoLiSi");
+
+            var s = h.GetBuff<ArtisanSpirit>();
+            s.EffectFactor = 2;
+        }
+    }
+
+    /// <summary>
     /// 废物利用
     /// 炮台销毁时获得能量
     /// </summary>
-    public class DeployEMPCannonRune3 : Rune
+    public class LuoLiSiRune4 : Rune
     {
         public override string DisplayName { get => "废物利用"; }
         public override void OnPreparingBattle(Hero hero)

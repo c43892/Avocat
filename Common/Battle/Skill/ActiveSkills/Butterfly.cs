@@ -29,13 +29,14 @@ namespace Avocat
     /// 黛丽万
     /// 蝶舞，治疗单个友方单位 50% 最大生命值
     /// </summary>
-    public class ButterflySingle : Butterfly
+    public class ButterflySingle : Butterfly, IWithRange
     {
         public override string ActiveSkillType { get; } = "fireAt";
         public override string SkillDescription { get; set; } = "治疗单个友方单位 50% 最大生命值";
 
         // 能量消耗
         public override int EnergyCost { get; set; }
+        public int Range { get; set; }
 
         // 主动释放
         public override void FireAt(int x, int y)

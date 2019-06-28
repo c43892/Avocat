@@ -59,7 +59,7 @@ namespace Avocat
             };
 
             // 游川隐
-            dAttrs[typeof(YouYinChuan)] = new Dictionary<string, object>
+            dAttrs[typeof(YouChuanYin)] = new Dictionary<string, object>
             {
                 ["AttackingType"] = "physic",
                 ["MaxHP"] = 329,
@@ -94,14 +94,15 @@ namespace Avocat
                 ["EnergyCost"] = 15 // 能量消耗
             };
 
-            // 蝶舞AOE
+            // 蝶舞单体治疗
             dAttrs[typeof(ButterflySingle)] = new Dictionary<string, object>
             {
-                ["EnergyCost"] = 50
+                ["EnergyCost"] = 50,
+                ["Range"] = 5
             };
 
-            // 蝶舞
-            dAttrs[typeof(ButterflySingle)] = new Dictionary<string, object>
+            // 蝶舞 AOE 治疗
+            dAttrs[typeof(ButterflyAOE)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 20
             };

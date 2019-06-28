@@ -43,7 +43,7 @@ namespace Avocat
         public int POW { get; set; } // 法攻
         public int POWInc { get; set; } // 法攻加成
         public int POWMore { get; set; } // 法攻加成
-        public PatternSkill PatternSkill { get; set; } // 有无pattern技能
+        public PatternSkill PatternSkill { get => GetBuff<PatternSkill>(); }
         public bool IsSkillReleased { get; set; }
 
         // 基本攻击力
