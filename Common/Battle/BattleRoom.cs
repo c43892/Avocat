@@ -85,8 +85,6 @@ namespace Avocat
             {
                 Battle.ActionDone(player);
             });
-
-
         }
 
         // 搜索可达路径

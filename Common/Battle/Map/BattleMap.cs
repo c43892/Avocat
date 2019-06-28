@@ -32,7 +32,15 @@ namespace Avocat
     {
         public Battle Battle { get; set; }
 
-        // 用来给加入地图的 item 进行 id 分配
+        // 储存地图信息
+        public List<MapData> MapInfo { get; set; }
+
+        // 储存英雄出生点
+        public List<MapData> RespawnForChamp = new List<MapData>();
+
+        // 储存敌人出生点
+        public List<MapData> RespawnForEnemy = new List<MapData>();
+
         public int ItemIDInMap
         {
             get
@@ -183,6 +191,51 @@ namespace Avocat
             return nearestTarget;
         }
 
+        // 获取出生位置
+        public void GetRespawnPlace()
+        {
+            FC.For(0, MapInfo.Count, (i) =>
+            {
+                if (MapInfo[i].RespawnForChamp == true)
+                    RespawnForChamp.Add(MapInfo[i]);
+                if (MapInfo[i].RespawnForEnemy == true)
+                    RespawnForEnemy.Add(MapInfo[i]);
+            });
+
+            GetRandomRespawnPlace(RespawnForChamp, Battle.Srand);
+            GetRandomRespawnPlace(RespawnForEnemy, Battle.Srand);
+        }
+
+        // 随机打乱出生顺序
+        public void GetRandomRespawnPlace(List<MapData> RespawnList, SRandom rand)
+        {
+            FC.For(RespawnList.Count, (i) =>
+            {
+                int RandomNum = rand.Next(RespawnList.Count);
+                var temp = RespawnList[RandomNum];
+                RespawnList[RandomNum] = RespawnList[i];
+                RespawnList[i] = temp;
+            });
+        }
+
+        // 设置地块逻辑
+        public void SetMapTileInfo(MapTile tile)
+        {
+            for (int i = 0; i < MapInfo.Count; i++)
+            {
+                if (tile.X == MapInfo[i].X && tile.Y == MapInfo[i].Y)
+                {
+                    // 设置地块逻辑
+                    var MapData = tile.MapData;
+                    MapData.Type = MapInfo[i].Type;
+                    MapData.RespawnForChamp = MapInfo[i].RespawnForChamp;
+                    MapData.RespawnForEnemy = MapInfo[i].RespawnForEnemy;
+                    MapData.MaterialSortingOrder = MapInfo[i].MaterialSortingOrder;
+                    MapData.RespawnSortingOrder = MapInfo[i].RespawnSortingOrder;
+                    return;
+                }
+            }
+        }        
         #region 寻路相关
 
         // 检查指定区域是否被占用

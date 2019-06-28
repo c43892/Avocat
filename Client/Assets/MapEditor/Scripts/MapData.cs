@@ -12,6 +12,7 @@ public class MapData
     public int Y { get; set; }
     public TileType Type{ get; set; }
     public int MaterialSortingOrder { get; set; }
+    public int RespawnSortingOrder { get; set; }
     public bool RespawnForChamp;
     public bool RespawnForEnemy;
 
@@ -19,11 +20,12 @@ public class MapData
     {
     }
 
-    public MapData(int X, int Y, TileType Type, int SortingOrder)
+    public MapData(int X, int Y, TileType Type, int MaterialSortingOrder, int RespawnSortingOrder)
     {
         this.X = X;
         this.Y = Y;
         this.Type = Type;
-        this.MaterialSortingOrder = SortingOrder;
+        this.MaterialSortingOrder = MaterialSortingOrder;
+        this.RespawnSortingOrder = RespawnSortingOrder;
     }
 }

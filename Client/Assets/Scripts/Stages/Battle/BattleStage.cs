@@ -153,11 +153,33 @@ public class BattleStage : MonoBehaviour
             tile.transform.SetParent(MapRoot);
             tile.X = x;
             tile.Y = y;
-            MapReader.ReadMapInfo(tile);
+            Map.SetMapTileInfo(tile);
+            SetMapTile(tile);
             tile.GetComponent<SpriteRenderer>().sortingOrder = y + 1;
             tile.gameObject.SetActive(true);
             Tiles[x, y] = tile;
         });
+    }
+
+    public void SetMapTile(MapTile tile)
+    {
+        var MapData = tile.MapData;
+        var material = tile.transform.Find("Material").GetComponent<SpriteRenderer>();
+        if (MapData.Type != TileType.None)
+            material.sprite = Resources.Load<Sprite>("UI/MapTile/" + MapData.Type.ToString());
+
+        // 设置地块渲染位置
+        material.sortingOrder = MapData.MaterialSortingOrder;
+
+        // 设置出生点逻辑和表现
+        if (MapData.RespawnForChamp == true || MapData.RespawnForEnemy == true)
+        {
+            tile.transform.Find("RespawnPlace").gameObject.SetActive(true);
+
+            // 设置出生点渲染位置
+            var Mesh = tile.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
+            Mesh.sortingOrder = MapData.RespawnSortingOrder;
+        }
     }
 
     // 构建地图上的对象
