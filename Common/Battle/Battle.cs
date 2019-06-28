@@ -58,8 +58,8 @@ namespace Avocat
             if (AIs.ContainsKey(warrior.Team))
                 AIs[warrior.Team].Remove(warrior.IDInMap);
 
-            for (var i = 0; i < warrior.Buffs.Count; i++)
-                warrior.Buffs[i].OnDetached();
+            foreach (var buff in warrior.Buffs)
+                buff.OnDetached();
 
             Map.RemoveObj(warrior);
 
@@ -450,16 +450,12 @@ namespace Avocat
         protected event Action<Buff, Warrior> BeforeBuffAttached = null;
         protected event Action<Buff, Warrior> AfterBuffAttached = null;
         public event Action<Buff, Warrior> OnBuffAttached = null;
-        public virtual void AddBuff(Buff buff, Warrior target = null)
+        public virtual Buff AddBuff(Buff buff, Warrior target = null)
         {
             BeforeBuffAttached?.Invoke(buff, target);
 
             if (target != null)
-            {
-                Debug.Assert(!target.Buffs.Contains(buff), "buff " + buff.Name + " already attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
-                target.Buffs.Add(buff);
-                buff.Owner = target;
-            }
+                target.AddBuff(ref buff); // 这个时候可能发生同名 buff 回合数叠加，buff 对象会变为已经在目标身上的原 buff
             else
             {
                 Debug.Assert(!GroundBuffs.Contains(buff), "buff " + buff.Name + " already attached to ground");
@@ -471,11 +467,20 @@ namespace Avocat
 
             OnBuffAttached?.Invoke(buff, target);
             AfterBuffAttached?.Invoke(buff, target);
+
+            return buff;
         }
 
         /// <summary>
         /// 移除 buff 或被动技能效果
         /// </summary>
+        public virtual void RemoveBuffByName(Warrior target, string name)
+        {
+            var buff = target.GetBuffByName(name);
+            if (buff != null)
+                RemoveBuff(buff);
+        }
+
         protected event Action<Buff, Warrior> BeforeBuffRemoved = null;
         protected event Action<Buff, Warrior> AfterBuffRemoved = null;
         public event Action<Buff, Warrior> OnBuffRemoved = null;
@@ -488,7 +493,7 @@ namespace Avocat
             if (target != null)
             {
                 Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.Name + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
-                target.Buffs.Remove(buff);
+                target.RemoveBuff(buff);
             }
             else
             {

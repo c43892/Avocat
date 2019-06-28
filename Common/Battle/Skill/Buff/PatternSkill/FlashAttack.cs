@@ -17,7 +17,8 @@ namespace Avocat
         public override string DisplayName => "一闪";
 
         // 触发模式
-        public override string[] CardsPattern { get; protected set; } = new string[] { "ATK", "ES" };
+        public string[] Pattern { get; set; } = new string[] { "ATK", "ES" };
+        public override string[] CardsPattern { get => Pattern; }
 
         // 寻找附近目标攻击
         public override void Fire()

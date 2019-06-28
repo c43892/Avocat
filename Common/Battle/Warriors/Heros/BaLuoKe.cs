@@ -18,7 +18,11 @@ namespace Avocat
         {
             DisplayName = "巴洛克";
             Name = "BaLuoKe";
-            AddSkill(new FastAssistance1(), new TacticalCommand(() => State == "Archer" ? "EN" : "ATK"));
+            AddSkill(new FastAssistance1(), 
+                new TacticalCommand() {
+                    Impl = new TacticalCommandImpl1(() => 
+                        State == "Archer" ? new string[] { "EN" } : new string[] { "ATK" })
+                });
         }
         
         public int[] ArcherAttackRange { get; set; }

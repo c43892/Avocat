@@ -13,6 +13,7 @@ namespace Avocat
     /// </summary>
     public class GenCards : Buff
     {
+        public override string Name { get => "GenCards"; }
         readonly Action<int, BattleCard[]> CardsGeneratedCallback = null;
         int Player { get; set; }
 

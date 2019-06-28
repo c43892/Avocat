@@ -9,7 +9,7 @@ namespace Avocat
     /// <summary>
     /// 被动释放技能
     /// </summary>
-    public class PassiveSkill : Buff
+    public abstract class PassiveSkill : Buff
     {
     }
 }

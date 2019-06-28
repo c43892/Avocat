@@ -21,9 +21,9 @@ namespace Avocat
         // 效果翻倍系数
         public int EffectFactor { get; set; } = 1;
 
-        void AddEN(int player)
+        void AddEN(int team)
         {
-            if (player != Owner.Team)
+            if (team != Owner.Team)
                 return;
 
             var bt = Battle as BattlePVE;

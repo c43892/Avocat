@@ -15,7 +15,7 @@ namespace Avocat
 
         // 是否在释放蝶舞之后，添加一张药水卡，这个开关会被符文打开
         public bool AddOnePTCard { get; set; } = false;
-        public override void Fire()
+        public void Try2AddOnePTCard()
         {
             if (!AddOnePTCard)
                 return;
@@ -29,41 +29,24 @@ namespace Avocat
     /// 黛丽万
     /// 蝶舞，治疗单个友方单位 50% 最大生命值
     /// </summary>
-    public class ButterflySingle : Butterfly
+    public class ButterflySingle : Butterfly, IWithRange
     {
+        public override string ActiveSkillType { get; } = "fireAt";
         public override string SkillDescription { get; set; } = "治疗单个友方单位 50% 最大生命值";
 
         // 能量消耗
         public override int EnergyCost { get; set; }
+        public int Range { get; set; }
 
         // 主动释放
-        public override void Fire()
+        public override void FireAt(int x, int y)
         {
-            Warrior target = null;
-            var map = Battle.Map;
-            for (var x = 0; x < map.Width; x++)
-            {
-                for (var y = 0; y < map.Height; y++)
-                {
-                    var warrior = map.GetAt<Warrior>(x, y);
-                    if (warrior == null || warrior.Team != Owner.Team)
-                        continue;
+            Warrior target = Owner.Battle.Map.GetAt<Warrior>(x, y);
+            if (target == null || target.Team != Owner.Team)
+                return;
 
-                    if (target != null)
-                    {
-                        // 选择血量百分比最小的目标
-                        var hpPercentage1 = (Fix64)target.HP / target.MaxHP;
-                        var hpPercentage2 = (Fix64)warrior.HP / warrior.MaxHP;
-                        if (hpPercentage2 < hpPercentage1)
-                            target = warrior;
-                    }
-                }
-            }
-
-            if (target != null)
-                Battle.AddHP(target, target.MaxHP / 2);
-
-            base.Fire();
+            Battle.AddHP(target, target.MaxHP / 2);
+            Try2AddOnePTCard();
         }
     }
 
@@ -94,7 +77,7 @@ namespace Avocat
                 }
             }
 
-            base.Fire();
+            Try2AddOnePTCard();
         }
     }
 }

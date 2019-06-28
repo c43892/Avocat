@@ -12,6 +12,8 @@ namespace Avocat
     /// </summary>
     public class ResetActionFlag : Buff
     {
+        public override string Name { get => "ResetActionFlag"; }
+
         void ImplResetActionFlags(int player)
         {
             for (var i = 0; i < Map.Width; i++)

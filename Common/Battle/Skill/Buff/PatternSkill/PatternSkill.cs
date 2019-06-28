@@ -15,7 +15,7 @@ namespace Avocat
         public BattlePVE BT { get => Battle as BattlePVE; }
 
         // 触发模式
-        public abstract string[] CardsPattern { get; protected set; }
+        public abstract string[] CardsPattern { get; }
 
         // 触发效果
         public abstract void Fire();

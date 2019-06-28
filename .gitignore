@@ -40,6 +40,7 @@ v15
 /Common/Battle/Replay/*.meta
 /Common/Battle/Skill/*.meta
 /Common/Battle/Skill/Buff/*.meta
+/Common/Battle/Skill/Buff/BuffDebuff/*.meta
 /Common/Battle/Skill/Buff/PassiveSkill/*.meta
 /Common/Battle/Skill/ActiveSkills/*.meta
 /Common/Battle/Skill/Buff/BattleCard/*.meta

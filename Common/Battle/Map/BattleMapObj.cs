@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Swift;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Avocat
 {
@@ -30,8 +31,5 @@ namespace Avocat
         {
             Map.FindXY(this, out x, out y);
         }
-
-        public List<Buff> Buffs { get; } = new List<Buff>();
-
     }
 }

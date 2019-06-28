@@ -79,30 +79,36 @@ public class CombatTestDriver : GameDriver
 
         // 黛丽万
         var dlw = Configuration.Config(new DaiLiWan(bt) { Team = 1 });
-        dlw.AddRune(new ButterflyRune1());
-        dlw.AddRune(new ButterflyRune2());
-        dlw.AddRune(new StarTeasRune1());
-        dlw.AddRune(new StarTeasRune2());
+        dlw.AddRune(new DaiLiWanRune1());
+        dlw.AddRune(new DaiLiWanRune2());
+        dlw.AddRune(new DaiLiWanRune3());
+        dlw.AddRune(new DaiLiWanRune4());
         dlw.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, dlw);
 
         // 洛里斯
         var lls = Configuration.Config(new LuoLiSi(bt) { Team = 1 });
-        lls.AddRune(new DeployEMPCannonRune1());
-        lls.AddRune(new DeployEMPCannonRune2());
-        lls.AddRune(new DeployEMPCannonRune3());
-        lls.AddRune(new ArtisanSpiritRune1());
+        lls.AddRune(new LuoLiSiRune1());
+        lls.AddRune(new LuoLiSiRune2());
+        lls.AddRune(new LuoLiSiRune3());
+        lls.AddRune(new LuoLiSiRune4());
         lls.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[1].X, MapReader.RespawnForChamp[1].Y, lls);
 
         // 巴洛克
         var blk = Configuration.Config(new BaLuoKe(bt) { Team = 1 });
-        blk.AddRune(new FastAssistanceRune1());
+        blk.AddRune(new BaLuoKeRune1());
+        blk.AddRune(new BaLuoKeRune2());
+        blk.AddRune(new BaLuoKeRune3());
+        blk.AddRune(new BaLuoKeRune4());
         blk.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, blk);
 
-        // 游隐川
-        bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
+        // 游川隐
+        var ycy = Configuration.Config(new YouChuanYin(bt) { Team = 1 });
+        ycy.AddRune(new YouChuanYinRune4());
+        ycy.RunAllRune2PrepareBattle();
+        bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, ycy);
 
         // items
         //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
