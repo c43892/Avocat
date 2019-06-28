@@ -79,7 +79,7 @@ public class MapCreator : MonoBehaviour
                 MapTilesList.Add(tile);
 
                 // MapData没有new之前就传递是值传递
-                tile.GetComponent<MapTile>().MapData = new MapData(x, y, TileType.None, material.sortingOrder);
+                tile.GetComponent<MapTile>().MapData = new MapData(x, y, TileType.None, material.sortingOrder, respawnPlace.sortingOrder);
                 var mapData = tile.GetComponent<MapTile>().MapData;
                 MapInfo.Add(mapData);
             });
@@ -193,8 +193,9 @@ public class MapCreator : MonoBehaviour
                             var material = data.transform.Find("Material").GetComponent<SpriteRenderer>();
                             material.sprite = Resources.Load<Sprite>("UI/MapTile/" + mapData.Type.ToString());
                         }
-                        mapData.MaterialSortingOrder = MapDatas[i].MaterialSortingOrder;   
-                        
+                        mapData.MaterialSortingOrder = MapDatas[i].MaterialSortingOrder;
+                        mapData.RespawnSortingOrder = MapDatas[i].RespawnSortingOrder;
+
                         // 加载出生点信息
                         var Mesh = data.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
                         mapData.RespawnForChamp = MapDatas[i].RespawnForChamp;

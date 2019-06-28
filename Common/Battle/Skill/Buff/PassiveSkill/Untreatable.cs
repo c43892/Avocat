@@ -17,7 +17,6 @@ namespace Avocat
         {
         }
         public override string Name { get; } = "Untreatable";
-        public override bool isBattleBUFF { get; set; } = true;
         void OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
         {
             if (warrior != Warrior || dhp <= 0)

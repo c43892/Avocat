@@ -14,11 +14,13 @@ namespace Avocat
     {
         public long Time;
         public List<byte[]> Messages = new List<byte[]>();
+        public string MapName ="";
 
         protected override void Sync()
         {
             BeginSync();
             SyncLong(ref Time);
+            SyncString(ref MapName);
 
             if (IsWrite)
             {

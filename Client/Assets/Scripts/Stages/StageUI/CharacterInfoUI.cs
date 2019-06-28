@@ -32,6 +32,17 @@ public class CharacterInfoUI : MonoBehaviour
     public Text ActiveSkillDescription;
     public Text PassiveSkillDescription;
 
+    // 判断技能是否为显示buff
+    public BuffToDisplay BuffDisplayList
+    {
+        get
+        {
+            if(buffDisplayList == null)
+                buffDisplayList = Configuration.Config(new BuffToDisplay());
+            return buffDisplayList;
+        }
+    } BuffToDisplay buffDisplayList;
+
     public void ShowWarriorPhoto(Warrior warrior)
     {
         ChampPhoto.SetActive(false);
@@ -145,7 +156,7 @@ public class CharacterInfoUI : MonoBehaviour
         });
         FC.For(warrior.Buffs.Count, (i) =>
         {
-            if (warrior.Buffs[i].isBattleBUFF)
+            if (BuffDisplayList.BuffsToDisplay.Contains((name)=> { return name.Equals(warrior.Buffs[i].Name); }) )
             {
                 for (int j = 0; j < BUFFPic.Length; j++)
                 {

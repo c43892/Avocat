@@ -135,6 +135,12 @@ namespace Avocat
                 ["AttackRange"] = new int[] { 2,3,4,5 }
             };
 
+            // 用于显示buff的技能
+            dAttrs[typeof(BuffToDisplay)] = new Dictionary<string, object>
+            {
+                ["BuffsToDisplay"] = new string [] { "CardATK" , "CounterAttack" , "Faint" , "Untreatable" }
+            };
+
             // 时光倒流
             dAttrs[typeof(TimeBack)] = new Dictionary<string, object>
             {

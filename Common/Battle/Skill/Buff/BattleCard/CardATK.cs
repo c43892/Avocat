@@ -20,7 +20,6 @@ namespace Avocat
         {
         }
         public override string Name { get; } = "CardATK";
-        public override bool isBattleBUFF { get; set; } = true;
         public override void OnAttached()
         { 
             Battle.AddATK(Warrior, ATK);
