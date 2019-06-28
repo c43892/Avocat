@@ -13,11 +13,7 @@ namespace Avocat
     /// </summary>
     public class DeployEMPCannonRune1 : Rune
     {
-        public DeployEMPCannonRune1()
-        {
-            DisplayName = "巨型炮台";
-        }
-
+        public override string DisplayName { get => "巨型炮台"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as LuoLiSi;
@@ -35,11 +31,7 @@ namespace Avocat
     /// </summary>
     public class DeployEMPCannonRune2 : Rune
     {
-        public DeployEMPCannonRune2()
-        {
-            DisplayName = "加速炮台";
-        }
-
+        public override string DisplayName { get => "加速炮台"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as LuoLiSi;
@@ -55,11 +47,7 @@ namespace Avocat
     /// </summary>
     public class DeployEMPCannonRune3 : Rune
     {
-        public DeployEMPCannonRune3()
-        {
-            DisplayName = "废物利用";
-        }
-
+        public override string DisplayName { get => "废物利用"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as LuoLiSi;

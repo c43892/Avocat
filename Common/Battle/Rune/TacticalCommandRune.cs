@@ -13,11 +13,7 @@ namespace Avocat
     /// </summary>
     public class TacticalCommandRune1 : Rune
     {
-        public TacticalCommandRune1()
-        {
-            DisplayName = "背水一战";
-        }
-
+        public override string DisplayName { get => "背水一战"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as BaLuoKe;
@@ -31,13 +27,9 @@ namespace Avocat
     /// 全能指挥
     /// 无论处于何种形态，巴洛克都会提供攻击指令与充能指令各1张
     /// </summary>
-    public class TacticalCommandRune3 : Rune
+    public class TacticalCommandRune2 : Rune
     {
-        public TacticalCommandRune3()
-        {
-            DisplayName = "全能指挥";
-        }
-
+        public override string DisplayName { get => "全能指挥"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as BaLuoKe;

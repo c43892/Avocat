@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\FastAssistance.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\ActiveSkills\TimeBack.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\BattleCard\CardATK.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\BuffDebuff\AllSuppressCounterAttackOn3POWInc.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\BuffDebuff\ATKIncDec.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\BuffDebuff\POWIncDec.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\GroundEffect\DisassembleCards.cs" />

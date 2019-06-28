@@ -13,11 +13,7 @@ namespace Avocat
     /// </summary>
     public class ArtisanSpiritRune1 : Rune
     {
-        public ArtisanSpiritRune1()
-        {
-            DisplayName = "匠心独运";
-        }
-
+        public override string DisplayName { get => "匠心独运"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as LuoLiSi;

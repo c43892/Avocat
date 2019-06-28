@@ -13,11 +13,7 @@ namespace Avocat
     /// </summary>
     public class ButterflyRune1 : Rune
     {
-        public ButterflyRune1()
-        {
-            DisplayName = "蝶影";
-        }
-
+        public override string DisplayName { get => "蝶影"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as DaiLiWan;
@@ -33,11 +29,7 @@ namespace Avocat
     /// </summary>
     public class ButterflyRune2 : Rune
     {
-        public ButterflyRune2()
-        {
-            DisplayName = "天之河";
-        }
-
+        public override string DisplayName { get => "天之河"; }
         public override void OnPreparingBattle(Hero hero)
         {
             var h = hero as DaiLiWan;
