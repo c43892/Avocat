@@ -248,6 +248,7 @@ public class InBattleOps : StageOpsLayer
 
                     if (CurrentSelWarrior.MovingPath.Count > 0)
                         Room.DoMoveOnPath(CurrentSelWarrior);
+
                     if (!CurrentSelWarrior.ActionDone)
                         DoAttack(CurrentSelWarrior, warrior);
 

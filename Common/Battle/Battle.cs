@@ -236,7 +236,7 @@ namespace Avocat
         }
 
         // 计算伤害
-        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, out int inc, out int more, out int damageDec);
+        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, out int inc, out int more, out int crit, out int damageDec);
         public event CalculateDamageAction BeforeCalculateDamage1;
         public event CalculateDamageAction BeforeCalculateDamage2;
         public int CalculateDamage(Warrior attacker, Warrior target, Skill skill, List<string> flags)
@@ -250,6 +250,7 @@ namespace Avocat
             var inc = 0;
             var more = 0;
             var damageDecFac = 0; // 减伤系数
+            var crit = attacker.Crit ; // 暴击系数
 
             if (flags.Contains("physic"))
             {
@@ -265,11 +266,11 @@ namespace Avocat
             }
 
             // 通知所有可能影响各种系数的计算逻辑
-            BeforeCalculateDamage1?.Invoke(attacker, target, flags, out inc, out more, out damageDecFac);
-            BeforeCalculateDamage2?.Invoke(attacker, target, flags, out inc, out more, out damageDecFac);
+            BeforeCalculateDamage1?.Invoke(attacker, target, flags, out inc, out more, out crit, out damageDecFac);
+            BeforeCalculateDamage2?.Invoke(attacker, target, flags, out inc, out more, out crit, out damageDecFac);
 
             // 计算最终攻击值
-            return Calculation.CalcDamage(basicAttack, inc, more, damageDecFac);
+            return Calculation.CalcDamage(basicAttack, inc, more, flags.Contains("CriticalAttack") ? crit : 0, damageDecFac);
         }
 
         // 变更行动标记

@@ -7,21 +7,19 @@ using System.Threading.Tasks;
 
 namespace Avocat
 {
-    ///// <summary>
-    ///// 蝶影
-    ///// 将 BufferflyAOE 替换成 Bufferfly
-    ///// </summary>
-    //public class YouChuanYinRune1 : Rune
-    //{
-    //    public override string DisplayName { get => "蝶影"; }
-    //    public override void OnPreparingBattle(Hero hero)
-    //    {
-    //        var h = hero as DaiLiWan;
-    //        Debug.Assert(h != null, "only available for DaiLiWan");
-
-    //        h.ReplaceActiveSkill(Configuration.Config(new ButterflySingle()));
-    //    }
-    //}
+    /// <summary>
+    /// 收刀术
+    /// 行动阶段，游川隐在攻击后返回原来的位置
+    /// </summary>
+    public class YouChuanYinRune1 : Rune
+    {
+        public override string DisplayName { get => "收刀术"; }
+        public override void OnPreparingBattle(Hero hero)
+        {
+            var h = hero as YouChuanYin;
+            Debug.Assert(h != null, "only available for YouChuanYin");
+        }
+    }
 
     ///// <summary>
     ///// 余晖

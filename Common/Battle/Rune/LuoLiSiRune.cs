@@ -70,7 +70,7 @@ namespace Avocat
             var h = hero as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
-            h.AddSkill(new GainENOnEMPDestroyed());
+            h.SetupSkills(new GainENOnEMPDestroyed());
         }
     }
 }

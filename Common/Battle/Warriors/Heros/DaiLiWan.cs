@@ -18,7 +18,7 @@ namespace Avocat
         {
             DisplayName = "黛丽万";
             Name = "DaiLiWan";
-            AddSkill(new ButterflyAOE(), new StarsTears());
+            SetupSkills(new ButterflyAOE(), new StarsTears());
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Avocat
             StandableTiles = TileType.All;
         }
 
-        public void AddSkill(params Skill[] ss)
+        public void SetupSkills(params Skill[] ss)
         {
             foreach (var s in ss)
             {

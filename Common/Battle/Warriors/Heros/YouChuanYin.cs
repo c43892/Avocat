@@ -18,7 +18,7 @@ namespace Avocat
         {
             DisplayName = "游川隐";
             Name = "YouChuanYin";
-            AddSkill(Configuration.Config(new Kendo()), Configuration.Config(new FlashAttack()));
+            SetupSkills(new Kendo(), new FlashAttack());
         }
     }
 }
