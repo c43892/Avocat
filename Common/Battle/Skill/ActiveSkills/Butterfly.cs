@@ -29,7 +29,7 @@ namespace Avocat
     /// 黛丽万
     /// 蝶舞，治疗单个友方单位 50% 最大生命值
     /// </summary>
-    public class ButterflySingle : Butterfly, IWithRange
+    public class ButterflySingle : Butterfly, IWithRange, ISkillTarget
     {
         public override string ActiveSkillType { get; } = "fireAt";
         public override string SkillDescription { get; set; } = "治疗单个友方单位 50% 最大生命值";
@@ -37,16 +37,43 @@ namespace Avocat
         // 能量消耗
         public override int EnergyCost { get; set; }
         public int Range { get; set; }
+        private List<BattleMapObj> targetList = new List<BattleMapObj>();
+        public List<BattleMapObj> TargetList
+        {
+            get
+            {
+                return targetList;
+            }
+            set
+            {
+                targetList = value;
+            }
+        } 
 
         // 主动释放
         public override void FireAt(int x, int y)
         {
             Warrior target = Owner.Battle.Map.GetAt<Warrior>(x, y);
-            if (target == null || target.Team != Owner.Team)
+            //if (target == null || target.Team != Owner.Team)
+            //    return;
+            if (!TargetList.Contains(target))
                 return;
 
             Battle.AddHP(target, target.MaxHP / 2);
             Try2AddOnePTCard();
+        }
+
+        public void FilterTarget()
+        {
+            Owner.Battle.Map.ForeachObjs((x, y, obj) =>
+            {
+                TargetList.Add(obj);
+            },
+            null,
+            (obj) =>
+            {
+                return (obj is Warrior) && (obj as Warrior).Team == Owner.Team;
+            });
         }
     }
 

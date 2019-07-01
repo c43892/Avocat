@@ -21,6 +21,7 @@ public class MapAvatar : MonoBehaviour
     public GameObject EnemySkillDec;
     public GameObject AttackHint;
 
+
     // 对应的角色
     public Warrior Warrior { get; set; }
 

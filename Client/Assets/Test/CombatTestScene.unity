@@ -4140,20 +4140,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapRoot: {fileID: 260587704}
-  MapTile: []
   Map: []
   RespawnForChamp: []
   RespawnForEnemy: []
-  ArrayIndex: 3
-  MapInfo:
-  - 000.json
-  - 11111.json
+  ArrayIndex: 0
+  MapNameList:
+  - 111.json
   - 222.json
-  - 666.json
-  - 888.json
-  - 999.json
-  - qweasd.json
-  - rrtt.json
+  - 333.json
 --- !u!4 &1700634538
 Transform:
   m_ObjectHideFlags: 0
