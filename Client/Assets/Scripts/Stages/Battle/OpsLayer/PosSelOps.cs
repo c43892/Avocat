@@ -10,6 +10,12 @@ public interface IWithRange
     int Range { get; set; }
 }
 
+public interface ISkillTarget
+{
+    List<BattleMapObj> TargetList { get; set; }
+    void FilterTarget();
+}
+
 /// <summary>
 /// 显示一个指定可选择的位置区域，让玩家在该区域内指定一个位置
 /// </summary>
@@ -31,27 +37,51 @@ public class PosSelOps : StageOpsLayer
         this.iRange = iRange;
         this.onSelPos = onSelPos;
         var map = BattleStage.Map;
-        FC.SquareFor(cx, cy, iRange.Range, (x, y) =>
+
+        // 如果无释放范围的技能
+        if (iRange.Range == -1)
         {
-            if (x < 0 || x >= map.Width || y < 0 || y >= map.Height)
-                return;
-
-            var obj = map.GetAt<BattleMapObj>(x, y);
-            if (MU.ManhattanDist(x, y, cx, cy) == iRange.Range)
+            var skill = (iRange as ISkillTarget);
+            skill.FilterTarget();
+            var targetList = skill.TargetList;
+            FC.For(targetList.Count, (i) =>
             {
-                if (obj == null || (obj != null && obj is Hero))
+                var warrior = targetList[i] as Warrior;
+                if (warrior != null)
                 {
-                    var tile = BattleStage.CreateMapTile(x, y);
-                    Range.Add(tile);
-                }
-            }
-        });
+                    // 建立用于显示技能范围的地块
+                    var avatar = BattleStage.GetAvatarByWarrior(warrior);
+                    var mapTile = BattleStage.CreateMapTile(avatar.X, avatar.Y);
+                    mapTile.gameObject.SetActive(false);
+                    Range.Add(mapTile);
 
-        //FC.For(0, Range.Count, i =>
-        //{
-        //  //  Range[i].GetComponent<SpriteRenderer>().color = Color.yellow;
-        //    Range[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
-        //});
+                    // 显示人物身上的技能标识
+                    if (warrior.Team == (iRange as Skill).Owner.Team)
+                        avatar.FriendSkillDec.SetActive(true);
+                    else
+                        avatar.EnemySkillDec.SetActive(true);
+                }
+                else
+                    Debug.Assert(warrior != null, "the target is not warrior");
+            });
+        }
+        else // 有释放范围的技能
+        {
+            FC.SquareFor(cx, cy, iRange.Range, (x, y) =>
+            {
+                if (x < 0 || x >= map.Width || y < 0 || y >= map.Height)
+                   return;
+                var obj = map.GetAt<BattleMapObj>(x, y);
+                if (MU.ManhattanDist(x, y, cx, cy) == iRange.Range)
+                {
+                    if (obj == null || (obj != null && obj is Hero))
+                    {
+                        var tile = BattleStage.CreateMapTile(x, y);
+                        Range.Add(tile);
+                    }
+                }
+            });
+        } 
     }
 
     // 检查是否在范围内
@@ -67,6 +97,15 @@ public class PosSelOps : StageOpsLayer
     public void RemoveShowRange()
     {
         BattleStage.RemoveTile(Range);
+        BattleStage.Map.ForeachObjs((x, y, obj) =>
+        {
+            if (obj is Warrior)
+            {
+                var avatar = BattleStage.GetAvatarByWarrior(obj as Warrior);
+                avatar.FriendSkillDec.SetActive(false);
+                avatar.EnemySkillDec.SetActive(false);
+            }
+        });
     }
 
     // 返回选择的位置
@@ -74,25 +113,19 @@ public class PosSelOps : StageOpsLayer
     {
         WorldPos2MapPos(x, y, out float gx, out float gy);
 
-        // 获取当前点击目标
-        var avatar = BattleStage.Avatars[(int)gx, (int)gy];
-        var warrior = avatar == null ? null : avatar.Warrior;
-        if (warrior == null || warrior.MovingPath.Count>0)
+        // 检查是否在技能范围内
+        if (CheckRange((int)gx, (int)gy, Range))
         {
-            // 点空地
-            if (CheckRange((int)gx, (int)gy, Range))
-            {
-                RemoveShowRange();
-                BattleStage.InBattleOps.RemoveShowAttackRange();
-                onSelPos((int)gx, (int)gy);
-                BattleStage.StartSkillStage(false);              
-            }
-            else
-            {
-                // 否则恢复初始状态
-                RemoveShowRange();
-                BattleStage.StartSkillStage(false);
-            }
+            RemoveShowRange();
+            BattleStage.InBattleOps.RemoveShowAttackRange();
+            onSelPos((int)gx, (int)gy);
+            BattleStage.StartSkillStage(false);
+        }
+        else
+        {
+            // 否则恢复初始状态
+            RemoveShowRange();
+            BattleStage.StartSkillStage(false);
         }
     }
 }

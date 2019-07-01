@@ -18,7 +18,7 @@ namespace Avocat
         {
             DisplayName = "洛里斯";
             Name = "LuoLiSi";
-            AddSkill(new DeployEMPCannon(), new ArtisanSpirit());
+            SetupSkills(new DeployEMPCannon(), new ArtisanSpirit());
         }
     }
 }

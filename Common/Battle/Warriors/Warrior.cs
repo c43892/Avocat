@@ -39,6 +39,7 @@ namespace Avocat
         public int ATK { get; set; } // 物攻
         public int ATKInc { get; set; } // 物攻加成
         public int ATKMore { get; set; } // 物攻加成
+        public int Crit { get; set; } // 暴击系数
 
         public int POW { get; set; } // 法攻
         public int POWInc { get; set; } // 法攻加成
