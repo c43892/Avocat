@@ -59,7 +59,7 @@ static class BattleStageOnEvents
         };
 
         // 角色移动
-        room.Battle.OnWarriorMovingOnPath += (Warrior warrior, int x, int y, List<int> path) =>
+        room.Battle.OnWarriorMovingOnPath += (Warrior warrior, int x, int y, List<int> path, bool ignoreMoveRangeRestrict) =>
         {
             var tx = path[path.Count - 2];
             var ty = path[path.Count - 1];

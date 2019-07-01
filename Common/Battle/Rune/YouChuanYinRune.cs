@@ -18,6 +18,7 @@ namespace Avocat
         {
             var h = hero as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
+            h.Battle.AddBuff(new ReturnBackAfterAttack());
         }
     }
 

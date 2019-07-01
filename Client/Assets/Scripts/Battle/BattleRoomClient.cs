@@ -77,6 +77,17 @@ public class BattleRoomClient
         });
     }
 
+    // 先移动然后执行攻击操作
+    public void DoMoveOnPathAndAttack(Warrior attacker, Warrior target)
+    {
+        BMS.Send("MoveOnPathAndAttack", (data) =>
+        {
+            data.Write(attacker.IDInMap);
+            data.Write(attacker.MovingPath.ToArray());
+            data.Write(target.IDInMap);
+        });
+    }
+
     // 回合结束
     public void ActionDone()
     {

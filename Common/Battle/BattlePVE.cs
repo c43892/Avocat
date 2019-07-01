@@ -89,9 +89,9 @@ namespace Avocat
         public event Action<Warrior, List<BattleCard>> BeforeCardsConsumed = null;
         public event Action<Warrior, List<BattleCard>> AfterCardsConsumed = null;
         public event Action<Warrior, List<BattleCard>> OnCardsConsumed = null;
-        void OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath)
+        void OnAfterMoveOnPath(Warrior warrior, int fx, int fy, List<int> movedPath, bool ignoreMoveRangeRestrict)
         {
-            if (warrior.Team != PlayerIndex)
+            if (warrior.Team != PlayerIndex || ignoreMoveRangeRestrict)
                 return;
 
             var movedPathLen = movedPath.Count / 2;

@@ -242,14 +242,16 @@ public class InBattleOps : StageOpsLayer
                  //   CurrentAvatar = avatar;
                     StageUI.CharacterInfoUI.UpdateWarriorInfo(warrior);
                     StageUI.SkillButtonUI.UpdateItemUsage();
-                  //  CurrentAvatar.IsShowClickFrame = true;
+                    //  CurrentAvatar.IsShowClickFrame = true;
 
                     // 点对方角色，指定攻击指令
 
-                    if (CurrentSelWarrior.MovingPath.Count > 0)
+                    // 移动后攻击改为一个单一指令，因为有类似游川影的收刀术需要将其作为一个完整逻辑进行处理
+                    if (CurrentSelWarrior.MovingPath.Count > 0 && !CurrentSelWarrior.ActionDone)
+                        Room.DoMoveOnPathAndAttack(CurrentSelWarrior, warrior);
+                    else if (CurrentSelWarrior.MovingPath.Count > 0) // 仅移动
                         Room.DoMoveOnPath(CurrentSelWarrior);
-
-                    if (!CurrentSelWarrior.ActionDone)
+                    else if (!CurrentSelWarrior.ActionDone) // 仅攻击
                         DoAttack(CurrentSelWarrior, warrior);
 
                     // 判断是否该刷新技能图片

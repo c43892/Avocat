@@ -81,6 +81,21 @@ namespace Avocat
                     Battle.Attack(attacker, target);
             });
 
+            bmp.HandleMsg("MoveOnPathAndAttack", (player, data) =>
+            {
+                var attackerID = data.ReadInt();
+                var pathXYArr = data.ReadIntArr();
+                var targetID = data.ReadInt();
+
+                var attacker = Battle.Map.GetByID<Warrior>(attackerID);
+                attacker.MovingPath.Clear();
+                attacker.MovingPath.AddRange(pathXYArr);
+                var target = Battle.Map.GetByID<Warrior>(targetID);
+
+                if (attacker is Hero)
+                    Battle.MoveOnPathAndAttack(attacker, target);
+            }); 
+
             bmp.HandleMsg("ActionDone", (player, data) =>
             {
                 Battle.ActionDone(player);

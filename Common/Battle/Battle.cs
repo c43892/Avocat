@@ -199,20 +199,20 @@ namespace Avocat
         }
 
         // 角色沿路径移动
-        public event Action<Warrior> BeforeMoveOnPath = null;
-        public event Action<Warrior, int, int, List<int>> AfterMoveOnPath = null;
-        public event Action<Warrior, int, int, List<int>> OnWarriorMovingOnPath = null; // 角色沿路径移动
-        public void MoveOnPath(Warrior warrior)
+        public event Action<Warrior, bool> BeforeMoveOnPath = null;
+        public event Action<Warrior, int, int, List<int>, bool> AfterMoveOnPath = null;
+        public event Action<Warrior, int, int, List<int>, bool> OnWarriorMovingOnPath = null; // 角色沿路径移动
+        public List<int> MoveOnPath(Warrior warrior, bool ignoreMoveRangeRestrict = false /* 忽略移动距离限制 */)
         {
             Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
 
             warrior.GetPosInMap(out int x, out int y);
             Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
 
-            if (warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
-                return;
+            if (!ignoreMoveRangeRestrict && warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
+                return null;
 
-            BeforeMoveOnPath?.Invoke(warrior);
+            BeforeMoveOnPath?.Invoke(warrior, ignoreMoveRangeRestrict);
 
             List<int> movedPath = new List<int>(); // 实际落实了的移动路径
             var lstPathXY = warrior.MovingPath;
@@ -238,8 +238,9 @@ namespace Avocat
 
             warrior.Moved = true;
 
-            OnWarriorMovingOnPath?.Invoke(warrior, x, y, movedPath);
-            AfterMoveOnPath?.Invoke(warrior, x, y, movedPath);
+            OnWarriorMovingOnPath?.Invoke(warrior, x, y, movedPath, ignoreMoveRangeRestrict);
+            AfterMoveOnPath?.Invoke(warrior, x, y, movedPath, ignoreMoveRangeRestrict);
+            return movedPath;
         }
 
         // 计算伤害
@@ -292,31 +293,47 @@ namespace Avocat
             AfterSetActionFlag?.Invoke(warrior, acted);
         }
 
+        // 角色沿路径移动后执行攻击动作
+        public event Action<Warrior> BeforeMoveOnPathAndAttack = null;
+        public event Action<Warrior, int, int, List<int>> AfterMoveOnPathAndAttack = null;
+        public event Action<Warrior, int, int, List<int>> OnMoveOnPathAndAttack = null;
+        public void MoveOnPathAndAttack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
+        {
+            attacker.GetPosInMap(out int fx, out int fy);
+            BeforeMoveOnPathAndAttack?.Invoke(attacker);
+
+            var pathList = MoveOnPath(attacker);
+            Attack(attacker, target, skill, flags);
+
+            OnMoveOnPathAndAttack?.Invoke(attacker, fx, fy, pathList);
+            AfterMoveOnPathAndAttack?.Invoke(attacker, fx, fy, pathList);
+        }
+
         // 执行攻击
         public event Action<Warrior, Warrior, Skill, List<string>> BeforeAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> AfterAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> OnWarriorAttack = null; // 角色进行攻击
-        public void Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
+        public List<string> Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
         {
+            var attackFlags = new List<string>();
             Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
             // 在连续指令的情况下，可能条件已经不满足
             if (attacker == null || target == null)
-                return;
+                return attackFlags;
 
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
-                return;
+                return attackFlags;
 
             // 整理攻击标记
-            var attackFlags = new List<string>();
             attackFlags.AddRange(flags);
             attackFlags.Add(attacker.AttackingType);
 
             BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
             if (attackFlags.Contains("CancelAttack")) // 取消攻击
-                return;
+                return attackFlags;
 
             // 计算实际伤害
             var damage = CalculateDamage(attacker, target, skill, attackFlags);
@@ -324,7 +341,6 @@ namespace Avocat
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
                 SetActionFlag(attacker, true);
-
 
             OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
 
@@ -341,6 +357,7 @@ namespace Avocat
             if (dhp != 0) AddHP(target, dhp);
 
             AfterAttack?.Invoke(attacker, target, skill, attackFlags);
+            return attackFlags;
         }
 
         // 模拟攻击行为的伤害数值，但并不执行攻击行为
