@@ -62,18 +62,27 @@ public class LocalBattleRecorder : MonoBehaviour
 
         using (var r = new BinaryReader(new FileStream(SaveFile, FileMode.Open)))
         {
-            var count = r.ReadInt32();
-            var data = r.ReadBytes((int)r.BaseStream.Length);
-            var buff = new RingBuffer();
-            buff.Write(data);
-
-            FC.For(count, (i) =>
+            try
             {
-                var replay = buff.Read<BattleReplay>();
-                replays.Add(replay);
-            });
+                var count = r.ReadInt32();
+                var data = r.ReadBytes((int)r.BaseStream.Length);
+                var buff = new RingBuffer();
+                buff.Write(data);
 
-            r.Close();
+                FC.For(count, (i) =>
+                {
+                    var replay = buff.Read<BattleReplay>();
+                    replays.Add(replay);
+                });
+            }
+            catch (Exception)
+            {
+                replays.Clear();
+            }
+            finally
+            {
+                r.Close();
+            }
         }
     }
 
