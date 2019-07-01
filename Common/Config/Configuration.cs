@@ -97,14 +97,14 @@ namespace Avocat
             // 蝶舞单体治疗
             dAttrs[typeof(ButterflySingle)] = new Dictionary<string, object>
             {
-                ["EnergyCost"] = 50,
-                ["Range"] = 5
+                ["EnergyCost"] = 20,
+                ["Range"] = -1
             };
 
             // 蝶舞 AOE 治疗
             dAttrs[typeof(ButterflyAOE)] = new Dictionary<string, object>
             {
-                ["EnergyCost"] = 20
+                ["EnergyCost"] = 50
             };
 
             // 匠心
@@ -145,6 +145,12 @@ namespace Avocat
             dAttrs[typeof(GainENOnEMPDestroyed)] = new Dictionary<string, object>
             {
                 ["ES2Add"] = 5
+            };
+
+            // 用于显示buff的技能
+            dAttrs[typeof(BuffToDisplay)] = new Dictionary<string, object>
+            {
+                ["BuffsToDisplay"] = new string [] { "CardATK" , "CounterAttack" , "Faint" , "Untreatable" }
             };
 
             // 时光倒流
