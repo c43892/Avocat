@@ -20,14 +20,15 @@ public class OperationOnMap : MonoBehaviour
         if (this == null)
             return;      
         
-
         // 如果点击鼠标右键则清除当前地块
         Event e = Event.current;       
         if (e.button == 1 && e.isMouse)
         {
+            // 获取鼠标此时的相对坐标
             Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             Vector3 mousePosition = mouseRay.GetPoint(0f);
             WorldPos2MapPos(mousePosition.x, mousePosition.y, out float gx, out float gy);
+
             var tile = MapCreator.MapTilesList.Find(t => t.X == (int)gx && t.Y == (int)gy);
             if (tile != null)
             {
@@ -57,7 +58,7 @@ public class OperationOnMap : MonoBehaviour
             if (Selection.activeGameObject.tag == "Material" || Selection.activeGameObject.tag == "RespawnPlace")
                 ob = Selection.activeGameObject.transform.parent.gameObject;
 
-            if (ob.name.Equals("EditMaptile(Clone)"))
+            if (ob.tag == "MapTile")
             {
                 var respawnPlace = ob.transform.Find("RespawnPlace").gameObject;
                 var mapTile = ob.GetComponent<MapTile>();

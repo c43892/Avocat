@@ -194,6 +194,7 @@ namespace Avocat
 
         public void AutoSortCards(Warrior warrior)
         {
+            // 没有pattern技能则不自动排序
             if (warrior.PatternSkill == null)
                 return;
 
@@ -222,7 +223,7 @@ namespace Avocat
                 }
 
                 // 判断是否应该将StoreIndex储存的卡牌更新到排序后的卡组
-                if (currentIndex % skillOrder.Length == 0)
+                if (currentIndex % skillOrder.Length == 0 && currentIndex != 0)
                 {
                     FC.For(currentIndex - skillOrder.Length, currentIndex, (i) =>
                     {
@@ -230,7 +231,7 @@ namespace Avocat
                         AfterSortingCards[i] = AvailableCards[j];
                     });
                 }
-                else
+                else // 将不符合组合的卡牌退回到剩余卡牌中
                 {
                     var remainder = currentIndex % skillOrder.Length;
 
@@ -240,8 +241,7 @@ namespace Avocat
                     });
                     currentIndex = currentIndex - remainder;
                     break;
-                }
-                   
+                }                   
             }
 
             // 将不符合组合条件的剩余卡牌放入排序后的卡组
@@ -258,6 +258,7 @@ namespace Avocat
                 }
             }
 
+            // 将排序后的卡组赋给原来卡组
             FC.For(AvailableCards.Count, (i) =>
             {
                 AvailableCards[i] = AfterSortingCards[i];
@@ -306,6 +307,7 @@ namespace Avocat
 
             AddEN(-skill.EnergyCost);
             skill.Fire();
+            skill.Owner.IsSkillReleased = true;
 
             OnFireSkill?.Invoke(skill);
             AfterFireSkill?.Invoke(skill);
@@ -327,6 +329,7 @@ namespace Avocat
 
             AddEN(-skill.EnergyCost);
             skill.FireAt(x, y);
+            skill.Owner.IsSkillReleased = true;
 
             OnFireSkillAt?.Invoke(skill, x, y);
             AfterFireSkillAt?.Invoke(skill, x, y);

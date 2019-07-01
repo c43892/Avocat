@@ -52,28 +52,31 @@ public class CombatTestDriver : GameDriver
     }
 
     // 开始游戏，可能是新游戏，也可能是播放录像
-    public void StartGame()
+    public void StartGame(BattleReplay battleReplay = null)
     {
         var map = new BattleMap(10, 6, (x, y) => TileType.Grass); // test map
         var s = DateTime.Now.ToLocalTime().ToString();
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:"+ s, Name = "战斗测试:"+ s }); // test battle
 
         // 载入地图
-        MapReader.ReloadMapInfo();
-        //   MapReader.onSetWarrior = (x, y, warrior) => { bt.AddWarriorAt(x, y, warrior);};
-        // npcs
-        //bt.AddWarriorAt(5, 1, Configuration.Config(new Boar(map) { Team = 2 }));
-        //bt.AddWarriorAt(5, 3, Configuration.Config(new Boar(map) { Team = 2 }));
-        //bt.AddWarriorAt(5, 5, Configuration.Config(new Boar(map) { Team = 2 }));
+        if (battleReplay == null)
+        {
+            map.MapInfo = MapReader.ReloadMapInfo();
+            bt.Replay.MapName = MapReader.MapNameList[MapReader.ArrayIndex];
+        }
+        else
+        {
+            MapReader.ReloadMapByName(battleReplay.MapName);
+            map.MapInfo = MapReader.Map;
+        }
+        
+        map.GetRespawnPlace();
 
-        //// heros
-        //bt.AddWarriorAt(2, 1, Configuration.Config(new DaiLiWan(bt) { Team = 1 }));
-        //bt.AddWarriorAt(2, 2, Configuration.Config(new LuoLiSi(bt) { Team = 1 }));
-        //bt.AddWarriorAt(2, 3, Configuration.Config(new YouYinChuan(bt) { Team = 1 }));
-        //bt.AddWarriorAt(2, 4, Configuration.Config(new BaLuoKe(bt) { Team = 1 }));
-
         // npcs
-        FC.For(3, (i) => bt.AddWarriorAt(MapReader.RespawnForEnemy[i].X, MapReader.RespawnForEnemy[i].Y, Configuration.Config(new Boar(map) { Team = 2 })));
+        FC.For(3, (i) =>
+        {
+            bt.AddWarriorAt(map.RespawnForEnemy[i].X, map.RespawnForEnemy[i].Y, Configuration.Config(new Boar(map) { Team = 2 }));
+        });
 
         // heros
 
@@ -84,7 +87,7 @@ public class CombatTestDriver : GameDriver
         dlw.AddRune(new DaiLiWanRune3());
         dlw.AddRune(new DaiLiWanRune4());
         dlw.RunAllRune2PrepareBattle();
-        bt.AddWarriorAt(MapReader.RespawnForChamp[0].X, MapReader.RespawnForChamp[0].Y, dlw);
+        bt.AddWarriorAt(map.RespawnForChamp[0].X, map.RespawnForChamp[0].Y, dlw);
 
         // 洛里斯
         var lls = Configuration.Config(new LuoLiSi(bt) { Team = 1 });
@@ -93,7 +96,7 @@ public class CombatTestDriver : GameDriver
         lls.AddRune(new LuoLiSiRune3());
         lls.AddRune(new LuoLiSiRune4());
         lls.RunAllRune2PrepareBattle();
-        bt.AddWarriorAt(MapReader.RespawnForChamp[1].X, MapReader.RespawnForChamp[1].Y, lls);
+        bt.AddWarriorAt(map.RespawnForChamp[1].X,map.RespawnForChamp[1].Y, lls);
 
         // 巴洛克
         var blk = Configuration.Config(new BaLuoKe(bt) { Team = 1 });
@@ -102,13 +105,13 @@ public class CombatTestDriver : GameDriver
         blk.AddRune(new BaLuoKeRune3());
         blk.AddRune(new BaLuoKeRune4());
         blk.RunAllRune2PrepareBattle();
-        bt.AddWarriorAt(MapReader.RespawnForChamp[2].X, MapReader.RespawnForChamp[2].Y, blk);
+        bt.AddWarriorAt(map.RespawnForChamp[2].X, map.RespawnForChamp[2].Y, blk);
 
         // 游川隐
         var ycy = Configuration.Config(new YouChuanYin(bt) { Team = 1 });
         ycy.AddRune(new YouChuanYinRune4());
         ycy.RunAllRune2PrepareBattle();
-        bt.AddWarriorAt(MapReader.RespawnForChamp[3].X, MapReader.RespawnForChamp[3].Y, ycy);
+        bt.AddWarriorAt(map.RespawnForChamp[3].X, map.RespawnForChamp[3].Y, ycy);
 
         // items
         //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
@@ -178,7 +181,7 @@ public class CombatTestDriver : GameDriver
     // 播放游戏录像
     public void OnPlayReplay(int i)
     {
-        StartGame();
+        StartGame(Recoder.Replays[i]);
         PlayReplay(Recoder.Replays[i]);
     }
 

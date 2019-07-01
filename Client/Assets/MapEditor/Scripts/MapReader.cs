@@ -11,91 +11,39 @@ using System;
 public class MapReader : MonoBehaviour
 {
     public GameObject MapRoot;
-    public List<Transform> MapTile = new List<Transform>();
+
+    // 储存地图信息
     public List<MapData> Map = new List<MapData>();
+
+    // 储存英雄出生点
     public List<MapData> RespawnForChamp = new List<MapData>();
+
+    // 储存敌人出生点
     public List<MapData> RespawnForEnemy = new List<MapData>();
+
+    // 选取地图文件时的index
     public int ArrayIndex = 0;
-    public List<string> MapInfo = new List<string>();
+
+    // 储存所有地图文件名
+    public List<string> MapNameList = new List<string>();
 
     // 将Json转换成地图信息
-    public void ReloadMapInfo()
+    public List<MapData> ReloadMapInfo()
     {
-        var fileName = Path.Combine(Application.dataPath, "Map", MapInfo[ArrayIndex]);
+        var fileName = Path.Combine(Application.dataPath, "Map", MapNameList[ArrayIndex]);
         var MapInformation = File.ReadAllText(fileName);
         MapDataCollection MapData = JsonMapper.ToObject<MapDataCollection>(MapInformation);
         Map = MapData.MapData;
-
-        // 将英雄和怪物出生点储存
-        FC.For(0, Map.Count, (i) =>
-        {
-            if(Map[i].RespawnForChamp == true)
-                RespawnForChamp.Add(Map[i]);
-            if (Map[i].RespawnForEnemy == true)
-                RespawnForEnemy.Add(Map[i]);
-        });
-        
-        GetRandomRespawnPlace(RespawnForChamp);
-        GetRandomRespawnPlace(RespawnForEnemy);
+        return Map;
     }
 
-    public bool IsMapTileInMapRoot()
+    // 根据名字加载地图
+    public void ReloadMapByName(string name)
     {
-        foreach (Transform child in MapRoot.transform)
-        {
-            if (child.CompareTag("MapTile"))
-                MapTile.Add(child.transform);
-        }
-        if (MapTile.Count == 0)
-            return false;
-        else
-            return true;
-    }
-
-    // 将MapData的数据传给tile
-    public void ReadMapInfo(MapTile tile)
-    {
-        for (int i = 0; i < Map.Count; i++)
-        {
-            if (tile.X == Map[i].X && tile.Y == Map[i].Y)
-            {
-                // 设置地块逻辑和表现
-                tile.MapData.Type = Map[i].Type;
-                var material = tile.transform.Find("Material").GetComponent<SpriteRenderer>();
-                if (Map[i].Type != TileType.None)
-                    material.sprite = Resources.Load<Sprite>("UI/MapTile/" + Map[i].Type.ToString());
-
-                // 设置地块渲染位置
-                material.sortingOrder =Map[i].MaterialSortingOrder; 
-
-                // 设置出生点逻辑和表现
-                if (Map[i].RespawnForChamp == true || Map[i].RespawnForEnemy == true)
-                {
-                    if (Map[i].RespawnForChamp == true)
-                        tile.MapData.RespawnForChamp = true;
-                    else
-                        tile.MapData.RespawnForEnemy = true;
-                    tile.transform.Find("RespawnPlace").gameObject.SetActive(true);
-
-                    // 让出生点位置渲染在地块上面
-                    var Mesh = tile.transform.Find("RespawnPlace").GetComponent<SpriteRenderer>();
-                    Mesh.sortingOrder = Map[i].MaterialSortingOrder+1;
-                }
-                return;
-            }
-        }
-    }
-
-    // 随机打乱出生顺序
-    public void GetRandomRespawnPlace(List<MapData> RespawnList)
-    {
-        FC.For(RespawnList.Count, (i) =>
-        {
-            int RandomNum = UnityEngine.Random.Range(0, RespawnList.Count);
-            var temp = RespawnList[RandomNum];
-            RespawnList[RandomNum] = RespawnList[i];
-            RespawnList[i] = temp;
-        });
+        var fileName = Path.Combine(Application.dataPath, "Map", name);
+        var MapInformation = File.ReadAllText(fileName);
+        MapDataCollection MapData = JsonMapper.ToObject<MapDataCollection>(MapInformation);
+        Map = MapData.MapData;
     }
 
     // 寻找所有Map文件
@@ -116,9 +64,9 @@ public class MapReader : MonoBehaviour
     // 找出最近保存的文件index
     public void FindCurrentMapIndex()
     {
-        for (int i = 0; i < MapInfo.Count; i++)
+        for (int i = 0; i < MapNameList.Count; i++)
         {
-            if (MapInfo[i].Equals(MapCreator.currentFileName + ".json"))
+            if (MapNameList[i].Equals(MapCreator.currentFileName + ".json"))
             {
                 ArrayIndex = i;
                 return;

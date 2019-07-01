@@ -186,7 +186,14 @@ namespace Avocat
                 foreach (var id in AIs[player].Keys.ToArray())
                     AIs[player][id].ActFirst?.Invoke();
             }
-                
+
+            // 每回合重置英雄释放技能的标记
+            Map.ForeachObjs((x, y, obj) =>
+            {
+                if (obj is Warrior && (obj as Warrior).Team == player)
+                    (obj as Warrior).IsSkillReleased = false;
+            });
+
             OnNextRoundStarted?.Invoke(player);
             AfterStartNextRound?.Invoke(player);
         }
