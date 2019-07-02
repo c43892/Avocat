@@ -14,9 +14,9 @@ namespace Avocat
     public class BaLuoKeRune1 : Rune
     {
         public override string DisplayName { get => "不动如山"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as BaLuoKe;
+            var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for BaLuoKe");
 
             h.ReplaceActiveSkill(Configuration.Config(new FastAssistance2()));
@@ -31,9 +31,9 @@ namespace Avocat
     public class BaLuoKeRune2 : Rune
     {
         public override string DisplayName { get => "背水一战"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as BaLuoKe;
+            var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
             h.GetBuff<TacticalCommand>().Impl = new TacticalCommandImpl2();
@@ -47,9 +47,9 @@ namespace Avocat
     public class BaLuoKeRune3 : Rune
     {
         public override string DisplayName { get => "侵略如火"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as BaLuoKe;
+            var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for BaLuoKe");
 
             h.Battle.AddBuff(new AllSuppressCounterAttackOn3POWInc(), h);
@@ -63,9 +63,9 @@ namespace Avocat
     public class BaLuoKeRune4 : Rune
     {
         public override string DisplayName { get => "全能指挥"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as BaLuoKe;
+            var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
             var impl = h.GetBuff<TacticalCommand>().Impl;

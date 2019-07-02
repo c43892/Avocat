@@ -15,6 +15,9 @@ namespace Avocat
         public abstract string DisplayName { get; } // 显示名称
 
         // 战斗准备，符文可能会增加技能，替换技能或者修改技能效果
-        public abstract void OnPreparingBattle(Hero hero);
+        public abstract void OnPreparingBattle();
+
+        // 装备者
+        public Hero Owner { get; set; }
     }
 }

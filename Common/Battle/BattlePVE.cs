@@ -301,13 +301,15 @@ namespace Avocat
         {
             if (Energy < skill.EnergyCost)
                 return;
+
             if (skill.Owner.IsSkillReleased)
                 return;
+
             BeforeFireSkill?.Invoke(skill);
 
             AddEN(-skill.EnergyCost);
-            skill.Fire();
             skill.Owner.IsSkillReleased = true;
+            skill.Fire();
 
             OnFireSkill?.Invoke(skill);
             AfterFireSkill?.Invoke(skill);
