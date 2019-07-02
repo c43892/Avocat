@@ -72,6 +72,9 @@ public class CombatTestDriver : GameDriver
         
         map.GetRespawnPlace();
 
+        // 配置buff显示列表
+        BattleStageUI.CharacterInfoUI.BuffDisplayList = Configuration.Config(new BuffToDisplay());
+
         // npcs
         FC.For(3, (i) =>
         {
