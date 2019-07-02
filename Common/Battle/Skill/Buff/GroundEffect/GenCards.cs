@@ -51,7 +51,7 @@ namespace Avocat
                 var cardsByHeros = new List<BattleCard>();
                 Battle.Map.ForeachObjs<Hero>((x, y, hero) =>
                 {
-                    if (hero.Team != Player)
+                    if (hero.Team != Player || hero.CardType == null)
                         return;
 
                     cardsByHeros.Add(BattleCard.Create(hero.CardType));

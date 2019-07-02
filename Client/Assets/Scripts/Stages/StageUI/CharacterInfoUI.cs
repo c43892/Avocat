@@ -64,15 +64,16 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void ShowWarriorType(Warrior warrior)
     {
+        ChampType.SetActive(false);
         if (warrior is Hero)
         {
-            ChampType.SetActive(true);
-            ChampType.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/CardType/" + (warrior as Hero).CardType) as Sprite;
+            var cardType = (warrior as Hero).CardType;
+            if (cardType != null)
+            {
+                ChampType.SetActive(true);
+                ChampType.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/CardType/" + cardType) as Sprite;
+            }
         }
-        else {
-            ChampType.SetActive(false);
-        }
-        
     }
 
     public void ShowAttackValue(Warrior warrior)

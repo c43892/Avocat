@@ -22,22 +22,22 @@ namespace Avocat
         }
     }
 
-    ///// <summary>
-    ///// 余晖
-    ///// 黛丽万死亡时触发一次星之泪效果
-    ///// </summary>
-    //public class DaiLiWanRune2 : Rune
-    //{
-    //    public override string DisplayName { get => "余晖"; }
-    //    public override void OnPreparingBattle(Hero hero)
-    //    {
-    //        var h = hero as DaiLiWan;
-    //        Debug.Assert(h != null, "only available for DaiLiWan");
+    /// <summary>
+    /// 拔刀术
+    /// 游川隐不再提供任何指令卡；行动阶段前，游川隐获得专注
+    /// </summary>
+    public class YouChuanYinRune2 : Rune
+    {
+        public override string DisplayName { get => "拔刀术"; }
+        public override void OnPreparingBattle()
+        {
+            var h = Owner as YouChuanYin;
+            Debug.Assert(h != null, "only available for YouChuanYin");
 
-    //        var buff = h.GetBuff<StarsTears>();
-    //        buff.TriggerOnDie = true;
-    //    }
-    //}
+            h.CardType = null;
+            h.Battle.AddBuff(new ConcentrateOnCritical(1), h);
+        }
+    }
 
     ///// <summary>
     ///// 星之子
