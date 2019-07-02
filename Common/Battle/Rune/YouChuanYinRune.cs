@@ -14,11 +14,11 @@ namespace Avocat
     public class YouChuanYinRune1 : Rune
     {
         public override string DisplayName { get => "收刀术"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as YouChuanYin;
+            var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
-            h.Battle.AddBuff(new ReturnBackAfterAttack());
+            h.Battle.AddBuff(new ReturnBackAfterAttack(), h);
         }
     }
 
@@ -63,9 +63,9 @@ namespace Avocat
     public class YouChuanYinRune4 : Rune
     {
         public override string DisplayName { get => "剑神"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as YouChuanYin;
+            var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
 
             h.GetBuff<FlashAttack>().Pattern = new string[] { "ATK" };

@@ -15,6 +15,9 @@ namespace Avocat
 
         void OnAfterMoveOnPathAndAttack(Warrior attacker, int fx, int fy, List<int> pathList)
         {
+            if (attacker != Owner)
+                return;
+
             var reversedPathList = new List<int>();
             for (var i = 0; i < pathList.Count; i += 2)
             {

@@ -14,9 +14,9 @@ namespace Avocat
     public class LuoLiSiRune1 : Rune
     {
         public override string DisplayName { get => "巨型炮台"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as LuoLiSi;
+            var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
             var s = h.GetActiveSkill<DeployEMPCannon>();
@@ -32,9 +32,9 @@ namespace Avocat
     public class LuoLiSiRune2 : Rune
     {
         public override string DisplayName { get => "加速炮台"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as LuoLiSi;
+            var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
             h.GetActiveSkill<DeployEMPCannon>().FastCannon = true;
@@ -48,9 +48,9 @@ namespace Avocat
     public class LuoLiSiRune3 : Rune
     {
         public override string DisplayName { get => "匠心独运"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as LuoLiSi;
+            var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
             var s = h.GetBuff<ArtisanSpirit>();
@@ -65,9 +65,9 @@ namespace Avocat
     public class LuoLiSiRune4 : Rune
     {
         public override string DisplayName { get => "废物利用"; }
-        public override void OnPreparingBattle(Hero hero)
+        public override void OnPreparingBattle()
         {
-            var h = hero as LuoLiSi;
+            var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
             h.SetupSkills(new GainENOnEMPDestroyed());

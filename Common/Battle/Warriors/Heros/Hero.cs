@@ -38,13 +38,14 @@ namespace Avocat
         public void RunAllRune2PrepareBattle()
         {
             foreach (var rune in runes)
-                rune.OnPreparingBattle(this);
+                rune.OnPreparingBattle();
         }
 
         List<Rune> runes = new List<Rune>();
 
         public void AddRune(Rune rune)
         {
+            rune.Owner = this;
             runes.Add(rune);
         }
 
