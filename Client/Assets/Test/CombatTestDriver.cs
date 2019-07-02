@@ -72,6 +72,9 @@ public class CombatTestDriver : GameDriver
         
         map.GetRespawnPlace();
 
+        // 配置buff显示列表
+        BattleStageUI.CharacterInfoUI.BuffDisplayList = Configuration.Config(new BuffToDisplay());
+
         // npcs
         FC.For(3, (i) =>
         {
@@ -109,6 +112,7 @@ public class CombatTestDriver : GameDriver
 
         // 游川隐
         var ycy = Configuration.Config(new YouChuanYin(bt) { Team = 1 });
+        ycy.AddRune(new YouChuanYinRune1());
         ycy.AddRune(new YouChuanYinRune4());
         ycy.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(map.RespawnForChamp[3].X, map.RespawnForChamp[3].Y, ycy);

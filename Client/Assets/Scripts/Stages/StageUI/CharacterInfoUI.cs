@@ -33,15 +33,19 @@ public class CharacterInfoUI : MonoBehaviour
     public Text PassiveSkillDescription;
 
     // 判断技能是否为显示buff
+    private BuffToDisplay buffDisplayList;
     public BuffToDisplay BuffDisplayList
     {
         get
         {
-            if(buffDisplayList == null)
-                buffDisplayList = Configuration.Config(new BuffToDisplay());
             return buffDisplayList;
         }
-    } BuffToDisplay buffDisplayList;
+        set
+        {
+            buffDisplayList = value;
+        }
+    }
+   
 
     public void ShowWarriorPhoto(Warrior warrior)
     {

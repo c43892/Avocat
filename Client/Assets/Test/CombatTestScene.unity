@@ -5971,6 +5971,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterInfoUI
       objectReference: {fileID: 0}
+    - target: {fileID: 8277795545212590550, guid: a6e745edef379c943b6ae0557a4caac0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8277795545212590549, guid: a6e745edef379c943b6ae0557a4caac0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6075,6 +6080,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277795544254812374, guid: a6e745edef379c943b6ae0557a4caac0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277795544828527975, guid: a6e745edef379c943b6ae0557a4caac0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6e745edef379c943b6ae0557a4caac0, type: 3}
