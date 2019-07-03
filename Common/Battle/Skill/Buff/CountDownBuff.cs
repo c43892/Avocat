@@ -22,12 +22,6 @@ namespace Avocat
             Team = team;
         }
 
-        // 叠加回合数
-        public void Expand(int addtionalNum)
-        {
-            Num = (Num + addtionalNum).Clamp(0, MaxNum);
-        }
-
         void CountDown(int team)
         {
             if (team != Team)

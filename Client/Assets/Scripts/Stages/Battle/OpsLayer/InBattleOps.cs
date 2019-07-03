@@ -272,7 +272,7 @@ public class InBattleOps : StageOpsLayer
         // 获取当前点击目标
         var avatar = BattleStage.GetAvatarAt((int)gx, (int)gy);
         var warrior = avatar?.Warrior;
-        if (warrior == null || warrior.Moved || warrior.Team != Room.PlayerMe)
+        if (warrior == null || warrior.Moved || warrior.ActionDone || warrior.Team != Room.PlayerMe)
         {
             base.OnStartDragging(x, y);
             return;

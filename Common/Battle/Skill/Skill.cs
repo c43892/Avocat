@@ -59,7 +59,7 @@ namespace Avocat
         public static Warrior Target<T>(this T skill) where T : Skill, ISkillWithPosSel => skill.Map.GetAt<Warrior>(skill.TX, skill.TY);
 
         // 地图上所有满足条件的攻击目标
-        public static List<Warrior> AllAvaliableTargets<T>(this T skill) where T : ISkillWithTargetFilter
+        public static List<Warrior> AllAvaliableTargets(this ISkillWithTargetFilter skill)
         {
             var targets = new List<Warrior>();
             (skill as Skill).Map.ForeachObjs((x, y, obj) =>
@@ -71,7 +71,7 @@ namespace Avocat
             return targets;
         }
 
-        public static void FireAt<T>(this T skill, int x, int y) where T : ISkillWithPosSel
+        public static void FireAt(this ISkillWithPosSel skill, int x, int y)
         {
             skill.TX = x;
             skill.TY = y;
@@ -79,9 +79,25 @@ namespace Avocat
         }
 
         // 判断自定对象是否是队友的函数
-        public static bool IsTeammate<T>(this T skill, BattleMapObj target) where T : ISkillWithOwner => target is Warrior && (target as Warrior).Team == skill.Owner.Team;
+        public static bool IsTeammate(this ISkillWithOwner skill, BattleMapObj target) => target is Warrior && (target as Warrior).Team == skill.Owner.Team;
 
         // 判断自定对象是否是敌人的函数
-        public static bool EnemyChecker<T>(this T skill, BattleMapObj target) where T : ISkillWithOwner => target is Warrior && (target as Warrior).Team != skill.Owner.Team;
+        public static bool EnemyChecker(this ISkillWithOwner skill, BattleMapObj target) => target is Warrior && (target as Warrior).Team != skill.Owner.Team;
+
+        // 叠加 buff 扩展逻辑
+        public static void ExpandOverlay(this ISkillWithOverlays skill, int overlay)
+        {
+            if (skill.Overlays < skill.MaxOverlays)
+            {
+                skill.Overlays += overlay ;
+                skill.UpdateOwnerAttrs();
+            }
+        }
+
+        // 回合 buff 扩展
+        public static void ExpandRound(this CountDownBuff buff, int num)
+        {
+            buff.Num = (num > buff.Num ? num : buff.Num).Clamp(0, buff.MaxNum);
+        }
     }
 }

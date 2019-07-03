@@ -199,17 +199,10 @@ namespace Avocat
             if ((GetBuffByID(buff.ID) is Buff b))
             {
                 if (b is CountDownBuff)
-                    (b as CountDownBuff).Expand((buff as CountDownBuff).Num);
+                    (b as CountDownBuff).ExpandRound((buff as CountDownBuff).Num);
 
                 if (b is ISkillWithOverlays)
-                {
-                    var ob = b as ISkillWithOverlays;
-                    if (ob.Overlays < ob.MaxOverlays)
-                    {
-                        ob.Overlays++;
-                        ob.UpdateOwnerAttrs();
-                    }
-                }
+                    (b as ISkillWithOverlays).ExpandOverlay((buff as ISkillWithOverlays).Overlays);
 
                 buff = b;
             }

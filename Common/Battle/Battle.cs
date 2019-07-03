@@ -204,7 +204,7 @@ namespace Avocat
         public event Action<Warrior, int, int, List<int>, bool> OnWarriorMovingOnPath = null; // 角色沿路径移动
         public List<int> MoveOnPath(Warrior warrior, bool ignoreMoveRangeRestrict = false /* 忽略移动距离限制 */)
         {
-            Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
+            Debug.Assert(!warrior.Moved && !warrior.ActionDone, "attacker has already moved or acted in this round");
 
             warrior.GetPosInMap(out int x, out int y);
             Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
