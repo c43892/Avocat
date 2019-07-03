@@ -50,7 +50,7 @@ namespace Avocat
             var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
-            var s = h.GetPassiveSkill<ArtisanSpirit>();
+            var s = h.GetBuffSkill<ArtisanSpirit>();
             s.EffectFactor = 2;
         }
     }

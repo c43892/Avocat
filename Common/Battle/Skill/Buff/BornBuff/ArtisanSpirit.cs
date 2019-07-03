@@ -11,7 +11,7 @@ namespace Avocat
     /// 洛里斯
     /// 匠心，行动阶段前，为团队提供能量
     /// </summary>
-    public class ArtisanSpirit : BornBuff
+    public class ArtisanSpirit : BuffWithOwner
     {
         public override string ID { get; } = "ArtisanSpirit";
         public ArtisanSpirit(Warrior owner) : base(owner) { }

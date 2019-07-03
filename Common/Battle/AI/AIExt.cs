@@ -68,7 +68,7 @@ namespace Avocat
                 return false;
 
             // 检查它限制行动的被动技能
-            if (warrior.GetPassiveSkill<Faint>() != null)
+            if (warrior.GetBuffSkill<Faint>() != null)
                 return false;
 
             return true;

@@ -65,7 +65,7 @@ namespace Avocat
             var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
 
-            h.GetPassiveSkill<FlashAttack>().Pattern = new string[] { "ATK" };
+            h.GetBuffSkill<FlashAttack>().Pattern = new string[] { "ATK" };
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Avocat
     /// <summary>
     /// 巴洛克，战术指挥
     /// </summary>
-    public class TacticalCommand : BornBuff
+    public class TacticalCommand : BuffWithOwner
     {
         public override string ID { get; } = "TacticalCommand";
         public TacticalCommand(Warrior owner) : base(owner) { }

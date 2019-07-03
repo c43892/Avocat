@@ -34,7 +34,7 @@ namespace Avocat
             var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
-            h.GetPassiveSkill<TacticalCommand>().Impl = new TacticalCommandImpl2();
+            h.GetBuffSkill<TacticalCommand>().Impl = new TacticalCommandImpl2();
         }
     }
 
@@ -64,7 +64,7 @@ namespace Avocat
             var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
-            var impl = h.GetPassiveSkill<TacticalCommand>().Impl;
+            var impl = h.GetBuffSkill<TacticalCommand>().Impl;
             if (impl is TacticalCommandImpl1)
             {
                 var cards = new string[] { "EN", "ATK" };

@@ -11,7 +11,7 @@ namespace Avocat
     /// 黛丽万
     /// 星之泪，行动阶段前，每当友方单位受到治疗时，为受到治疗的友方单位提供护盾
     /// </summary>
-    public class StarsTears : BornBuff
+    public class StarsTears : BuffWithOwner
     {
         public override string ID { get;} = "StarsTears";
         public StarsTears(Warrior owner) : base(owner) { }

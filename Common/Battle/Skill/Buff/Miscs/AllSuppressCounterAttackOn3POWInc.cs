@@ -17,7 +17,7 @@ namespace Avocat
 
         void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
-            var buff = Owner.GetPassiveSkill<POWInc>();
+            var buff = Owner.GetBuffSkill<POWInc>();
             if (buff == null || buff.Num < 3)
                 return;
 

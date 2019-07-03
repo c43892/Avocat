@@ -7,7 +7,7 @@ namespace Avocat
     /// <summary>
     /// buff/debuff
     /// </summary>
-    public abstract class Buff : PassiveSkill
+    public abstract class Buff : Skill
     {
         public virtual void OnAttached() { }
         public virtual void OnDetached() { }

@@ -63,5 +63,10 @@ namespace Avocat
 
             base.OnAttached();
         }
+
+        public override void OnDetached()
+        {
+            throw new Exception("not implemented yet");
+        }
     }
 }

@@ -303,8 +303,7 @@ namespace Avocat
             BeforeMoveOnPathAndAttack?.Invoke(attacker, target);
 
             var pathList = MoveOnPath(attacker);
-            if (!attacker.ActionDone) // 可能已经行动过了
-                Attack(attacker, target, skill, flags);
+            Attack(attacker, target, skill, flags);
 
             OnMoveOnPathAndAttack?.Invoke(attacker, target, fx, fy, pathList);
             AfterMoveOnPathAndAttack?.Invoke(attacker, target, fx, fy, pathList);
@@ -333,7 +332,8 @@ namespace Avocat
 
             BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
-            if (attackFlags.Contains("CancelAttack")) // 取消攻击
+            // 可能需要 取消攻击 或者因为 PatternSkill 导致已经行动过了
+            if (attacker.ActionDone || attackFlags.Contains("CancelAttack"))
                 return attackFlags;
 
             // 计算实际伤害
@@ -484,7 +484,7 @@ namespace Avocat
 
             if (target != null)
             {
-                target.AddOrOverBuff(ref buff); // 这个时候可能发生同名 buff 回合数叠加，buff 对象会变为已经在目标身上的原 buff
+                target.AddOrOverBuffInternal(ref buff); // 这个时候可能发生同名 buff 回合数叠加，buff 对象会变为已经在目标身上的原 buff
                 Debug.Assert(buff != null, "a buff was replaced with a null");
             }
             else
@@ -506,8 +506,7 @@ namespace Avocat
         /// </summary>
         public virtual void RemoveBuffByID(Warrior target, string ID)
         {
-            var buff = target.GetPassiveSkillByID(ID) as Buff;
-            if (buff != null)
+            if (target.GetBuffByID(ID) is Buff buff)
                 RemoveBuff(buff);
         }
 
@@ -523,7 +522,7 @@ namespace Avocat
             if (target != null)
             {
                 Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.ID + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
-                target.RemovePassiveSkill(buff);
+                target.RemoveBuffInternal(buff);
             }
             else
             {

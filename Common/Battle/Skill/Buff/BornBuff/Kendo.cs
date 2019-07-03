@@ -11,7 +11,7 @@ namespace Avocat
     /// 游川隐
     /// 剑道，攻击时施加创伤效果，使目标不可被治疗
     /// </summary>
-    public class Kendo : BornBuff
+    public class Kendo : BuffWithOwner
     {
         // 效果持续几回合
         public int EffectRoundNum { get; set; }

@@ -26,10 +26,7 @@ namespace Avocat
                 if (s is ActiveSkill)
                     AddActiveSkill(Configuration.Config(s as ActiveSkill));
                 else
-                {
-                    Debug.Assert(!(s is Buff), "buff should be added by Battle.AddBuff");
-                    AddPassiveSkill(Configuration.Config(s as PassiveSkill));
-                }
+                    Battle.AddBuff(Configuration.Config(s as Buff));
             }
         }
 

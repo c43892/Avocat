@@ -132,20 +132,21 @@ public class CharacterInfoUI : MonoBehaviour
         var ActiveSkillFrame = ActiveSkill.transform.parent.gameObject;
         PassiveSkillFrame.SetActive(false);
         ActiveSkillFrame.SetActive(false);
-        var AllPassiveSkills = warrior.PassiveSkills;
+        var AllBuffs = warrior.Buffs;
         if (warrior.GetDefaultActiveSkill() != null) {
             ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().ID) as Sprite;
             ActiveSkillFrame.SetActive(true);
         }
-        FC.For(AllPassiveSkills.Length, (i) =>
+        FC.For(AllBuffs.Length, (i) =>
         {
-            if (AllPassiveSkills[i] is PatternSkill)
+            if (AllBuffs[i] is PatternSkill)
             {
-                ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].ID) as Sprite;
+                ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllBuffs[i].ID) as Sprite;
                 ActiveSkillFrame.SetActive(true);
             }
-            else if (AllPassiveSkills[i] is PassiveSkill) {
-                PassiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].ID) as Sprite;
+            else
+            {
+                PassiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllBuffs[i].ID) as Sprite;
                 PassiveSkillFrame.SetActive(true);
             }
         });
@@ -195,18 +196,18 @@ public class CharacterInfoUI : MonoBehaviour
                 activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().ID) as Sprite;
                 ActiveSkillDescription.text = activeSkill.ID;
             }
-            else // 如果是patternskill
+            else // 如果是 patternskill
             {
-                var AllPassiveSkills = warrior.PassiveSkills;
-                FC.For(AllPassiveSkills.Length, (i) =>
+                var AllBuffs = warrior.Buffs;
+                FC.For(AllBuffs.Length, (i) =>
                 {
-                    if (AllPassiveSkills[i] is PatternSkill)
+                    if (AllBuffs[i] is PatternSkill)
                     {
-                        var patternSkill = AllPassiveSkills[i];
+                        var patternSkill = AllBuffs[i];
                         patternTrigger.SetActive(true);
                         energyTrigger.gameObject.SetActive(false);
                         activeSkillName.text = patternSkill.ID;
-                        activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + AllPassiveSkills[i].ID) as Sprite;
+                        activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + AllBuffs[i].ID) as Sprite;
                         ActiveSkillDescription.text = patternSkill.ID;
 
                         FC.For(PatternSkillTriggerPics.Length, (j) =>
@@ -228,12 +229,9 @@ public class CharacterInfoUI : MonoBehaviour
             var Buffs = warrior.Buffs;
             FC.For(Buffs.Length, (i) =>
             {
-                if (Buffs[i] is PassiveSkill)
-                {
-                    passiveSkillName.text = Buffs[i].ID;
-                    passiveSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + Buffs[i].ID) as Sprite;
-                    PassiveSkillDescription.text = Buffs[i].ID;
-                }
+                passiveSkillName.text = Buffs[i].ID;
+                passiveSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + Buffs[i].ID) as Sprite;
+                PassiveSkillDescription.text = Buffs[i].ID;
             });
         }
     }

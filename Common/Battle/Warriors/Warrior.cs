@@ -44,8 +44,20 @@ namespace Avocat
         public int POW { get; set; } // 法攻
         public int POWInc { get; set; } // 法攻加成
         public int POWMore { get; set; } // 法攻加成
-        public PatternSkill PatternSkill { get => GetPassiveSkill<PatternSkill>(); }
         public bool IsSkillReleased { get; set; }
+
+        // 模式匹配技能
+        public PatternSkill PatternSkill
+        {
+            get
+            {
+                foreach (var buff in buffs.Values)
+                    if (buff is PatternSkill)
+                        return buff as PatternSkill;
+
+                return null;
+            }
+        }
 
         // 基本攻击力
         public int BasicAttackValue
@@ -177,33 +189,14 @@ namespace Avocat
 
         #region buff 相关
 
-        Dictionary<string, PassiveSkill> pss = new Dictionary<string, PassiveSkill>();
+        Dictionary<string, Buff> buffs = new Dictionary<string, Buff>();
+        public Buff[] Buffs { get => buffs.Values.ToArray(); }
+        public Buff GetBuffByID(string id) => buffs.ContainsKey(id) ? buffs[id] : null;
 
-        public PassiveSkill[] PassiveSkills { get => pss.Values.ToArray(); }
-        public PassiveSkill GetPassiveSkillByID(string id) => pss.ContainsKey(id) ? pss[id] : null;
-
-        public Buff[] Buffs
+        // 不应该直接调用，应该从 Battle.AddBuff 走
+        public void AddOrOverBuffInternal(ref Buff buff)
         {
-            get
-            {
-                var buffs = new List<Buff>();
-                foreach (var ps in pss.Values)
-                    if (ps is Buff)
-                        buffs.Add(ps as Buff);
-
-                return buffs.ToArray();
-            }
-        }
-
-        public void AddPassiveSkill(PassiveSkill ps)
-        {
-            Debug.Assert(GetPassiveSkillByID(ps.ID) == null, "passive skill duplicated: " + ps.ID);
-            pss[ps.ID] = ps;
-        }
-
-        public void AddOrOverBuff(ref Buff buff)
-        {
-            if ((GetPassiveSkillByID(buff.ID) is Buff b))
+            if ((GetBuffByID(buff.ID) is Buff b))
             {
                 if (b is CountDownBuff)
                     (b as CountDownBuff).Expand((buff as CountDownBuff).Num);
@@ -221,19 +214,20 @@ namespace Avocat
                 buff = b;
             }
             else
-                pss[buff.ID] = buff;
+                buffs[buff.ID] = buff;
         }
 
-        public void RemovePassiveSkill(PassiveSkill ps)
+        // 不应该直接调用，应该从 Battle.RemoveBuff 走
+        public void RemoveBuffInternal(Buff ps)
         {
-            Debug.Assert(pss.ContainsKey(ps.ID) && pss[ps.ID] == ps, "buff " + ps.ID + " has not been attached to target " + ID);
-            pss.Remove(ps.ID);
+            Debug.Assert(buffs.ContainsKey(ps.ID) && buffs[ps.ID] == ps, "buff " + ps.ID + " has not been attached to target " + ID);
+            buffs.Remove(ps.ID);
         }
 
         // 获取指定类型的 buff 或被动技能
-        public T GetPassiveSkill<T>() where T : PassiveSkill
+        public T GetBuffSkill<T>() where T : Buff
         {
-            foreach (var ps in pss.Values)
+            foreach (var ps in buffs.Values)
                 if (ps is T)
                     return ps as T;
 

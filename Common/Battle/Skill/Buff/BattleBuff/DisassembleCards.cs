@@ -40,5 +40,10 @@ namespace Avocat
             Battle.BeforeActionDone += DissambleCards;
             base.OnAttached();
         }
+
+        public override void OnDetached()
+        {
+            throw new Exception("not implemented yet");
+        }
     }
 }

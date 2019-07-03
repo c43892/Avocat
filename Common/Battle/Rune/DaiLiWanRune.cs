@@ -33,7 +33,7 @@ namespace Avocat
             var h = Owner as DaiLiWan;
             Debug.Assert(h != null, "only available for DaiLiWan");
 
-            var buff = h.GetPassiveSkill<StarsTears>();
+            var buff = h.GetBuffSkill<StarsTears>();
             buff.TriggerOnDie = true;
         }
     }
@@ -49,7 +49,7 @@ namespace Avocat
             var h = Owner as DaiLiWan;
             Debug.Assert(h != null, "only available for DaiLiWan");
 
-            var buff = h.GetPassiveSkill<StarsTears>();
+            var buff = h.GetBuffSkill<StarsTears>();
             buff.WithAddtionalEffectOnSelf = true;
         }
     }
