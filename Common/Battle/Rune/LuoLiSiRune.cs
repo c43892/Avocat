@@ -13,7 +13,6 @@ namespace Avocat
     /// </summary>
     public class LuoLiSiRune1 : Rune
     {
-        public override string DisplayName { get => "巨型炮台"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as LuoLiSi;
@@ -31,7 +30,6 @@ namespace Avocat
     /// </summary>
     public class LuoLiSiRune2 : Rune
     {
-        public override string DisplayName { get => "加速炮台"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as LuoLiSi;
@@ -47,13 +45,12 @@ namespace Avocat
     /// </summary>
     public class LuoLiSiRune3 : Rune
     {
-        public override string DisplayName { get => "匠心独运"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
-            var s = h.GetBuff<ArtisanSpirit>();
+            var s = h.GetPassiveSkill<ArtisanSpirit>();
             s.EffectFactor = 2;
         }
     }
@@ -64,13 +61,12 @@ namespace Avocat
     /// </summary>
     public class LuoLiSiRune4 : Rune
     {
-        public override string DisplayName { get => "废物利用"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as LuoLiSi;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
-            h.SetupSkills(new GainENOnEMPDestroyed());
+            h.SetupSkills(new GainENOnEMPDestroyed(Owner));
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Avocat
         }
 
         // 迭代所有非空道具
-        public void ForeachObjs(Action<int, int, BattleMapObj> act, Func<bool> continueCondition = null, Func<BattleMapObj, bool> filter = null)
+        public void ForeachObjs(Action<int, int, BattleMapObj> act, Func<BattleMapObj, bool> filter = null, Func<bool> continueCondition = null)
         {
             FC.For2(Width, Height, (x, y) =>
             {
@@ -92,16 +92,16 @@ namespace Avocat
         }
 
         // 迭代所有非空道具
-        public void ForeachObjs<T>(Action<int, int, T> act, Func<bool> continueCondition = null) where T : BattleMapObj
+        public void ForeachObjs<T>(Action<int, int, T> act, Func<T, bool> filter = null, Func<bool> continueCondition = null) where T : BattleMapObj
         {
-            ForeachObjs((x, y, obj) => act(x, y, obj as T), continueCondition, (obj) => obj is T);
+            ForeachObjs((x, y, obj) => act(x, y, obj as T), (obj) => obj is T && (filter == null || filter(obj as T)), continueCondition);
         }
 
         // 查找指定角色的地图坐标
         public void FindXY(BattleMapObj target, out int px, out int py)
         {
             Debug.Assert(target != null, "the target should not be null");
-            Debug.Assert(target.Map == this, "the obj is not in the map : " + target.DisplayName);
+            Debug.Assert(target.Map == this, "the obj is not in the map : " + target.ID);
 
             var found = false;
             var tx = 0;
@@ -114,9 +114,9 @@ namespace Avocat
                     ty = y;
                     found = true;
                 }
-            }, () => !found);
+            }, null, () => !found);
 
-            Debug.Assert(found, "can not find the obj in map : " + target.DisplayName);
+            Debug.Assert(found, "can not find the obj in map : " + target.ID);
 
             px = tx;
             py = ty;
@@ -151,11 +151,11 @@ namespace Avocat
         public T GetByID<T>(int idInMap) where T : BattleMapObj
         {
             T target = null;
-            ForeachObjs((x, y, obj) =>
+            ForeachObjs<T>((x, y, obj) =>
             {
                 if (obj.IDInMap == idInMap)
                     target = obj as T;
-            }, () => target == null);
+            }, null, () => target == null);
 
             return target;
         }

@@ -16,9 +16,8 @@ namespace Avocat
         public DaiLiWan(Battle bt)
             : base(bt)
         {
-            DisplayName = "黛丽万";
-            Name = "DaiLiWan";
-            SetupSkills(new ButterflyAOE(), new StarsTears());
+            ID = "DaiLiWan";
+            SetupSkills(new ButterflyAOE(this), new StarsTears(this));
         }
     }
 }

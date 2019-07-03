@@ -5,17 +5,6 @@ using Swift;
 using Avocat;
 using System;
 
-public interface IWithRange
-{
-    int Range { get; set; }
-}
-
-public interface ISkillTarget
-{
-    List<BattleMapObj> TargetList { get; set; }
-    void FilterTarget();
-}
-
 /// <summary>
 /// 显示一个指定可选择的位置区域，让玩家在该区域内指定一个位置
 /// </summary>
@@ -27,52 +16,53 @@ public class PosSelOps : StageOpsLayer
     }
 
     List<MapTile> Range = new List<MapTile>();
-    IWithRange iRange;
     Action<int, int> onSelPos = null;
 
     // 显示范围
-    public void ShowRange(int cx, int cy, IWithRange iRange, Action< int, int> onSelPos)
+    public void ShowRange(int cx, int cy, ActiveSkill skill, Action< int, int> onSelPos)
     {
         Debug.Assert(Range.Count == 0, "path asasrange is not empty now.");
-        this.iRange = iRange;
         this.onSelPos = onSelPos;
         var map = BattleStage.Map;
 
         // 如果无释放范围的技能
-        if (iRange.Range == -1)
+        if (!(skill is ISkillWithRange))
         {
-            var skill = (iRange as ISkillTarget);
-            skill.FilterTarget();
-            var targetList = skill.TargetList;
-            FC.For(targetList.Count, (i) =>
+            // 需要过滤目标
+            if (skill is ISkillWithTargetFilter)
             {
-                var warrior = targetList[i] as Warrior;
-                if (warrior != null)
+                var targetList = (skill as ISkillWithTargetFilter).AllAvaliableTargets();
+                FC.For(targetList.Count, (i) =>
                 {
-                    // 建立用于显示技能范围的地块
-                    var avatar = BattleStage.GetAvatarByWarrior(warrior);
-                    var mapTile = BattleStage.CreateMapTile(avatar.X, avatar.Y);
-                    mapTile.gameObject.SetActive(false);
-                    Range.Add(mapTile);
+                    var warrior = targetList[i] as Warrior;
+                    if (warrior != null)
+                    {
+                        // 建立用于显示技能范围的地块
+                        var avatar = BattleStage.GetAvatarByWarrior(warrior);
+                        var mapTile = BattleStage.CreateMapTile(avatar.X, avatar.Y);
+                        mapTile.gameObject.SetActive(false);
+                        Range.Add(mapTile);
 
-                    // 显示人物身上的技能标识
-                    if (warrior.Team == (iRange as Skill).Owner.Team)
-                        avatar.FriendSkillDec.SetActive(true);
+                        // 显示人物身上的技能标识
+                        if (warrior.Team == skill.Owner.Team)
+                            avatar.FriendSkillDec.SetActive(true);
+                        else
+                            avatar.EnemySkillDec.SetActive(true);
+                    }
                     else
-                        avatar.EnemySkillDec.SetActive(true);
-                }
-                else
-                    Debug.Assert(warrior != null, "the target is not warrior");
-            });
+                        Debug.Assert(warrior != null, "the target is not warrior");
+                });
+            }
         }
         else // 有释放范围的技能
         {
-            FC.SquareFor(cx, cy, iRange.Range, (x, y) =>
+            var range = (skill as ISkillWithRange).Range;
+            FC.SquareFor(cx, cy, range, (x, y) =>
             {
                 if (x < 0 || x >= map.Width || y < 0 || y >= map.Height)
                    return;
                 var obj = map.GetAt<BattleMapObj>(x, y);
-                if (MU.ManhattanDist(x, y, cx, cy) == iRange.Range)
+                if (MU.ManhattanDist(x, y, cx, cy) == range)
                 {
                     if (obj == null || (obj != null && obj is Hero))
                     {

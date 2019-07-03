@@ -13,12 +13,11 @@ namespace Avocat
     /// </summary>
     public class YouChuanYinRune1 : Rune
     {
-        public override string DisplayName { get => "收刀术"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
-            h.Battle.AddBuff(new ReturnBackAfterAttack(), h);
+            h.Battle.AddBuff(new ReturnBackAfterAttack(h));
         }
     }
 
@@ -28,14 +27,13 @@ namespace Avocat
     /// </summary>
     public class YouChuanYinRune2 : Rune
     {
-        public override string DisplayName { get => "拔刀术"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
 
             h.CardType = null;
-            h.Battle.AddBuff(new ConcentrateOnCritical(1), h);
+            h.Battle.AddBuff(new ConcentrateOnCritical(h, 1));
         }
     }
 
@@ -62,13 +60,12 @@ namespace Avocat
     /// </summary>
     public class YouChuanYinRune4 : Rune
     {
-        public override string DisplayName { get => "剑神"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
 
-            h.GetBuff<FlashAttack>().Pattern = new string[] { "ATK" };
+            h.GetPassiveSkill<FlashAttack>().Pattern = new string[] { "ATK" };
         }
     }
 }

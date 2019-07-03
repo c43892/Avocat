@@ -44,7 +44,7 @@ namespace Avocat
         public int POW { get; set; } // 法攻
         public int POWInc { get; set; } // 法攻加成
         public int POWMore { get; set; } // 法攻加成
-        public PatternSkill PatternSkill { get => GetBuff<PatternSkill>(); }
+        public PatternSkill PatternSkill { get => GetPassiveSkill<PatternSkill>(); }
         public bool IsSkillReleased { get; set; }
 
         // 基本攻击力
@@ -116,9 +116,8 @@ namespace Avocat
         // 添加主动技能
         public void AddActiveSkill(ActiveSkill skill, bool asDefaultActiveSkill = true)
         {
-            var name = skill.Name;
+            var name = skill.ID;
             Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed. Use ReplaceActiveSkill to replace it.");
-            skill.Owner = this;
             activeSkills[name] = skill;
 
             if (asDefaultActiveSkill)
@@ -128,9 +127,9 @@ namespace Avocat
         // 替换同名主动技能
         public ActiveSkill ReplaceActiveSkill(ActiveSkill skill)
         {
-            var s = activeSkills[skill.Name];
-            activeSkills.Remove(skill.Name);
-            AddActiveSkill(skill, defaultSkillName == skill.Name);
+            var s = activeSkills[skill.ID];
+            activeSkills.Remove(skill.ID);
+            AddActiveSkill(skill, defaultSkillName == skill.ID);
             return s;
         }
 
@@ -161,8 +160,8 @@ namespace Avocat
         // 移除主动技能
         public void RemoveActiveSkill(ActiveSkill skill)
         {
-            Debug.Assert(skill.Owner == this, "skill named: " + skill.Name + " doest not exist.");
-            RemoveActiveSkill(skill.Name);
+            Debug.Assert(skill.Owner == this, "skill named: " + skill.ID + " doest not exist.");
+            RemoveActiveSkill(skill.ID);
         }
 
         // 移除主动技能
@@ -178,38 +177,65 @@ namespace Avocat
 
         #region buff 相关
 
-        Dictionary<string, Buff> buffs = new Dictionary<string, Buff>();
+        Dictionary<string, PassiveSkill> pss = new Dictionary<string, PassiveSkill>();
 
-        public Buff[] Buffs { get => buffs.Values.ToArray(); }
-        public Buff GetBuffByName(string name) => buffs.ContainsKey(name) ? buffs[name] : null;
-        public void AddBuff(ref Buff buff)
+        public PassiveSkill[] PassiveSkills { get => pss.Values.ToArray(); }
+        public PassiveSkill GetPassiveSkillByID(string id) => pss.ContainsKey(id) ? pss[id] : null;
+
+        public Buff[] Buffs
         {
-            var b = GetBuffByName(buff.Name);
-            if (b == null)
+            get
             {
-                buffs[buff.Name] = buff;
-                buff.Owner = this;
-            }
-            else
-            {
-                Debug.Assert(b == null || buff is BuffCountDown, "buff " + buff.Name + " already attached to target " + Name);
-                (b as BuffCountDown).Expand((buff as BuffCountDown).Num);
-                buff = b;
+                var buffs = new List<Buff>();
+                foreach (var ps in pss.Values)
+                    if (ps is Buff)
+                        buffs.Add(ps as Buff);
+
+                return buffs.ToArray();
             }
         }
 
-        public void RemoveBuff(Buff buff)
+        public void AddPassiveSkill(PassiveSkill ps)
         {
-            Debug.Assert(buffs.ContainsKey(buff.Name) && buffs[buff.Name] == buff, "buff " + buff.Name + " has not been attached to target " + Name);
-            buffs.Remove(buff.Name);
+            Debug.Assert(GetPassiveSkillByID(ps.ID) == null, "passive skill duplicated: " + ps.ID);
+            pss[ps.ID] = ps;
+        }
+
+        public void AddOrOverBuff(ref Buff buff)
+        {
+            if ((GetPassiveSkillByID(buff.ID) is Buff b))
+            {
+                if (b is CountDownBuff)
+                    (b as CountDownBuff).Expand((buff as CountDownBuff).Num);
+
+                if (b is ISkillWithOverlays)
+                {
+                    var ob = b as ISkillWithOverlays;
+                    if (ob.Overlays < ob.MaxOverlays)
+                    {
+                        ob.Overlays++;
+                        ob.UpdateOwnerAttrs();
+                    }
+                }
+
+                buff = b;
+            }
+            else
+                pss[buff.ID] = buff;
+        }
+
+        public void RemovePassiveSkill(PassiveSkill ps)
+        {
+            Debug.Assert(pss.ContainsKey(ps.ID) && pss[ps.ID] == ps, "buff " + ps.ID + " has not been attached to target " + ID);
+            pss.Remove(ps.ID);
         }
 
         // 获取指定类型的 buff 或被动技能
-        public T GetBuff<T>() where T : Buff
+        public T GetPassiveSkill<T>() where T : PassiveSkill
         {
-            foreach (var buff in buffs.Values)
-                if (buff is T)
-                    return buff as T;
+            foreach (var ps in pss.Values)
+                if (ps is T)
+                    return ps as T;
 
             return null;
         }

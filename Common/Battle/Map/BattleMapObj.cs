@@ -12,8 +12,7 @@ namespace Avocat
     /// </summary>
     public class BattleMapObj
     {
-        public string DisplayName { get; set; }
-        public string Name { get; set; }
+        public string ID { get; set; }
         public BattleMap Map { get; private set; }
         public Battle Battle { get { return Map?.Battle; } }
         public int IDInMap { get; private set; }

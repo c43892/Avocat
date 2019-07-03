@@ -49,13 +49,9 @@ static class BattleStageOnEvents
             var doAttackerRefresh = attackerAvatar.DelayRefreshAttrs();
             var doTargetRefresh = attackerAvatar.DelayRefreshAttrs();
             if (flags.Contains("SkillAttack"))
-            {
                 aniPlayer.SkillAttacking(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
-            }
-            else {
-                aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });
-            }
-            
+            else
+                aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });            
         };
 
         // 角色移动

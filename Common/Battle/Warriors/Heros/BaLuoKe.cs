@@ -16,10 +16,9 @@ namespace Avocat
         public BaLuoKe(Battle bt)
             : base(bt)
         {
-            DisplayName = "巴洛克";
-            Name = "BaLuoKe";
-            SetupSkills(new FastAssistance1(), 
-                new TacticalCommand() {
+            ID = "BaLuoKe";
+            SetupSkills(new FastAssistance1(this), 
+                new TacticalCommand(this) {
                     Impl = new TacticalCommandImpl1(() => 
                         State == "Archer" ? new string[] { "EN" } : new string[] { "ATK" })
                 });
