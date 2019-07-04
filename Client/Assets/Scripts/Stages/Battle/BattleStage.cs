@@ -205,7 +205,7 @@ public class BattleStage : MonoBehaviour
         avatar.Warrior = warrior;
         avatar.BattleStage = this;
         avatar.transform.SetParent(MapRoot);
-        avatar.gameObject.name = warrior.Name;
+        avatar.gameObject.name = warrior.ID;
         avatar.SetIdleAnimation(warrior);
         avatar.gameObject.SetActive(true);
         avatar.RefreshAttrs();
@@ -367,7 +367,7 @@ public class BattleStage : MonoBehaviour
         }
     }
 
-    public void StartSkill(int cx, int cy, IWithRange skill, Action<int, int> onSelPos)
+    public void StartSkill(int cx, int cy, ActiveSkill skill, Action<int, int> onSelPos)
     {
         PosSelOps.ShowRange(cx, cy, skill, onSelPos);
         InBattleOps.RemoveShowAttackRange();

@@ -11,13 +11,11 @@ namespace Avocat
     /// 眩晕
     /// 没行动能力
     /// </summary>
-    public class Faint : BuffCountDown
+    public class Faint : CountDownBuffWithOwner
     {
-        public Faint(int num)
-            : base(num)
-        {
-        }
-        public override string Name { get; } = "Faint";
+        public override string ID { get; } = "Faint";
+        public Faint(Warrior owner, int num) : base(owner, num) { }
+        
         void UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
         {
             if (warrior != Owner)

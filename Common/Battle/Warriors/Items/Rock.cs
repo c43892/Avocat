@@ -17,8 +17,7 @@ namespace Avocat
         public Rock(BattleMap map)
             : base(map)
         {
-            DisplayName = "岩石";
-            Name = "Rock";
+            ID = "Rock";
         }
 
         public int EffectRoundNum { get; set; }
@@ -27,7 +26,7 @@ namespace Avocat
         public override void Use2(Warrior target)
         {
             if (target != null)
-                Battle.AddBuff(new Faint(EffectRoundNum), target);
+                Battle.AddBuff(new Faint(target, EffectRoundNum));
         }
     }
 }

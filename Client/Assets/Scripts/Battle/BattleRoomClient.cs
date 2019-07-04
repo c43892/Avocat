@@ -122,7 +122,7 @@ public class BattleRoomClient
         BMS.Send("FireActiveSkill", (data) =>
         {
             data.Write(warrior.IDInMap);
-            data.Write(skill.Name);
+            data.Write(skill.ID);
         });
     }
 
@@ -133,7 +133,7 @@ public class BattleRoomClient
         BMS.Send("FireActiveSkillAt", (data) =>
         {
             data.Write(warrior.IDInMap);
-            data.Write(skill.Name);
+            data.Write(skill.ID);
             data.Write(x);
             data.Write(y);
         });

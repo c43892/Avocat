@@ -17,8 +17,7 @@ namespace Avocat
         public EMPCannon(BattleMap map, bool fastCannon)
             : base(map)
         {
-            DisplayName = "EMP 炮";
-            Name = "EMPCannon";
+            ID = "EMPCannon";
             AI = new WarriorAI(this).Build(fastCannon ? "FastEMPConnon" : "EMPConnon");
         }
     }

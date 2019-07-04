@@ -77,10 +77,10 @@ namespace Avocat
             ConsumeCardsOnMoving();
 
             // 行动结束分解剩余卡牌
-            AddBuff(new DisassembleCards(PlayerIndex, AvailableCards, (player, cards) => ResetAvailableCards()));
+            AddBuff(new DisassembleCards(this, AvailableCards, (player, cards) => ResetAvailableCards()));
 
             // 行动开始前，生成新卡牌
-            AddBuff(new GenCards(PlayerIndex, (player, cards) => ResetAvailableCards(cards)));
+            AddBuff(new GenCards(this, (player, cards) => ResetAvailableCards(cards)));
 
             Robot = new RobotPlayer(this);
         }
@@ -330,7 +330,7 @@ namespace Avocat
             BeforeFireSkillAt?.Invoke(skill, x, y);
 
             AddEN(-skill.EnergyCost);
-            skill.FireAt(x, y);
+            (skill as ISkillWithPosSel).FireAt(x, y);
             skill.Owner.IsSkillReleased = true;
 
             OnFireSkillAt?.Invoke(skill, x, y);

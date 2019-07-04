@@ -16,9 +16,8 @@ namespace Avocat
         public YouChuanYin(Battle bt)
             : base(bt)
         {
-            DisplayName = "游川隐";
-            Name = "YouChuanYin";
-            SetupSkills(new Kendo(), new FlashAttack());
+            ID = "YouChuanYin";
+            SetupSkills(new Kendo(this), new FlashAttack(this));
         }
     }
 }

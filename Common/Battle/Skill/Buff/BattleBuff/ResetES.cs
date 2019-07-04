@@ -10,9 +10,10 @@ namespace Avocat
     /// <summary>
     /// 回合开始重置护盾
     /// </summary>
-    public class ResetES : Buff
+    public class ResetES : BattleBuff
     {
-        public override string Name { get => "ResetES"; }
+        public override string ID { get => "ResetES"; }
+        public ResetES(Battle bt) : base(bt) { }
 
         public override void OnAttached()
         {
@@ -28,6 +29,11 @@ namespace Avocat
             };
 
             base.OnAttached();
+        }
+
+        public override void OnDetached()
+        {
+            throw new Exception("not implemented yet");
         }
     }
 }

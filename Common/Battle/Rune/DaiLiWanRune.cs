@@ -13,13 +13,12 @@ namespace Avocat
     /// </summary>
     public class DaiLiWanRune1 : Rune
     {
-        public override string DisplayName { get => "蝶影"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as DaiLiWan;
             Debug.Assert(h != null, "only available for DaiLiWan");
 
-            h.ReplaceActiveSkill(Configuration.Config(new ButterflySingle()));
+            h.ReplaceActiveSkill(Configuration.Config(new ButterflySingle(h)));
         }
     }
 
@@ -29,13 +28,12 @@ namespace Avocat
     /// </summary>
     public class DaiLiWanRune2 : Rune
     {
-        public override string DisplayName { get => "余晖"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as DaiLiWan;
             Debug.Assert(h != null, "only available for DaiLiWan");
 
-            var buff = h.GetBuff<StarsTears>();
+            var buff = h.GetBuffSkill<StarsTears>();
             buff.TriggerOnDie = true;
         }
     }
@@ -46,13 +44,12 @@ namespace Avocat
     /// </summary>
     public class DaiLiWanRune3 : Rune
     {
-        public override string DisplayName { get => "星之子"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as DaiLiWan;
             Debug.Assert(h != null, "only available for DaiLiWan");
 
-            var buff = h.GetBuff<StarsTears>();
+            var buff = h.GetBuffSkill<StarsTears>();
             buff.WithAddtionalEffectOnSelf = true;
         }
     }
@@ -63,7 +60,6 @@ namespace Avocat
     /// </summary>
     public class DaiLiWanRune4 : Rune
     {
-        public override string DisplayName { get => "天之河"; }
         public override void OnPreparingBattle()
         {
             var h = Owner as DaiLiWan;

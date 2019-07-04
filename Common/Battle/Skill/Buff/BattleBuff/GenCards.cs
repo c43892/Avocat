@@ -11,15 +11,14 @@ namespace Avocat
     /// <summary>
     /// 每回合重新生成战斗卡牌
     /// </summary>
-    public class GenCards : Buff
+    public class GenCards : BattleBuff
     {
-        public override string Name { get => "GenCards"; }
+        public override string ID { get => "GenCards"; }
         readonly Action<int, BattleCard[]> CardsGeneratedCallback = null;
-        int Player { get; set; }
 
-        public GenCards(int player, Action<int, BattleCard[]> onCardsGenerated = null)
+        public GenCards(Battle bt, Action<int, BattleCard[]> onCardsGenerated = null)
+            : base(bt)
         {
-            Player = player;
             CardsGeneratedCallback = onCardsGenerated;
         }
 
@@ -36,11 +35,12 @@ namespace Avocat
             return cards;
         }
 
+        readonly int Team = 1; // 玩家 only
         public override void OnAttached()
         {
-            Battle.BeforeStartNextRound += (int player) =>
+            Battle.BeforeStartNextRound += (int team) =>
             {
-                if (Player != player)
+                if (team != Team) 
                     return;
 
                 // 填充卡片
@@ -51,17 +51,22 @@ namespace Avocat
                 var cardsByHeros = new List<BattleCard>();
                 Battle.Map.ForeachObjs<Hero>((x, y, hero) =>
                 {
-                    if (hero.Team != Player || hero.CardType == null)
+                    if (hero.Team != Team || hero.CardType == null)
                         return;
 
                     cardsByHeros.Add(BattleCard.Create(hero.CardType));
                 });
 
                 cardsByHeros.InsertRange(0, twoRandomCards);
-                CardsGeneratedCallback(player, cardsByHeros.ToArray());
+                CardsGeneratedCallback(Team, cardsByHeros.ToArray());
             };
 
             base.OnAttached();
+        }
+
+        public override void OnDetached()
+        {
+            throw new Exception("not implemented yet");
         }
     }
 }

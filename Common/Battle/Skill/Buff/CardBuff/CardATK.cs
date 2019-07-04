@@ -11,15 +11,14 @@ namespace Avocat
     /// <summary>
     /// 攻击卡片效果
     /// </summary>
-    public class CardATK : BuffCountDown
+    public class CardATK : CountDownBuffWithOwner
     {
         public int ATK { get; set; } = 0;
 
-        public CardATK()
-            : base(1)  // 效果一回合结束
-        {
-        }
-        public override string Name { get; } = "CardATK";
+        // 玩家效果，持续一回合 
+        public CardATK(Warrior owner) : base(owner, 1) { }
+
+        public override string ID { get; } = "CardATK";
         public override void OnAttached()
         { 
             Battle.AddATK(Owner, ATK);

@@ -22,7 +22,7 @@ public class SkillButtonUI : MonoBehaviour
         ItemUsage.SetActive(false);
         if (warrior.GetDefaultActiveSkill() is ActiveSkill) // 若为主动技能
         {
-            skill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().Name) as Sprite;
+            skill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().ID) as Sprite;
             energyHint.SetActive(true);
             skillHint.SetActive(false);
 
@@ -32,7 +32,7 @@ public class SkillButtonUI : MonoBehaviour
         }
         else if (warrior.PatternSkill != null) // 若为pattern技能
         {
-            skill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.PatternSkill.Name) as Sprite;
+            skill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.PatternSkill.ID) as Sprite;
             energyHint.SetActive(false);
             skillHint.SetActive(true);
 

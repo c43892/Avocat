@@ -9,11 +9,12 @@ namespace Avocat
     /// <summary>
     /// 攻击后返回原位
     /// </summary>
-    public class ReturnBackAfterAttack : Buff
+    public class ReturnBackAfterAttack : BuffWithOwner
     {
-        public override string Name => "ReturnBackAfterAttack";
+        public override string ID => "ReturnBackAfterAttack";
+        public ReturnBackAfterAttack(Warrior owner) : base(owner) { }
 
-        void OnAfterMoveOnPathAndAttack(Warrior attacker, int fx, int fy, List<int> pathList)
+        void OnAfterMoveOnPathAndAttack(Warrior attacker, Warrior target, int fx, int fy, List<int> pathList)
         {
             if (attacker != Owner)
                 return;
@@ -44,7 +45,5 @@ namespace Avocat
             Battle.AfterMoveOnPathAndAttack -= OnAfterMoveOnPathAndAttack;
             base.OnDetached();
         }
-
-        
     }
 }

@@ -14,16 +14,13 @@ namespace Avocat
     /// </summary>
     public abstract class FastAssistance : ActiveSkill
     {
-        public override string Name { get => "FastAssistance"; }
-        public override string DisplayName { get => "快速援护"; }
-
-        // 能量消耗
-        public override int EnergyCost { get; set; }
+        public override string ID { get => "FastAssistance"; }
+        public FastAssistance(Warrior owner) : base(owner) { }
 
         // 基础效果：增加一层魔力，额外行动一次
         public void BaseEffect()
         {
-            Owner.Battle.AddBuff(new POWInc(1), Owner);
+            Owner.Battle.AddBuff(new POWInc(Owner, 2, 1));
             Owner.ActionDone = false;
         }
     }
@@ -34,7 +31,7 @@ namespace Avocat
     /// </summary>
     public class FastAssistance1 : FastAssistance
     {
-        public override string SkillDescription { get; set; } = "切换巴洛克形态";
+        public FastAssistance1(Warrior owner) : base(owner) { }
 
         // 主动释放
         public override void Fire()
@@ -52,7 +49,7 @@ namespace Avocat
     /// </summary>
     public class FastAssistance2 : FastAssistance
     {
-        public override string SkillDescription { get; set; } = "加满护盾";
+        public FastAssistance2(Warrior owner) : base(owner) { }
 
         // 主动释放
         public override void Fire()
@@ -60,9 +57,7 @@ namespace Avocat
             var owner = Owner as BaLuoKe;
             Debug.Assert(owner != null, "only BaLuoKe can use this skill");
             Debug.Assert(owner.State == "Archer", "BaLuoKe should in Archer state");
-
-            // 加满护盾
-            Battle.AddES(owner, owner.MaxES);
+            Battle.AddES(owner, owner.MaxES); // 加满护盾
             BaseEffect();
         }
     }

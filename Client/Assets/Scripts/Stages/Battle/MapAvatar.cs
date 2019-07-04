@@ -60,7 +60,7 @@ public class MapAvatar : MonoBehaviour
     // 刷新属性值
     public void RefreshAttrs()
     {
-        NameText.text = Warrior.DisplayName;
+        NameText.text = Warrior.ID;
         RefreshAttrs2(Warrior.HP, Warrior.BasicAttackValue, Warrior.ES, Warrior.ActionDone);
     }
 
@@ -118,7 +118,7 @@ public class MapAvatar : MonoBehaviour
 
     void SetIdleAni(Warrior warrior, string path)
     {
-        var skeletonName = path + warrior.Name + "_SkeletonData";
+        var skeletonName = path + warrior.ID + "_SkeletonData";
         var runtimeSkeletonDataAsset = Resources.Load<SkeletonDataAsset>(skeletonName);
         var skeletonAnimation = gameObject.transform.Find("_MapWarrior").GetComponent<SkeletonAnimation>();
         skeletonAnimation.skeletonDataAsset = runtimeSkeletonDataAsset;
@@ -134,10 +134,10 @@ public class MapAvatar : MonoBehaviour
         string path;
         if (warrior is ITransformable)
         {
-            path = "Animation/" + warrior.Name + "/" + (warrior as ITransformable).State + "/";
+            path = "Animation/" + warrior.ID + "/" + (warrior as ITransformable).State + "/";
         }
         else {
-            path = "Animation/" + warrior.Name + "/";
+            path = "Animation/" + warrior.ID + "/";
         }
         SetIdleAni(warrior, path);
     }

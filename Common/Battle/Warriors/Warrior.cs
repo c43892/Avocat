@@ -44,8 +44,20 @@ namespace Avocat
         public int POW { get; set; } // 法攻
         public int POWInc { get; set; } // 法攻加成
         public int POWMore { get; set; } // 法攻加成
-        public PatternSkill PatternSkill { get => GetBuff<PatternSkill>(); }
         public bool IsSkillReleased { get; set; }
+
+        // 模式匹配技能
+        public PatternSkill PatternSkill
+        {
+            get
+            {
+                foreach (var buff in buffs.Values)
+                    if (buff is PatternSkill)
+                        return buff as PatternSkill;
+
+                return null;
+            }
+        }
 
         // 基本攻击力
         public int BasicAttackValue
@@ -116,9 +128,8 @@ namespace Avocat
         // 添加主动技能
         public void AddActiveSkill(ActiveSkill skill, bool asDefaultActiveSkill = true)
         {
-            var name = skill.Name;
+            var name = skill.ID;
             Debug.Assert(!activeSkills.ContainsKey(name), "skill named: " + name + " has aleardy existed. Use ReplaceActiveSkill to replace it.");
-            skill.Owner = this;
             activeSkills[name] = skill;
 
             if (asDefaultActiveSkill)
@@ -128,9 +139,9 @@ namespace Avocat
         // 替换同名主动技能
         public ActiveSkill ReplaceActiveSkill(ActiveSkill skill)
         {
-            var s = activeSkills[skill.Name];
-            activeSkills.Remove(skill.Name);
-            AddActiveSkill(skill, defaultSkillName == skill.Name);
+            var s = activeSkills[skill.ID];
+            activeSkills.Remove(skill.ID);
+            AddActiveSkill(skill, defaultSkillName == skill.ID);
             return s;
         }
 
@@ -161,8 +172,8 @@ namespace Avocat
         // 移除主动技能
         public void RemoveActiveSkill(ActiveSkill skill)
         {
-            Debug.Assert(skill.Owner == this, "skill named: " + skill.Name + " doest not exist.");
-            RemoveActiveSkill(skill.Name);
+            Debug.Assert(skill.Owner == this, "skill named: " + skill.ID + " doest not exist.");
+            RemoveActiveSkill(skill.ID);
         }
 
         // 移除主动技能
@@ -179,37 +190,39 @@ namespace Avocat
         #region buff 相关
 
         Dictionary<string, Buff> buffs = new Dictionary<string, Buff>();
-
         public Buff[] Buffs { get => buffs.Values.ToArray(); }
-        public Buff GetBuffByName(string name) => buffs.ContainsKey(name) ? buffs[name] : null;
-        public void AddBuff(ref Buff buff)
+        public Buff GetBuffByID(string id) => buffs.ContainsKey(id) ? buffs[id] : null;
+
+        // 不应该直接调用，应该从 Battle.AddBuff 走
+        public void AddOrOverBuffInternal(ref Buff buff)
         {
-            var b = GetBuffByName(buff.Name);
-            if (b == null)
+            if ((GetBuffByID(buff.ID) is Buff b))
             {
-                buffs[buff.Name] = buff;
-                buff.Owner = this;
-            }
-            else
-            {
-                Debug.Assert(b == null || buff is BuffCountDown, "buff " + buff.Name + " already attached to target " + Name);
-                (b as BuffCountDown).Expand((buff as BuffCountDown).Num);
+                if (b is CountDownBuff)
+                    (b as CountDownBuff).ExpandRound((buff as CountDownBuff).Num);
+
+                if (b is ISkillWithOverlays)
+                    (b as ISkillWithOverlays).ExpandOverlay((buff as ISkillWithOverlays).Overlays);
+
                 buff = b;
             }
+            else
+                buffs[buff.ID] = buff;
         }
 
-        public void RemoveBuff(Buff buff)
+        // 不应该直接调用，应该从 Battle.RemoveBuff 走
+        public void RemoveBuffInternal(Buff ps)
         {
-            Debug.Assert(buffs.ContainsKey(buff.Name) && buffs[buff.Name] == buff, "buff " + buff.Name + " has not been attached to target " + Name);
-            buffs.Remove(buff.Name);
+            Debug.Assert(buffs.ContainsKey(ps.ID) && buffs[ps.ID] == ps, "buff " + ps.ID + " has not been attached to target " + ID);
+            buffs.Remove(ps.ID);
         }
 
         // 获取指定类型的 buff 或被动技能
-        public T GetBuff<T>() where T : Buff
+        public T GetBuffSkill<T>() where T : Buff
         {
-            foreach (var buff in buffs.Values)
-                if (buff is T)
-                    return buff as T;
+            foreach (var ps in buffs.Values)
+                if (ps is T)
+                    return ps as T;
 
             return null;
         }

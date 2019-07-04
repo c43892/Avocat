@@ -10,13 +10,11 @@ namespace Avocat
     /// <summary>
     /// 创伤效果，不可治疗
     /// </summary>
-    public class Untreatable : BuffCountDown
+    public class Untreatable : CountDownBuffWithOwner
     {
-        public Untreatable(int num)
-            :base(num)
-        {
-        }
-        public override string Name { get; } = "Untreatable";
+        public Untreatable(Warrior owner, int num) : base(owner, num) { }
+        public override string ID { get; } = "Untreatable";
+
         void OnBeforeAddHp(Warrior warrior, int dhp, Action<int> changeDhp)
         {
             if (warrior != Owner || dhp <= 0)

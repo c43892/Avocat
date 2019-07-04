@@ -9,16 +9,17 @@ namespace Avocat
     /// <summary>
     /// 每回合开始前增加专注 buff
     /// </summary>
-    public class AddConcentrateOnCriticalBeforeAction : Buff
+    public class AddConcentrateOnCriticalBeforeAction : BuffWithOwner
     {
-        public override string Name { get => "AddConcentrateOnCriticalBeforeAction"; }
+        public override string ID { get => "AddConcentrateOnCriticalBeforeAction"; }
+        public AddConcentrateOnCriticalBeforeAction(Warrior owner) : base(owner) { }
 
         void OnBeforeStartNextRound(int team)
         {
             if (team != Owner.Team)
                 return;
 
-            Owner.Battle.AddBuff(new ConcentrateOnCritical(2));
+            Battle.AddBuff(new ConcentrateOnCritical(Owner, 2));
         }
 
         public override void OnAttached()

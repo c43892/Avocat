@@ -10,38 +10,40 @@ namespace Avocat
     /// <summary>
     /// 每回合分解未使用的战斗卡牌
     /// </summary>
-    public class DisassembleCards : Buff
+    public class DisassembleCards : BattleBuff
     {
-        public override string Name { get => "DisassembleCards"; }
-        public BattlePVE BattlePVE { get => this.Battle as BattlePVE; }
+        public override string ID { get => "DisassembleCards"; }
+        public BattlePVE BT { get => Battle as BattlePVE; }
         public List<BattleCard> AvailableCards { get; private set; }
-        int Player { get; set; }
+
         readonly Action<int, BattleCard[]> OnCardsDisassembledDone;
 
-        public DisassembleCards(int player, List<BattleCard> cardList, Action<int, BattleCard[]> onCardsDisassembledDone)
+        public DisassembleCards(Battle bt, List<BattleCard> cardList, Action<int, BattleCard[]> onCardsDisassembledDone)
+            : base(bt)
         {
             AvailableCards = cardList;
-            Player = player;
             OnCardsDisassembledDone = onCardsDisassembledDone;
         }
 
-        void DissambleCards(int player)
+        void DissambleCards(int team)
         {
-            if (Player != player)
-                return;
-
             // 每张卡牌增加一定建设值
             var cards = AvailableCards.ToArray();
-            BattlePVE.AddCardDissambleValue(cards.Length * 20);
+            BT.AddCardDissambleValue(cards.Length * 20);
 
             AvailableCards.Clear();
-            OnCardsDisassembledDone?.Invoke(player, cards);
+            OnCardsDisassembledDone?.Invoke(team, cards);
         }
 
         public override void OnAttached()
         {
             Battle.BeforeActionDone += DissambleCards;
             base.OnAttached();
+        }
+
+        public override void OnDetached()
+        {
+            throw new Exception("not implemented yet");
         }
     }
 }

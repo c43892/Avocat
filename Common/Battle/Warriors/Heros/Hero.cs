@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Avocat
 {
@@ -24,8 +25,8 @@ namespace Avocat
             {
                 if (s is ActiveSkill)
                     AddActiveSkill(Configuration.Config(s as ActiveSkill));
-                else if (s is Buff)
-                    Battle.AddBuff(Configuration.Config(s as Buff), this);
+                else
+                    Battle.AddBuff(Configuration.Config(s as Buff));
             }
         }
 

@@ -17,8 +17,7 @@ namespace Avocat
         public Trunk(BattleMap map)
             : base(map)
         {
-            DisplayName = "树干";
-            Name = "Trunk";
+            ID = "Trunk";
         }
         
         public int EffectRoundNum { get; set; }
@@ -27,7 +26,7 @@ namespace Avocat
         public override void Use2(Warrior target)
         {
             if (target != null)
-                Battle.AddBuff(Configuration.Config(new Untreatable(EffectRoundNum)), target);
+                Battle.AddBuff(Configuration.Config(new Untreatable(target, EffectRoundNum)));
         }
     }
 }

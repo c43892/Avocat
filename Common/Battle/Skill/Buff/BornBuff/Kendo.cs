@@ -11,20 +11,19 @@ namespace Avocat
     /// 游川隐
     /// 剑道，攻击时施加创伤效果，使目标不可被治疗
     /// </summary>
-    public class Kendo : PassiveSkill
+    public class Kendo : BuffWithOwner
     {
         // 效果持续几回合
         public int EffectRoundNum { get; set; }
-        public override string Name { get; } = "Kendo";
-        public override string DisplayName { get; } = "剑道";
-        public override string SkillDescription { get; set; } = "攻击时施加创伤效果，使目标不可被治疗";
+        public override string ID { get; } = "Kendo";
+        public Kendo(Warrior owner) : base(owner) { }
 
         void OnAfterAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (attacker != Owner)
                 return;
 
-            Battle.AddBuff(new Untreatable(EffectRoundNum), target);
+            Battle.AddBuff(new Untreatable(Owner, EffectRoundNum));
         }
 
         public override void OnAttached()

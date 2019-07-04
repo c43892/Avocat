@@ -67,8 +67,8 @@ namespace Avocat
             if (!warrior.InAttackRange(x, y))
                 return false;
 
-            // 检查它限制行动的 buff
-            if (warrior.GetBuffByName("Faint") != null)
+            // 检查它限制行动的被动技能
+            if (warrior.GetBuffSkill<Faint>() != null)
                 return false;
 
             return true;

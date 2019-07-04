@@ -7,18 +7,22 @@ using System.Threading.Tasks;
 namespace Avocat
 {
     /// <summary>
-    /// 专注：受影响对象产生暴击
+    /// 巴洛克
+    /// 侵略如火: 当拥有 3 层魔力提升时，我方全体单位获得[攻击时，封锁对手反击]
     /// </summary>
-    public class ConcentrateOnCritical : BuffCountDown
+    public class AllSuppressCounterAttackOn3POWInc : BuffWithOwner
     {
-        public override string Name { get => "ConcentrateOnCritical"; }
-
-        public ConcentrateOnCritical(int num) : base(num) { }
+        public override string ID { get => "AllSuppressCounterAttackOn3POWInc"; }
+        public AllSuppressCounterAttackOn3POWInc(Warrior owner) : base(owner) { }
 
         void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
-            if (!flags.Contains("CriticalAttack"))
-                flags.Add("CriticalAttack");
+            var buff = Owner.GetBuffSkill<POWInc>();
+            if (buff == null || buff.Num < 3)
+                return;
+
+            if (!flags.Contains("SuppressCounterAttack"))
+                flags.Add("SuppressCounterAttack");
         }
 
         public override void OnAttached()

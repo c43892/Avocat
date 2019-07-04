@@ -16,9 +16,8 @@ namespace Avocat
         public LuoLiSi(Battle bt)
             : base(bt)
         {
-            DisplayName = "洛里斯";
-            Name = "LuoLiSi";
-            SetupSkills(new DeployEMPCannon(), new ArtisanSpirit());
+            ID = "LuoLiSi";
+            SetupSkills(new DeployEMPCannon(this), new ArtisanSpirit(this));
         }
     }
 }

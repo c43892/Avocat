@@ -10,9 +10,10 @@ namespace Avocat
     /// <summary>
     /// 反击
     /// </summary>
-    public class CounterAttack : PassiveSkill
+    public class CounterAttack : BuffWithOwner
     {
-        public override string Name { get; } = "CounterAttack";
+        public override string ID { get; } = "CounterAttack";
+        public CounterAttack(Warrior owner) : base(owner) { }
 
         void AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {

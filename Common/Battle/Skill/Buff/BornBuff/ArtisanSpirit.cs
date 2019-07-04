@@ -11,15 +11,13 @@ namespace Avocat
     /// 洛里斯
     /// 匠心，行动阶段前，为团队提供能量
     /// </summary>
-    public class ArtisanSpirit : PassiveSkill
+    public class ArtisanSpirit : BuffWithOwner
     {
-        public int ES2Add { get; set; }
-        public override string Name { get; } = "ArtisanSpirit";
-        public override string DisplayName { get; } = "匠心";
-        public override string SkillDescription { get; set; } = "行动阶段前，为团队提供能量";
+        public override string ID { get; } = "ArtisanSpirit";
+        public ArtisanSpirit(Warrior owner) : base(owner) { }
 
-        // 效果翻倍系数
-        public int EffectFactor { get; set; } = 1;
+        public int ES2Add { get; set; } // 加多少能量
+        public int EffectFactor { get; set; } = 1; // 效果翻倍系数
 
         void AddEN(int team)
         {

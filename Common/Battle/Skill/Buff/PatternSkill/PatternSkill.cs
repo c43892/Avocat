@@ -10,17 +10,30 @@ namespace Avocat
     /// <summary>
     /// 卡牌模式触发技能
     /// </summary>
-    public abstract class PatternSkill : Buff
+    public abstract class PatternSkill : BuffWithOwner
     {
-        public BattlePVE BT { get => Battle as BattlePVE; }
+        public PatternSkill(Hero owner) : base(owner) { }
+
+        public override void OnAttached()
+        {
+            BT.AfterCardsConsumed += CheckPatternTrigger;
+            base.OnAttached();
+        }
+
+        public override void OnDetached()
+        {
+            BT.AfterCardsConsumed -= CheckPatternTrigger;
+            base.OnDetached();
+        }
 
         // 触发模式
         public abstract string[] CardsPattern { get; }
 
-        // 触发效果
-        public abstract void Fire();
+        public override Battle Battle { get => Owner.Battle; }
+        public BattlePVE BT { get => Battle as BattlePVE; }
 
         // 检查卡牌模式
+        public abstract void WhenPatternMatched();
         public virtual void CheckPatternTrigger(Warrior warrior, List<BattleCard> cards)
         {
             if (warrior != Owner)
@@ -35,20 +48,48 @@ namespace Avocat
                         matched = false;
             }
 
-            if (matched)
-                Fire();
+            WhenPatternMatched();
+        }
+    }
+
+    /// <summary>
+    /// 模式匹配技能并且需要攻击目标
+    /// </summary>
+    public abstract class PatternSkillWithAttackTarget : PatternSkill, ISkillWithTargetFilter
+    {
+        public PatternSkillWithAttackTarget(Hero owner) : base(owner) { }
+
+        // 模式匹配上之后，还要等攻击目标
+        bool matched = false;
+        public override void WhenPatternMatched() => matched = true;
+
+        void OnBeforeStartNextRound(int team)
+        {
+            if (team == Owner.Team)
+                matched = false;
         }
 
         public override void OnAttached()
         {
-            BT.AfterCardsConsumed += CheckPatternTrigger;
+            BT.BeforeStartNextRound += OnBeforeStartNextRound;
+            BT.BeforeAttack += OnBeforeAttack;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            BT.AfterCardsConsumed -= CheckPatternTrigger;
+            BT.BeforeStartNextRound -= OnBeforeStartNextRound;
+            BT.BeforeAttack -= OnBeforeAttack;
             base.OnDetached();
+        }
+
+        public abstract void FireOn(Warrior target);
+        public abstract bool TargetFilter(BattleMapObj target);
+
+        private void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        {
+            if (matched && TargetFilter(target) && flags.IndexOf("SuppressPatternMatch") < 0)
+                FireOn(target);
         }
     }
 }

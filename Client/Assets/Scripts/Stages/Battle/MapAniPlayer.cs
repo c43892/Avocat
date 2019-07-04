@@ -160,7 +160,6 @@ public class MapAniPlayer : MonoBehaviour
     public MapAniPlayer MakeAttacking2(MonoBehaviour attacker, MonoBehaviour target) => Add(MakeAttacking2Impl(attacker, target));
     IEnumerator MakeAttacking2Impl(MonoBehaviour attacker, MonoBehaviour target)
     {
-        
         //var fx = attacker.transform.localPosition.x;
         //var fy = attacker.transform.localPosition.y;
         //var tx = target.transform.localPosition.x;

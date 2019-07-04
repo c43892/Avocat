@@ -204,7 +204,7 @@ namespace Avocat
         public event Action<Warrior, int, int, List<int>, bool> OnWarriorMovingOnPath = null; // 角色沿路径移动
         public List<int> MoveOnPath(Warrior warrior, bool ignoreMoveRangeRestrict = false /* 忽略移动距离限制 */)
         {
-            Debug.Assert(!warrior.Moved, "attacker has already moved in this round");
+            Debug.Assert(!warrior.Moved && !warrior.ActionDone, "attacker has already moved or acted in this round");
 
             warrior.GetPosInMap(out int x, out int y);
             Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
@@ -244,7 +244,7 @@ namespace Avocat
         }
 
         // 计算伤害
-        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, out int inc, out int more, out int crit, out int damageDec);
+        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec);
         public event CalculateDamageAction BeforeCalculateDamage1;
         public event CalculateDamageAction BeforeCalculateDamage2;
         public int CalculateDamage(Warrior attacker, Warrior target, Skill skill, List<string> flags)
@@ -274,8 +274,8 @@ namespace Avocat
             }
 
             // 通知所有可能影响各种系数的计算逻辑
-            BeforeCalculateDamage1?.Invoke(attacker, target, flags, out inc, out more, out crit, out damageDecFac);
-            BeforeCalculateDamage2?.Invoke(attacker, target, flags, out inc, out more, out crit, out damageDecFac);
+            BeforeCalculateDamage1?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac);
+            BeforeCalculateDamage2?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac);
 
             // 计算最终攻击值
             return Calculation.CalcDamage(basicAttack, inc, more, flags.Contains("CriticalAttack") ? crit : 0, damageDecFac);
@@ -294,19 +294,19 @@ namespace Avocat
         }
 
         // 角色沿路径移动后执行攻击动作
-        public event Action<Warrior> BeforeMoveOnPathAndAttack = null;
-        public event Action<Warrior, int, int, List<int>> AfterMoveOnPathAndAttack = null;
-        public event Action<Warrior, int, int, List<int>> OnMoveOnPathAndAttack = null;
+        public event Action<Warrior, Warrior> BeforeMoveOnPathAndAttack = null;
+        public event Action<Warrior, Warrior, int, int, List<int>> AfterMoveOnPathAndAttack = null;
+        public event Action<Warrior, Warrior, int, int, List<int>> OnMoveOnPathAndAttack = null;
         public void MoveOnPathAndAttack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
         {
             attacker.GetPosInMap(out int fx, out int fy);
-            BeforeMoveOnPathAndAttack?.Invoke(attacker);
+            BeforeMoveOnPathAndAttack?.Invoke(attacker, target);
 
             var pathList = MoveOnPath(attacker);
             Attack(attacker, target, skill, flags);
 
-            OnMoveOnPathAndAttack?.Invoke(attacker, fx, fy, pathList);
-            AfterMoveOnPathAndAttack?.Invoke(attacker, fx, fy, pathList);
+            OnMoveOnPathAndAttack?.Invoke(attacker, target, fx, fy, pathList);
+            AfterMoveOnPathAndAttack?.Invoke(attacker, target, fx, fy, pathList);
         }
 
         // 执行攻击
@@ -332,7 +332,8 @@ namespace Avocat
 
             BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
-            if (attackFlags.Contains("CancelAttack")) // 取消攻击
+            // 可能需要 取消攻击 或者因为 PatternSkill 导致已经行动过了
+            if (attacker.ActionDone || attackFlags.Contains("CancelAttack"))
                 return attackFlags;
 
             // 计算实际伤害
@@ -341,8 +342,6 @@ namespace Avocat
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
                 SetActionFlag(attacker, true);
-
-            OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
 
             // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾
             var dhp = -damage;
@@ -355,6 +354,8 @@ namespace Avocat
 
             if (des != 0) AddES(target, des);
             if (dhp != 0) AddHP(target, dhp);
+
+            OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
 
             AfterAttack?.Invoke(attacker, target, skill, attackFlags);
             return attackFlags;
@@ -475,19 +476,23 @@ namespace Avocat
         protected event Action<Buff, Warrior> BeforeBuffAttached = null;
         protected event Action<Buff, Warrior> AfterBuffAttached = null;
         public event Action<Buff, Warrior> OnBuffAttached = null;
-        public virtual Buff AddBuff(Buff buff, Warrior target = null)
+        public virtual Buff AddBuff(Buff buff)
         {
+            var target = buff is ISkillWithOwner ? (buff as ISkillWithOwner).Owner : null;
+
             BeforeBuffAttached?.Invoke(buff, target);
 
             if (target != null)
-                target.AddBuff(ref buff); // 这个时候可能发生同名 buff 回合数叠加，buff 对象会变为已经在目标身上的原 buff
+            {
+                target.AddOrOverBuffInternal(ref buff); // 这个时候可能发生同名 buff 回合数叠加，buff 对象会变为已经在目标身上的原 buff
+                Debug.Assert(buff != null, "a buff was replaced with a null");
+            }
             else
             {
-                Debug.Assert(!GroundBuffs.Contains(buff), "buff " + buff.Name + " already attached to ground");
+                Debug.Assert(!GroundBuffs.Contains(buff), "buff " + buff.ID + " already attached to ground");
                 GroundBuffs.Add(buff);
             }
 
-            buff.Battle = this;
             buff.OnAttached();
 
             OnBuffAttached?.Invoke(buff, target);
@@ -499,10 +504,9 @@ namespace Avocat
         /// <summary>
         /// 移除 buff 或被动技能效果
         /// </summary>
-        public virtual void RemoveBuffByName(Warrior target, string name)
+        public virtual void RemoveBuffByID(Warrior target, string ID)
         {
-            var buff = target.GetBuffByName(name);
-            if (buff != null)
+            if (target.GetBuffByID(ID) is Buff buff)
                 RemoveBuff(buff);
         }
 
@@ -511,30 +515,26 @@ namespace Avocat
         public event Action<Buff, Warrior> OnBuffRemoved = null;
         public virtual void RemoveBuff(Buff buff)
         {
-            var target = buff.Owner;
+            var target = buff is ISkillWithOwner ? (buff as ISkillWithOwner).Owner : null;
 
             BeforeBuffRemoved?.Invoke(buff, target);
 
             if (target != null)
             {
-                Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.Name + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
-                target.RemoveBuff(buff);
+                Debug.Assert(target.Buffs.Contains(buff), "buff " + buff.ID + " has not been attached to target (" + target.AvatarID + "," + target.IDInMap + ")");
+                target.RemoveBuffInternal(buff);
             }
             else
             {
-                Debug.Assert(GroundBuffs.Contains(buff), "buff " + buff.Name + " has not been attached to ground)");
+                Debug.Assert(GroundBuffs.Contains(buff), "buff " + buff.ID + " has not been attached to ground)");
                 GroundBuffs.Remove(buff);
             }
 
             buff.OnDetached();
-            buff.Owner = null;
-            buff.Battle = null;
 
             OnBuffRemoved?.Invoke(buff, target);
             AfterBuffRemoved?.Invoke(buff, target);
         }
-
-
 
         // 促发时光倒流
         public event Action<BattleReplay> OnTimeBackTriggered = null;
@@ -591,8 +591,8 @@ namespace Avocat
         protected virtual Battle Build(params int[] players)
         {
             BattleStatusTransfer(players);
-            AddBuff(new ResetES()); // 回合开始时重置护盾
-            AddBuff(new ResetActionFlag()); // 回合开始时重置行动标记
+            AddBuff(new ResetES(this)); // 回合开始时重置护盾
+            AddBuff(new ResetActionFlag(this)); // 回合开始时重置行动标记
             return this;
         }
 

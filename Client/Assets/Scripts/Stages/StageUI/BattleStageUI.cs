@@ -55,7 +55,7 @@ public class BattleStageUI : MonoBehaviour
         var skill = (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior?.GetDefaultActiveSkill();
         Debug.Assert(skill != null, "there is no default active skill");
         Warrior warrior = BattleStage.InBattleOps.CurrentSelWarrior;
-        if (skill.ActiveSkillType == "fireAt")
+        if (skill is ISkillWithPosSel)
         {
             // confirm the position and fire at it
             var cx = 0;
@@ -72,8 +72,9 @@ public class BattleStageUI : MonoBehaviour
                 cx = x;
                 cy = y;
             }
+
             BattleStage.StartSkillStage(true);
-            BattleStage.StartSkill(cx, cy, (IWithRange)skill, (selX, selY) =>
+            BattleStage.StartSkill(cx, cy, skill, (selX, selY) =>
             {
                 if (BattleStage.InBattleOps.CurrentSelWarrior.MovingPath.Count > 0)
                 {

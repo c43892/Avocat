@@ -98,7 +98,6 @@ namespace Avocat
             dAttrs[typeof(ButterflySingle)] = new Dictionary<string, object>
             {
                 ["EnergyCost"] = 20,
-                ["Range"] = -1
             };
 
             // 蝶舞 AOE 治疗
@@ -153,11 +152,11 @@ namespace Avocat
                 ["BuffsToDisplay"] = new string [] { "CardATK" , "CounterAttack" , "Faint" , "Untreatable" }
             };
 
-            // 时光倒流
-            dAttrs[typeof(TimeBack)] = new Dictionary<string, object>
-            {
-                ["EnergyCost"] = 1
-            };
+            //// 时光倒流
+            //dAttrs[typeof(TimeBack)] = new Dictionary<string, object>
+            //{
+            //    ["EnergyCost"] = 1
+            //};
 
             // 树干
             dAttrs[typeof(Trunk)] = new Dictionary<string, object>
