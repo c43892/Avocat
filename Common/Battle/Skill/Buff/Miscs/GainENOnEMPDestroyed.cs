@@ -9,7 +9,7 @@ namespace Avocat
     /// <summary>
     /// EMP 炮台摧毁时增加能量
     /// </summary>
-    public class GainENOnEMPDestroyed : BuffWithOwner
+    public class GainENOnEMPDestroyed : BuffWithOwner,ISkillWithPassiveSkill
     {
         public override string ID { get => "GainENOnEMPDestroyed"; }
         public GainENOnEMPDestroyed(Warrior owner) : base(owner) { }

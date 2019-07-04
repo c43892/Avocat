@@ -16,7 +16,7 @@ namespace Avocat
     /// <summary>
     /// 巴洛克，战术指挥
     /// </summary>
-    public class TacticalCommand : BuffWithOwner
+    public class TacticalCommand : BuffWithOwner,ISkillWithPassiveSkill
     {
         public override string ID { get; } = "TacticalCommand";
         public TacticalCommand(Warrior owner) : base(owner) { }
@@ -57,7 +57,7 @@ namespace Avocat
     /// 巴洛克
     /// 战术指挥，行动阶段前，生成一张指令卡
     /// </summary>
-    public class TacticalCommandImpl1 : ITacticalCommandImpl
+    public class TacticalCommandImpl1 : ITacticalCommandImpl, ISkillWithPassiveSkill
     {
         public BaLuoKe Owner { get; set; }
 
@@ -82,7 +82,7 @@ namespace Avocat
     /// 巴洛克
     /// 战术指挥，行动阶段前，全体魔力和攻击力提升一层
     /// </summary>
-    public class TacticalCommandImpl2 : ITacticalCommandImpl
+    public class TacticalCommandImpl2 : ITacticalCommandImpl, ISkillWithPassiveSkill
     {
         public BaLuoKe Owner { get; set; }
 

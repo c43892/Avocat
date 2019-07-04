@@ -4146,8 +4146,6 @@ MonoBehaviour:
   ArrayIndex: 0
   MapNameList:
   - 111.json
-  - 222.json
-  - 333.json
 --- !u!4 &1700634538
 Transform:
   m_ObjectHideFlags: 0
@@ -5119,6 +5117,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1985072626643364863, guid: c915bbc7fd1e2cc46978c471bfb92cb1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c915bbc7fd1e2cc46978c471bfb92cb1, type: 3}
 --- !u!1001 &2593694193225827703
@@ -5231,6 +5234,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BattleCardArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 2804018243663415809, guid: 847398f81b81006429f0b3d0608fc533,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2804018243663415808, guid: 847398f81b81006429f0b3d0608fc533,
         type: 3}
@@ -6087,6 +6095,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8277795544828527975, guid: a6e745edef379c943b6ae0557a4caac0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8277795545693601786, guid: a6e745edef379c943b6ae0557a4caac0,
         type: 3}
       propertyPath: m_IsActive
       value: 0

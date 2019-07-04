@@ -43,6 +43,9 @@ namespace Avocat
         void UpdateOwnerAttrs(); // 更新所有者属性
     }
 
+    public interface ISkillWithPassiveSkill
+    { }
+
     /// <summary>
     /// 主被动技能
     /// </summary>
@@ -98,6 +101,18 @@ namespace Avocat
         public static void ExpandRound(this CountDownBuff buff, int num)
         {
             buff.Num = (num > buff.Num ? num : buff.Num).Clamp(0, buff.MaxNum);
+        }
+
+        // 技能名字
+        public static string DisPlayName(this Skill skill)
+        {
+            return ClientConfiguration.GetAttribute<Skill,string>(skill,"DisplayName");
+        }
+
+        // 技能描述
+        public static string SkillDescription(this Skill skill)
+        {
+            return ClientConfiguration.GetAttribute<Skill, string>(skill, "SkillDescription");
         }
     }
 }

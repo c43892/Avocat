@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,7 +53,7 @@ namespace Avocat
     /// 黛丽万
     /// 蝶舞，治疗所有友方单位 50% 最大生命值
     /// </summary>
-    public class ButterflyAOE : Butterfly, ISkillWithTargetFilter
+    public class ButterflyAOE : Butterfly
     {
         public ButterflyAOE(Warrior owner) : base(owner) { }
 
