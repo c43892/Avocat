@@ -19,6 +19,7 @@ namespace Avocat
         {
             ID = "EMPCannon";
             AI = new WarriorAI(this).Build(fastCannon ? "FastEMPConnon" : "EMPConnon");
+            Battle.AddBuff(new CounterAttack(this)); // 反击 buff
         }
     }
 }

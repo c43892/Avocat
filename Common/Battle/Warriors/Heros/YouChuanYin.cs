@@ -17,7 +17,7 @@ namespace Avocat
             : base(bt)
         {
             ID = "YouChuanYin";
-            SetupSkills(new Kendo(this), new FlashAttack(this));
+            SetupSkills(new Kendo(this), new FlashAttack(this), new CounterAttack(this));
         }
     }
 }

@@ -12,11 +12,12 @@ namespace Avocat
     public class Calculation
     {
         // 基本伤害公式
-        public static int CalcDamage(int basicAttack, int inc, int more, int crit, int damageDecFac)
+        public static int CalcDamage(int basicAttack, int inc, int more, int crit, int damageDecFac, int finalDamageFac)
         {
             var damage = basicAttack * (100 + inc) * (100 + more) / 10000;
             damage = damage * (100 + crit) / 100;
             damage = damage - damage * damageDecFac / (100 + damageDecFac);
+            damage = damage * finalDamageFac / 100;
             return damage < 0 ? 0 : (int)damage;
         }
 

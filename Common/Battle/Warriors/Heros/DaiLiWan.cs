@@ -17,7 +17,7 @@ namespace Avocat
             : base(bt)
         {
             ID = "DaiLiWan";
-            SetupSkills(new ButterflyAOE(this), new StarsTears(this));
+            SetupSkills(new ButterflyAOE(this), new StarsTears(this), new CounterAttack(this));
         }
     }
 }

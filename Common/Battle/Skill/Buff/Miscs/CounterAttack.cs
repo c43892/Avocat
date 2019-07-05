@@ -15,6 +15,8 @@ namespace Avocat
         public override string ID { get; } = "CounterAttack";
         public CounterAttack(Warrior owner) : base(owner) { }
 
+        public int FinalDamageFact { get; set; } = 50; // 最终伤害系数百分比
+
         void AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
         {
             if (target != Owner || flags.Contains("SuppressCounterAttack"))
@@ -24,18 +26,25 @@ namespace Avocat
             if (!target.InAttackRange(x, y))
                 return;
 
-             Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack");
+             Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack", "SuppressCounterAttack");
+        }
+
+        void OnBeforeCalculateDamage1(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec, ref int finalDamageFac)
+        {
+            finalDamageFac = FinalDamageFact;
         }
 
         public override void OnAttached()
         {
             Battle.AfterAttack += AttackBack;
+            
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
             Battle.AfterAttack -= AttackBack;
+            Battle.BeforeCalculateDamage1 -= OnBeforeCalculateDamage1;
             base.OnDetached();
         }
     }
