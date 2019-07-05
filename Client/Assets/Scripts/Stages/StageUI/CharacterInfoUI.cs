@@ -46,6 +46,7 @@ public class CharacterInfoUI : MonoBehaviour
         }
     }
 
+    // 显示人物信息栏头像
     public void ShowWarriorPhoto(Warrior warrior)
     {
         ChampPhoto.SetActive(false);
@@ -61,6 +62,7 @@ public class CharacterInfoUI : MonoBehaviour
         }
     }
 
+    // 显示人物类型
     public void ShowWarriorType(Warrior warrior)
     {
         ChampType.SetActive(false);
@@ -123,9 +125,10 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void ShowWarriorName(Warrior warrior)
     {
-        ChampName.GetComponent<Text>().text = warrior.ID;
+        ChampName.GetComponent<Text>().text = warrior.DisPlayName();
     }
 
+    // 更新血条旁边的技能图标
     public void UpdateSkillPicture(Warrior warrior)
     {
         var PassiveSkillFrame = PassiveSkill.transform.parent.gameObject;
@@ -144,7 +147,7 @@ public class CharacterInfoUI : MonoBehaviour
                 ActiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllBuffs[i].ID) as Sprite;
                 ActiveSkillFrame.SetActive(true);
             }
-            else
+            else if(AllBuffs[i] is ISkillWithPassiveSkill)
             {
                 PassiveSkill.GetComponent<Image>().sprite = Resources.Load<Sprite>("UI/Skill/" + AllBuffs[i].ID) as Sprite;
                 PassiveSkillFrame.SetActive(true);
@@ -152,6 +155,7 @@ public class CharacterInfoUI : MonoBehaviour
         });
     }
 
+    // 显示人物信息栏左下角buff栏
     public void UpDateBUFF(Warrior warrior)
     {
         bool[] isBUFFPicTaken = new bool[BUFFPic.Length];
@@ -191,10 +195,10 @@ public class CharacterInfoUI : MonoBehaviour
             {
                 patternTrigger.SetActive(false);
                 energyTrigger.gameObject.SetActive(true);
-                activeSkillName.text = activeSkill.ID;
+                activeSkillName.text = activeSkill.DisPlayName();
                 energyTrigger.text = activeSkill.EnergyCost.ToString() + " 能量";
                 activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + warrior.GetDefaultActiveSkill().ID) as Sprite;
-                ActiveSkillDescription.text = activeSkill.ID;
+                ActiveSkillDescription.text = activeSkill.SkillDescription();
             }
             else // 如果是 patternskill
             {
@@ -206,9 +210,9 @@ public class CharacterInfoUI : MonoBehaviour
                         var patternSkill = AllBuffs[i];
                         patternTrigger.SetActive(true);
                         energyTrigger.gameObject.SetActive(false);
-                        activeSkillName.text = patternSkill.ID;
+                        activeSkillName.text = patternSkill.DisPlayName();
                         activeSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + AllBuffs[i].ID) as Sprite;
-                        ActiveSkillDescription.text = patternSkill.ID;
+                        ActiveSkillDescription.text = patternSkill.SkillDescription();
 
                         FC.For(PatternSkillTriggerPics.Length, (j) =>
                         {
@@ -229,9 +233,12 @@ public class CharacterInfoUI : MonoBehaviour
             var Buffs = warrior.Buffs;
             FC.For(Buffs.Length, (i) =>
             {
-                passiveSkillName.text = Buffs[i].ID;
-                passiveSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + Buffs[i].ID) as Sprite;
-                PassiveSkillDescription.text = Buffs[i].ID;
+                if (Buffs[i] is ISkillWithPassiveSkill)
+                {
+                    passiveSkillName.text = Buffs[i].DisPlayName();
+                    passiveSkillIcon.sprite = Resources.Load<Sprite>("UI/Skill/" + Buffs[i].ID) as Sprite;
+                    PassiveSkillDescription.text = Buffs[i].SkillDescription();
+                }           
             });
         }
     }

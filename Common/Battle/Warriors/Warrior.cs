@@ -21,7 +21,7 @@ namespace Avocat
     public class Warrior : BattleMapObj
     {
         public Warrior(BattleMap map)
-            :base (map)
+            : base(map)
         {
         }
 
@@ -69,7 +69,7 @@ namespace Avocat
                 else if (AttackingType == "magic")
                     return ATK / 2 + POW;
                 else if (AttackingType == "chaos")
-                    return ATK /2 + POW / 2;
+                    return ATK / 2 + POW / 2;
 
                 Debug.Assert(false, "unknown attacking type: " + AttackingType);
                 return 0;
@@ -242,4 +242,12 @@ namespace Avocat
             return members.ToArray();
         }
     }
+    public static class WarriorEx
+    {
+        public static string DisPlayName(this Warrior warrior)
+        {
+            return ClientConfiguration.GetAttribute<Warrior, string>(warrior, "DisplayName");
+        }
+    }
+       
 }

@@ -17,25 +17,36 @@ static class CharacterUIOnEvent
         var aniPlayer = BattleStage.GetComponent<MapAniPlayer>();
         var stageUI = BattleStage.BattleStageUIRoot.GetComponent<BattleStageUI>();
         var characterui = stageUI.CharacterInfoUI;
+        var skillButtonUI = stageUI.SkillButtonUI;
+
         bt.OnAddHP += (warrior, dhp) =>
         {
             aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
         };
 
-        bt.BeforeAttack += (warrior,target,skill, flags) =>
+        //bt.OnAddHP += (warrior, dhp) =>
+        //{
+        //    aniPlayer.Op(() => skillButtonUI.UpdateSkill(warrior));
+        //};
+
+        bt.OnWarriorAttack += (warrior,target,skill, flags) =>
         {
-            aniPlayer.Op(() => characterui.UpdateWarriorInfo(target));
-            //if (target is Hero)
-            //{
-            //    aniPlayer.Op(() => stageUI.SkillButtonUI.UpdateSkill(target));
-            //    aniPlayer.Op(() => stageUI.SkillButtonUI.skill.GetComponent<Button>().enabled = false);
-            //}          
+            aniPlayer.Op(() => characterui.UpdateWarriorInfo(target));       
+        };
+
+        bt.OnWarriorAttack += (warrior, target, skill, flags) =>
+        {
+            aniPlayer.Op(() => skillButtonUI.UpdateSkillState(bt.Energy, (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior));
         };
 
         //bt.AfterAttack += (warrior, target, skill, flags) =>
         //{
-        //    if (target is Hero)
-        //        aniPlayer.Op(() => stageUI.SkillButtonUI.skill.GetComponent<Button>().enabled = true);
+        //    aniPlayer.Op(() => characterui.UpdateWarriorInfo((BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior));
+        //};
+
+        //bt.AfterAttack += (warrior, target, skill, flags) =>
+        //{
+        //    aniPlayer.Op(() => skillButtonUI.UpdateSkillState(bt.Energy, (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior));
         //};
 
         bt.OnAddES += (warrior, des) =>
@@ -55,12 +66,9 @@ static class CharacterUIOnEvent
 
         bt.OnSetActionFlag += (warrior, isActionDone) =>
         {
-            // 如果英雄完成回合则w动作显示技能框
+            // 如果英雄完成回合则动作显示技能框
             if (isActionDone)
-            {
-                stageUI.SkillButtonUI.UpdateSkill(warrior);
                 stageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
-            }
         };
 
         // 回合结束清除左上角信息栏显示

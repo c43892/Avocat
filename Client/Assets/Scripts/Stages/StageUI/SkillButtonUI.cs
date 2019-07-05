@@ -14,10 +14,16 @@ public class SkillButtonUI : MonoBehaviour
     public GameObject[] skillCards;
     public GameObject ItemUsage;
     public GameObject EndButton;
-    public Battle battle;
 
     public void UpdateSkill(Warrior warrior)
     {
+        // 如果为敌军或者在空地则显示为地形改造按钮
+        if (warrior == null || !(warrior is Hero))
+        {
+            UpdateItemUsage();
+            return;
+        }
+            
         skill.SetActive(true);
         ItemUsage.SetActive(false);
         if (warrior.GetDefaultActiveSkill() is ActiveSkill) // 若为主动技能
@@ -57,30 +63,15 @@ public class SkillButtonUI : MonoBehaviour
     // 更新技能状态
     public void UpdateSkillState(int en, Warrior warrior)
     {
-        if (warrior == null)
+        UpdateSkill(warrior);
+        var button = skill.GetComponent<Button>();
+        if (!(warrior is Hero))
             return;
-
-        if (warrior.IsSkillReleased)
-        {
-            skill.GetComponent<Button>().interactable = false;
-            return;
-        }
-
-        if (!warrior.ActionDone)
-        {
-            if (en >= int.Parse(energy.text))
-            {
-                skill.GetComponent<Button>().interactable = true;
-            }
-            else
-            {
-                skill.GetComponent<Button>().interactable = false;
-            }
-        }
+            
+        if (!warrior.ActionDone && en >= int.Parse(energy.text) && !warrior.IsSkillReleased)
+            button.interactable = true;
         else
-        {
-            skill.GetComponent<Button>().interactable = false;
-        }
+            button.interactable = false;
     }
 
     // 显示地形改造按钮

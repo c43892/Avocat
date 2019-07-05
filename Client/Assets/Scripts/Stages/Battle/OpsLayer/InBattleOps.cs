@@ -133,19 +133,12 @@ public class InBattleOps : StageOpsLayer
                 StageUI.CharacterInfoUI.gameObject.SetActive(false);
                 StageUI.obstacleUI.gameObject.SetActive(false);
                 StageUI.SkillButtonUI.UpdateItemUsage();
-                //if (CurrentItem != null)
-                //    CurrentItem.MapItem.IsShowClickFrame = false;
-                //if (CurrentAvatar != null)
-                //    CurrentAvatar.IsShowClickFrame = false;
-                //if (CurrentTile != null)
-                //    CurrentTile.IsShowClickFrame = false;
 
                 if (warrior != null)
                 {
                     // 显示人物信息栏
                     StageUI.CharacterInfoUI.GetComponent<CharacterInfoUI>().UpdateWarriorInfo(warrior);
-                   // avatar.IsShowClickFrame = true;
-                  //  CurrentAvatar = avatar;
+
                     if (warrior.Team == Room.PlayerMe)
                     {
 
@@ -153,7 +146,6 @@ public class InBattleOps : StageOpsLayer
                         Room.SortingBattleCards(warrior);
 
                         // 刷新技能
-                        StageUI.SkillButtonUI.UpdateSkill(warrior);
                         StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
 
                         // 选中己方角色，等待攻击指令
@@ -218,13 +210,10 @@ public class InBattleOps : StageOpsLayer
                 {
                     // 点己方角色，切换操作对象
                     CurrentSelWarrior = warrior;
-                  //  CurrentAvatar = avatar;
 
                     // 显示人物信息栏
                     StageUI.CharacterInfoUI.UpdateWarriorInfo(warrior);
-                    StageUI.SkillButtonUI.UpdateSkill(warrior);
                     StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
-                  //  CurrentAvatar.IsShowClickFrame = true;
 
                     // 根据英雄切换卡牌顺序
                     Room.SortingBattleCards(warrior);
@@ -291,7 +280,7 @@ public class InBattleOps : StageOpsLayer
 
         // 显示人物信息栏
         StageUI.CharacterInfoUI.UpdateWarriorInfo(warrior);
-        StageUI.SkillButtonUI.UpdateSkill(warrior);
+        StageUI.SkillButtonUI.UpdateSkillState((BattleStage.Battle as BattlePVE).Energy, warrior);
 
         CurrentSelWarrior = warrior;
         var tile = BattleStage.Tiles[(int)gx, (int)gy];
