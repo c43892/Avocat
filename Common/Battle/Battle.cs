@@ -317,7 +317,6 @@ namespace Avocat
         public List<string> Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
         {
             var attackFlags = new List<string>();
-            Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
 
             // 在连续指令的情况下，可能条件已经不满足
             if (attacker == null || target == null)
@@ -342,7 +341,10 @@ namespace Avocat
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
+            {
+                Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
                 SetActionFlag(attacker, true);
+            }
 
             // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾
             var dhp = -damage;
