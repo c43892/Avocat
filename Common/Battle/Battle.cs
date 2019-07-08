@@ -365,8 +365,6 @@ namespace Avocat
         // 模拟攻击行为的伤害数值，但并不执行攻击行为
         public void SimulateAttackingDamage(Warrior attacker, Warrior target, Skill skill, Action<int> onDamage, params string[] flags)
         {
-            Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
-
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
                 return;
