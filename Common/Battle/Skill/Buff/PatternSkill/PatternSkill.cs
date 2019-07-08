@@ -83,7 +83,11 @@ namespace Avocat
             base.OnDetached();
         }
 
-        public abstract void FireOn(Warrior target);
+        public virtual void FireOn(Warrior target)
+        {
+            matched = false;
+        }
+
         public abstract bool TargetFilter(BattleMapObj target);
 
         private void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)

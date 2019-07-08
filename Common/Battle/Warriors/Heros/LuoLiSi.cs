@@ -17,7 +17,7 @@ namespace Avocat
             : base(bt)
         {
             ID = "LuoLiSi";
-            SetupSkills(new DeployEMPCannon(this), new ArtisanSpirit(this));
+            SetupSkills(new DeployEMPCannon(this), new ArtisanSpirit(this), new CounterAttack(this));
         }
     }
 }

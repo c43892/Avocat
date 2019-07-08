@@ -21,7 +21,7 @@ namespace Avocat
                 new TacticalCommand(this) {
                     Impl = new TacticalCommandImpl1(() => 
                         State == "Archer" ? new string[] { "EN" } : new string[] { "ATK" })
-                });
+                }, new CounterAttack(this));
         }
         
         public int[] ArcherAttackRange { get; set; }

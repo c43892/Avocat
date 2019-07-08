@@ -30,6 +30,7 @@ namespace Avocat
         public override void FireOn(Warrior target)
         {
             BT.Attack(Owner, target, this, "SuppressCounterAttack", "SkillAttack", "SuppressPatternMatch");
+            base.FireOn(target);
         }
     }
 }

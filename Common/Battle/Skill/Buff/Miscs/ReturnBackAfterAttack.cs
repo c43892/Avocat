@@ -20,7 +20,7 @@ namespace Avocat
                 return;
 
             var reversedPathList = new List<int>();
-            for (var i = 0; i < pathList.Count; i += 2)
+            for (var i = 2; i < pathList.Count; i += 2) // 路径不包含起点
             {
                 reversedPathList.Add(pathList[pathList.Count - i - 2]);
                 reversedPathList.Add(pathList[pathList.Count - i - 1]);

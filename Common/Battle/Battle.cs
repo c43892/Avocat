@@ -202,17 +202,17 @@ namespace Avocat
         public event Action<Warrior, bool> BeforeMoveOnPath = null;
         public event Action<Warrior, int, int, List<int>, bool> AfterMoveOnPath = null;
         public event Action<Warrior, int, int, List<int>, bool> OnWarriorMovingOnPath = null; // 角色沿路径移动
-        public List<int> MoveOnPath(Warrior warrior, bool ignoreMoveRangeRestrict = false /* 忽略移动距离限制 */)
+        public List<int> MoveOnPath(Warrior warrior, bool forceMove = false /* 忽略限制强制移动 */)
         {
-            Debug.Assert(!warrior.Moved && !warrior.ActionDone, "attacker has already moved or acted in this round");
+            Debug.Assert(forceMove || (!warrior.Moved && !warrior.ActionDone), "attacker has already moved or acted in this round");
 
             warrior.GetPosInMap(out int x, out int y);
             Debug.Assert(MU.ManhattanDist(x, y, warrior.MovingPath[0], warrior.MovingPath[1]) == 1, "the warrior has not been right on the start position: " + x + ", " + y);
 
-            if (!ignoreMoveRangeRestrict && warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
+            if (!forceMove && warrior.MovingPath.Count > warrior.MoveRange * 2) // 超出移动能力
                 return null;
 
-            BeforeMoveOnPath?.Invoke(warrior, ignoreMoveRangeRestrict);
+            BeforeMoveOnPath?.Invoke(warrior, forceMove);
 
             List<int> movedPath = new List<int>(); // 实际落实了的移动路径
             var lstPathXY = warrior.MovingPath;
@@ -238,13 +238,13 @@ namespace Avocat
 
             warrior.Moved = true;
 
-            OnWarriorMovingOnPath?.Invoke(warrior, x, y, movedPath, ignoreMoveRangeRestrict);
-            AfterMoveOnPath?.Invoke(warrior, x, y, movedPath, ignoreMoveRangeRestrict);
+            OnWarriorMovingOnPath?.Invoke(warrior, x, y, movedPath, forceMove);
+            AfterMoveOnPath?.Invoke(warrior, x, y, movedPath, forceMove);
             return movedPath;
         }
 
         // 计算伤害
-        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec);
+        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec, ref int finalDamageFac);
         public event CalculateDamageAction BeforeCalculateDamage1;
         public event CalculateDamageAction BeforeCalculateDamage2;
         public int CalculateDamage(Warrior attacker, Warrior target, Skill skill, List<string> flags)
@@ -259,6 +259,7 @@ namespace Avocat
             var more = 0;
             var damageDecFac = 0; // 减伤系数
             var crit = attacker.Crit ; // 暴击系数
+            var finalDamageFac = 1; // 最终还有一个伤害系数，比如反击效果的伤害系数就是放在这里
 
             if (flags.Contains("physic"))
             {
@@ -274,11 +275,11 @@ namespace Avocat
             }
 
             // 通知所有可能影响各种系数的计算逻辑
-            BeforeCalculateDamage1?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac);
-            BeforeCalculateDamage2?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac);
+            BeforeCalculateDamage1?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac, ref finalDamageFac);
+            BeforeCalculateDamage2?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac, ref finalDamageFac);
 
             // 计算最终攻击值
-            return Calculation.CalcDamage(basicAttack, inc, more, flags.Contains("CriticalAttack") ? crit : 0, damageDecFac);
+            return Calculation.CalcDamage(basicAttack, inc, more, flags.Contains("CriticalAttack") ? crit : 0, damageDecFac, finalDamageFac);
         }
 
         // 变更行动标记
@@ -332,7 +333,7 @@ namespace Avocat
 
             BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
-            // 可能需要 取消攻击 或者因为 PatternSkill 导致已经行动过了
+            // 可能需要取消攻击 或者因为 PatternSkill 导致已经行动过了
             if (attacker.ActionDone || attackFlags.Contains("CancelAttack"))
                 return attackFlags;
 
