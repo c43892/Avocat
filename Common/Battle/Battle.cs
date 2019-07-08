@@ -259,7 +259,7 @@ namespace Avocat
             var more = 0;
             var damageDecFac = 0; // 减伤系数
             var crit = attacker.Crit ; // 暴击系数
-            var finalDamageFac = 1; // 最终还有一个伤害系数，比如反击效果的伤害系数就是放在这里
+            var finalDamageFac = 100; // 最终还有一个伤害系数，比如反击效果的伤害系数就是放在这里
 
             if (flags.Contains("physic"))
             {
@@ -365,8 +365,6 @@ namespace Avocat
         // 模拟攻击行为的伤害数值，但并不执行攻击行为
         public void SimulateAttackingDamage(Warrior attacker, Warrior target, Skill skill, Action<int> onDamage, params string[] flags)
         {
-            Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
-
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
                 return;
