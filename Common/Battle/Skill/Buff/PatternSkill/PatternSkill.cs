@@ -48,7 +48,8 @@ namespace Avocat
                         matched = false;
             }
 
-            WhenPatternMatched();
+            if (matched)
+                WhenPatternMatched();
         }
     }
 
