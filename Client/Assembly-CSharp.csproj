@@ -106,6 +106,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\ATKIncDec.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\ConcentrateOnCritical.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\CounterAttack.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\CriticalAsChaos.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\Faint.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\GainENOnEMPDestroyed.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Skill\Buff\Miscs\OverlayAttrBuff.cs" />

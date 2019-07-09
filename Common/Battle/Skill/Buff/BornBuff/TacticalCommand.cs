@@ -80,7 +80,7 @@ namespace Avocat
 
     /// <summary>
     /// 巴洛克
-    /// 战术指挥，行动阶段前，全体魔力和攻击力提升一层
+    /// 背水一战，巴洛克不再提供任何指令卡，行动阶段前，全体魔力和攻击力提升一层
     /// </summary>
     public class TacticalCommandImpl2 : ITacticalCommandImpl, ISkillWithPassiveSkill
     {
