@@ -47,7 +47,6 @@ namespace Avocat
             var h = Owner as YouChuanYin;
             Debug.Assert(h != null, "only available for YouChuanYin");
 
-            h.CardType = null;
             h.Battle.AddBuff(new CriticalAsChaos(h));
         }
     }
