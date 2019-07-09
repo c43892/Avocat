@@ -355,12 +355,12 @@ namespace Avocat
                 des = damage > target.ES ? 0 : -damage;
             }
 
+            OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
+            AfterAttack?.Invoke(attacker, target, skill, attackFlags);
+
             if (des != 0) AddES(target, des);
             if (dhp != 0) AddHP(target, dhp);
-
-            OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
-
-            AfterAttack?.Invoke(attacker, target, skill, attackFlags);
+ 
             return attackFlags;
         }
 

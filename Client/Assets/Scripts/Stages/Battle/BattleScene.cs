@@ -9,7 +9,9 @@ public class BattleScene : MonoBehaviour
 {
     public SkeletonAnimation champSkeleton;
     public SkeletonAnimation enemySkeleton;
- 
+    public LostHP lostHpForEnemy;
+    public LostHP lostHpForHero;
+
     public IEnumerator SetAttackAnimation(MapAvatar warrior, MapAvatar target) {
         gameObject.SetActive(true);
         var attackerAvatar = warrior.transform.Find("_MapWarrior");
@@ -87,4 +89,18 @@ public class BattleScene : MonoBehaviour
         warriorAnimation.AnimationState.SetAnimation(0, "die", false);
     }
 
+    public void CreateLostHP(Warrior warrior,int dhp)
+    {
+        if (warrior is Hero)
+        {
+            var HpLose = Instantiate(lostHpForHero);
+            HpLose.SetHPLost(dhp);
+        }
+        else
+        {
+            var HpLose = Instantiate(lostHpForEnemy);
+            HpLose.SetHPLost(dhp);
+        }
+        
+    }
 }

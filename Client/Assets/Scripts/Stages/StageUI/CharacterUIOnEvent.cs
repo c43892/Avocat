@@ -21,7 +21,11 @@ static class CharacterUIOnEvent
 
         bt.OnAddHP += (warrior, dhp) =>
         {
-            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
+            var warriorInfo = characterui.GetWarriorInfo(warrior);
+            aniPlayer.Op(() =>
+            {
+                characterui.UpdateWarriorInfo(warrior,warriorInfo);
+            });
         };
 
         //bt.OnAddHP += (warrior, dhp) =>
@@ -29,9 +33,10 @@ static class CharacterUIOnEvent
         //    aniPlayer.Op(() => skillButtonUI.UpdateSkill(warrior));
         //};
 
-        bt.OnWarriorAttack += (warrior,target,skill, flags) =>
+        bt.OnWarriorAttack += (attacker, target,skill, flags) =>
         {
-            aniPlayer.Op(() => characterui.UpdateWarriorInfo(target));       
+            var warriorInfo = characterui.GetWarriorInfo(target);
+            aniPlayer.Op(() => characterui.UpdateWarriorInfo(target,warriorInfo));       
         };
 
         bt.OnWarriorAttack += (warrior, target, skill, flags) =>
@@ -51,17 +56,20 @@ static class CharacterUIOnEvent
 
         bt.OnAddES += (warrior, des) =>
         {
-            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
+            var warriorInfo = characterui.GetWarriorInfo(warrior);
+            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior,warriorInfo));
         };
 
         bt.OnAddATK += (warrior, dATK) =>
         {
-            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
+            var warriorInfo = characterui.GetWarriorInfo(warrior);
+            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior,warriorInfo));
         };
 
         bt.OnTransfrom += (warrior, state) =>
         {
-            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior));
+            var warriorInfo = characterui.GetWarriorInfo(warrior);
+            aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior,warriorInfo));
         };
 
         bt.OnSetActionFlag += (warrior, isActionDone) =>

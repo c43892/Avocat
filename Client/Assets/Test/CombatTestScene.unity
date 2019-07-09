@@ -5221,6 +5221,24 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 2593694192591062158, guid: ef6e1d8e45cee9645ae1729fb244f7a7,
+        type: 3}
+      propertyPath: lostHp
+      value: 
+      objectReference: {fileID: 4630739814871636999, guid: 7e87e54af4624cd4d90f53c0a18faeef,
+        type: 3}
+    - target: {fileID: 2593694192591062158, guid: ef6e1d8e45cee9645ae1729fb244f7a7,
+        type: 3}
+      propertyPath: lostHpForEnemy
+      value: 
+      objectReference: {fileID: 1257284891755254302, guid: 62c6c1b8f4687ba4fb18f43cc1cc2ad5,
+        type: 3}
+    - target: {fileID: 2593694192591062158, guid: ef6e1d8e45cee9645ae1729fb244f7a7,
+        type: 3}
+      propertyPath: lostHpForHero
+      value: 
+      objectReference: {fileID: 439346362336048528, guid: 60ba2381df7e30348b6ad1da4c1be017,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef6e1d8e45cee9645ae1729fb244f7a7, type: 3}
 --- !u!1001 &2804018241735410421

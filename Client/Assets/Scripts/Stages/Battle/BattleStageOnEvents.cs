@@ -54,6 +54,16 @@ static class BattleStageOnEvents
                 aniPlayer.MakeAttacking2(attackerAvatar, targetAvatar).OnEnded(() => { doAttackerRefresh(); doTargetRefresh(); });            
         };
 
+        // 角色扣血显示
+        bt.OnAddHP += (warrior, dhp) =>
+        {
+            aniPlayer.Op(() =>
+                   {
+                       var battleScene = BattleStage.BattleScene.GetComponent<BattleScene>();
+                       battleScene.CreateLostHP(warrior,dhp);
+                   });
+        };
+
         // 角色移动
         room.Battle.OnWarriorMovingOnPath += (Warrior warrior, int x, int y, List<int> path, bool ignoreMoveRangeRestrict) =>
         {
