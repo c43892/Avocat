@@ -77,24 +77,37 @@ public class CharacterInfoUI : MonoBehaviour
         }
     }
 
-    public void ShowAttackValue(Warrior warrior)
+    public void ShowAttackValue(int atk)
     {
-        AttackValue.GetComponent<Text>().text = warrior.ATK.ToString();
+        AttackValue.GetComponent<Text>().text = atk.ToString();
     }
-    public void ShowArmorValue(Warrior warrior)
+    public void ShowArmorValue(int arm)
     {
-        ArmorValue.GetComponent<Text>().text = warrior.ARM.ToString();
+        ArmorValue.GetComponent<Text>().text = arm.ToString();
     }
-    public void ShowMagicValue(Warrior warrior)
+    public void ShowMagicValue(int pow)
     {
-        MagicValue.GetComponent<Text>().text = warrior.POW.ToString();
+        MagicValue.GetComponent<Text>().text = pow.ToString();
     }
-    public void ShowRESValue(Warrior warrior)
+    public void ShowRESValue(int res)
     {
-        MagicResistValue.GetComponent<Text>().text = warrior.RES.ToString();
+        MagicResistValue.GetComponent<Text>().text = res.ToString();
     }
 
-    public void UpdateWarriorInfo(Warrior warrior)
+    public void UpDateLife(int hp, int maxHP)
+    {
+       LifeValue.GetComponent<Text>().text = hp.ToString() + "/" + maxHP.ToString();
+       LifeBar.GetComponent<RectTransform>().anchorMax = new Vector2( hp / (float)maxHP, 1); 
+    }
+
+    public void UpDateShield(int es, int maxES)
+    {
+        ShieldValue.GetComponent<Text>().text = es.ToString() + "/" + maxES.ToString();
+        ShieldBar.GetComponent<RectTransform>().anchorMax = new Vector2(es / (float)maxES, 1);
+    }
+
+
+    public void UpdateWarriorInfo(Warrior warrior, Dictionary<string, object> warriorInfo = null)
     {
         gameObject.SetActive(true);
         ShowWarriorPhoto(warrior);
@@ -102,26 +115,38 @@ public class CharacterInfoUI : MonoBehaviour
         UpDateBUFF(warrior);
         ShowWarriorType(warrior);
         ShowWarriorName(warrior);
-        ShowAttackValue(warrior);
-        ShowArmorValue(warrior);
-        ShowMagicValue(warrior);
-        ShowRESValue(warrior);
-        UpDateShield(warrior);
-        UpDateLife(warrior);
         UpdateSkillPanelInfo(warrior);
+
+        // 一般用于点击人物时刷新
+        if (warriorInfo == null)
+        {
+            ShowAttackValue(warrior.ATK);
+            ShowArmorValue(warrior.ARM);
+            ShowMagicValue(warrior.POW);
+            ShowRESValue(warrior.RES);
+            UpDateShield(warrior.ES, warrior.MaxES);
+            UpDateLife(warrior.HP, warrior.MaxHP);
+        }
+        else // 一般用于动画播放时刷新
+        {
+            var atk = (int)warriorInfo["AttackValue"];
+            var arm = (int)warriorInfo["ArmorValue"];
+            var pow = (int)warriorInfo["MagicValue"];
+            var res = (int)warriorInfo["RESValue"];
+            var es = (int)warriorInfo["ShieldValue"];
+            var maxES = (int)warriorInfo["MaxShieldValue"];
+            var hp = (int)warriorInfo["HPValue"];
+            var maxHP = (int)warriorInfo["MaxHPValue"];
+            ShowAttackValue(atk);
+            ShowArmorValue(arm);
+            ShowMagicValue(pow);
+            ShowRESValue(res);
+            UpDateShield(es, maxES);
+            UpDateLife(hp, maxHP);
+        }
     }
 
-    public void UpDateLife(Warrior warrior)
-    {
-        LifeValue.GetComponent<Text>().text = warrior.HP.ToString() + "/" + warrior.MaxHP.ToString();
-        LifeBar.GetComponent<RectTransform>().anchorMax = new Vector2(warrior.HP / (float)warrior.MaxHP, 1);
-    }
-
-    public void UpDateShield(Warrior warrior)
-    {
-        ShieldValue.GetComponent<Text>().text = warrior.ES.ToString() + "/" + warrior.MaxES.ToString();
-        ShieldBar.GetComponent<RectTransform>().anchorMax = new Vector2(warrior.ES / (float)warrior.MaxES, 1);
-    }
+   
 
     public void ShowWarriorName(Warrior warrior)
     {
@@ -251,6 +276,20 @@ public class CharacterInfoUI : MonoBehaviour
     public void ShowSkillPanel()
     {
         SkillPanel.SetActive(true);
+    }
+
+    public Dictionary<string, object> GetWarriorInfo(Warrior warrior)
+    {
+        Dictionary<string, object> warriorInfo = new Dictionary<string, object>();
+        warriorInfo["AttackValue"] = warrior.ATK;
+        warriorInfo["ArmorValue"] = warrior.ARM;
+        warriorInfo["MagicValue"] = warrior.POW;
+        warriorInfo["RESValue"] = warrior.RES;
+        warriorInfo["ShieldValue"] = warrior.ES;
+        warriorInfo["MaxShieldValue"] = warrior.MaxES;
+        warriorInfo["HPValue"] = warrior.HP;
+        warriorInfo["MaxHPValue"] = warrior.MaxHP;
+        return warriorInfo;
     }
 }
 
