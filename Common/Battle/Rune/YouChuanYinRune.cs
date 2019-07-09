@@ -37,22 +37,19 @@ namespace Avocat
         }
     }
 
-    ///// <summary>
-    ///// 星之子
-    ///// 黛丽万死亡时触发一次星之泪效果
-    ///// </summary>
-    //public class DaiLiWanRune3 : Rune
-    //{
-    //    public override string DisplayName { get => "星之子"; }
-    //    public override void OnPreparingBattle(Hero hero)
-    //    {
-    //        var h = hero as DaiLiWan;
-    //        Debug.Assert(h != null, "only available for DaiLiWan");
+    /// <summary>
+    /// 心眼
+    /// 游川隐的暴击伤害无视护甲
+    public class YouChuanYinRune3 : Rune
+    {
+        public override void OnPreparingBattle()
+        {
+            var h = Owner as YouChuanYin;
+            Debug.Assert(h != null, "only available for YouChuanYin");
 
-    //        var buff = h.GetBuff<StarsTears>();
-    //        buff.WithAddtionalEffectOnSelf = true;
-    //    }
-    //}
+            h.Battle.AddBuff(new CriticalAsChaos(h));
+        }
+    }
 
     /// <summary>
     /// 剑神

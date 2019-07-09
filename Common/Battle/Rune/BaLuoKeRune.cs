@@ -34,6 +34,7 @@ namespace Avocat
             var h = Owner as BaLuoKe;
             Debug.Assert(h != null, "only available for LuoLiSi");
 
+            h.CardType = null;
             h.GetBuffSkill<TacticalCommand>().Impl = new TacticalCommandImpl2();
         }
     }
