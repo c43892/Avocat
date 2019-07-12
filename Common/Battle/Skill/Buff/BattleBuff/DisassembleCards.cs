@@ -16,13 +16,10 @@ namespace Avocat
         public BattlePVE BT { get => Battle as BattlePVE; }
         public List<BattleCard> AvailableCards { get; private set; }
 
-        readonly Action<int, BattleCard[]> OnCardsDisassembledDone;
-
-        public DisassembleCards(Battle bt, List<BattleCard> cardList, Action<int, BattleCard[]> onCardsDisassembledDone)
+        public DisassembleCards(Battle bt, List<BattleCard> cardList)
             : base(bt)
         {
             AvailableCards = cardList;
-            OnCardsDisassembledDone = onCardsDisassembledDone;
         }
 
         void DissambleCards(int team)
@@ -32,7 +29,7 @@ namespace Avocat
             BT.AddCardDissambleValue(cards.Length * 20);
 
             AvailableCards.Clear();
-            OnCardsDisassembledDone?.Invoke(team, cards);
+            BT.AddCards();
         }
 
         public override void OnAttached()

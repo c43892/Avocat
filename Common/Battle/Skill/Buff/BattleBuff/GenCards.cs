@@ -14,31 +14,14 @@ namespace Avocat
     public class GenCards : BattleBuff
     {
         public override string ID { get => "GenCards"; }
-        readonly Action<int, BattleCard[]> CardsGeneratedCallback = null;
+        public BattlePVE BT { get => Battle as BattlePVE; }
 
-        public GenCards(Battle bt, Action<int, BattleCard[]> onCardsGenerated = null)
-            : base(bt)
-        {
-            CardsGeneratedCallback = onCardsGenerated;
-        }
-
-        // 生成随机战斗卡牌
-        BattleCard[] GenNextCards(int num)
-        {
-            var cards = new BattleCard[num];
-            FC.For(num, (i) =>
-            {
-                var type = Battle.Srand.Next(0, BattleCard.BattleCardTypesNum);
-                cards[i] = BattleCard.Create(BattleCard.CardTypes[type]);
-            });
-
-            return cards;
-        }
+        public GenCards(Battle bt) : base(bt) { }
 
         readonly int Team = 1; // 玩家 only
         public override void OnAttached()
         {
-            Battle.BeforeStartNextRound += (int team) =>
+            Battle.BeforeStartNextRound1 += (int team) =>
             {
                 if (team != Team) 
                     return;
@@ -46,7 +29,8 @@ namespace Avocat
                 // 填充卡片
 
                 // 两张随机
-                var twoRandomCards = GenNextCards(2);
+                var twoRandomCards = Battle.GenNextCards(2);
+
                 // 每个英雄一张
                 var cardsByHeros = new List<BattleCard>();
                 Battle.Map.ForeachObjs<Hero>((x, y, hero) =>
@@ -57,8 +41,8 @@ namespace Avocat
                     cardsByHeros.Add(BattleCard.Create(hero.CardType));
                 });
 
-                cardsByHeros.InsertRange(0, twoRandomCards);
-                CardsGeneratedCallback(Team, cardsByHeros.ToArray());
+                cardsByHeros.AddRange(twoRandomCards);
+                BT.AddCards(cardsByHeros);
             };
 
             base.OnAttached();

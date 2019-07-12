@@ -57,6 +57,7 @@ public class CombatTestDriver : GameDriver
         var map = new BattleMap(10, 6, (x, y) => TileType.Grass); // test map
         var s = DateTime.Now.ToLocalTime().ToString();
         var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:"+ s, Name = "战斗测试:"+ s }); // test battle
+        var p = new Player();
 
         // 载入地图
         if (battleReplay == null)
@@ -118,6 +119,13 @@ public class CombatTestDriver : GameDriver
         ycy.AddRune(new YouChuanYinRune4());
         ycy.RunAllRune2PrepareBattle();
         bt.AddWarriorAt(map.RespawnForChamp[3].X, map.RespawnForChamp[3].Y, ycy);
+
+        // 装备
+        var e1 = new Equip();
+        e1.AddAttr(new CollageAdd() { P0 = 1 });
+        p.AddEquip(e1);
+
+        p.OnPreparingBattle(bt);
 
         // items
         // bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));

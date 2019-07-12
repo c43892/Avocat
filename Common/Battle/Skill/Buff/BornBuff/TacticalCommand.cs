@@ -42,13 +42,13 @@ namespace Avocat
 
         public override void OnAttached()
         {
-            Battle.BeforeStartNextRound += OnBeforeStartNextRound;
+            Battle.BeforeStartNextRound1 += OnBeforeStartNextRound;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            Battle.BeforeStartNextRound -= OnBeforeStartNextRound;
+            Battle.BeforeStartNextRound1 -= OnBeforeStartNextRound;
             base.OnDetached();
         }
     }

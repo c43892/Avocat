@@ -30,8 +30,11 @@ v15
 /Common/Swift/Math/*.meta
 /Common/Swift/AStar/*.meta
 /Common/Swift/DataStructures/*.meta
+/Common/Player/*.meta
 /Common/Battle/*.meta
 /Common/Battle/AI/*.meta
+/Common/Battle/Equip/*.meta
+/Common/Battle/Equip/EquipAttrs/*.meta
 /Common/Battle/Map/*.meta
 /Common/Battle/Warriors/*.meta
 /Common/Battle/Warriors/Heros/*.meta

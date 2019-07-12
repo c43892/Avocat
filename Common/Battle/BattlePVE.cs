@@ -25,6 +25,9 @@ namespace Avocat
         // 暂存区的卡牌
         public List<BattleCard> StashedCards = new List<BattleCard>();
 
+        // 玩家最大技能卡数量
+        public int PlayerMaxCardNum { get; } = 8;
+
         // 玩家能量槽
         public int MaxEnergy { get; set; } = 100;
         public int Energy { get; set; } = 0;
@@ -55,11 +58,18 @@ namespace Avocat
             }
         }
 
-        // 重置可用卡片
-        void ResetAvailableCards(BattleCard[] cards = null)
+        // 添加卡片
+        public void AddCards(IEnumerable<BattleCard> cards = null)
         {
             if (cards != null)
                 AvailableCards.AddRange(cards);
+
+            // 限制最大数量
+            if (AvailableCards.Count > PlayerMaxCardNum)
+            {
+                var removeNum = AvailableCards.Count - PlayerMaxCardNum;
+                AvailableCards.RemoveRange(AvailableCards.Count - removeNum, removeNum);
+            }
 
             var moveRange = AvailableCards.Count;
             Map.ForeachObjs<Warrior>((x, y, warrior) =>
@@ -77,10 +87,10 @@ namespace Avocat
             ConsumeCardsOnMoving();
 
             // 行动结束分解剩余卡牌
-            AddBuff(new DisassembleCards(this, AvailableCards, (player, cards) => ResetAvailableCards()));
+            AddBuff(new DisassembleCards(this, AvailableCards));
 
             // 行动开始前，生成新卡牌
-            AddBuff(new GenCards(this, (player, cards) => ResetAvailableCards(cards)));
+            AddBuff(new GenCards(this));
 
             Robot = new RobotPlayer(this);
         }
@@ -112,7 +122,7 @@ namespace Avocat
 
             OnCardsConsumed?.Invoke(warrior, cards);
 
-            ResetAvailableCards();
+            AddCards();
 
             AfterCardsConsumed?.Invoke(warrior, cards);
         }
@@ -157,7 +167,7 @@ namespace Avocat
             n1 = lst1.IndexOf(c2);
             n2 = lst2.IndexOf(c1);
 
-            ResetAvailableCards();
+            AddCards();
 
             OnBattleCardsExchange?.Invoke(g1, n1, g2, n2);
             AfterBattleCardsExchange?.Invoke(g1, n1, g2, n2);
@@ -172,7 +182,7 @@ namespace Avocat
             BeforeAddBattleCard?.Invoke(card);
 
             AvailableCards.Add(card);
-            ResetAvailableCards();
+            AddCards();
 
             OnAddBattleCard?.Invoke(card);
             AfterAddBattleCard?.Invoke(card);

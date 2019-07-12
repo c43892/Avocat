@@ -67,6 +67,19 @@ namespace Avocat
             AfterWarriorRemoved?.Invoke(warrior);
         }
 
+        // 生成随机战斗卡牌
+        public BattleCard[] GenNextCards(int num)
+        {
+            var cards = new BattleCard[num];
+            FC.For(num, (i) =>
+            {
+                var type = Srand.Next(0, BattleCard.BattleCardTypesNum);
+                cards[i] = BattleCard.Create(BattleCard.CardTypes[type]);
+            });
+
+            return cards;
+        }
+
         #region 战斗准备过程
 
         // 移动角色位置
@@ -175,12 +188,14 @@ namespace Avocat
         }
 
         // 回合开始，重置所有角色行动标记
-        public event Action<int> BeforeStartNextRound = null;
+        public event Action<int> BeforeStartNextRound1 = null;
+        public event Action<int> BeforeStartNextRound2 = null;
         public event Action<int> AfterStartNextRound = null;
         public event Action<int> OnNextRoundStarted = null;
         public void StartNextRound(int player)
         {
-            BeforeStartNextRound?.Invoke(player);
+            BeforeStartNextRound1?.Invoke(player);
+            BeforeStartNextRound2?.Invoke(player);
 
             // 处理所属当前队伍的 ai
             if (AIs.ContainsKey(player))

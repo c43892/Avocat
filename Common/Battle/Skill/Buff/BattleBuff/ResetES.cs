@@ -17,7 +17,7 @@ namespace Avocat
 
         public override void OnAttached()
         {
-            Battle.BeforeStartNextRound += (int player) =>
+            Battle.BeforeStartNextRound1 += (int player) =>
             {
                 Map.ForeachObjs<Warrior>((i, j, warrior) =>
                 {

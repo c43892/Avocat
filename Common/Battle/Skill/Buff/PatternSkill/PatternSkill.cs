@@ -72,14 +72,14 @@ namespace Avocat
 
         public override void OnAttached()
         {
-            BT.BeforeStartNextRound += OnBeforeStartNextRound;
+            BT.BeforeStartNextRound1 += OnBeforeStartNextRound;
             BT.BeforeAttack += OnBeforeAttack;
             base.OnAttached();
         }
 
         public override void OnDetached()
         {
-            BT.BeforeStartNextRound -= OnBeforeStartNextRound;
+            BT.BeforeStartNextRound1 -= OnBeforeStartNextRound;
             BT.BeforeAttack -= OnBeforeAttack;
             base.OnDetached();
         }
