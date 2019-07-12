@@ -22,11 +22,7 @@ namespace Avocat
             if (target != Owner || flags.Contains("SuppressCounterAttack"))
                 return;
 
-            attacker.GetPosInMap(out int x, out int y);
-            if (!target.InAttackRange(x, y))
-                return;
-
-             Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack", "SuppressCounterAttack", "SuppressPatternMatch");                                
+            Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack", "SuppressCounterAttack", "SuppressPatternMatch");                                
         }
 
         void OnBeforeCalculateDamage1(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec, ref int finalDamageFac)

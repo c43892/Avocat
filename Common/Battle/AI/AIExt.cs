@@ -238,20 +238,26 @@ namespace Avocat
                 var dstX = fx;
                 var dstY = fy;
 
-                if (warrior.MoveRange > 0)
-                {
-                    // 向目标寻路，如果无法达到，返回的路径表示朝向目标最近的方向的移动路径
-                    var path2Target = map.FindPath(fx, fy, tx, ty, warrior.MoveRange, warrior.StandableTiles);
-                    if (path2Target.Count > 0)
-                    {
-                        dstX = path2Target[path2Target.Count - 2];
-                        dstY = path2Target[path2Target.Count - 1];
-                    }
-                }
-
                 // 如果寻路结果的终点，可以攻击到目标，则加入候选列表
                 if (warrior.AttackRange.IndexOf(MU.ManhattanDist(dstX, dstY, tx, ty)) >= 0)
                     targets[target] = new KeyValuePair<int, int>(dstX, dstY);
+                else if (warrior.MoveRange > 0)
+                {
+                    // 向目标寻路，如果无法达到，返回的路径表示朝向目标最近的方向的移动路径
+                    var path2Target = map.FindPath(fx, fy, tx, ty, warrior.MoveRange, warrior.StandableTiles);
+                    for (var i = 0; i < path2Target.Count; i += 2)
+                    {
+                        dstX = path2Target[path2Target.Count - i - 2];
+                        dstY = path2Target[path2Target.Count - i - 1];
+
+                        // 如果寻路结果的终点，可以攻击到目标，则加入候选列表
+                        if (warrior.AttackRange.IndexOf(MU.ManhattanDist(dstX, dstY, tx, ty)) >= 0)
+                        {
+                            targets[target] = new KeyValuePair<int, int>(dstX, dstY);
+                            break;
+                        }
+                    }
+                }
             });
 
             return targets;

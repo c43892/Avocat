@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\BattleRoom.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Equip\Equip.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Equip\EquipAttr.cs" />
+    <Compile Include="Assets\Scripts\Common\Battle\Equip\EquipAttrs\BackNoRange.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Equip\EquipAttrs\CollageAdd.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Equip\EquipAttrs\StartAddShd.cs" />
     <Compile Include="Assets\Scripts\Common\Battle\Map\BattleMap.cs" />

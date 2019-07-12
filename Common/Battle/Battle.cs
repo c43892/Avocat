@@ -325,6 +325,7 @@ namespace Avocat
         }
 
         // 执行攻击
+        public event Action<Warrior, Warrior, Skill, List<string>> PrepareAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> BeforeAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> AfterAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> OnWarriorAttack = null; // 角色进行攻击
@@ -336,13 +337,18 @@ namespace Avocat
             if (attacker == null || target == null)
                 return attackFlags;
 
-            target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
-            if (!attacker.InAttackRange(tx, ty))
-                return attackFlags;
-
             // 整理攻击标记
             attackFlags.AddRange(flags);
             attackFlags.Add(attacker.AttackingType);
+
+            PrepareAttack?.Invoke(attacker, target, skill, attackFlags);
+
+            if (!attackFlags.Contains("IgnoreAttackRange")) // 可能是无视攻击距离限制的
+            {
+                target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
+                if (!attacker.InAttackRange(tx, ty))
+                    return attackFlags;
+            }
 
             BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
