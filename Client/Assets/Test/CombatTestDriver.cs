@@ -123,6 +123,7 @@ public class CombatTestDriver : GameDriver
         // 装备
         var e1 = new Equip();
         e1.AddAttr(new CollageAdd() { P0 = 1 });
+        e1.AddAttr(new StartAddShd() { P0 = 50 });
         p.AddEquip(e1);
 
         p.OnPreparingBattle(bt);
