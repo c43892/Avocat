@@ -244,7 +244,7 @@ public class InBattleOps : StageOpsLayer
                         DoAttack(CurrentSelWarrior, warrior);
 
                     // 判断是否该刷新技能图片
-                    BattleStage.Battle.SetActionFlag(CurrentSelWarrior, CurrentSelWarrior.ActionDone);
+                    // BattleStage.Battle.SetActionFlag(CurrentSelWarrior, CurrentSelWarrior.ActionDone);
                     CurrentSelWarrior = null;
                     status = "selectingWarrior";
                 }

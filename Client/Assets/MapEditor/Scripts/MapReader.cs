@@ -7,7 +7,6 @@ using Avocat;
 using Swift;
 using System;
 
-
 public class MapReader : MonoBehaviour
 {
     public GameObject MapRoot;

@@ -9,7 +9,7 @@ namespace Avocat
 {
     /// <summary>
     /// 蝶影
-    /// 将 BufferflyAOE 替换成 Bufferfly
+    /// 将 BufferflyAOE 替换成 BufferflySingle
     /// </summary>
     public class DaiLiWanRune1 : Rune
     {

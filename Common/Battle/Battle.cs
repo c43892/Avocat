@@ -149,22 +149,26 @@ namespace Avocat
         #region 战斗过程
 
         // 重置指定角色行动标记
-        public event Action<Warrior, Action<bool, bool>> BeforeResetActionFlag = null;
+        public event Action<Warrior, Action<bool, bool, bool>> BeforeResetActionFlag = null;
         public event Action<Warrior> AfterResetActionFlag = null;
         public event Action<Warrior> DoResetActionFlag = null;
         public void ResetActionFlag(Warrior warrior)
         {
-            var resetMovedFlag = true;
-            var resetActionFlag = true;
+            var resetMovedFlag = true; // 移动标记
+            var resetActionFlag = true; // 行动标记
+            var resetSkillFlag = true; // 技能释放标记
 
-            BeforeResetActionFlag?.Invoke(warrior, (_resetMovedFlag, _resetActionFlag) =>
+            BeforeResetActionFlag?.Invoke(warrior, (_resetMovedFlag, _resetActionFlag, _resetSkillFlag) =>
             {
                 resetMovedFlag = _resetMovedFlag;
                 resetActionFlag = _resetActionFlag;
+                resetSkillFlag = _resetSkillFlag;
             });
 
-            if (resetMovedFlag) warrior.Moved = false; // 重置行动标记
-            if (resetActionFlag) SetActionFlag(warrior, false); // 重置行动标记
+            SetActionFlag(warrior, 
+                resetMovedFlag ? false : warrior.Moved,
+                resetActionFlag ? false : warrior.ActionDone,
+                resetSkillFlag ? false : warrior.IsSkillReleased);
 
             DoResetActionFlag?.Invoke(warrior);
             AfterResetActionFlag?.Invoke(warrior);
@@ -186,13 +190,6 @@ namespace Avocat
                 foreach (var id in AIs[player].Keys.ToArray())
                     AIs[player][id].ActFirst?.Invoke();
             }
-
-            // 每回合重置英雄释放技能的标记
-            Map.ForeachObjs((x, y, obj) =>
-            {
-                if (obj is Warrior && (obj as Warrior).Team == player)
-                    (obj as Warrior).IsSkillReleased = false;
-            });
 
             OnNextRoundStarted?.Invoke(player);
             AfterStartNextRound?.Invoke(player);
@@ -283,15 +280,17 @@ namespace Avocat
         }
 
         // 变更行动标记
-        public event Action<Warrior, bool> BeforeSetActionFlag = null;
-        public event Action<Warrior, bool> AfterSetActionFlag = null;
-        public event Action<Warrior, bool> OnSetActionFlag = null;
-        public void SetActionFlag(Warrior warrior, bool acted)
+        public event Action<Warrior, bool, bool, bool> BeforeSetActionFlag = null;
+        public event Action<Warrior, bool, bool, bool> AfterSetActionFlag = null;
+        public event Action<Warrior, bool, bool, bool> OnSetActionFlag = null;
+        public void SetActionFlag(Warrior warrior, bool moved, bool acted, bool skillReleased)
         {
-            BeforeSetActionFlag?.Invoke(warrior, acted);
+            BeforeSetActionFlag?.Invoke(warrior, moved, acted, skillReleased);
+            warrior.Moved = moved;
             warrior.ActionDone = acted;
-            OnSetActionFlag?.Invoke(warrior, acted);
-            AfterSetActionFlag?.Invoke(warrior, acted);
+            warrior.IsSkillReleased = skillReleased;
+            OnSetActionFlag?.Invoke(warrior, moved, acted, skillReleased);
+            AfterSetActionFlag?.Invoke(warrior, moved, acted, skillReleased);
         }
 
         // 角色沿路径移动后执行攻击动作
@@ -343,7 +342,7 @@ namespace Avocat
             if (!attackFlags.Contains("ExtraAttack"))
             {
                 Debug.Assert(!attacker.ActionDone, "attacker has already attacted in this round");
-                SetActionFlag(attacker, true);
+                SetActionFlag(attacker, true, true, true);
             }
 
             // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾

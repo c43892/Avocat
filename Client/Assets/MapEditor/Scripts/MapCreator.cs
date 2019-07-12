@@ -171,7 +171,6 @@ public class MapCreator : MonoBehaviour
             var fileName = Path.Combine(Application.dataPath, "Map", mapName);
             var MapInformation = File.ReadAllText(fileName);
             MapDataCollection MapData = JsonMapper.ToObject<MapDataCollection>(MapInformation);
-            
 
             // 加载前先清空地图信息
             DestroyMap();

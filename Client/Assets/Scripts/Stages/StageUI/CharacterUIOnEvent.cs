@@ -72,7 +72,7 @@ static class CharacterUIOnEvent
             aniPlayer.Op(() => characterui.UpdateWarriorInfo(warrior,warriorInfo));
         };
 
-        bt.OnSetActionFlag += (warrior, isActionDone) =>
+        bt.OnSetActionFlag += (warrior, isMoved, isActionDone, isSkillReleased) =>
         {
             // 如果英雄完成回合则动作显示技能框
             if (isActionDone)

@@ -120,8 +120,8 @@ public class CombatTestDriver : GameDriver
         bt.AddWarriorAt(map.RespawnForChamp[3].X, map.RespawnForChamp[3].Y, ycy);
 
         // items
-        //  bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
-        //  bt.AddItemAt(7, 4, Configuration.Config(new Rock(map)));
+        // bt.AddItemAt(7, 2, Configuration.Config(new Trunk(map)));
+        // bt.AddItemAt(7, 4, Configuration.Config(new Rock(map)));
 
         // test room
         var room = new BattleRoomClient(new BattlePVERoom(bt)) { PlayerMe = 1 };
@@ -208,6 +208,4 @@ public class CombatTestDriver : GameDriver
         StartingUI.transform.Find("Replays").gameObject.SetActive(false);
         StartingUI.transform.Find("PlayReplays").gameObject.SetActive(true);
     }
-
-    
 }

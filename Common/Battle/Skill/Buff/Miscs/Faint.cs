@@ -16,12 +16,12 @@ namespace Avocat
         public override string ID { get; } = "Faint";
         public Faint(Warrior owner, int num) : base(owner, num) { }
         
-        void UnsetActionFlag(Warrior warrior, Action<bool, bool> resetActionFlags)
+        void UnsetActionFlag(Warrior warrior, Action<bool, bool, bool> resetActionFlags)
         {
             if (warrior != Owner)
                 return;
 
-            resetActionFlags(false, false);
+            resetActionFlags(false, false, false);
         }
 
         void CancelAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)

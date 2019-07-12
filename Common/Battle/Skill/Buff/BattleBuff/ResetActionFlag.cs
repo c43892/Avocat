@@ -25,7 +25,7 @@ namespace Avocat
                     if (warrior?.Team != team)
                         continue;
 
-                    // 重置行动标记
+                    // 重置行动标记和英雄释放技能的标记
                     Battle.ResetActionFlag(warrior);
                 }
             }
