@@ -312,52 +312,64 @@ namespace Avocat
         public event Action<Warrior, Warrior> BeforeMoveOnPathAndAttack = null;
         public event Action<Warrior, Warrior, int, int, List<int>> AfterMoveOnPathAndAttack = null;
         public event Action<Warrior, Warrior, int, int, List<int>> OnMoveOnPathAndAttack = null;
-        public void MoveOnPathAndAttack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
+        public void MoveOnPathAndAttack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags) { MoveOnPathAndAttack(attacker, target, null, skill, flags); }
+        public void MoveOnPathAndAttack(Warrior attacker, Warrior target, Warrior[] addtionalTargets, Skill skill = null, params string[] flags)
         {
             attacker.GetPosInMap(out int fx, out int fy);
             BeforeMoveOnPathAndAttack?.Invoke(attacker, target);
 
             var pathList = MoveOnPath(attacker);
-            Attack(attacker, target, skill, flags);
+            Attack(attacker, target, addtionalTargets, skill, flags);
 
             OnMoveOnPathAndAttack?.Invoke(attacker, target, fx, fy, pathList);
             AfterMoveOnPathAndAttack?.Invoke(attacker, target, fx, fy, pathList);
         }
 
         // 执行攻击
-        public event Action<Warrior, Warrior, Skill, List<string>> PrepareAttack = null;
+        public event Action<Warrior, Warrior, List<Warrior>, Skill, List<string>> PrepareAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> BeforeAttack = null;
         public event Action<Warrior, Warrior, Skill, List<string>> AfterAttack = null;
-        public event Action<Warrior, Warrior, Skill, List<string>> OnWarriorAttack = null; // 角色进行攻击
-        public List<string> Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags)
+        public event Action<Warrior, Warrior, List<Warrior>, Dictionary<Warrior, int>, Dictionary<Warrior, int>, Skill, List<string>> OnWarriorAttack = null; // 角色进行攻击
+        public void Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags) { Attack(attacker, target, null, skill, flags); }
+        public void Attack(Warrior attacker, Warrior target, Warrior[] addtionalTargets, Skill skill = null, params string[] flags)
         {
-            var attackFlags = new List<string>();
-
             // 在连续指令的情况下，可能条件已经不满足
             if (attacker == null || target == null)
-                return attackFlags;
+                return;
 
             // 整理攻击标记
+            var attackFlags = new List<string>();
             attackFlags.AddRange(flags);
             attackFlags.Add(attacker.AttackingType);
 
-            PrepareAttack?.Invoke(attacker, target, skill, attackFlags);
+            // 额外攻击目标
+            var addTars = new List<Warrior>();
+            if (addtionalTargets != null)
+                addTars.AddRange(addtionalTargets);
+
+            PrepareAttack?.Invoke(attacker, target, addTars, skill, attackFlags);
 
             if (!attackFlags.Contains("IgnoreAttackRange")) // 可能是无视攻击距离限制的
             {
                 target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
                 if (!attacker.InAttackRange(tx, ty))
-                    return attackFlags;
+                    return;
             }
 
             BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
 
             // 可能需要取消攻击 或者因为 PatternSkill 导致已经行动过了
             if (attacker.ActionDone || attackFlags.Contains("CancelAttack"))
-                return attackFlags;
+                return;
+
+            var tars = new List<Warrior>();
+            tars.Add(target);
+            tars.AddRange(addTars);
 
             // 计算实际伤害
-            var damage = CalculateDamage(attacker, target, skill, attackFlags);
+            var damages = new Dictionary<Warrior, int>();
+            foreach (var tar in tars)
+                damages[tar] = CalculateDamage(attacker, tar, skill, attackFlags);
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
@@ -367,21 +379,37 @@ namespace Avocat
             }
 
             // 混乱攻击不计算护盾，其它类型攻击需要先消耗护盾
-            var dhp = -damage;
-            var des = 0;
-            if (!attackFlags.Contains("chaos") && target.ES > 0)
+            var dhps = new Dictionary<Warrior, int>();
+            var dess = new Dictionary<Warrior, int>();
+            foreach (var tar in tars)
             {
-                dhp = damage > target.ES ? target.ES - damage : 0;
-                des = damage > target.ES ? 0 : -damage;
+                var damage = damages[tar];
+                var dhp = -damage;
+                var des = 0;
+                if (!attackFlags.Contains("chaos") && target.ES > 0)
+                {
+                    dhp = damage > target.ES ? target.ES - damage : 0;
+                    des = damage > target.ES ? 0 : -damage;
+                }
+
+                dhps[tar] = dhp;
+                dess[tar] = des;
             }
 
-            OnWarriorAttack?.Invoke(attacker, target, skill, attackFlags);
+            OnWarriorAttack?.Invoke(attacker, target, addTars, dhps, dess, skill, attackFlags);
+
+            foreach (var tar in tars)
+            {
+                var dhp = dhps[tar];
+                var des = dess[tar];
+
+                if (des != 0) AddES(target, des);
+                if (dhp != 0) AddHP(target, dhp);
+            }
+
             AfterAttack?.Invoke(attacker, target, skill, attackFlags);
 
-            if (des != 0) AddES(target, des);
-            if (dhp != 0) AddHP(target, dhp);
- 
-            return attackFlags;
+            return;
         }
 
         // 模拟攻击行为的伤害数值，但并不执行攻击行为

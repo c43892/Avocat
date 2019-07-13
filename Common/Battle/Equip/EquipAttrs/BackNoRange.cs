@@ -13,7 +13,7 @@ namespace Avocat
     {
         public override void OnPreparingBattle(Battle bt)
         {
-            bt.PrepareAttack += (attacker, target, skill, attackFlags) =>
+            bt.PrepareAttack += (attacker, target, addtionalTargets, skill, attackFlags) =>
             {
                 if (attacker.Team != Team)
                     return;

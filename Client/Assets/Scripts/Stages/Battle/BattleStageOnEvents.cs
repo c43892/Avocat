@@ -42,7 +42,7 @@ static class BattleStageOnEvents
         };
 
         // 角色攻击
-        room.Battle.OnWarriorAttack += (Warrior attacker, Warrior target, Skill skill, List<string> flags) =>
+        room.Battle.OnWarriorAttack += (Warrior attacker, Warrior target, List<Warrior> addTars, Dictionary<Warrior, int> dhps, Dictionary<Warrior, int> dess, Skill skill, List<string> flags) =>
         {
             var attackerAvatar = BattleStage.GetAvatarByWarrior(attacker);
             var targetAvatar = BattleStage.GetAvatarByWarrior(target);

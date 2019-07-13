@@ -33,13 +33,13 @@ static class CharacterUIOnEvent
         //    aniPlayer.Op(() => skillButtonUI.UpdateSkill(warrior));
         //};
 
-        bt.OnWarriorAttack += (attacker, target,skill, flags) =>
+        bt.OnWarriorAttack += (attacker, target, addTars, dhps, dess, skill, flags) =>
         {
             var warriorInfo = characterui.GetWarriorInfo(target);
             aniPlayer.Op(() => characterui.UpdateWarriorInfo(target,warriorInfo));       
         };
 
-        bt.OnWarriorAttack += (warrior, target, skill, flags) =>
+        bt.OnWarriorAttack += (warrior, target, addTars, dhps, dess, skill, flags) =>
         {
             aniPlayer.Op(() => skillButtonUI.UpdateSkillState(bt.Energy, (BattleStage.CurrentOpLayer as InBattleOps)?.CurrentSelWarrior));
         };
