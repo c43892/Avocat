@@ -138,7 +138,7 @@ namespace Avocat
             dAttrs[typeof(EMPCannon)] = new Dictionary<string, object>
             {
                 ["AttackingType"] = "physic",
-                ["AttackRange"] = new int[] { 2,3,4,5 }
+                ["AttackRange"] = new int[] { 2, 3, 4, 5 }
             };
 
             dAttrs[typeof(GainENOnEMPDestroyed)] = new Dictionary<string, object>

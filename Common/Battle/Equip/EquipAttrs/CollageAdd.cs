@@ -11,8 +11,6 @@ namespace Avocat
     /// </summary>
     public class CollageAdd : EquipAttr
     {
-        public int P0 { get; set; } // 卡片数量
-
         public override void OnPreparingBattle(Battle bt)
         {
             bt.BeforeStartNextRound2 += (int team) =>
@@ -22,7 +20,7 @@ namespace Avocat
 
                 // 添加随机指令卡
                 var btpve = bt as BattlePVE;
-                btpve.AddCards(btpve.GenNextCards(P0));
+                btpve.AddCards(btpve.GenNextCards(P0)); // 卡片数量
             };
         }
     }

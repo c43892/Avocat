@@ -11,6 +11,8 @@ namespace Avocat
     /// </summary>
     public abstract class EquipAttr
     {
+        public int P0 { get; set; } // 不同 EquipAttr 意义不同
+
         // 所属队伍
         public int Team { get; set; }
 

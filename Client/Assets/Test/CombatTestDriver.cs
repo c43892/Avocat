@@ -56,7 +56,7 @@ public class CombatTestDriver : GameDriver
     {
         var map = new BattleMap(10, 6, (x, y) => TileType.Grass); // test map
         var s = DateTime.Now.ToLocalTime().ToString();
-        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:"+ s, Name = "战斗测试:"+ s }); // test battle
+        var bt = new BattlePVE(map, 0, new PlayerInfo { ID = "tester:" + s, Name = "战斗测试:" + s }); // test battle
         var p = new Player();
 
         // 载入地图

@@ -138,6 +138,7 @@
     <Compile Include="Assets\Scripts\Common\Battle\Warriors\Warrior.cs" />
     <Compile Include="Assets\Scripts\Common\Calculation.cs" />
     <Compile Include="Assets\Scripts\Common\Config\Configuration.cs" />
+    <Compile Include="Assets\Scripts\Common\Config\EquipConfig.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\PriorityQueue.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\AStar\SpatialAStar.cs" />
     <Compile Include="Assets\Scripts\Common\Swift\Common\BufferExtension.cs" />

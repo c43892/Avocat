@@ -13,10 +13,13 @@ v15
 /Server/Debug
 /Server/x64/Debug
 /Server/Server/Common
+/Server/Server/Config
 
 /Client/obj
 /Client/Assets/Scripts/Common
 /Client/Assets/Scripts/Common.meta
+/Client/Assets/Resources/Config
+/Client/Assets/Resources/Config.meta
 /Client/Assets/Map
 
 /Common/*.meta
@@ -30,6 +33,7 @@ v15
 /Common/Swift/Math/*.meta
 /Common/Swift/AStar/*.meta
 /Common/Swift/DataStructures/*.meta
+/Common/Swift/Config/*.meta
 /Common/Battle/*.meta
 /Common/Battle/AI/*.meta
 /Common/Battle/Player/*.meta
@@ -50,8 +54,9 @@ v15
 /Common/Battle/Skill/Buff/Miscs/*.meta
 /Common/Battle/Skill/Buff/PatternSkill/*.meta
 /Common/Battle/Rune/*.meta
-/Common/UserPlayer/*.meta
 /Common/Config/*.meta
+/Common/UserPlayer/*.meta
+/Config/*.meta
 /Doc/~*.*
 /tmp
 

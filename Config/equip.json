@@ -1,0 +1,22 @@
+{
+'10001': {
+	'type': 1,
+	'hp': 1,
+	'shield': 1,
+	'attack': 1,
+	'magic_power': 1,
+	'armor': 1,
+	'resistance': 1,
+	'attrs': {'Spurt': -50}
+}，
+'10002': {
+	'type': 2,
+	'hp': 1,
+	'shield': 1,
+	'attack': 1,
+	'magic_power': 1,
+	'armor': 1,
+	'resistance': 1,
+	'attrs': {'collageAdd': 1}
+}
+}

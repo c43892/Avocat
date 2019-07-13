@@ -12,8 +12,6 @@ namespace Avocat
     /// </summary>
     public class Spurt : EquipAttr
     {
-        public int P0 { get; set; } // 溅射伤害系数
-
         public override void OnPreparingBattle(Battle bt)
         {
             bt.BeforeAttack += (attacker, target, addTars, skill, attackFlags, multi, addMulti) =>

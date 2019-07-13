@@ -11,8 +11,6 @@ namespace Avocat
     /// </summary>
     public class StartAddShd : EquipAttr
     {
-        public int P0 { get; set; } // 护盾值百分比
-
         public override void OnPreparingBattle(Battle bt)
         {
             bt.BeforeStartNextRound1 += (int team) =>
@@ -22,7 +20,7 @@ namespace Avocat
 
                 bt.Map.ForeachObjs<Warrior>((x, y, warrior) =>
                 {
-                    bt.AddES(warrior, warrior.MaxES * P0 / 100);
+                    bt.AddES(warrior, warrior.MaxES * P0 / 100); // 护盾值百分比
                 }, (warrior) => warrior.Team == team);
             };
         }

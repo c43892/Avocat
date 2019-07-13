@@ -133,13 +133,10 @@ namespace Avocat
         // 添加对象到地图
         public void SetObjAt(int x, int y, BattleMapObj obj)
         {
-            Debug.Assert(obj == null || obj.Map == this, "no warrior on the map specified");
-
             if (objs[x, y] == obj)
                 return;
 
-            if (obj != null && obj.Map == this)
-                objs[x, y] = null;
+            Debug.Assert(objs[x, y] == null && (obj == null || obj.Map == this), "no warrior on the map specified");
 
             if (objs[x, y] != null)
                 RemoveObj(objs[x, y]);
