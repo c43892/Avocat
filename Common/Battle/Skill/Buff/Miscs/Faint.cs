@@ -24,7 +24,7 @@ namespace Avocat
             resetActionFlags(false, false, false);
         }
 
-        void CancelAttack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags)
+        void CancelAttack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags, List<int> multi, List<int> addMulti)
         {
             if (attacker != Owner)
                 return;

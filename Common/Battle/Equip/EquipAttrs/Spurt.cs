@@ -16,7 +16,7 @@ namespace Avocat
 
         public override void OnPreparingBattle(Battle bt)
         {
-            bt.BeforeAttack+= (attacker, target, addTars, skill, attackFlags) =>
+            bt.BeforeAttack += (attacker, target, addTars, skill, attackFlags, multi, addMulti) =>
             {
                 if (attacker.Team != Team)
                     return;
@@ -31,6 +31,8 @@ namespace Avocat
                             addTars.Add(t);
                     }
                 });
+
+                addMulti.Add(P0); // 溅射伤害系数
             };
         }
     }

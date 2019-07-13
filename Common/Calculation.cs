@@ -17,12 +17,7 @@ namespace Avocat
             var damage = basicAttack * (100 + inc) * (100 + more) / 10000;
 
             foreach (var p in multiplier)
-            {
-                if (p > 0)
-                    damage = damage * (100 + p) / 100;
-                else
-                    damage = damage * (100 - p) / 100;
-            }
+                damage = damage * (100 + p) / 100;
 
             return damage < 0 ? 0 : (int)damage;
         }
