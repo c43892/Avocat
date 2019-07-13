@@ -109,14 +109,18 @@ namespace Swift
             For(bottom, top + 1, (_y) =>
             {
                 f(left, _y);
+                if (continueCondition != null && continueCondition()) return;
                 f(right, _y);
+                if (continueCondition != null && continueCondition()) return;
             }, continueCondition);
 
             // 上下(不包括4个角落)
             For(left + 1, right, (_x) =>
             {
                 f(_x, bottom);
+                if (continueCondition != null && continueCondition()) return;
                 f(_x, top);
+                if (continueCondition != null && continueCondition()) return;
             }, continueCondition);
         }
 
@@ -150,9 +154,13 @@ namespace Swift
             if (seq == SquareForSeq.PerpendicularFirst)
             {
                 f(cx - r, cy);  // 左
+                if (continueCondition != null && continueCondition()) return;
                 f(cx + r, cy);  // 右
+                if (continueCondition != null && continueCondition()) return;
                 f(cx, cy + r);  // 上
+                if (continueCondition != null && continueCondition()) return;
                 f(cx, cy - r);  // 下
+                if (continueCondition != null && continueCondition()) return;
 
                 // 左右(包括上下左右4个角落)
                 For(cy - r, cy + r + 1, (_y) =>
@@ -161,7 +169,9 @@ namespace Swift
                         return;
 
                     f(cx - r, _y);
+                    if (continueCondition != null && continueCondition()) return;
                     f(cx + r, _y);
+                    if (continueCondition != null && continueCondition()) return;
                 }, continueCondition);
                 // 上下(不包括4个角落)
                 For(cx - r + 1, cx + r, (_x) =>
@@ -170,7 +180,9 @@ namespace Swift
                         return;
 
                     f(_x, cy - r);
+                    if (continueCondition != null && continueCondition()) return;
                     f(_x, cy + r);
+                    if (continueCondition != null && continueCondition()) return;
                 }, continueCondition);
             }
             else
@@ -179,13 +191,18 @@ namespace Swift
                 For(cy - r, cy + r + 1, (_y) =>
                 {
                     f(cx - r, _y);
+                    if (continueCondition != null && continueCondition()) return;
                     f(cx + r, _y);
+                    if (continueCondition != null && continueCondition()) return;
                 }, continueCondition);
+
                 // 上下(不包括4个角落)
                 For(cx - r + 1, cx + r, (_x) =>
                 {
                     f(_x, cy - r);
+                    if (continueCondition != null && continueCondition()) return;
                     f(_x, cy + r);
+                    if (continueCondition != null && continueCondition()) return;
                 }, continueCondition);
             }
         }
@@ -213,17 +230,25 @@ namespace Swift
             int bottom = cy - r;
 
             f(left, cy);  // 左
+            if (continueCondition != null && !continueCondition()) return;
             f(right, cy);  // 右
+            if (continueCondition != null && !continueCondition()) return;
             f(cx, top);  // 上
+            if (continueCondition != null && !continueCondition()) return;
             f(cx, bottom);  // 下
+            if (continueCondition != null && !continueCondition()) return;
 
             for (int i = 1; i < r && (continueCondition == null || continueCondition()); i++)
             {
                 f(left + i, cy + i);     // 左-->上
+                if (continueCondition != null && !continueCondition()) return;
                 f(left + i, cy - i);    // 左-->下
+                if (continueCondition != null && !continueCondition()) return;
 
                 f(right - i, cy + i);    // 右-->上
+                if (continueCondition != null && !continueCondition()) return;
                 f(right - i, cy - i);   // 右-->下
+                if (continueCondition != null && !continueCondition()) return;
             }
         }
         public static void ObliqueSquareFor2(int cx, int cy, int start_r, int end_r, Action<int, int> f, Func<bool> continueCondition = null)

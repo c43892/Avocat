@@ -372,7 +372,7 @@ namespace Avocat
 
             // 能击杀的，10 分
             var damage = 0;
-            warrior.Battle.SimulateAttackingDamage(warrior, target, null, (d) => damage = d);
+            warrior.Battle.SimulateAttackingDamage(warrior, target, null, null, (d) => damage = d);
             if (damage >= target.HP + target.ES)
                 score += 10;
 
@@ -491,7 +491,7 @@ namespace Avocat
 
                     // 能击杀的，3 分
                     var damage = 0;
-                    attacker.Battle.SimulateAttackingDamage(attacker, t, null, (d) => damage = d);
+                    attacker.Battle.SimulateAttackingDamage(attacker, t, null, null, (d) => damage = d);
                     if (damage >= target.HP + target.ES)
                         score += 10;
 

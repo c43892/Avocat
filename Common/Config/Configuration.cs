@@ -109,7 +109,7 @@ namespace Avocat
             // 匠心
             dAttrs[typeof(ArtisanSpirit)] = new Dictionary<string, object>
             {
-                ["ES2Add"] = 10 // 每次加多少盾
+                ["EN2Add"] = 10 // 每次加多少能量
             };
 
             // 剑道

@@ -24,13 +24,12 @@ namespace Avocat
             resetActionFlags(false, false, false);
         }
 
-        void CancelAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void CancelAttack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags)
         {
             if (attacker != Owner)
                 return;
 
-            if (!flags.Contains("CancelAttack"))
-                flags.Add("CancelAttack");
+            flags.Add("CancelAttack");
         }
 
         public override void OnAttached()

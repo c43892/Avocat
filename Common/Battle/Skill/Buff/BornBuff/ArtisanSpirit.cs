@@ -16,7 +16,7 @@ namespace Avocat
         public override string ID { get; } = "ArtisanSpirit";
         public ArtisanSpirit(Warrior owner) : base(owner) { }
 
-        public int ES2Add { get; set; } // 加多少能量
+        public int EN2Add { get; set; } // 加多少能量
         public int EffectFactor { get; set; } = 1; // 效果翻倍系数
 
         void AddEN(int team)
@@ -25,7 +25,7 @@ namespace Avocat
                 return;
 
             var bt = Battle as BattlePVE;
-            bt.AddEN(ES2Add * EffectFactor);
+            bt.AddEN(EN2Add * EffectFactor);
         }
 
         public override void OnAttached()
