@@ -15,14 +15,13 @@ namespace Avocat
         public override string ID { get => "AllSuppressCounterAttackOn3POWInc"; }
         public AllSuppressCounterAttackOn3POWInc(Warrior owner) : base(owner) { }
 
-        void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void OnBeforeAttack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags, List<int> multi, List<int> addMulti)
         {
             var buff = Owner.GetBuffSkill<POWInc>();
             if (buff == null || buff.Num < 3)
                 return;
 
-            if (!flags.Contains("SuppressCounterAttack"))
-                flags.Add("SuppressCounterAttack");
+            flags.Add("SuppressCounterAttack");
         }
 
         public override void OnAttached()

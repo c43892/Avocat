@@ -14,9 +14,9 @@ namespace Avocat
         public override string ID { get => "CriticalWithPierce"; }
         public CriticalAsChaos(Warrior owner) : base(owner) { }
 
-        void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void OnBeforeAttack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags, List<int> multi, List<int> addMulti)
         {
-            if (flags.Contains("CriticalAttack") && !flags.Contains("chaos"))
+            if (flags.Contains("CriticalAttack"))
                 flags.Add("chaos");
         }
 

@@ -125,6 +125,7 @@ public class CombatTestDriver : GameDriver
         e1.AddAttr(new CollageAdd() { P0 = 1 });
         e1.AddAttr(new StartAddShd() { P0 = 50 });
         e1.AddAttr(new BackNoRange());
+        e1.AddAttr(new Spurt() { P0 = -50 });
         p.AddEquip(e1);
 
         p.OnPreparingBattle(bt);

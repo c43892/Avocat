@@ -91,9 +91,9 @@ namespace Avocat
 
         public abstract bool TargetFilter(BattleMapObj target);
 
-        private void OnBeforeAttack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        private void OnBeforeAttack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags, List<int> multi, List<int> addMulti)
         {
-            if (matched && TargetFilter(target) && flags.IndexOf("SuppressPatternMatch") < 0)
+            if (matched && TargetFilter(target) && flags.Contains("SuppressPatternMatch"))
                 FireOn(target);
         }
     }

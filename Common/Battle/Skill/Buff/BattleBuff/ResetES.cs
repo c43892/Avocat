@@ -17,11 +17,11 @@ namespace Avocat
 
         public override void OnAttached()
         {
-            Battle.BeforeStartNextRound1 += (int player) =>
+            Battle.BeforeStartNextRound1 += (int team) =>
             {
                 Map.ForeachObjs<Warrior>((i, j, warrior) =>
                 {
-                    if (warrior.Team != player)
+                    if (warrior.Team != team)
                         return;
 
                     warrior.ES = 0; // 重置所有护甲

@@ -256,10 +256,10 @@ namespace Avocat
         }
 
         // 计算伤害
-        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec, ref int finalDamageFac);
+        public delegate void CalculateDamageAction(Warrior attacker, Warrior target, HashSet<string> flags, ref int inc, ref int more, List<int> muliplier);
         public event CalculateDamageAction BeforeCalculateDamage1;
         public event CalculateDamageAction BeforeCalculateDamage2;
-        public int CalculateDamage(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        public int CalculateDamage(Warrior attacker, Warrior target, Skill skill, HashSet<string> flags, List<int> multiplier /* 叠加系数，包括减伤系数，反击伤害系数，溅射系数等 */)
         {
             // 物理和法术分别取不同的抗性，混乱攻击忽视抗性
 
@@ -269,29 +269,29 @@ namespace Avocat
 
             var inc = 0;
             var more = 0;
-            var damageDecFac = 0; // 减伤系数
-            var crit = attacker.Crit ; // 暴击系数
-            var finalDamageFac = 100; // 最终还有一个伤害系数，比如反击效果的伤害系数就是放在这里
 
             if (flags.Contains("physic"))
             {
                 inc = attacker.ATKInc;
                 more = attacker.ATKMore;
-                damageDecFac = target.ARM;
+                multiplier.Add(target.ARM);
             }
             else if (flags.Contains("magic"))
             {
                 inc = attacker.POWInc;
                 more = attacker.POWMore;
-                damageDecFac = target.RES;
+                multiplier.Add(target.RES);
             }
 
+            if (flags.Contains("CriticalAttack"))  // 暴击系数
+                multiplier.Add(attacker.Crit);
+
             // 通知所有可能影响各种系数的计算逻辑
-            BeforeCalculateDamage1?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac, ref finalDamageFac);
-            BeforeCalculateDamage2?.Invoke(attacker, target, flags, ref inc, ref more, ref crit, ref damageDecFac, ref finalDamageFac);
+            BeforeCalculateDamage1?.Invoke(attacker, target, flags, ref inc, ref more, multiplier);
+            BeforeCalculateDamage2?.Invoke(attacker, target, flags, ref inc, ref more, multiplier);
 
             // 计算最终攻击值
-            return Calculation.CalcDamage(basicAttack, inc, more, flags.Contains("CriticalAttack") ? crit : 0, damageDecFac, finalDamageFac);
+            return Calculation.CalcDamage(basicAttack, inc, more, multiplier);
         }
 
         // 变更行动标记
@@ -326,10 +326,10 @@ namespace Avocat
         }
 
         // 执行攻击
-        public event Action<Warrior, Warrior, List<Warrior>, Skill, List<string>> PrepareAttack = null;
-        public event Action<Warrior, Warrior, Skill, List<string>> BeforeAttack = null;
-        public event Action<Warrior, Warrior, Skill, List<string>> AfterAttack = null;
-        public event Action<Warrior, Warrior, List<Warrior>, Dictionary<Warrior, int>, Dictionary<Warrior, int>, Skill, List<string>> OnWarriorAttack = null; // 角色进行攻击
+        public event Action<Warrior, Warrior, List<Warrior>, Skill, HashSet<string>> PrepareAttack = null;
+        public event Action<Warrior, Warrior, List<Warrior>, Skill, HashSet<string>, List<int>, List<int>> BeforeAttack = null;
+        public event Action<Warrior, Warrior, List<Warrior>, Skill, HashSet<string>> AfterAttack = null;
+        public event Action<Warrior, Warrior, List<Warrior>, Dictionary<Warrior, int>, Dictionary<Warrior, int>, Skill, HashSet<string>> OnWarriorAttack = null; // 角色进行攻击
         public void Attack(Warrior attacker, Warrior target, Skill skill = null, params string[] flags) { Attack(attacker, target, null, skill, flags); }
         public void Attack(Warrior attacker, Warrior target, Warrior[] addtionalTargets, Skill skill = null, params string[] flags)
         {
@@ -338,8 +338,8 @@ namespace Avocat
                 return;
 
             // 整理攻击标记
-            var attackFlags = new List<string>();
-            attackFlags.AddRange(flags);
+            var attackFlags = new HashSet<string>();
+            attackFlags.UnionWith(flags);
             attackFlags.Add(attacker.AttackingType);
 
             // 额外攻击目标
@@ -356,7 +356,10 @@ namespace Avocat
                     return;
             }
 
-            BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
+            // 额外伤害系数
+            var multi = new List<int>();
+            var addMulti = new List<int>();
+            BeforeAttack?.Invoke(attacker, target, addTars, skill, attackFlags, multi, addMulti);
 
             // 可能需要取消攻击 或者因为 PatternSkill 导致已经行动过了
             if (attacker.ActionDone || attackFlags.Contains("CancelAttack"))
@@ -369,7 +372,7 @@ namespace Avocat
             // 计算实际伤害
             var damages = new Dictionary<Warrior, int>();
             foreach (var tar in tars)
-                damages[tar] = CalculateDamage(attacker, tar, skill, attackFlags);
+                damages[tar] = CalculateDamage(attacker, tar, skill, attackFlags, tar == target ? multi : addMulti);
 
             // ExtraAttack 不影响行动标记
             if (!attackFlags.Contains("ExtraAttack"))
@@ -403,34 +406,41 @@ namespace Avocat
                 var dhp = dhps[tar];
                 var des = dess[tar];
 
-                if (des != 0) AddES(target, des);
-                if (dhp != 0) AddHP(target, dhp);
+                if (des != 0) AddES(tar, des);
+                if (dhp != 0) AddHP(tar, dhp);
             }
 
-            AfterAttack?.Invoke(attacker, target, skill, attackFlags);
+            AfterAttack?.Invoke(attacker, target, addTars, skill, attackFlags);
 
             return;
         }
 
         // 模拟攻击行为的伤害数值，但并不执行攻击行为
-        public void SimulateAttackingDamage(Warrior attacker, Warrior target, Skill skill, Action<int> onDamage, params string[] flags)
+        public void SimulateAttackingDamage(Warrior attacker, Warrior target, Warrior[] addtionalTargets, Skill skill, Action<int> onDamage, params string[] flags)
         {
             target.GetPosInMap(out int tx, out int ty); // 检查攻击范围限制
             if (!attacker.InAttackRange(tx, ty))
                 return;
 
             // 整理攻击标记
-            var attackFlags = new List<string>();
-            attackFlags.AddRange(flags);
+            var attackFlags = new HashSet<string>();
+            attackFlags.UnionWith(flags);
             attackFlags.Add(attacker.AttackingType);
 
-            BeforeAttack?.Invoke(attacker, target, skill, attackFlags);
+            var addTars = new List<Warrior>();
+            if (addtionalTargets != null)
+                addTars.AddRange(addtionalTargets);
+
+            // 额外伤害系数
+            var multi = new List<int>();
+            var addMulti = new List<int>();
+            BeforeAttack?.Invoke(attacker, target, addTars, skill, attackFlags, multi, addMulti);
 
             if (attackFlags.Contains("CancelAttack")) // 取消攻击
                 return;
 
             // 计算实际伤害
-            var damage = CalculateDamage(attacker, target, skill, attackFlags);
+            var damage = CalculateDamage(attacker, target, skill, attackFlags, multi);
             onDamage(damage);
         }
 

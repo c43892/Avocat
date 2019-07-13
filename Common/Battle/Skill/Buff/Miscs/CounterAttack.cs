@@ -17,7 +17,7 @@ namespace Avocat
 
         public int FinalDamageFact { get; set; } = 50; // 最终伤害系数百分比
 
-        void AttackBack(Warrior attacker, Warrior target, Skill skill, List<string> flags)
+        void AttackBack(Warrior attacker, Warrior target, List<Warrior> tars, Skill skill, HashSet<string> flags)
         {
             if (target != Owner || flags.Contains("SuppressCounterAttack"))
                 return;
@@ -25,9 +25,9 @@ namespace Avocat
             Battle.Attack(target, attacker, this, "CounterAttack", "ExtraAttack", "SuppressCounterAttack", "SuppressPatternMatch");                                
         }
 
-        void OnBeforeCalculateDamage1(Warrior attacker, Warrior target, List<string> flags, ref int inc, ref int more, ref int crit, ref int damageDec, ref int finalDamageFac)
+        void OnBeforeCalculateDamage1(Warrior attacker, Warrior target, HashSet<string> flags, ref int inc, ref int more, List<int> multiplier)
         {
-            finalDamageFac = FinalDamageFact;
+            multiplier.Add(FinalDamageFact);
         }
 
         public override void OnAttached()
